@@ -36,40 +36,37 @@
           </div>
 
           <div> <!-- 상품 list -->
+
             <div class="product-list-container">
-              <div class="product-item">
-                  <a th:href="@{/product/view}" class="item-link"> <!-- 링크에 GET -->
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test1.jpeg}" alt="롤렉스 데이트저스트">
-                      </div>
-                      <div class="item-info">
 
-                          <div class="item-header">
-                              <span class="item-brand">032C</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">롤 데이트저스트 36mm 126233 브라이트 블랙 다이아 셋팅 쥬빌리 Rolex Datejust</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <span class="discount-rate">6%</span>
-                                  <del class="original-price">69,273,300원</del>
-                              </div>
-                              <span class="final-price">65,116,902원</span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                          <div class="rating-box">
-                            <span><img th:src="@{/image/상품/graystar.png}" alt="" class="rating_star"> 5.0</span>
-                            <span class="rating-good">고객만족우수</span>
-                          </div>
-
-                      </div>
-                  </a>
-              </div>
+                <div class="product-item" th:each="productDTO : ${productDTOList}">
+                    <a th:href="@{/product/view/{prodNo}(prodNo=${productDTO.prod_no})}" class="item-link">
+                        <div class="item-thumb">
+                            <img th:src="@{/image/test1.jpeg}" alt="상품 이미지">
+                        </div>
+                        <div class="item-info">
+                            <div class="item-header">
+                                <span class="item-brand">[[${productDTO.prod_company}]]</span>
+                                <div class="item-icons">
+                                    <button type="button" class="btn-wish"></button>
+                                    <button type="button" class="btn-cart"></button>
+                                </div>
+                            </div>
+                            <p class="item-name">[[${productDTO.prod_name}]]</p>
+                            <div class="item-price-box">
+                                <div>
+                                    <span class="discount-rate">[[${productDTO.prod_sale}]]%</span>
+                                    <del class="original-price">[[${productDTO.prod_price}]]원</del>
+                                </div>
+                                <span class="final-price" th:text="|${productDTO.prod_price - productDTO.prod_price * (productDTO.prod_sale / 100.0)}원|">50,000원</span>
+                            </div>
+                            <div class="rating-box">
+                                <span><img th:src="@{/image/상품/graystar.png}" alt="" class="rating_star"> 5.0</span>
+                                <span class="rating-good">고객만족우수</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
 
               <div class="product-item">
                   <a href="#" class="item-link">

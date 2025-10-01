@@ -1,157 +1,79 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 나의리뷰</title>
-   <link rel="stylesheet" href="/kmarket/inc/css/my.css">
-</head>
-<body class="logged-in">
-    <header>
-        <div class="main-header">
-            <div class="header-left">
-                <a href="./index.html">
-                    <img src="../image/logo.jpg" alt="SHOPLY 로고" class="logo">
-                </a>
-                <span>쇼핑의 플레이리스트</span>
-            </div>
-            <div class="header-right">
-                <div class="login-menu">
-                    <a href="./login.html">로그인</a> |
-                    <a href="./register.html">회원가입</a> |
-                </div>
-                <div class="user-menu">
-                    <a href="#">로그아웃</a> |
-                    <a href="./my/home.html">마이페이지</a> |
-                    <a href="./cart.html">장바구니</a>
-                </div>
-            </div>
-        </div>
-    </header>
-    <main class="container">
-        <div class="sidebar">
-            
-            <ul>
-                <li><a href="home.html">마이페이지 홈</a></li>
-                <li><a href="order.html">전체주문내역</a></li>
-                <li><a href="point.html">포인트내역</a></li>
-                <li><a href="coupon.html">쿠폰</a></li>
-                <li><a href="#" class="active">나의리뷰</a></li>
-                <li><a href="qna.html">문의하기</a></li>
-                <li><a href="info.html">나의설정</a></li>
-            </ul>
-        </div>
-        <div class="content">
+<div th:replace="~{my/_head.html}"></div>
 
-            <div class="main-content-header">
-                <h2>나의 쇼핑 정보</h2>
-                <div class="info-summary">
-                    <div class="info-item">
-                        <div class="count">2</div>
-                        <div>주문</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="count">1</div>
-                        <div>쿠폰</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="count">1,000</div>
-                        <div>포인트</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="count">1</div>
-                        <div>문의</div>
-                    </div>
+<main class="container">
+    <div class="sidebar">
+        <ul>
+            <li><a th:href="@{/my/home}">마이페이지 홈</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
+            <li><a th:href="@{/my/point}">포인트내역</a></li>
+            <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+            <li><a th:href="@{/my/review}" class="active">나의리뷰</a></li>
+            <li><a th:href="@{/my/qna}">문의하기</a></li>
+            <li><a th:href="@{/my/info}">나의설정</a></li>
+        </ul>
+    </div>
+    <div class="content">
+
+        <div class="main-content-header">
+            <h2>나의 쇼핑 정보</h2>
+            <div class="info-summary">
+                <div class="info-item">
+                    <div class="count" th:text="${orderCount}">2</div>
+                    <div>주문</div>
                 </div>
-            </div>
-
-            <div class="banner">
-                810 x 86 배너 광고
-            </div>
-
-            <table class="review-table">
-                <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>상품명</th>
-                        <th>내용</th>
-                        <th>별점</th>
-                        <th>작성일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>상품번호 / 상품명</td>
-                        <td>배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                        <td><span class="rating">★★★★★</span></td>
-                        <td>2022-12-10</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>상품번호 / 상품명</td>
-                        <td>배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                        <td><span class="rating">★★★★★</span></td>
-                        <td>2022-12-06</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>상품번호 / 상품명</td>
-                        <td>배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                        <td><span class="rating">★★★★★</span></td>
-                        <td>2022-12-06</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="pagination">
-                <button>&lt; 이전</button>
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-                <button>다음 &gt;</button>
-            </div>
-        </div>
-    </main>
-    <footer>
-        <div class="footer-container">
-            <div class="footer-top">
-                <h2>(주)샵플리닷컴</h2>
-                <a href="#">사업자정보확인</a>
-                <a href="#">소비자보호 서비스 가입사실확인</a>
-            </div>
-            <div class="footer-info">
-                <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
-                <p>부산광역시 부산진구 중앙대로 103</p>
-                <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
-                <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-links">
-                    <a href="#">개인정보처리방침</a> |
-                    <a href="#">영상정보처리기기 운영·관리방침</a> |
-                    <a href="#">고객센터</a> |
-                    <a href="#">FAQ</a>
+                <div class="info-item">
+                    <div class="count" th:text="${couponCount}">1</div>
+                    <div>쿠폰</div>
                 </div>
-                <div class="footer-sns">
-                    <a href="#"><img src="../image/facebook.png" alt="Facebook"></a>
-                    <a href="#"><img src="../image/instagram.png" alt="Instagram"></a>
+                <div class="info-item">
+                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 3, 'COMMA')}">1,000</div>
+                    <div>포인트</div>
+                </div>
+                <div class="info-item">
+                    <div class="count" th:text="${qnaCount}">1</div>
+                    <div>문의</div>
                 </div>
             </div>
         </div>
-    </footer>
-    <script>
-        // 로그인 상태 시뮬레이션
-        const isLoggedIn = true; // 실제로는 서버에서 로그인 상태를 확인
 
-        const loginMenu = document.querySelector('.login-menu');
-        const userMenu = document.querySelector('.user-menu');
+        <div class="banner">
+            810 x 86 배너 광고
+        </div>
 
-        if (isLoggedIn) {
-            document.body.classList.add('logged-in');
-        }
-    </script>
-</body>
-</html>
+        <table class="review-table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>상품명</th>
+                <th>내용</th>
+                <th>별점</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="review, status : ${reviewList}">
+                <td th:text="${status.count}">1</td>
+                <td th:text="${review.prodName}">상품번호 / 상품명</td>
+                <td th:text="${review.revContent}">배송이 빠릅니다. 잘 사용하겠습니다.</td>
+                <td><span th:text="${review.revRating}" class="rating">★★★★★</span></td>
+                <td th:text="${#dates.format(review.revRdate, 'yyyy-MM-dd')}">2022-12-10</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(reviewList)}">
+                <td colspan="5" style="text-align: center;">작성된 리뷰가 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <button>&lt; 이전</button>
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            <button>5</button>
+            <button>다음 &gt;</button>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{my/_tail.html}"></div>

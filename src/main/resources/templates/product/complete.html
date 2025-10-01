@@ -9,7 +9,7 @@
 
                 <div class="order-info-bar">
                     <span>2025년 9월 28일(일)에 주문하신 주문건의 주문번호는 <strong>202509280952869</strong>입니다.</span>
-                    <a href="/kmarket/my/order.html">주문상세조회 ></a>
+                    <a th:href="@{/my/order}">주문상세조회 ></a>
                 </div>
 
                 <div class="recipient-info">
@@ -29,7 +29,7 @@
                 <section class="order-section">
                     <h2>주문 상품 정보</h2>
                     <div class="order-item">
-                        <img src="https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg" alt="주문상품1">
+                        <img th:src="@{https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg}" alt="주문상품1">
                         <div class="order-item-info">
                             <p class="name">마스마룰즈 스트랩파우치 모음전 VER.3</p>
                             <p class="desc">옵션: SP_체커보드</p>
@@ -106,7 +106,7 @@
                             <div class="promo-banner">
                                 <p>더 많은 혜택을 누리려면</p>
                                 <a href="#"><img
-                                        src="https://sui.ssgcdn.com/cmpt/banner/202403/2024032113572839817171954381_63.png"
+                                        th:src="@{https://sui.ssgcdn.com/cmpt/banner/202403/2024032113572839817171954381_63.png}"
                                         alt="프로모션 배너"></a>
                             </div>
                         </section>
@@ -114,8 +114,8 @@
                 </div>
 
                 <div class="action-buttons">
-                    <a href="/kmarket/product/list.html"><button type="button" class="btn-secondary">쇼핑 계속하기</button></a>
-                    <a href="/kmarket/my/order.html"><button type="button" class="btn-primary">주문상세조회</button></a>
+                    <a th:href="@{/product/list}"><button type="button" class="btn-secondary">쇼핑 계속하기</button></a>
+                    <a th:href="@{/my/order}"><button type="button" class="btn-primary">주문상세조회</button></a>
                 </div>
             </div>
         </div>

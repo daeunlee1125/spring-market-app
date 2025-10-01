@@ -1,0 +1,26 @@
+package kr.co.shoply.dto;
+
+import lombok.*;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ProductDTO {
+    private String prod_no;
+    private int cate2_no;
+    private String prod_name;
+    private String prod_info;
+    private String prod_company;
+    private String mem_id;
+    private int prod_price;
+    private int prod_sale;
+    private int prod_deliv_price;
+    private int prod_point;
+    private int prod_stock;
+    private int prod_sold;
+    private int prod_hit;
+
+}

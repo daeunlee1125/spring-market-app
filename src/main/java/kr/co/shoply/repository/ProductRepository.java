@@ -1,6 +1,6 @@
 package kr.co.shoply.repository;
 
-import kr.co.study.entity.Product;
+import kr.co.shoply.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

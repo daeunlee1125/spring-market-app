@@ -1,6 +1,6 @@
 package kr.co.shoply.repository;
 
-import kr.co.sboard.entity.market.UserCoupon;
+import kr.co.shoply.entity.UserCoupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

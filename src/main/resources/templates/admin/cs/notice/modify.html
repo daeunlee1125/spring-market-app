@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kmarket/admin - notice modify</title>
+    <!-- Font Awesome 아이콘 라이브러리 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/cs.css">
+
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            SHOPLY Admin
+        </div>
+        <nav>
+            <ul class="mainSideBar">
+                <li>
+                    <div><i class="fas fa-cog"></i> 환경설정</div>
+                    <ul class="subSideBar">
+                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+                    </ul>
+                </li>
+            <li>
+                <div><i class="fas fa-store"></i> 상점관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
+                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-users"></i> 회원관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
+                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-box-open"></i> 상품관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
+                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-truck"></i> 주문관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
+                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
+                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-headset"></i> 고객센터</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
+                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
+                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
+                </ul>
+            </li>
+        </ul>
+        </nav>
+    </aside>
+
+    <header>
+        <div class="middle">
+            <div id="logo">
+                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+            </div>
+            
+            <div class="header-nav">
+                <ul class="header-menu">
+                    <li><a href="/kmarket/index.html">홈</a></li>
+                    <li><a href="#">로그아웃</a></li>
+                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <div class="middle main-content">
+            <div class="main-common">
+                <div class="main-head">
+                    <div>
+                        <h3>공지사항 수정</h3>
+                    </div>
+                    <div class="main-head-right">
+                        <a href="">HOME</a>
+                        <div>
+                            &nbsp;>&nbsp;
+                        </div>
+                        <a href="">고객센터</a>
+                        <div>
+                            &nbsp;>&nbsp;
+                        </div>
+                        <a href="" class="nav-last">공지사항</a>
+                    </div>
+                </div>
+                <div class="main-content-top"></div>
+                <main>
+                    <div class="notice-form_3">
+                        <table class="notice-table_3">
+                            <tbody>
+                                <tr>
+                                    <th class="notice-th_3">유형</th>
+                                    <td class="notice-td_3">
+                                        <select class="notice-select_3" name="type">
+                                            <option value="">유형선택</option>
+                                            <option value="customer" selected>고객서비스</option>
+                                            <option value="safe">안전거래</option>
+                                            <option value="harmful">위해상품</option>
+                                            <option value="event">이벤트당첨</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="notice-th_3">제목</th>
+                                    <td class="notice-td_3">
+                                        <input type="text" class="notice-input_3" name="title" value="[안내] 해외결제 사칭 문자 주의">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="notice-th_3">내용</th>
+                                    <td class="notice-td_3">
+                                        <textarea class="notice-textarea_3" name="content" >
+안녕하세요. 쇼플리입니다.
+
+해외직구몰을 사칭하는 피싱 문자가 최근 다시 신고되고 있어 안내 드립니다 .
+
+아래와같이 쇼플리 해외직구 승인결제 피싱 문자 또는 발신번호 006, 002 등으로
+시작하는 피싱 문자를 수신하신 고객님께서는 통화 또는 문자 내 기재된 번호/링크등을
+클릭하지 않도록 주의하여주시기바랍니다 .
+                                        </textarea>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="notice-buttons_3">
+                            <button type="button" class="notice-btn-cancel_3">취소하기</button>
+                            <button type="submit" class="notice-btn-submit_3">수정하기</button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="middle">
+            <p id="footer-p">
+                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

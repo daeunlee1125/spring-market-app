@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 상세페이지</title>
+
+    <link rel="stylesheet" href="/kmarket/inc/css/_tamplateProduct.css">
+    <link rel="stylesheet" href="/kmarket/inc/css/product.css">
+
+    <!-- bxSlider -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="top-bar-back">
+            <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
+        </div>
+
+        <!-- 1번째 줄 -->
+        <div class="top-header">
+
+            <!-- 로고 -->
+            <div class="header-left">
+                <img src="/kmarket/image/logo.jpg" alt="로고" class="logo">
+            </div>
+
+            <!-- 검색창 -->
+            <div class="header-center">
+                <form action="">
+                    <input type="text" placeholder="검색">
+                    <button type="submit">
+                        <img src="/kmarket/image/search.png" alt="검색">
+                    </button>
+                </form>
+            </div>
+
+            <!-- 아이콘 + 로그인 메뉴 -->
+            <div class="header-right">
+                <img src="/kmarket/image/user.png" alt="유저" class="icon">
+                <img src="/kmarket/image/cart.png" alt="장바구니" class="icon" style="width: 30px;">
+
+            </div>
+        </div>
+
+        <div class="bottom-header">
+            <div class="header-left">
+                <a href="#" id="categoryBtn"> 전체 카테고리</a>
+                <a href="#">히트상품</a>
+                <a href="#">추천상품</a>
+                <a href="#">최신상품</a>
+                <a href="#">인기상품</a>
+                <a href="#">할인상품</a>
+
+            </div>
+
+
+            <div class="header-right login-menu">
+
+                <a href="#">로그인</a> |
+                <a href="#">회원가입</a> |
+                <a href="#">고객센터</a>
+
+            </div>
+        </div>
+
+    </header>
+
+
+
+    <div class="container">
+
+        <!-- 베스트 상품 안 들어가는 창은 여기부터 저 아래 주석까지 삭제하고 작업 -->
+        <div class="left-space">
+            <div class="inner">
+                <h3>베스트 상품</h3>
+
+                <!-- 첫 번째 상품 (카드형) -->
+                <div class="product-card">
+                    <div class="img-box">
+                        <img src="/kmarket/image/prod1.png" alt="침대">
+                    </div>
+                    <a href="#" class="name">가이온 스너그 단면매트리스 침대 화이트</a>
+                    <div class="price-box">
+                        <div class="price-top">
+                            <span class="original">266,180원</span>
+                            <span class="discount">54%</span>
+                        </div>
+                        <div class="sale-cont">
+
+                            <span class="sale">119,800원</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 나머지 상품 (리스트형) -->
+                <ul class="product-list">
+                    <li class="product-item">
+                        <div class="thumb">
+                            <img src="/kmarket/image/prod2.png" alt="운동화">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="name">여성용 러닝업 트래킹화</a>
+                            <div class="price-box">
+                                <div class="price-top2">
+                                    <span class="original">133,090원</span>
+                                    <span class="discount">54%</span>
+                                </div>
+                                <div class="sale-cont">
+
+                                    <span class="sale">59,900원</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="product-item">
+                        <div class="thumb">
+                            <img src="/kmarket/image/prod3.png" alt="세제">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="name">듀얼(드럼/일반 겸용) 2.7L x2개 세탁세제</a>
+                            <div class="price-box">
+                                <div class="price-top2">
+                                    <span class="original">66,600원</span>
+                                    <span class="discount">54%</span>
+                                </div>
+                                <div class="sale-cont">
+
+                                    <span class="sale">29,950원</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="product-item">
+                        <div class="thumb">
+                            <img src="/kmarket/image/prod4.png" alt="화장품">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="name">비건 피톤치드 시카 토너</a>
+                            <div class="price-box">
+                                <div class="price-top2">
+                                    <span class="original">133,090원</span>
+                                    <span class="discount">54%</span>
+                                </div>
+                                <div class="sale-cont">
+
+                                    <span class="sale">59,900원</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="product-item">
+                        <div class="thumb">
+                            <img src="/kmarket/image/prod5.png" alt="모자">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="name">남녀공용 모자 블랙</a>
+                            <div class="price-box">
+                                <div class="price-top2">
+                                    <span class="original">133,090원</span>
+                                    <span class="discount">54%</span>
+                                </div>
+                                <div class="sale-cont">
+
+                                    <span class="sale">59,900원</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 여기까지 베스트 상품!! -->
+
+
+        <div class="wrapper">
+
+            <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
+            <div id="categoryBox" class="category-box">
+                <div class="main-menu">
+                    <ul>
+                        <li data-target="menu1">패션/의류/뷰티</li>
+                        <li data-target="menu2">패션잡화</li>
+                        <li data-target="menu3">명품</li>
+                        <li data-target="menu4">뷰티</li>
+                    </ul>
+                </div>
+
+                <div class="sub-menu">
+                    <ul id="menu1" class="submenu-content">
+                        <li><a href="#">여성의류</a></li>
+                        <li><a href="#">남성의류</a></li>
+                        <li><a href="#">아동복</a></li>
+                    </ul>
+                    <ul id="menu2" class="submenu-content" style="display:none;">
+                        <li><a href="#">가방</a></li>
+                        <li><a href="#">신발</a></li>
+                    </ul>
+                    <ul id="menu3" class="submenu-content" style="display:none;">
+                        <li><a href="#">해외 명품</a></li>
+
+                    </ul>
+                    <ul id="menu4" class="submenu-content" style="display:none;">
+                        <li><a href="#">스킨케어</a></li>
+                        <li><a href="#">메이크업</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+            <main>
+                <div class="main-size">
+                    <div class="main-nav-div"> <!-- 네비 -->
+                        <nav class="main-nav">
+                            <a href="/kmarket/index.html"><span>HOME</span></a>
+                            <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
+                            <span>패션 / 의류 / 뷰티</span> <!-- 동적 -->
+                            <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
+                            <span>남성의류</span> <!-- 동적 -->
+                        </nav>
+                    </div>
+                    <div class="product-view-container">
+
+                        <div class="product-image-section">
+                            <div class="main-image">
+                                <img src="/kmarket/image/test1.jpeg" alt="베이직 레더 벨트">
+                            </div>
+                        </div>
+                        <div class="product-info-section" data-product-price="16830">
+                            <div class="info-header">
+                                <span class="brand-store">신세계백화점</span>
+                                <h2>
+                                    <span class="brand-name">지오다노</span>
+                                    <span class="product-name">베이직 레더 벨트 130004</span>
+                                </h2>
+                                <a href="#"> <!-- 리뷰로 넘어가는 링크 -->
+                                    <div class="rating">
+                                        <span class="stars">★★★★★</span>
+                                        <span class="rating-score">4.6</span>
+                                        <span class="review-count">(152건)</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="info-price">
+                                <div class="price-original">
+                                    <span class="original">18,700원</span>
+                                </div>
+                                <div class="price-final">
+                                    <span class="discount-rate">10%</span>
+                                    <span class="final">16,830</span>
+                                    <span class="unit">원</span>
+                                </div>
+                            </div>
+
+                            <div class="info-delivery">
+                                <div class="delivery-row">
+                                    <span class="label">배송비</span>
+                                    <span class="content">3,000원 (3만원 이상 무료)</span>
+                                </div>
+                                <div class="delivery-row">
+                                    <span class="label"></span>
+                                    <span class="content arrival-info">9/29(월) 도착 예정</span>
+                                </div>
+                                <div class="delivery-row">
+                                    <span class="label">포장안내</span>
+                                    <span class="content">쇼핑백 제공이 가능합니다.</span>
+                                </div>
+                            </div>
+
+                            <div class="info-options">
+                                <select id="select-color" name="color">
+                                    <option value="">색상 선택하세요.</option>
+                                    <option value="블랙">블랙</option>
+                                    <option value="브라운">브라운</option>
+                                </select>
+                                <select id="select-size" name="size">
+                                    <option value="">사이즈 선택하세요.</option>
+                                    <option value="M (30-32)">M (30-32)</option>
+                                    <option value="L (33-35)">L (33-35)</option>
+                                </select>
+
+                                <div id="selected-options-list"></div>
+                            </div>
+
+                            <div class="info-purchase">
+                                <div class="total-price">
+                                    <span>총 상품금액</span>
+                                    <strong id="grand-total-price">0원</strong>
+                                </div>
+                                <div class="action-buttons">
+                                    <a href="/kmarket/product/cart.html"><button class="btn btn-cart">장바구니</button></a>
+                                    <a href="/kmarket/product/order.html"><button class="btn btn-buy">바로구매</button></a>
+                                </div>
+                            </div>
+
+                            <div class="banner">
+                                <img src="/kmarket/inc/image/banner-top.jpg" alt="배너 광고">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="product-detail">
+                    <nav class="product-detail-nav">
+                        <ul>
+                            <li class="active"><a href="#detail-info">상품상세정보</a></li>
+                            <li><a href="#detail-review">고객리뷰 (0)</a></li>
+                            <li><a href="#detail-exchange">교환/반품 안내</a></li>
+                        </ul>
+                    </nav>
+                    <div class="nav-placeholder"></div>
+
+                    <div id="detail-info" class="detail-content">
+                        <p style="text-align: center; padding: 40px 0; font-size: 18px; color: #888;">
+                            상품 번호: 1000722586634<br>
+                            모델 번호: Y0251LCL158S1N00125F
+                        </p>
+                        <img src="/kmarket/inc/image/info.avif" alt="SSG Guarantee">
+                        <img src="/kmarket/inc/image/productDetail.jpg" alt="짧은 상세 이미지">
+
+                        <div class="long-detail-container">
+                            <img src="/kmarket/inc/image/productDetail2.jpg" alt="긴 상세 이미지" class="long-detail-image">
+                            <div class="fade-overlay"></div>
+                        </div>
+                        <button type="button" class="toggle-detail-btn">상세정보 펼쳐보기 ▼</button>
+                    </div>
+
+                    <div id="detail-review" class="detail-content">
+                        <div class="review-header">
+                            <div class="review-tabs">
+                                <a href="#" class="active">전체(562)</a>
+                                <a href="#">포토(132)</a>
+                                <a href="#">동영상(2)</a>
+                                <a href="#">선물(11)</a>
+                            </div>
+                            <div class="review-sort">
+                                <select>
+                                    <option>추천순</option>
+                                    <option>최신순</option>
+                                    <option>평점 높은순</option>
+                                    <option>평점 낮은순</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="review-list">
+                            <div class="review-item">
+                                <div class="review-meta-top">
+                                    <div class="review-author">
+                                        <div class="rating-stars">★★★★★</div>
+                                        <div class="user-id">rif*******</div>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>늘 사용하는 제품인데 특히 환절기 보습에 좋은 것 같습니다. 스킨부터 탄탄하게 수분을 쌓아올리니 덜 건조해요 다만 바뀐 패키지보다는 이전이 더 고급스러운 것 같아 아쉬워요</p>
+                                    <div class="review-photo">
+                                        <img src="/kmarket/inc/image/review1.jpg" alt="리뷰 사진 1">
+                                    </div>
+                                    <div class="review-tags">
+                                        <span class="tag">맞춤정보</span>
+                                        <span class="tag">피부타입: 복합성</span>
+                                        <span class="tag">피부자극: 순해요</span>
+                                        <span class="tag">보습력: 촉촉해요</span>
+                                        <span class="tag">제형: 점성이 있어요</span>
+                                    </div>
+                                </div>
+                                <div class="review-meta-bottom">
+                                    <span class="date">2025.09.22</span>
+                                    <a href="#" class="report">신고/차단</a>
+                                    <div class="review-actions">
+                                        <button class="btn-helpful">👍 0</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="review-item">
+                                <div class="review-meta-top">
+                                    <div class="review-author">
+                                        <div class="rating-stars">★★★★☆</div>
+                                        <div class="user-id">hoi*******</div>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>내가 먼저 써 본후 부드럽고 향도 은은해서 며느리 생일선물 했네요. 며늘이 아주 좋아하네요</p>
+                                    <div class="review-photo">
+                                        <img src="/kmarket/inc/image/review2.jpg" alt="리뷰 사진 2">
+                                    </div>
+                                </div>
+                                <div class="review-meta-bottom">
+                                    <span class="date">2025.09.25</span>
+                                    <a href="#" class="report">신고/차단</a>
+                                    <div class="review-actions">
+                                        <button class="btn-helpful">👍 0</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+
+                    <div class="pagination-container">
+                        <div class="pagination">
+                            <a href="#" class="page-link prev disabled">이전</a>
+                            <a href="#" class="page-link active">1</a>
+                            <a href="#" class="page-link">2</a>
+                            <a href="#" class="page-link">3</a>
+                            <a href="#" class="page-link">4</a>
+                            <a href="#" class="page-link">5</a>
+                            <a href="#" class="page-link next">다음</a>
+                        </div>
+                    </div>
+
+                    <div id="detail-exchange" class="detail-content">
+                        <div class="exchange-info-box">
+                            <h3>교환/반품 안내</h3>
+                            <p>고객님의 단순 변심으로 인한 교환/반품은 실제 상품을 수령하신 날로부터 7일 이내에 신청 가능합니다.</p>
+
+                            <table>
+                                <colgroup>
+                                    <col style="width: 150px;">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th>신청 방법</th>
+                                        <td>홈페이지 > 마이페이지 > 주문/배송 조회 > '교환/반품 신청'</td>
+                                    </tr>
+                                    <tr>
+                                        <th>반품 배송비</th>
+                                        <td>
+                                            <strong>편도 3,000원</strong> (최초 배송비 무료인 경우 6,000원 부과) <br>
+                                            상품 불량, 오배송의 경우 판매자 부담
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>보내실 곳</th>
+                                        <td>(12345) OO광역시 OO구 OO로 123, K마켓 물류센터</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>교환/반품이 불가능한 경우</h4>
+                            <ul>
+                                <li>상품 수령 후 7일을 초과한 경우</li>
+                                <li>고객님의 책임 있는 사유로 상품이 멸실 또는 훼손된 경우 (단, 상품 내용 확인을 위해 포장 등을 훼손한 경우는 제외)</li>
+                                <li>고객님의 사용 또는 일부 소비에 의하여 상품의 가치가 현저히 감소한 경우 (예: 화장품, 식품)</li>
+                                <li>시간의 경과에 의하여 재판매가 곤란할 정도로 상품의 가치가 현저히 감소한 경우</li>
+                                <li>복제가 가능한 상품 등의 포장을 훼손한 경우 (예: CD/DVD, 게임, 도서의 경우 포장 개봉 시)</li>
+                                <li>상품의 구성품(사은품, 택, 박스 등)을 분실하였거나 훼손한 경우</li>
+                            </ul>
+
+                            <h4>환불 안내</h4>
+                            <ul>
+                                <li>반품하신 상품이 물류센터에 도착하여 검수가 완료된 후 환불 처리가 진행됩니다.</li>
+                                <li><strong>신용카드</strong>: 카드사 승인 취소까지 약 3~5 영업일이 소요됩니다.</li>
+                                <li><strong>무통장 입금/계좌이체</strong>: 고객님의 계좌로 1~2 영업일 내에 환불됩니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+
+            </div>
+        </main>
+    </div>
+    </div>
+
+
+    <footer>
+
+        <div class="top-footer">
+            <div class="footer-wrapper">
+                <div class="top-f">
+                    <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
+                    <a href="#">서비스이용약관</a> |
+                    <a href="#" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
+                    <a href="#">전자금융거래약관</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-wrapper">
+
+            <h3 class="cpname">(주)샵플리닷컴</h3>
+            <div class="call-cont">
+                <img src="/kmarket/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
+                <span class="tel">1234-5678</span>
+                <span class="time"> (평일 09:00~18:00)</span>
+            </div>
+            <div style="color: gray; margin-top: 15px">
+                <span>대표이사 : 홍길동</span>
+                <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
+                <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
+
+                <div style="margin-top: 3px;">
+                    <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
+                </div>
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+</body>
+<script src="/kmarket/inc/js/view.js"></script>
+<script src="/kmarket/inc/js/list.js"></script>
+<script src="/kmarket/inc/js/index.js"></script>
+
+</html>

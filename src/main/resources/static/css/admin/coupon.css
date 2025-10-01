@@ -1,0 +1,190 @@
+/* 쿠폰 검색 영역 */
+.search-bar .search-place {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: transparent; /* 바깥 배경 투명 */
+  border: none;
+  padding: 0;
+}
+
+.search-bar input {
+  flex: 1;
+  border: 1px solid #ccc;
+  height: 35px;
+  outline: none;
+  background-color: #fff;  /* 안쪽만 흰 배경 */
+  padding: 0 8px;
+}
+
+
+.search-bar button {
+  height: 35px;
+  font-size: 14px;
+  border: none;  /* 버튼은 border 없애야 겹치지 않음 */
+}
+
+
+.search-bar input {
+  flex: 1;
+  padding: 0 8px;
+}
+
+/* 검색 버튼 크기 맞추기 */
+.search-bar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;       /* input, select와 동일 높이 */
+  min-width: 60px;    /* 버튼 가로 최소 확보 */
+  line-height: 1;     /* 글자 세로 중앙 */
+  font-size: 14px;
+  background: linear-gradient(135deg, #a77ece, #6c3fc9);
+  border: none;
+  color: #fff;
+  padding: 0 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap; /* "검색" 두 줄로 안 깨지게 */
+}
+
+.search-bar button:hover {
+  background: linear-gradient(135deg, #8d6dbd, #5936a9);
+}
+
+/* 모달 팝업 중앙정렬 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-popup {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.modal-popup.large {
+  width: 800px;
+}
+
+
+
+
+/* 쿠폰 상세 모달 */
+.coupon-detail th,
+.coupon-detail td {
+  text-align: center;   /* 모든 텍스트 가운데 정렬 */
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.coupon-detail td.note {
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 10px;
+  white-space: pre-line; /* 줄바꿈 유지 */
+}
+
+
+/* 모달 닫기 버튼 */
+.modal-header .closeModalBtn {
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;            /* X는 흰색 */
+  background: transparent; /* 배경색 없음 → 헤더 배경(남색) 그대로 */
+  border: none;
+  margin-left: auto;      /* 오른쪽 끝 */
+  line-height: 1;
+}
+
+.modal-header .closeModalBtn:hover {
+  color: #ddd;            /* hover 시 살짝 밝은 회색 */
+}
+
+
+
+.long-input {
+  width: 100%;       
+  height: 200px;     
+  padding: 10px;      
+  font-size: 14px;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+
+.small-btn {
+  padding: 6px 14px;   /* 버튼 크기 줄임 */
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+
+/* 쿠폰발급현황 전용 */
+.coupon-issue-table td a {
+  color: #4a2f73;
+  font-weight: bold;
+}
+.coupon-issue-table td a:hover {
+  text-decoration: underline;
+}
+
+.status.not-used { color: red; font-weight: bold; }
+.status.used { color: green; font-weight: bold; }
+
+.stop-btn {
+  background: #aaa;
+  border: 1px solid #888;
+  padding: 5px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.stop-btn:hover {
+  background: #888;
+  color: #fff;
+}
+
+
+.sub-top {
+  margin-top: 0;     /* 위쪽 여백 제거 */
+  padding-top: 0;    /* 내부 여백 제거 */
+}
+
+.search-bar {
+  margin-top: 0;     /* 혹시 search-bar 자체에 margin 있으면 제거 */
+}
+
+
+
+.stop-btn {
+  background: linear-gradient(135deg, #a77ece, #6c3fc9); /* register-btn이랑 동일 */
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.stop-btn:hover {
+  background: linear-gradient(135deg, #8d6dbd, #5936a9); /* hover 시 조금 어둡게 */
+}

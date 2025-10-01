@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kmarket/admin - Final Version</title>
+    <!-- Font Awesome 아이콘 라이브러리 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/shop.css">
+
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            SHOPLY Admin
+        </div>
+        <nav>
+            <ul class="mainSideBar">
+                <li>
+                    <div><i class="fas fa-cog"></i> 환경설정</div>
+                    <ul class="subSideBar">
+                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+                    </ul>
+                </li>
+            <li>
+                <div><i class="fas fa-store"></i> 상점관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
+                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-users"></i> 회원관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
+                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-box-open"></i> 상품관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
+                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-truck"></i> 주문관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
+                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
+                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-headset"></i> 고객센터</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
+                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
+                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
+                </ul>
+            </li>
+        </ul>
+        </nav>
+    </aside>
+
+    <header>
+        <div class="middle">
+            <div id="logo">
+                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+            </div>
+            
+            <div class="header-nav">
+                <ul class="header-menu">
+                    <li><a href="/kmarket/index.html">홈</a></li>
+                    <li><a href="#">로그아웃</a></li>
+                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    
+
+    <div class="main">
+        <div class="middle main-content">
+            <div class="main-common">
+                <div class="main-head">
+                    <div>
+                        <h3>상점목록</h3>
+                    </div>
+                    <div class="main-head-right">
+                        <a href="">HOME</a>
+                        <div>
+                            &nbsp;>&nbsp;
+                        </div>
+                        <a href="">상점관리</a>
+                        <div>
+                            &nbsp;>&nbsp;
+                        </div>
+                        <a href="" class="nav-last">상점목록</a>
+                    </div>
+                </div>
+                <div class="main-content-top"></div>
+                <main>
+                    <div class="sub-top">
+                        <div class="search-bar">
+                            <form action="">
+                                <select name="" id="">
+                                    <option value="">상호명</option>
+                                    <option value="">대표자</option>
+                                    <option value="">사업자등록번호</option>
+                                    <option value="">연락처</option>
+                                </select>
+                                <div class="search-place">
+                                    <input type="text" placeholder="검색어 입력">
+                                    <button type="submit">
+                                    <img src="/kmarket/inc/image/search.png" alt="검색">
+                                    </button>
+                                </div>
+                            </form> 
+                        </div>
+                        <div class="state-wrap">
+                            <span class="state running">
+                                <span class="color-dot running">•</span><span>운영 중</span>
+                            </span>
+                            <span class="state stopped">
+                                <span class="color-dot stopped">•</span><span>운영 중지</span>
+                            </span>
+                            <span class="state pending">
+                                <span class="color-dot pending">•</span><span>운영 준비</span>
+                            </span>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>번호</th>
+                            <th>상호명</th>
+                            <th>대표</th>
+                            <th>사업자등록번호</th>
+                            <th>통신판매업번호</th>
+                            <th>연락처</th>
+                            <th>운영</th>
+                            <th>관리</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            
+                            <td>(주)다나와</td>
+                            <td>정우성</td>
+                            <td>112-12-12345</td>
+                            <td>2024-서울강남-04433</td>
+                            <td>010-1234-1001</td>
+                            <td class="color-dot running">•</td>
+                            <td>
+                                <form action="#">
+                                    <input type="submit" value="[ 중단 ]" class="openModalBtn2">
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            
+                            <td>(주)다나와</td>
+                            <td>정우성</td>
+                            <td>112-12-12345</td>
+                            <td>2024-서울강남-04433</td>
+                            <td>010-1234-1001</td>
+                            <td class="color-dot stopped">•</td>
+                            <td>
+                                <form action="#">
+                                    <input type="submit" value="[ 재개 ]" class="openModalBtn2">
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            
+                            <td>(주)다나와</td>
+                            <td>정우성</td>
+                            <td>112-12-12345</td>
+                            <td>2024-서울강남-04433</td>
+                            <td>010-1234-1001</td>
+                            <td class="color-dot pending">•</td>
+                            <td>
+                                <form action="#">
+                                    <input type="submit" value="[ 승인 ]" class="openModalBtn2">
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            
+                            <td>(주)다나와</td>
+                            <td>정우성</td>
+                            <td>112-12-12345</td>
+                            <td>2024-서울강남-04433</td>
+                            <td>010-1234-1001</td>
+                            <td class="color-dot running">•</td>
+                            <td>
+                                <form action="#">
+                                    <input type="submit" value="[ 중단 ]" class="openModalBtn2">
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>5</td>
+                            
+                            <td>(주)다나와</td>
+                            <td>정우성</td>
+                            <td>112-12-12345</td>
+                            <td>2024-서울강남-04433</td>
+                            <td>010-1234-1001</td>
+                            <td class="color-dot running">•</td>
+                            <td>
+                                <form action="#">
+                                    <input type="submit" value="[ 중단 ]" class="openModalBtn2">
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>6</td>
+                            
+                            <td>(주)다나와</td>
+                            <td>정우성</td>
+                            <td>112-12-12345</td>
+                            <td>2024-서울강남-04433</td>
+                            <td>010-1234-1001</td>
+                            <td class="color-dot running">•</td>
+                            <td>
+                                <form action="#">
+                                    <input type="submit" value="[ 중단 ]" class="openModalBtn2">
+                                </form>
+                            </td>
+                        </tr>
+
+                    </table>
+                    
+                    <div class="banner-actions">
+                    <button class="delete-btn">선택삭제</button>
+
+                    <div class="page">
+                        <a href="#" class="prev">이전</a>
+                        <a href="#" class="num current">1</a>
+                        <a href="#" class="num">2</a>
+                        <a href="#" class="num">3</a>
+                        <a href="#" class="next">다음</a>
+                    </div>
+
+                    <button class="register-btn" id="openModalBtn">상점등록</button>
+                    </div>
+                    
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="middle">
+            <p id="footer-p">
+                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+            </p>
+        </div>
+    </footer>
+
+
+
+
+    <!-- 모달(팝업) HTML -->
+    <div class="modal-overlay hidden" id="modal">
+        <div class="modal-popup">
+            <div class="modal-header">
+                <h2>상점등록</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-content">
+                <hr>
+                <div class="form-group">
+                    <label for="id">아이디</label>
+                    <input type="text" id="id">
+                    <span class="description">영문, 숫자 4~12자 설정</span>
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password">
+                     <span class="description">영문, 숫자, 특수문자 8~12자 설정</span>
+                </div>
+                <div class="form-group">
+                    <label for="password-confirm">비밀번호확인</label>
+                    <input type="password" id="password-confirm">
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="store-name">상호명</label>
+                    <input type="text" id="store-name" placeholder="상호명입력 예) (주)">
+                </div>
+                <div class="form-group">
+                    <label for="ceo-name">대표</label>
+                    <input type="text" id="ceo-name" placeholder="이름입력">
+                </div>
+                <div class="form-group">
+                    <label for="biz-reg-num">사업자등록번호</label>
+                    <input type="text" id="biz-reg-num">
+                    <span class="description">- 포함 12자리 입력</span>
+                </div>
+                 <div class="form-group">
+                    <label for="ecom-reg-num">통신판매업번호</label>
+                    <input type="text" id="ecom-reg-num">
+                    <span class="description">- 포함 12자리 입력</span>
+                </div>
+                <div class="form-group">
+                    <label for="tel">전화번호</label>
+                    <input type="text" id="tel">
+                </div>
+                <div class="form-group">
+                    <label for="fax">팩스</label>
+                    <input type="text" id="fax">
+                </div>
+                <div class="form-group">
+                    <label for="zipcode">주소</label>
+                    <input type="text" id="zipcode" placeholder="우편번호" readonly>
+                    <button type="button" id="searchAddressBtn" class="search-btn">우편번호 검색</button>
+                </div>
+                <div class="form-group">
+                    <label for="address"></label>
+                    <input type="text" id="address" placeholder="기본주소" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="address-detail"></label>
+                    <input type="text" id="address-detail" placeholder="상세주소입력">
+                </div>
+                <hr>
+            </div>
+            <div class="modal-footer">
+                <button>등록하기</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // --- 모달 로직 ---
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+
+        // '등록하기' 버튼을 클릭하면 모달을 보여줍니다.
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+        });
+
+        // 'x' 버튼을 클릭하면 모달을 숨깁니다.
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // 모달의 배경(오버레이) 부분을 클릭하면 모달을 숨깁니다.
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+
+
+        
+
+    </script>
+    <script src="/kmarket/inc/js/admin/shop.js"></script>
+
+</body>
+</html>

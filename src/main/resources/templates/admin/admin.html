@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kmarket/admin - Final Version</title>
+    <!-- Font Awesome 아이콘 라이브러리 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/admin.css">
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/main.css"
+
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            SHOPLY Admin
+        </div>
+        <nav>
+            <ul class="mainSideBar">
+                <li>
+                    <div><i class="fas fa-cog"></i> 환경설정</div>
+                    <ul class="subSideBar">
+                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div><i class="fas fa-store"></i> 상점관리</div>
+                    <ul class="subSideBar">
+                        <li><a href="#">상점목록</a></li>
+                        <li><a href="#">매출현황</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div><i class="fas fa-users"></i> 회원관리</div>
+                    <ul class="subSideBar">
+                        <li><a href="#">회원목록</a></li>
+                        <li><a href="#">포인트관리</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div><i class="fas fa-box-open"></i> 상품관리</div>
+                    <ul class="subSideBar">
+                        <li><a href="#">상품목록</a></li>
+                        <li><a href="#">상품등록</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div><i class="fas fa-truck"></i> 주문관리</div>
+                    <ul class="subSideBar">
+                        <li><a href="#">주문현황</a></li>
+                        <li><a href="#">배송현황</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div><i class="fas fa-headset"></i> 고객센터</div>
+                    <ul class="subSideBar">
+                        <li><a href="#">공지사항</a></li>
+                        <li><a href="#">자주묻는질문</a></li>
+                        <li><a href="#">문의하기</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <header>
+        <div class="middle">
+            <div id="logo">
+                <img src="/kmarket/inc/image/logo.jpg" alt="logo">
+            </div>
+            
+            <div class="header-nav">
+                <ul class="header-menu">
+                    <li><a href="#">홈</a></li>
+                    <li><a href="#">로그아웃</a></li>
+                    <li><a href="#">고객센터</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    
+
+    <div class="main">
+        <div class="middle main-content">
+            <div class="main-common">
+                <div class="main-head">
+                    <div>
+                        <h3>관리자메인</h3>
+                    </div>
+                    <div class="main-head-right">
+                        <a href="">HOME</a>
+                        <div>
+                            &nbsp;>&nbsp;
+                        </div>
+                        <a href="" class="nav-last">관리자 메인</a>
+                    </div>
+                </div>
+                <div class="main-content-top">
+
+                </div>
+                <main>
+                    <div class="admin-main-box">
+                        <!-- 집계현황 -->
+                        <section class="dashboard">
+                            <h4>집계현황</h4>
+                            <div class="dashboard-charts">
+                                <div class="chart-box">
+                                    <h5>결제현황</h5>
+                                    <img src="/kmarket/inc/image/chart1.png" alt="결제현황 차트">
+                                </div>
+                                <div class="chart-box">
+                                    <h5>주요매출</h5>
+                                    <img src="/kmarket/inc/image/chart2.png" alt="매출 차트">
+                                </div>
+                            </div>
+                    </section>
+
+                    <section class="status">
+                        <h4>운영현황</h4>
+                        <table class="status-bottom">
+                            <thead>
+                                <tr>
+                                    <th>입금대기</th>
+                                    <th>배송준비</th>
+                                    <th>취소요청</th>
+                                    <th>교환요청</th>
+                                    <th>반품요청</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="main-row">
+                                    <td>101</td>
+                                    <td>124</td>
+                                    <td>14</td>
+                                    <td>7</td>
+                                    <td>24</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="status-bottom">
+                            <thead>
+                                <tr>
+                                    <th>주문건수</th>
+                                    <th>주문금액</th>
+                                    <th>회원가입</th>
+                                    <th>방문자 수</th>
+                                    <th>문의 게시물</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="main-row">
+                                    <td>131</td>
+                                    <td>3,700,000</td>
+                                    <td>232</td>
+                                    <td>2,500</td>
+                                    <td>25</td>
+                                </tr>
+                                <tr class="sub-row">
+                                    <td>
+                                        <table class="mini-table">
+                                            <tr><td>오늘</td><td>60</td></tr>
+                                            <tr><td>어제</td><td>71</td></tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="mini-table">
+                                            <tr><td>오늘</td><td>1,200,000</td></tr>
+                                            <tr><td>어제</td><td>2,500,000</td></tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="mini-table">
+                                            <tr><td>오늘</td><td>102</td></tr>
+                                            <tr><td>어제</td><td>130</td></tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="mini-table">
+                                            <tr><td>오늘</td><td>1,300</td></tr>
+                                            <tr><td>어제</td><td>1,200</td></tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="mini-table">
+                                            <tr><td>오늘</td><td>13</td></tr>
+                                            <tr><td>어제</td><td>12</td></tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+
+
+
+
+                    <!-- 공지사항 & 고객문의 -->
+                    <section class="board">
+                        <div class="board-box">
+                            <h4>공지사항</h4>
+                            <ul>
+                                <li>[안내] 해외직구세금면제주의 <span>22.10.31</span></li>
+                                <li>[안내] 로젠택배 파업 / 교환수거지연 <span>22.10.31</span></li>
+                                <li>[안내] 구매회원등급제약관개정 <span>22.10.31</span></li>
+                                <li>[안내] 개인정보취급방침약관개정 <span>22.10.31</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="board-box">
+                            <h4>고객문의</h4>
+                            <ul>
+                                <li>[가입] 가입문의내용 <span>chh**</span> <span>22.10.31</span></li>
+                                <li>[탈퇴] 탈퇴문의내용 <span>chh**</span> <span>22.10.31</span></li>
+                                <li>[회원정보] 회원정보문의내용 <span>chh**</span> <span>22.10.31</span></li>
+                                <li>[회원정보] 회원정보문의내용 <span>chh**</span> <span>22.10.31</span></li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </main>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="middle">
+            <p id="footer-p">
+                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+            </p>
+        </div>
+    </footer>
+
+    <!-- 모달(팝업) HTML -->
+    <div class="modal-overlay hidden" id="modal">
+        <div class="modal-popup">
+            <div class="modal-header">
+                <h2>상점등록</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-content">
+                <hr>
+                <div class="form-group">
+                    <label for="id">아이디</label>
+                    <input type="text" id="id">
+                    <span class="description">영문, 숫자 4~12자 설정</span>
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password">
+                     <span class="description">영문, 숫자, 특수문자 8~12자 설정</span>
+                </div>
+                <div class="form-group">
+                    <label for="password-confirm">비밀번호확인</label>
+                    <input type="password" id="password-confirm">
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="store-name">상호명</label>
+                    <input type="text" id="store-name" placeholder="상호명입력 예) (주)">
+                </div>
+                <div class="form-group">
+                    <label for="ceo-name">대표</label>
+                    <input type="text" id="ceo-name" placeholder="이름입력">
+                </div>
+                <div class="form-group">
+                    <label for="biz-reg-num">사업자등록번호</label>
+                    <input type="text" id="biz-reg-num">
+                    <span class="description">- 포함 12자리 입력</span>
+                </div>
+                 <div class="form-group">
+                    <label for="ecom-reg-num">통신판매업번호</label>
+                    <input type="text" id="ecom-reg-num">
+                    <span class="description">- 포함 12자리 입력</span>
+                </div>
+                <div class="form-group">
+                    <label for="tel">전화번호</label>
+                    <input type="text" id="tel">
+                </div>
+                <div class="form-group">
+                    <label for="fax">팩스</label>
+                    <input type="text" id="fax">
+                </div>
+                <div class="form-group">
+                    <label for="zipcode">주소</label>
+                    <input type="text" id="zipcode" placeholder="우편번호" readonly>
+                    <button type="button" id="searchAddressBtn" class="search-btn">우편번호 검색</button>
+                </div>
+                <div class="form-group">
+                    <label for="address"></label>
+                    <input type="text" id="address" placeholder="기본주소" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="address-detail"></label>
+                    <input type="text" id="address-detail" placeholder="상세주소입력">
+                </div>
+                <hr>
+            </div>
+            <div class="modal-footer">
+                <button>등록하기</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        // --- 모달 로직 ---
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+
+        // '등록하기' 버튼을 클릭하면 모달을 보여줍니다.
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+        });
+
+        // 'x' 버튼을 클릭하면 모달을 숨깁니다.
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // 모달의 배경(오버레이) 부분을 클릭하면 모달을 숨깁니다.
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        // --- Daum 우편번호 서비스 로직 ---
+        const searchAddressBtn = document.getElementById('searchAddressBtn');
+
+        function execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    let addr = ''; // 주소 변수
+
+                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져옵니다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣습니다.
+                    document.getElementById('zipcode').value = data.zonecode;
+                    document.getElementById("address").value = addr;
+                    // 커서를 상세주소 필드로 이동시킵니다.
+                    document.getElementById("address-detail").focus();
+                }
+            }).open();
+        }
+
+        // '우편번호 검색' 버튼 클릭 시 함수를 실행합니다.
+        searchAddressBtn.addEventListener('click', execDaumPostcode);
+
+    </script>
+
+</body>
+</html>

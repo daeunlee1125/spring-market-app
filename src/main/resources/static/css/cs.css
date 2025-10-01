@@ -1,0 +1,255 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    height: 100px; 
+    border-bottom: none;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.header-left {
+    padding-top: 80px;
+    display: flex;
+    align-items: flex-end; /* 로고 아래 정렬 */
+}
+
+.logo {
+    display: block;        /* 블록 처리 */
+    height: 60px;
+}
+
+main {
+    width: 90%;
+    max-width: 1250px;
+    margin: 0 auto;
+    
+}
+
+ /* 메인 타이틀 */
+ main > div:first-child {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+main > div:first-child p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+ /* 공통 섹션 스타일 */
+section {
+    background: white;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+section header-sec {
+    border-top: 3px solid #e9ecef;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+}
+
+section header-sec h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+section header-sec a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+section header-sec a:hover {
+    color: #0066cc;
+}
+
+ /* 공지사항 스타일 */
+.notice-list {
+    list-style: none;
+    padding: 0;
+}
+
+.notice-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+
+}
+
+.notice-list .title {
+    color: #333;
+    text-decoration: none;
+}
+
+.notice-list .date {
+    color: #666;
+    font-size: 14px;
+}
+
+.notice-list a {
+    text-decoration: none;
+    color: #333;
+}
+
+.notice-list a:hover {
+    font-weight: bold;
+}
+
+ /* FAQ 스타일 */
+
+.faq-list {
+    justify-content: center;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.faq-list a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+
+.faq-list img {
+    width: 70px;
+    height: 70px;
+    border: solid 1px black;
+    margin-bottom: 10px;
+}
+
+/* Q&A 스타일 */
+.qna-list {
+    list-style: none;
+    padding: 0;
+}
+
+.qna-list li {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.qna-list a {
+    flex: 1; 
+    display: block;
+    text-decoration: none;
+}
+
+.qna-list a:hover { 
+    font-weight: bold;
+}
+
+.qna-list li:last-child {
+    border-bottom: none;
+}
+
+.qna-list .type {
+    color: black;
+    padding: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.qna-list .title {
+    flex: 1;
+    color: #333;
+}
+
+.qna-list .writer {
+    color: #666;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.qna-list .date {
+    color: #666;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.qna-list .writer,
+.qna-list .date {
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+/* 1:1 상담 스타일 */
+.counseling {
+    padding: 0;
+}
+
+.counseling-content {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+}
+
+.counseling .user-guide,
+.counseling .seller-guide {
+    
+    padding: 20px;
+}
+
+.counseling .seller-guide {
+    border-left: 1px solid #f0f0f0;
+}
+
+.counseling h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.counseling .member-type {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 0;
+}
+
+.counseling .contact {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.counseling .ph {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.counseling .time {
+    font-size: 14px;
+    color: #666;
+}

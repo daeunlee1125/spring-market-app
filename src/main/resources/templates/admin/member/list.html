@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kmarket/admin - Final Version</title>
+    <!-- Font Awesome 아이콘 라이브러리 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
+    <link rel="stylesheet" href="/kmarket/inc/css/admin/member.css">
+
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            SHOPLY Admin
+        </div>
+        <nav>
+            <ul class="mainSideBar">
+                <li>
+                    <div><i class="fas fa-cog"></i> 환경설정</div>
+                    <ul class="subSideBar">
+                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+                    </ul>
+                </li>
+            <li>
+                <div><i class="fas fa-store"></i> 상점관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
+                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-users"></i> 회원관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
+                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-box-open"></i> 상품관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
+                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-truck"></i> 주문관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
+                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
+                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-headset"></i> 고객센터</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
+                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
+                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
+                </ul>
+            </li>
+        </ul>
+        </nav>
+    </aside>
+
+    <header>
+        <div class="middle">
+            <div id="logo">
+                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+            </div>
+            
+            <div class="header-nav">
+                <ul class="header-menu">
+                    <li><a href="/kmarket/index.html">홈</a></li>
+                    <li><a href="#">로그아웃</a></li>
+                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    
+
+    <div class="main">
+        <div class="middle main-content">
+            <div class="main-common">
+                <div class="main-head">
+                    <div>
+                        <h3>회원목록</h3>
+                    </div>
+                    <div class="main-head-right">
+                        <a href="">HOME</a>
+                        <div>
+                            &nbsp;>&nbsp;
+                        </div>
+                        <a href="">회원관리</a>
+                        <div>
+                            &nbsp;>&nbsp;
+                        </div>
+                        <a href="" class="nav-last">회원목록</a>
+                    </div>
+                </div>
+                <div class="main-content-top"></div>
+
+
+                <main>
+
+                    <!-- search bar 있으신 분들은 위쪽 select-2를 삭제 -->
+                    <div class="sub-top">
+                        
+                        
+                        <div class="search-bar">
+                            
+                            <form action="">
+                                <select name="" id="">
+                                    <option value="">아이디</option>
+                                    <option value="">이름</option>
+                                    <option value="">이메일</option>
+                                    <option value="">휴대폰</option>
+                                </select>
+                                <div class="search-place">
+                                    <input type="text" placeholder="검색어 입력">
+                                    <button type="submit">
+                                    <img src="/kmarket/inc/image/search.png" alt="검색">
+                                    </button>
+                                </div>
+                            </form> 
+                        </div>
+                    </div>
+                    <!-- 여기까지 sub-top -->
+
+
+                    <form action="">
+                        <table class="table">
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>번호</th>
+                                <th>아이디</th>
+                                <th>이름</th>
+                                <th>성별</th>
+                                <th>등급</th>
+                                <th>포인트</th>
+                                <th>이메일</th>
+                                <th>휴대폰</th>
+                                <th>가입일</th>
+                                <th>상태</th>
+                                <th>관리</th>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="userid" value="xxx..." ></td>
+                                <td>1</td>
+                                <td>xxx...</td>
+                                <td>정우성</td>
+                                <td>M</td>
+                                <td>
+                                    <select name="" class="rankbtn" id="">
+                                        <option value="VVIP">VVIP</option>
+                                        <option value="VIP">VIP</option>
+                                        <option value="GOLD">GOLD</option>
+                                        <option value="SILVER">SILVER</option>
+                                        <option value="FAMILY">FAMILY</option>
+                                    </select>
+                                </td>
+                                <td>15,000</td>
+                                <td>daeunlee@gmail.com</td>
+                                <td>010-2222-3333</td>
+                                <td>2023-01-32 12:22:22</td>
+                                <td class="running">
+                                    정상
+                                </td>
+                                <td>
+                                    
+                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
+                                    <button class="stop-btn"><a href="#">[ 중지 ]</a></button>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="userid" value="xxx..."></td>
+                                <td>1</td>
+                                <td>xxx...</td>
+                                <td>정우성</td>
+                                <td>M</td>
+                                <td>
+                                    <select name="" class="rankbtn" id="">
+                                        <option value="VVIP">VVIP</option>
+                                        <option value="VIP">VIP</option>
+                                        <option value="GOLD">GOLD</option>
+                                        <option value="SILVER">SILVER</option>
+                                        <option value="FAMILY">FAMILY</option>
+                                    </select>
+                                </td>
+                                <td>15,000</td>
+                                <td>daeunlee@gmail.com</td>
+                                <td>010-2222-3333</td>
+                                <td>2023-01-32 12:22:22</td>
+                                <td class="paused">
+                                    중지
+                                </td>
+                                <td>
+                                    
+                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
+                                    <button class="restart-btn"><a href="#">[ 재개 ]</a></button>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="userid" value="xxx..."></td>
+                                <td>1</td>
+                                <td>xxx...</td>
+                                <td>정우성</td>
+                                <td>M</td>
+                                <td>
+                                    <select name="" class="rankbtn" id="">
+                                        <option value="VVIP">VVIP</option>
+                                        <option value="VIP">VIP</option>
+                                        <option value="GOLD">GOLD</option>
+                                        <option value="SILVER">SILVER</option>
+                                        <option value="FAMILY">FAMILY</option>
+                                    </select>
+                                </td>
+                                <td>15,000</td>
+                                <td>daeunlee@gmail.com</td>
+                                <td>010-2222-3333</td>
+                                <td>2023-01-32 12:22:22</td>
+                                <td class="sleep">
+                                    휴면
+                                </td>
+                                <td>
+                                    
+                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
+                                    <button class="restart-btn"><a href="#">[ 재개 ]</a></button>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="userid" value="xxx..."></td>
+                                <td>1</td>
+                                <td>xxx...</td>
+                                <td>정우성</td>
+                                <td>M</td>
+                                <td>
+                                    <select name="" class="rankbtn" id="">
+                                        <option value="VVIP">VVIP</option>
+                                        <option value="VIP">VIP</option>
+                                        <option value="GOLD">GOLD</option>
+                                        <option value="SILVER">SILVER</option>
+                                        <option value="FAMILY">FAMILY</option>
+                                    </select>
+                                </td>
+                                <td>15,000</td>
+                                <td>daeunlee@gmail.com</td>
+                                <td>010-2222-3333</td>
+                                <td>2023-01-32 12:22:22</td>
+                                <td class="gone">
+                                    탈퇴
+                                </td>
+                                <td>
+                                    
+                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
+                                    <button class="quit-btn"><a href="#">[ 비활성 ]</a></button>
+                                    
+                                </td>
+                            </tr>
+
+                        </table>
+                    </form>
+
+
+                    <!-- banner-actions div 안에서 가지고 있는 버튼 따라 삭제하시면 됩니당 -->
+                    <!-- 페이지 넘기는 버튼 삭제하고 싶으면 그냥 page 삭제하면 되고 -->
+                    <!-- 버튼을 삭제하고 싶으면 버튼 클래스를 transpar로 바꿔주세요! -->
+                    <div class="banner-actions">
+                        <button class="delete-btn">선택수정</button>
+
+                        <div class="page">
+                            <a href="#" class="prev">이전</a>
+                            <a href="#" class="num current">1</a>
+                            <a href="#" class="num">2</a>
+                            <a href="#" class="num">3</a>
+                            <a href="#" class="next">다음</a>
+                        </div>
+
+                        <button class="transpar" id="openModalBtn">상점등록</button>
+                    </div>
+                    
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="middle">
+            <p id="footer-p">
+                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+            </p>
+        </div>
+    </footer>
+
+
+
+
+    <!-- 모달(팝업) HTML -->
+    <div class="modal-overlay hidden modal" id="modal">
+        <div class="modal-popup">
+            <form action="">
+                <div class="modal-header">
+                    <h2>회원수정</h2>
+                    <button class="close-btn closeModalBtn" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="modal-content">
+                    <!-- 테이블 같은 건 다 modal-content 안에서 만드시면 됩니당 -->
+                     <hr>
+                    <div class="form-group">
+                        <label for="id">아이디</label>
+                        <input type="text" id="id" placeholder="abc1234">
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">이름</label>
+                        <input type="text" id="name" value="홍길동">
+                    </div>
+                    <div class="form-group">
+                        <label for="gen">성별</label>
+                        <div>
+                            <input type="radio" id="gen" name="gen" value="M">남&nbsp;&nbsp;&nbsp;
+                            <input type="radio" id="gen" name="gen" value="F">여
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="rank">등급</label>
+                        <input type="text" id="rank" placeholder="VVIP" readonly>
+                        <span class="description">회원 등급은 목록에서 선택수정 가능</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="">상태</label>
+                        <div class="running">정상</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">EMAIL</label>
+                        <input type="text" id="email" value="abc1234@gmail.com">
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="hp">휴대폰</label>
+                        <input type="text" id="hp" value="010-2222-2222">
+                    </div>
+                    <div class="form-group">
+                        <label for="zipcode">주소</label>
+                        <input type="text" id="zipcode" placeholder="우편번호" readonly>
+                        <button type="button" id="searchAddressBtn" class="search-btn">우편번호 검색</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="address"></label>
+                        <input type="text" id="address" placeholder="기본주소" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="address-detail"></label>
+                        <input type="text" id="address-detail" placeholder="상세주소입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="">가입일</label>
+                        <div>0000-00-00 00:00:00</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">최근 로그인 날짜</label>
+                        <div>0000-00-00 00:00:00</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">기타</label>
+                        <textarea name="" id=""></textarea>
+                    </div>
+
+                    <hr>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit">수정하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+
+    <script>
+        // --- 모달 로직 ---
+        document.addEventListener("DOMContentLoaded", () => {
+        // 열기 버튼
+        document.querySelectorAll(".openModalBtn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetId = btn.dataset.target;
+            document.getElementById(targetId).classList.remove("hidden");
+            });
+        });
+
+        // 닫기 버튼 + 배경 클릭
+        document.querySelectorAll(".modal").forEach(modal => {
+            modal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
+                modal.classList.add("hidden");
+            }
+            });
+        });
+        });
+
+
+    </script>
+    <script src="/kmarket/inc/js/admin/member.js"></script>
+
+
+</body>
+</html>

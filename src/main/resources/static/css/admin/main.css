@@ -1,0 +1,138 @@
+/* 관리자 메인 공통 */
+main {
+    padding: 20px;
+}
+
+/* 큰 메인 박스 */
+.admin-main-box {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* 집계현황 */
+.dashboard {
+    margin-bottom: 30px;
+}
+.dashboard-charts {
+    display: flex;
+    gap: 20px;
+}
+.chart-box {
+    flex: 1;
+    border: 1px solid #ddd;
+    padding: 15px;
+    background: #fff;
+    text-align: center;
+}
+.chart-box img {
+    width: 100%;
+    height: auto;
+}
+
+/* 운영현황 (큰 테이블) */
+.status {
+    margin-bottom: 30px;
+}
+
+/* 운영현황 상단 */
+.status-top {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    margin-bottom: 20px;
+    background: #fff;
+}
+.status-top th {
+    background: #f5f5f5;
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-weight: bold;
+}
+.status-top td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    font-weight: bold;
+    color: #d00;
+    background: #fff;
+}
+
+
+.status-bottom {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    margin-top: 15px;
+    background: #fff;
+}
+
+.status-bottom th {
+    background: #f5f5f5;
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.status-bottom td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    vertical-align: top;
+}
+
+/* 메인 숫자 강조 */
+.status-bottom .main-row td {
+    font-size: 16px;
+    font-weight: bold;
+    color: #d00;
+    background: #fcfcfc;
+}
+
+/* 작은 2x2 테이블 */
+.mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 13px;
+}
+.mini-table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+}
+.mini-table tr td:first-child {
+    font-weight: bold;
+    background: #f9f9f9;
+    width: 50%;
+}
+.mini-table tr td:last-child {
+    width: 50%;
+}
+
+
+/* 공지사항 & 고객문의 */
+.board {
+    display: flex;
+    gap: 20px;
+}
+.board-box {
+    flex: 1;
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 15px;
+}
+.board-box h4 {
+    margin-bottom: 10px;
+}
+.board-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.board-box li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}

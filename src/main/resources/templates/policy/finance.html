@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoply 전자금융거래 약관</title>
+
+  <link rel="stylesheet" href="/kmarket/inc/css/index.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/policy.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- jQuery (bxSlider 필요시 대비) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+  <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="top-bar-back">
+    <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
+  </div>
+
+  <!-- 1번째 줄 -->
+  <div class="top-header">
+    <!-- 로고 -->
+    <div class="header-left">
+      <img src="/kmarket/inc/image/logo.jpg" alt="로고" class="logo">
+    </div>
+
+    <!-- 검색창 -->
+    <div class="header-center">
+      <form action="">
+        <input type="text" placeholder="검색">
+        <button type="submit">
+          <img src="/kmarket/inc/image/search.png" alt="검색">
+        </button>
+      </form>
+    </div>
+
+    <!-- 아이콘 + 로그인 메뉴 -->
+    <div class="header-right">
+      <img src="/kmarket/inc/image/user.png" alt="유저" class="icon">
+      <img src="/kmarket/inc/image/cart.png" alt="장바구니" class="icon" style="width: 30px;">
+    </div>
+  </div>
+
+  <!-- 2번째 줄 -->
+  <div class="bottom-header">
+    <div class="header-left">
+      <a href="#" id="categoryBtn"> 전체 카테고리</a>
+      <a href="#">히트상품</a>
+      <a href="#">추천상품</a>
+      <a href="#">최신상품</a>
+      <a href="#">인기상품</a>
+      <a href="#">할인상품</a>
+    </div>
+
+    <div class="header-right login-menu">
+      <a href="#">로그인</a> | 
+      <a href="#">회원가입</a> | 
+      <a href="#">고객센터</a>
+    </div>
+  </div>
+</header>
+
+
+<div class="wrapper">
+
+  <!-- 전체 카테고리 눌렀을 때 나오는 메뉴 -->
+  <div id="categoryBox" class="category-box" style="display:none;">
+    <div class="main-menu">
+      <ul>
+        <li data-target="menu1">패션/의류/뷰티</li>
+        <li data-target="menu2">패션잡화</li>
+        <li data-target="menu3">명품</li>
+        <li data-target="menu4">뷰티</li>
+      </ul>
+    </div>
+
+    <div class="sub-menu">
+      <ul id="menu1" class="submenu-content">
+        <li><a href="#">여성의류</a></li>
+        <li><a href="#">남성의류</a></li>
+        <li><a href="#">아동복</a></li>
+      </ul>
+      <ul id="menu2" class="submenu-content" style="display:none;">
+        <li><a href="#">가방</a></li>
+        <li><a href="#">신발</a></li>
+      </ul>
+      <ul id="menu3" class="submenu-content" style="display:none;">
+        <li><a href="#">해외 명품</a></li>
+      </ul>
+      <ul id="menu4" class="submenu-content" style="display:none;">
+        <li><a href="#">스킨케어</a></li>
+        <li><a href="#">메이크업</a></li>
+      </ul>
+    </div>
+  </div>
+
+<!-- 상단 배너 -->
+<div class="policy-banner">
+  <div class="banner-text">
+    <p>Shoply는 고객 여러분의 정보를 소중하게 생각합니다.<br>
+    다양한 정책 및 법률을 확인해 보세요.</p>
+  </div>
+  <div class="banner-img">
+    <i class="fa-solid fa-shield-halved"></i>
+  </div>
+</div>
+
+  <!-- 메인 컨텐츠 (약관 내용) -->
+  <main class="policy-wrapper">
+    <!-- 메인 타이틀 -->
+    <h2 class="policy-main-title">Shoply 서비스 이용 약관</h2>
+
+    <!-- 약관 메뉴 -->
+    <div class="policy-menu">
+      <div class="menu-center">
+        <a href="buyer.html" class="menu-item">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span>구매회원 약관</span>
+        </a>
+        <a href="seller.html" class="menu-item">
+          <i class="fa-brands fa-sellsy"></i>
+          <span>판매회원 약관</span>
+        </a>
+        <a href="finance.html" class="menu-item active">
+          <i class="fa-solid fa-sack-dollar"></i>
+          <span>전자금융거래 약관</span>
+        </a>
+        <a href="location.html" class="menu-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>위치정보 약관</span>
+        </a>
+        <a href="privacy.html" class="menu-item">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>개인정보 처리방침</span>
+        </a>
+      </div>
+
+      <!-- 인쇄 버튼 -->
+      <button class="print-btn">
+        <i class="fa-solid fa-print"></i>
+      </button>
+    </div>
+
+    <!-- 약관 본문 -->
+    <div class="policy-content">
+      <h3>제1조 (목적)</h3>
+      <p>
+        본 약관은 주식회사 샵플리(이하 “회사”라 함)가 제공하는 전자금융거래서비스를 이용자가 온라인 또는 오프라인으로 이용하는 경우,
+        회사와 이용자 간 전자금융거래의 법률관계를 정함을 그 목적으로 합니다.
+      </p>
+
+      <h3>제2조 (정의)</h3>
+      <p>
+        본 약관에서 사용하는 용어의 정의는 다음과 같습니다.<br>
+        1. “전자금융거래”라 함은 회사가 전자적 장치를 통하여 제공하는 금융서비스를 이용자가 금융회사 또는 전자금융업자의 종사자와 직접 대면하지 않고 이용하는 거래를 말합니다.<br>
+        2. “전자지급거래”라 함은 이용자가 회사의 전자지급수단을 이용하여 자금을 지급하는 거래를 말합니다.<br>
+        3. “전자지급수단”이라 함은 선불전자지급수단, 직불전자지급수단, 신용전자지급수단 등 전자적 방법을 이용하여 지급을 할 수 있는 수단을 말합니다.<br>
+        4. “접근매체”라 함은 전자금융거래에 있어서 거래지시를 하거나 이용자를 확인하는데 사용되는 수단으로서 전자카드, 비밀번호, 인증서 등을 말합니다.<br>
+        5. “전자금융업무”라 함은 회사가 전자적 장치를 통하여 제공하는 모든 금융 관련 서비스를 말합니다.<br>
+        6. 기타 본 약관에서 사용하는 용어의 정의는 관련 법령 및 일반적인 거래 관행에 따릅니다.
+      </p>
+
+      <h3>제3조 (약관의 명시 및 변경)</h3>
+      <p>
+        1. 회사는 이용자가 전자금융거래를 하기 전에 본 약관을 인터넷사이트 초기화면에 게시하고, 약관의 중요 내용을 확인할 수 있도록 합니다.<br>
+        2. 회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 변경할 수 있으며, 약관이 변경되는 경우 적용일자 및 사유를 명시하여
+        적용일자 1일 전부터 인터넷사이트 초기화면에 게시하거나 전자적 수단을 통하여 이용자에게 공지합니다.
+      </p>
+
+      <h3>제4조 (전자금융거래서비스의 구성 및 종류)</h3>
+      <p>
+        회사가 제공하는 전자금융거래서비스는 다음과 같습니다.<br>
+        1. 전자지급결제대행서비스<br>
+        2. 선불전자지급수단 발행 및 관리서비스<br>
+        3. 결제대금예치서비스(에스크로 서비스)<br>
+        4. 기타 회사가 정하는 전자금융 관련 서비스
+      </p>
+      <h3>제5조 (거래내용의 확인)</h3>
+      <p>
+      ① 회사는 인터넷사이트와 모바일 애플리케이션(이하 "Shoply")의 해당 서비스 조회 화면을 통하여 전자금융거래의 내용(이용자의 "오류정정 요구사실 및 처리결과에 관한 사항"을 포함합니다)을 확인할 수 있도록 하며, 이용자의 거래내용 서면 교부를 요청하는 경우에는 요청일로부터 2주 이내에 거래내용에 관한 서면을 교부합니다.<br><br>
+
+      ② 회사는 이용자가 Shoply를 통해 전자금융거래를 실행한 경우, 해당 거래내용을 전자문서 형태로 보관하며, 법령에 따라 일정기간 내 보관된 거래내역을 확인할 수 있도록 조치를 취합니다.<br><br>
+
+      ③ 이용자가 본인 확인을 위해 회사에 제공해야 하는 정보는 다음과 같습니다.<br>
+      1. 거래계좌의 명칭 또는 번호<br>
+      2. 거래의 종류 및 금액<br>
+      3. 거래 상대방을 나타내는 정보<br>
+      4. 거래 일시<br>
+      5. 전자적 장치의 종류 및 전자적 장치로 식별할 수 있는 정보<br>
+      6. 거래가 전자금융거래법에 따라 발생한 경우 그 수수료<br>
+      7. 거래의 처리 결과에 관한 정보<br>
+      8. 그 밖에 전자금융거래의 안전 및 신뢰성을 확보하기 위하여 대통령령으로 정한 사항
+      </p>
+
+     
+
+      <h3>제6조 (오류의 정정 등)</h3>
+      <p>
+      ① 이용자는 Shoply의 전자금융거래서비스를 이용함에 있어 오류가 있음을 안 때에는 회사에 그 정정을 요구할 수 있습니다.<br>
+      ② 회사는 이용자로부터 오류 정정 요구를 받은 경우, 즉시 조사하여 처리한 후 정정 요구를 받은 날로부터 2주 이내에 그 처리 결과를 이용자에게 알립니다.<br>
+      ③ 회사의 고의 또는 과실로 인하여 오류가 발생한 경우, 그로 인한 손해에 대해서는 회사가 책임을 집니다.
+      </p>
+
+      
+
+      <h3>제7조 (전자금융거래 기록의 생성 및 보존)</h3>
+      <p>
+      ① 회사는 이용자가 Shoply를 통해 수행한 전자금융거래의 내용을 추적·검색할 수 있도록 기록을 생성하여 보존합니다.<br>
+      ② 기록의 보존 기간은 전자금융거래법 및 관련 규정이 정한 기간에 따릅니다.<br>
+      ③ 회사는 거래내용의 위·변조, 훼손 및 도난을 방지하기 위하여 보안 기술 및 관리 체계를 갖추고, 이용자가 언제든 해당 기록을 확인할 수 있도록 조치합니다.
+      </p>
+
+      
+
+      <h3>제8조 (거래지시의 철회)</h3>
+      <p>
+      ① 이용자가 Shoply를 통해 거래지시를 한 경우, 거래지시는 철회가 불가능할 수 있습니다. 다만 법령에서 별도로 정한 경우에는 예외로 합니다.<br>
+      ② 거래지시 철회의 처리 가능 여부는 결제수단의 종류와 거래 단계에 따라 달라질 수 있으며, 회사는 이용자에게 사전 안내합니다.
+      </p>
+
+      
+
+      <h3>제9조 (전자금융거래정보의 제공금지)</h3>
+      <p>
+      회사는 전자금융거래서비스를 제공함에 있어 취득한 이용자의 인적사항, 계좌정보 및 거래내용에 관한 정보를 이용자의 동의 없이 제3자에게 제공하거나 누설하지 않습니다. 다만, 법령에 의해 요구되는 경우에는 예외로 합니다.
+      </p>
+
+      
+
+      <h3>제10조 (회사의 책임)</h3>
+      <p>
+      ① 회사는 다음 각 호의 사고로 인해 이용자에게 손해가 발생한 경우 그 손해를 배상할 책임이 있습니다.<br>
+      1. 접근매체의 위조나 변조로 발생한 사고<br>
+      2. 계약 체결 또는 거래지시의 전자적 전송이나 처리 과정에서 발생한 사고<br>
+      3. 기타 전자금융거래의 이용과정에서 발생한 사고<br><br>
+
+      ② 다만, 회사는 다음 각 호의 경우에는 면책됩니다.<br>
+      1. 이용자가 접근매체를 제3자에게 대여하거나 양도·담보의 목적으로 제공한 경우<br>
+      2. 이용자가 고의 또는 중대한 과실로 접근매체를 누설·노출하거나 방치한 경우<br>
+      3. 그 밖에 법령에서 정한 경우
+      </p>
+
+      
+
+      <h3>제11조 (분쟁처리 및 분쟁조정)</h3>
+      <p>
+      ① 이용자는 Shoply 초기 화면에 게시된 고객센터를 통해 전자금융거래와 관련한 분쟁 처리를 신청할 수 있습니다.<br>
+      ② 회사는 분쟁 처리 신청을 접수한 날로부터 15일 이내에 결과를 이용자에게 안내합니다.<br>
+      ③ 이용자는 회사의 분쟁 처리 결과에 이의가 있는 경우, 금융감독원·한국소비자원 등 외부 분쟁조정기관을 통해 분쟁조정을 신청할 수 있습니다.
+      </p>
+
+      
+
+      <h3>제12조 (회사의 안전성 확보 의무)</h3>
+      <p>
+      회사는 전자금융거래의 안전성과 신뢰성을 확보하기 위하여 관련 법령에서 정한 기술적·관리적 조치를 취합니다.  
+      예: 암호화 기술, 접근통제, 보안 프로그램 설치 및 갱신 등.
+      </p>
+
+      
+
+      <h3>제13조 (약관의 준칙)</h3>
+      <p>
+      이 약관에서 정하지 아니한 사항은 전자금융거래법 등 관련 법령 및 일반 상관습에 따릅니다.
+      </p>
+
+      
+      <h3>제14조 (관할)</h3>
+      <p>
+      이 약관에 의한 전자금융거래와 관련된 분쟁은 회사의 본사 소재지를 관할하는 법원을 제1심 관할법원으로 합니다.
+      </p>
+
+
+    </div>
+  </main>
+</div>
+
+
+<footer>
+  <div class="top-footer">
+    <div class="footer-wrapper">
+      <div class="top-f">
+        <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
+        <a href="#">서비스이용약관</a> |
+        <a href="#" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
+        <a href="#">전자금융거래약관</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-wrapper">
+    <h3 class="cpname">(주)샵플리닷컴</h3>
+    <div class="call-cont">
+      <img src="/kmarket/inc/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
+      <span class="tel">1234-5678</span>
+      <span class="time"> (평일 09:00~18:00)</span>
+    </div>
+    <div style="color: gray; margin-top: 15px">
+      <span>대표이사 : 홍길동</span>
+      <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
+      <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
+
+      <div style="margin-top: 3px;">
+        <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 인쇄 기능
+  document.querySelector(".print-btn").addEventListener("click", function() {
+    window.print();
+  });
+
+  // 카테고리 박스 toggle
+  document.getElementById("categoryBtn").addEventListener("click", function(e) {
+    e.preventDefault();
+    const box = document.getElementById("categoryBox");
+    box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+  });
+
+  // 메인메뉴 hover 시 서브메뉴 표시
+  document.querySelectorAll(".main-menu li").forEach(item => {
+    item.addEventListener("mouseenter", function() {
+      document.querySelectorAll(".submenu-content").forEach(sub => sub.style.display = "none");
+      document.getElementById(this.dataset.target).style.display = "block";
+    });
+  });
+</script>
+
+<script src="/kmarket/inc/js/index.js"></script>
+</body>
+</html>

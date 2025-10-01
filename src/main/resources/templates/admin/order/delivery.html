@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>kmarket/admin - 매출현황</title>
+  <!-- 공통 CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/admin_temp.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/admin_list.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
+
+
+
+
+</head>
+<body>
+  <!-- 사이드바 -->
+<aside class="sidebar">
+    <div class="sidebar-header">SHOPLY Admin</div>
+    <nav>
+      <ul class="mainSideBar">
+        <li>
+          <div><i class="fas fa-cog"></i> 환경설정</div>
+          <ul class="subSideBar">
+            <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+            <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+            <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+            <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+            <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-store"></i> 상점관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">상점목록</a></li>
+            <li><a href="#">매출현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-users"></i> 회원관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">회원목록</a></li>
+            <li><a href="#">포인트관리</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-box-open"></i> 상품관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">상품목록</a></li>
+            <li><a href="#">상품등록</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-truck"></i> 주문관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">주문현황</a></li>
+            <li><a href="#">배송현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-truck"></i> 쿠폰관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">쿠폰목록</a></li>
+            <li><a href="#">쿠폰발급현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-headset"></i> 고객센터</div>
+          <ul class="subSideBar">
+            <li><a href="#">공지사항</a></li>
+            <li><a href="#">자주묻는질문</a></li>
+            <li><a href="#">문의하기</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- 헤더 -->
+  <header>
+    <div class="middle">
+      <div id="logo">
+        <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+      </div>
+      <div class="header-nav">
+        <ul class="header-menu">
+          <li><a href="#">홈</a></li>
+          <li><a href="#">로그아웃</a></li>
+          <li><a href="#">고객센터</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 -->
+  <div class="main">
+    <div class="middle main-content">
+      <div class="main-common">
+        <div class="main-head">
+          <div><h3>매출현황</h3></div>
+          <div class="main-head-right">
+            <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
+            <a href="">상점관리</a><div>&nbsp;>&nbsp;</div>
+            <a href="" class="nav-last">매출현황</a>
+          </div>
+        </div>
+
+        <!-- 검색조건 카테고리 -->
+        <div class="search-tabs">
+        <ul>
+            <li class="active"><a href="#">일별</a></li>
+            <li><a href="#">주간</a></li>
+            <li><a href="#">월별</a></li>
+        </ul>
+        </div>
+
+        <!-- 매출현황 테이블 ★주문건수,주문합계,매출합계는 눌렀을때 오름차순/내림차순 왔다갔다 가능해야함-->
+        <main>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>상호명</th>
+                <th>사업자등록번호</th>
+                <th><a href="?sort=orderCount">주문건수</a></th>
+                <th>결제완료</th>
+                <th>배송중</th>
+                <th>배송완료</th>
+                <th>구매확정</th>
+                <th><a href="?sort=orderTotal">주문합계</a></th>
+                <th><a href="?sort=salesTotal">매출합계</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>5</td>
+                <td>(주) 다나와</td>
+                <td>112-12-12345</td>
+                <td>103</td>
+                <td>90</td>
+                <td>56</td>
+                <td>52</td>
+                <td>50</td>
+                <td>12,870,600</td>
+                <td>10,870,600</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>(주) 맛남</td>
+                <td>112-12-12344</td>
+                <td>26</td>
+                <td>24</td>
+                <td>12</td>
+                <td>6</td>
+                <td>6</td>
+                <td>5,683,200</td>
+                <td>5,230,000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>(주) 컴퓨존</td>
+                <td>112-12-12343</td>
+                <td>36</td>
+                <td>27</td>
+                <td>20</td>
+                <td>16</td>
+                <td>14</td>
+                <td>18,720,000</td>
+                <td>16,720,000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>누리푸드</td>
+                <td>112-12-12342</td>
+                <td>56</td>
+                <td>52</td>
+                <td>37</td>
+                <td>30</td>
+                <td>28</td>
+                <td>7,581,400</td>
+                <td>7,080,800</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>굿바디 스포츠</td>
+                <td>112-12-12341</td>
+                <td>79</td>
+                <td>70</td>
+                <td>58</td>
+                <td>43</td>
+                <td>40</td>
+                <td>4,820,700</td>
+                <td>4,620,700</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 페이지네이션 -->
+          <div class="page">
+            <a href="#" class="prev">이전</a>
+            <a href="#" class="num current">1</a>
+            <a href="#" class="num">2</a>
+            <a href="#" class="num">3</a>
+            <a href="#" class="num">4</a>
+            <a href="#" class="num">5</a>
+            <a href="#" class="next">다음</a>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="middle">
+      <p id="footer-p">
+        Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

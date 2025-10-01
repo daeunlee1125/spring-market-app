@@ -1,0 +1,170 @@
+/* 상단 배너 */
+.policy-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #7b4397, #dc2430); /* 보라 → 레드 그라데이션 */
+  color: white;
+  padding: 25px 35px; /* 살짝 줄임 */
+  border-radius: 10px;
+  margin: 20px auto 30px; /* 아래 여백 줄여서 타이틀과 붙임 */
+  max-width: 960px;
+}
+
+.policy-banner .banner-text {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.policy-banner .banner-img {
+  font-size: 55px;   /* 아이콘 크기 */
+}
+
+
+
+/* 메인 타이틀 */
+.policy-main-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+  text-align: center;
+  margin-bottom: 60px; /* 40px → 25px: 배너와 타이틀 간격 줄임 */
+  font-family: 'Arial', 'Noto Sans KR', sans-serif;
+}
+
+/* 약관 영역 */
+.policy-wrapper {
+  max-width: 960px;
+  margin: 30px auto; /* 50px → 30px: 전체 여백 줄임 */
+  padding: 20px;
+  font-family: 'Arial', 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.7;
+}
+
+/* 메뉴 전체 */
+.policy-menu {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 25px; /* 살짝 줄임 */
+}
+
+/* 메뉴 아이템 */
+.policy-menu .menu-center {
+  display: flex;
+  gap: 50px; /* 아이템 간격 */
+}
+
+.policy-menu .menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #666;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.policy-menu .menu-item i {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+/* hover */
+.policy-menu .menu-item:hover {
+  color: #333;
+}
+
+/* 활성화 */
+.policy-menu .menu-item.active {
+  color: purple;
+  font-weight: bold;
+}
+.policy-menu .menu-item.active i {
+  color: purple;
+}
+
+
+/* 인쇄 버튼 */
+.print-btn {
+  position: absolute;
+  right: 0;
+  top: -28px;   /* 조금 위 */
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.print-btn i {
+  font-size: 16px;   /* 더 작게 */
+  color: #666;
+  transition: color 0.2s;
+}
+
+.print-btn i:hover {
+  color: purple;
+}
+
+
+
+.policy-content h3 {
+  font-size: 14px;
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.policy-content p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+
+
+/* 개인정보 처리방침 표 스타일 */
+.policy-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.policy-content table th,
+.policy-content table td {
+  border: 1px solid #ddd;
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.policy-content table th {
+  background: #f7f7f7;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+}
+
+.policy-content table tr:nth-child(even) {
+  background: #fafafa; /* 줄마다 은은한 배경 */
+}
+
+.policy-content table tr:hover {
+  background: #f3f0ff; /* hover 시 연보라 강조 */
+}
+
+/* 표 안쪽 텍스트 */
+.policy-content table td {
+  line-height: 1.6;
+  color: #444;
+}

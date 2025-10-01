@@ -1,0 +1,287 @@
+/* 아마 height 정도만 수정하면 될 것 같아요 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+.table tr th {
+    height: 40px;
+    background-color:#f3effa; 
+    border: 1px solid #ddd;
+    color: #4a2f73; 
+
+}
+.table tr td {
+    height: 60px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #eee;
+    color: #444;
+    padding: 3px;
+
+}
+.table tr:hover td {
+  background: #faf7ff;
+}
+
+.table td input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+}
+.table td input:hover {
+    font-weight: bold;
+    color: #4a2f73;
+}
+.table td img {
+  width: 60px;      /* td 너비에 맞춤 */
+  height: 60px;     /* td 높이에 맞춤 */
+  object-fit: cover; /* 비율 유지하면서 넘치는 부분은 잘라냄 */
+}
+
+
+
+/* (여기부터 수정X) */
+.page {
+    text-align: center;
+    margin-top: 5px;
+}
+.page > a {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #d7d7d7;
+    background: #f2f2f2;
+}
+
+.page > .current {
+    border: 1px solid #6d6d6d;
+    background: #888;
+    color: #fff;
+}
+
+.sub-top {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+
+  margin-top: 30px;
+
+}
+
+.search-bar {
+    width: 300px;
+    position: relative;
+    bottom: 8px;
+}
+.search-bar form {
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+  gap: 8px;            /* 간격 */
+}
+
+.search-bar select {
+  width: 111px;
+  height: 35px; /* search-place 높이와 맞춰주면 깔끔 */
+  font-size: 14px;
+  border: 1px solid rgb(201, 201, 201);
+  background-color: white;
+  
+}
+
+
+.search-bar .search-place {
+  flex: 1; /* 남은 공간 차지 */
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  background-color: white;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background-color: transparent;
+}
+
+
+.search-bar button {
+  background-color: transparent;
+  border: 0;
+  height: 25px;
+  padding-top: 2px;
+  cursor: pointer;
+}
+.search-bar button img {
+  width: 20px;
+}
+
+
+
+.select-2 {
+  width: 111px;
+  height: 35px;
+  font-size: 14px;
+  border: 1px solid rgb(201, 201, 201);
+  background-color: white;
+  margin-bottom: 10px;
+  margin-top: 23px;
+  
+}
+
+
+
+.transpar {
+    background-color: transparent;
+    border: none;
+    padding: 13px 32px;
+    font-size: 16px;
+    color: transparent;
+}
+
+tr td .mod-btn{
+    
+    background-color: transparent;
+    border-width: 0px;
+}
+
+tr td .del-btn{
+    
+    background-color: transparent;
+    border-width: 0px;
+
+}
+.table td button:hover {
+    font-weight: bold;
+    color: #4a2f73;
+}
+
+
+
+
+
+
+
+.h2-1 {
+    margin: 30px 0 15px;
+    font-size: 21px;
+    font-weight: bold;
+    position: relative;
+    color: #4a2f73; /* 진한 보라 */
+}
+.h2-1::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #a77ece, #6c3fc9);
+    border-radius: 2px;
+}
+
+.gray-1 {
+    background: linear-gradient(90deg, #f1f3f2, #ececec);
+    height: 38px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    border-left: 4px solid #a77ece; /* 포인트 */
+}
+
+.table-1 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 35px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.table-1 th {
+    background: #f3effa;
+    border: 1px solid #ddd;
+    font-weight: 600;
+    color: #333;
+}
+.table-1 td {
+    border: 1px solid #eee;
+    padding: 12px 15px;
+    color: #444;
+    transition: background 0.2s ease;
+}
+.table-1 tr:hover td {
+    background: #faf7ff;
+}
+.table-1 .submit-1 {
+    border: 0;
+    padding: 0px;
+    padding-right: 42px;
+
+}
+
+.input-1 {
+    width: 95%;
+    padding: 12px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fafafa;
+    font-size: 15px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-1:focus {
+    border-color: #a77ece;
+    box-shadow: 0 0 4px rgba(167,126,206,0.5);
+    outline: none;
+    background: #fff;
+}
+input[type="file"] {
+    width: 40%;
+}
+
+.submit-btn-1 {
+    border: 0;
+    height: 45px;
+    width: 120px;
+    margin: 0;
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    float: right;
+    margin-bottom: 20px;
+}
+.submit-btn-1:hover {
+    background: linear-gradient(135deg, #6c3fc9, #4a2f73);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.yellow {
+    background: rgb(245, 245, 229);
+    height: 50px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+td select {
+    height: 40px;
+    margin: 0px;
+    width: 200px;
+}
+
+

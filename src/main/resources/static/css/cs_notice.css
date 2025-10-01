@@ -1,0 +1,660 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    height: 100px; 
+    border-bottom: none;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.header-left {
+    padding-top: 80px;
+    display: flex;
+    align-items: flex-end; 
+}
+
+.logo {
+    display: block;        
+    height: 60px;
+}
+
+body {
+    font-family: 'Malgun Gothic', sans-serif;
+    color: #333;
+}
+
+.container {
+    max-width: 1250px;
+    margin: 0 auto;
+    background: white;
+    /* min-height: 100vh; */
+}
+
+/* 브레드크럼 */
+.breadcrumb {
+    padding: 15px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin-top: 50px;
+}
+
+.breadcrumb a {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* 메인 영역 */
+.main-area {
+    display: flex;
+}
+
+/* 사이드바 */
+.sidebar {
+    width: 200px;
+    border-right: 1px solid #ddd;
+    padding: 10px 0;
+    text-align: center;
+    min-height: 55vh;
+}
+
+.sidebar-menu {
+    display: inline-block;
+    text-align: left;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu .category-title {
+padding: 15px 10px;  
+font-weight: bold;
+font-size: 16px;
+margin-bottom: 15px;
+} 
+
+.sidebar-menu a {
+display: block;
+padding: 8px 20px;
+color: #333;
+text-decoration: none;
+font-size: 13px;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+font-weight: bold;
+text-decoration: underline;
+}
+
+.sidebar-menu .category-title {
+padding: 15px 10px;
+font-weight: bold;
+font-size: 16px;
+margin-bottom: 15px;
+}
+
+.sidebar-menu .category-title::before {
+margin-right: 5px;
+}
+
+
+/* 메인 콘텐츠 */
+.main-content {
+flex: 1;
+display: flex;
+flex-direction: column;
+}
+
+/* 공통 헤더 스타일 (공지사항, 문의하기에서 공통 사용) */
+.main-content .notice-header{
+border-bottom: solid 2px;
+padding: 20px 0px;
+}   
+
+.notice-header h2, .inquiry-header h2 {
+font-size: 20px;
+margin-bottom: 5px;
+}
+
+.notice-header p, .inquiry-header p {
+font-size: 13px;
+color: #777;
+}
+
+.notice-header {
+border-bottom: 1px solid #ccc;
+width: 90%; 
+margin: 0 auto;
+}
+
+/* 공지사항 리스트 */
+.notice-list {
+padding: 0;
+list-style: none;
+border: none;
+}
+
+.notice-item {
+border-top: 1px solid #ccc; 
+border-bottom: none;
+width: 90%;
+margin: 0 auto; 
+}
+
+.notice-item:first-child {
+border-top: none; 
+}
+
+.notice-item a {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 12px 10px;
+text-decoration: none;
+color: inherit;
+}
+
+.notice-item:hover {
+background: #f8f9fa;
+}
+
+.notice-category {
+font-size: 12px;
+}
+
+.notice-content {
+flex: 1;
+font-size: 14px;
+color: #333;
+}
+
+.notice-title {
+color: #333;
+}
+
+.notice-date {
+color: #666;
+font-size: 12px;
+}
+
+/* 문의하기 리스트 */
+.inquiry-list {
+padding: 0;
+list-style: none;
+border: none;
+}
+
+.inquiry-item {
+border-top: 1px solid #ccc; 
+border-bottom: none;
+width: 90%;
+margin: 0 auto; 
+}
+
+.inquiry-item:first-child {
+border-top: none; 
+}
+
+.inquiry-item a {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 12px 10px;
+text-decoration: none;
+color: inherit;
+}
+
+.inquiry-item:hover {
+background: #f8f9fa;
+}
+
+.inquiry-content {
+flex: 1;
+font-size: 14px;
+color: #333;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.inquiry-type {
+font-size: 12px;
+color: #666;
+text-align: center;
+}
+
+.inquiry-title {
+color: #333;
+}
+
+.inquiry-meta {
+display: flex;
+align-items: center;
+gap: 15px;
+font-size: 12px;
+color: #666;
+}
+
+.inquiry-status {
+color: #0066cc;
+text-decoration: underline;
+}
+
+/* 등록하기 버튼 영역 */
+.register-area {
+width: 90%;
+margin: 20px auto;
+text-align: right;
+padding: 20px 0;
+}
+
+.btn-register {
+padding: 10px 20px;
+background: #dc3545;
+color: white;
+border: none;
+font-size: 14px;
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
+border-radius: 4px;
+}
+
+.btn-register:hover {
+background: #c82333;
+}
+
+/* 페이지네이션 */
+.pagination {
+text-align: center;
+padding: 20px;
+
+}
+
+.pagination span {
+margin: 0 5px;
+color: #666;
+font-size: 14px;
+cursor: pointer;
+}
+
+.pagination .current {
+color: #e74c3c;
+font-weight: bold;
+}
+
+    /* 상세 페이지 헤더 */
+.detail-header{
+border-bottom: 1px solid #ccc;
+padding: 10px;
+width: 90%;
+margin: 0 auto;
+}
+
+.detail-answer{
+    border-top: 1px solid #ccc;
+}
+
+
+.detail-header h4{
+font-size: 15px;
+margin-bottom: 10px;
+color: #333;
+}
+
+.detail-answer h4{
+font-size: 15px;
+margin-bottom: 15px;
+}
+
+
+.detail-meta {
+font-size: 12px;
+color: #777;
+display: flex;
+gap: 15px;
+}
+
+.detail-meta span {
+display: flex;
+align-items: center;
+}
+
+/* 상세 내용 */
+.detail-content, .detail-answer{
+width: 90%;
+min-height: auto;
+margin: 0 auto;
+padding: 20px 20px;
+}
+
+.detail-answer{
+padding-bottom: 0px;
+}
+
+
+
+.detail-content, .detail-answer p {
+font-size: 14px;
+line-height: 1.6;
+color: #333;
+margin-bottom: 10px;
+}   
+
+.detail-content ul {
+margin-left: 20px;
+margin-bottom: 15px;
+}   
+
+.detail-content li {
+font-size: 14px;
+line-height: 1.6;
+color: #333;
+margin-bottom: 5px;
+}
+
+/* 버튼 영역 */
+.button-area {
+width: 90%;
+margin: 20px auto;
+text-align: center;
+border-top: 1px solid #ddd;
+padding-top: 20px;
+}
+
+.btn-list {
+padding: 10px 30px;
+background: #333;
+color: white;
+border: none;
+font-size: 14px;
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
+}
+
+.btn-list:hover {
+background: #555;
+}
+
+/* FAQ 섹션 */
+.faq-section {
+    width: 850px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    background: white;
+    overflow: hidden;
+}
+
+.faq-section-title {
+    background: #f8f9fa;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e9ecef;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 15px 20px;
+    background: white;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-question:hover {
+    background: #f8f9fa;
+}
+
+.faq-question::before {
+    content: "Q.";
+    color: #007bff;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.faq-arrow {
+    color: #666;
+    font-size: 12px;
+    transition: transform 0.3s;
+}
+
+.faq-question.active .faq-arrow {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #f8f9fa;
+}
+
+.faq-answer.active {
+    max-height: 200px;
+}
+
+.faq-answer-content {
+    padding: 15px 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.faq-answer-content::before {
+    content: "A.";
+    color: #28a745;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.faq-answer-content p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+    margin: 0;
+    display: inline;
+}
+
+/* 더보기 버튼 */
+.more-button {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.btn-more {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    background: #dc3545;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-more:hover {
+    background: #c82333;
+}
+
+/* 숨겨진 FAQ 아이템 */
+.faq-item.hidden {
+    display: none;
+}
+
+.faq-page .notice-header {
+    border-bottom: none;
+}
+
+/* 문의등록 폼 컨테이너 */
+.inquiry-register-container {
+    width: 90%;
+    margin: 15px auto;
+    max-width: 880px;
+}
+
+/* 문의등록 폼 */
+.inquiry-register-form {
+    width: 100%;
+}
+
+.inquiry-form-row {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    
+}
+
+.inquiry-form-row:nth-child(2){
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    padding: 15px 0;
+}
+
+.inquiry-form-row.content-row {
+    align-items: flex-start;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 12px;
+
+}
+
+.inquiry-form-label {
+    width: 100px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    padding-top: 10px;
+    flex-shrink: 0;
+}
+
+.inquiry-form-field {
+    flex: 1;
+    margin-left: 20px;
+    
+}
+
+.inquiry-select-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inquiry-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    min-width: 120px;
+}
+
+.inquiry-text-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.inquiry-textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.inquiry-text-input::placeholder,
+.inquiry-textarea::placeholder {
+    color: #999;
+}
+
+/* 문의등록 버튼 영역 */
+.inquiry-register-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px 0;
+}
+
+.inquiry-btn {
+    padding: 12px 25px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    min-width: 100px;
+    font-weight: bold;
+}
+
+.inquiry-btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.inquiry-btn-cancel:hover {
+    background: #5a6268;
+}
+
+.inquiry-btn-submit {
+    background: #007bff;
+    color: white;
+}
+
+.inquiry-btn-submit:hover {
+    background: #0056b3;
+}
+
+
+/* 폼 포커스 스타일 */
+.inquiry-text-input:focus,
+.inquiry-textarea:focus,
+.inquiry-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+

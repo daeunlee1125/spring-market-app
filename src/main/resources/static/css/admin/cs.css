@@ -1,0 +1,217 @@
+/*///////////////////////////////////////  */
+/* 공지사항 보기(view) 전용 스타일 */
+/*///////////////////////////////////////  */
+
+.notice-view-table_2 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+}
+
+.notice-view-table_2 tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notice-view-table_2 th {
+    width: 120px;
+    padding: 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #4a2f73; 
+    /* color: #333; */
+    border-right: 1px solid #e0e0e0;
+    background-color:#f3effa;
+    /* background: #4a2f73; */
+}
+
+.notice-view-table_2 td {
+    padding: 20px;
+    color: #555;
+    line-height: 1.8;
+}
+
+.notice-content_2 {
+    min-height: 200px;
+    white-space: pre-line;
+}
+
+.notice-buttons_2 {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+    padding-bottom: 40px;
+}
+
+.notice-btn_2 {
+    padding: 13px 32px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-delete_2 {
+    background: #aaa;
+    color: white;  
+}
+
+.btn-edit_2 {
+    background: #aaa;
+    color: white;
+}
+
+.btn-list_2 {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}
+
+/*///////////////////////////////////////  */
+/* 공지사항 작성,수정(write, modify) 폼 스타일 */
+/*///////////////////////////////////////  */
+
+.notice-form_3 {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.notice-table_3 {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #e0e0e0;
+}
+
+.notice-table_3 tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notice-th_3 {
+    width: 150px;
+    padding: 30px;
+    text-align: left;
+    font-weight: bold;
+    background-color:#f3effa;
+    vertical-align: top;
+    color: #4a2f73; 
+}
+
+.notice-td_3 {
+    padding: 20px;
+}
+
+.notice-select_3 {
+    width: 200px;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #666;
+    background-color: #fff;
+}
+
+.notice-select_3:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.notice-input_3 {
+    width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.notice-input_3::placeholder {
+    color: #999;
+}
+
+.notice-input_3:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.notice-textarea_3 {
+    width: 100%;
+    height: 200px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.notice-textarea_3::placeholder {
+    color: #999;
+}
+
+.notice-textarea_3:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.notice-buttons_3 {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.notice-btn-cancel_3,
+.notice-btn-submit_3 {
+    padding: 12px 40px;
+    font-size: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.notice-btn-cancel_3 {
+    background: #aaa;
+    color: white;
+}
+
+.notice-btn-submit_3 {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}
+
+
+/*문의하기 답변*/
+
+.qna-textarea_2 {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.qna-textarea_2::placeholder {
+    color: #999;
+}
+
+.qna-textarea_2:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.btn-add_2 {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}

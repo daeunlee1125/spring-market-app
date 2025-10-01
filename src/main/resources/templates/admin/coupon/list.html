@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>쿠폰목록 - SHOPLY Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/admin_temp.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/coupon.css">
+</head>
+<body>
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+    <div class="sidebar-header">SHOPLY Admin</div>
+    <nav>
+      <ul class="mainSideBar">
+        <li>
+          <div><i class="fas fa-cog"></i> 환경설정</div>
+          <ul class="subSideBar">
+            <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+            <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+            <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+            <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+            <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-store"></i> 상점관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">상점목록</a></li>
+            <li><a href="#">매출현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-users"></i> 회원관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">회원목록</a></li>
+            <li><a href="#">포인트관리</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-box-open"></i> 상품관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">상품목록</a></li>
+            <li><a href="#">상품등록</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-truck"></i> 주문관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">주문현황</a></li>
+            <li><a href="#">배송현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">쿠폰목록</a></li>
+            <li><a href="#">쿠폰발급현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-headset"></i> 고객센터</div>
+          <ul class="subSideBar">
+            <li><a href="#">공지사항</a></li>
+            <li><a href="#">자주묻는질문</a></li>
+            <li><a href="#">문의하기</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- 헤더 -->
+  <header>
+    <div class="middle">
+      <div id="logo">
+        <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+      </div>
+      <div class="header-nav">
+        <ul class="header-menu">
+          <li><a href="#">홈</a></li>
+          <li><a href="#">로그아웃</a></li>
+          <li><a href="#">고객센터</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 -->
+  <div class="main">
+    <div class="middle main-content">
+      <div class="main-common">
+        <div class="main-head">
+          <div><h3>쿠폰목록</h3></div>
+          <div class="main-head-right">
+            <a href="#">HOME</a><div>&nbsp;>&nbsp;</div>
+            <a href="#">쿠폰관리</a><div>&nbsp;>&nbsp;</div>
+            <a href="#" class="nav-last">쿠폰목록</a>
+          </div>
+        </div>
+
+        <!-- 검색 영역 -->
+        <div class="main-content-top" style="border:none; margin:15px 0;">
+          <div class="search-bar">
+            <form>
+              <select>
+                <option>쿠폰번호</option>
+                <option>쿠폰명</option>
+                <option>발급자</option>
+              </select>
+              <div class="search-place">
+                <input type="text" placeholder="검색어 입력">
+              </div>
+              <button type="submit">검색</button>
+            </form>
+          </div>
+
+
+        <!-- 쿠폰목록 테이블 -->
+        <main>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>쿠폰번호</th>
+                <th>쿠폰종류</th>
+                <th>쿠폰명</th>
+                <th>혜택</th>
+                <th>사용기간</th>
+                <th>발급자</th>
+                <th>발급수</th>
+                <th>사용수</th>
+                <th>상태</th>
+                <th>발급일</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10121211341</a></td>
+                <td>개별상품 할인</td>
+                <td>10월 한달 감사 쿠폰</td>
+                <td>2,000원 할인</td>
+                <td>0000-00-00 ~ 0000-00-00</td>
+                <td>(주)다있어</td>
+                <td>102</td>
+                <td>43</td>
+                <td style="color:green;">발급중</td>
+                <td>0000-00-00</td>
+                <td>
+                    <button class="openModalBtn register-btn small-btn" data-target="confirmEndModal">종료</button>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 페이지네이션 -->
+          <div class="page">
+            <a href="#" class="prev">이전</a>
+            <a href="#" class="num current">1</a>
+            <a href="#" class="num">2</a>
+            <a href="#" class="num">3</a>
+            <a href="#" class="next">다음</a>
+          </div>
+
+          <!-- 쿠폰 등록 버튼 -->
+          <div style="text-align:right; margin-top:15px;">
+            <button class="openModalBtn register-btn" data-target="couponRegisterModal">쿠폰등록</button>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="middle">
+      <p id="footer-p">
+        Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+      </p>
+    </div>
+  </footer>
+
+  <!-- ================== 모달 ================== -->
+
+        <!-- 쿠폰 상세 모달 -->
+        <div class="modal hidden" id="couponDetailModal">
+        <div class="modal-popup large">
+            <div class="modal-header">
+            <h2>쿠폰정보 <span>10121211341</span></h2>
+            <span class="closeModalBtn">&times;</span>
+            </div>
+            <div class="modal-content">
+            <table class="table coupon-detail">
+                <tr>
+                <th>쿠폰번호</th>
+                <td>10121211341</td>
+                <th>발급처</th>
+                <td>(주)다있어</td>
+                </tr>
+                <tr>
+                <th>쿠폰종류</th>
+                <td colspan="3">개별상품 할인</td>
+                </tr>
+                <tr>
+                <th>쿠폰명</th>
+                <td colspan="3">10월 한달 감사 쿠폰 이벤트</td>
+                </tr>
+                <tr>
+                <th>혜택</th>
+                <td colspan="3">2,000 원 할인</td>
+                </tr>
+                <tr>
+                <th>사용기간</th>
+                <td colspan="3">0000-00-00 ~ 0000-00-00</td>
+                </tr>
+                <tr>
+                <th>유의사항</th>
+                <td colspan="3" class="note">
+                    상품 중복 할인 쿠폰<br>
+                    - 상품 1개에 대해 사용 가능<br>
+                    - 판매자 즉시할인/상품할인 쿠폰과 중복 사용 가능<br><br>
+                    사용자<br>
+                    - (주)다있어
+                </td>
+                </tr>
+            </table>
+            </div>
+        </div>
+        </div>
+
+
+
+
+  <!-- 종료 확인 모달 -->
+  <div class="modal hidden" id="confirmEndModal">
+    <div class="modal-popup">
+      <div class="modal-header">
+        <h2>쿠폰 종료 확인</h2>
+        <span class="closeModalBtn">&times;</span>
+      </div>
+      <div class="modal-content">
+        <p>해당 쿠폰의 발급을 종료하시겠습니까?</p>
+        <div style="text-align:center; margin-top:20px;">
+          <button class="register-btn">확인</button>
+          <button class="closeModalBtn delete-btn">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 쿠폰 등록 모달 -->
+<div class="modal hidden" id="couponRegisterModal">
+  <div class="modal-popup large">
+    <div class="modal-header">
+      <h2>쿠폰등록</h2>
+      <button class="closeModalBtn">&times;</button>
+    </div>
+    <div class="modal-content">
+      <form>
+        <div class="form-group">
+          <label>발급처</label>
+          <input type="text" value="(주)다있어">
+        </div>
+
+        <div class="form-group">
+          <label>쿠폰종류</label>
+          <select>
+            <option>종류선택</option>
+            <option>개별상품 할인</option>
+            <option>주문상품 할인</option>
+            <option>배송비 무료</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>쿠폰명</label>
+          <input type="text" placeholder="쿠폰명을 입력하세요">
+        </div>
+
+        <div class="form-group">
+          <label>혜택</label>
+          <div>
+            <label><input type="radio" name="benefit"> 1,000 할인</label>
+            <label><input type="radio" name="benefit"> 2,000 할인</label>
+            <label><input type="radio" name="benefit"> 3,000 할인</label>
+            <label><input type="radio" name="benefit"> 4,000 할인</label>
+            <label><input type="radio" name="benefit"> 5,000 할인</label><br>
+            <label><input type="radio" name="benefit"> 10% 할인</label>
+            <label><input type="radio" name="benefit"> 20% 할인</label>
+            <label><input type="radio" name="benefit"> 30% 할인</label>
+            <label><input type="radio" name="benefit"> 40% 할인</label>
+            <label><input type="radio" name="benefit"> 50% 할인</label><br>
+            <label><input type="radio" name="benefit"> 배송비 무료</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>사용기간</label>
+          <div>
+            <input type="date"> ~ <input type="date">
+          </div>
+          <div>
+            또는 발급일로부터 <input type="text" style="width:80px;"> 이내
+          </div>
+        </div>
+        <div class="form-group">
+            <label>유의사항</label>
+            <input type="text" class="long-input" placeholder="유의사항을 입력하세요">
+        </div>
+
+        <!-- 버튼 -->
+        <div style="text-align:center; margin-top:20px;">
+          <button type="button" class="closeModalBtn delete-btn">취소</button>
+          <button type="submit" class="register-btn">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+  <!-- JS 공통 로직 -->
+  <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        // 열기 버튼
+        document.querySelectorAll(".openModalBtn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetId = btn.dataset.target;
+            document.getElementById(targetId).classList.remove("hidden");
+            });
+        });
+
+        // 닫기 버튼 + 배경 클릭
+        document.querySelectorAll(".modal").forEach(modal => {
+            modal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
+                modal.classList.add("hidden");
+            }
+            });
+        });
+        });
+
+    </script>
+</body>
+</html>

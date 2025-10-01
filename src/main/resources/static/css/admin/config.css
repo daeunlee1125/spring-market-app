@@ -1,0 +1,585 @@
+.h2-1 {
+    margin: 30px 0 15px;
+    font-size: 21px;
+    font-weight: bold;
+    position: relative;
+    color: #4a2f73; /* 진한 보라 */
+}
+.h2-1::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #a77ece, #6c3fc9);
+    border-radius: 2px;
+}
+
+.gray-1 {
+    background: linear-gradient(90deg, #f1f3f2, #ececec);
+    height: 38px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    border-left: 4px solid #a77ece; /* 포인트 */
+}
+
+.table-1 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 35px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.table-1 th {
+    background: #f3effa;
+    border: 1px solid #ddd;
+    font-weight: 600;
+    color: #333;
+}
+.table-1 td {
+    border: 1px solid #eee;
+    padding: 12px 15px;
+    color: #444;
+    transition: background 0.2s ease;
+}
+.table-1 tr:hover td {
+    background: #faf7ff;
+}
+.table-1 .submit-1 {
+    border: 0;
+    padding: 0px;
+    padding-right: 42px;
+
+}
+
+.input-1 {
+    width: 95%;
+    padding: 12px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fafafa;
+    font-size: 15px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-1:focus {
+    border-color: #a77ece;
+    box-shadow: 0 0 4px rgba(167,126,206,0.5);
+    outline: none;
+    background: #fff;
+}
+
+.submit-btn-1 {
+    border: 0;
+    height: 40px;
+    width: 110px;
+    margin: 10px 0;
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    float: right;
+}
+.submit-btn-1:hover {
+    background: linear-gradient(135deg, #6c3fc9, #4a2f73);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+
+
+
+/* 탭 메뉴 */
+#tabMenu-2 {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 -2px 50px; /* border 겹치게 */
+}
+
+#tabMenu-2 li {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #e7e7e7;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: #f7f7f7;
+  margin-right: 5px;
+  font-size: 15px;
+  color: #797979;
+  transition: all 0.2s ease;
+}
+
+#tabMenu-2 li:hover {
+  background: #f1f1f1;
+}
+
+#tabMenu-2 li.active {
+  background: #fff;
+  font-weight: 600;
+  color: #4a2f73;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  position: relative;
+  z-index: 2;
+}
+
+
+
+/* 탭 콘텐츠 박스 */
+.tab-wrapper-2 {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 20px;
+  z-index: 1;
+}
+
+
+.table-2 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+
+  border-radius: 6px;
+}
+.table-2 tr th {
+    height: 60px;
+    background-color:#f3effa; /* 연보라 배경 */
+    border: 1px solid #ddd;
+    color: #4a2f73; /* 보라 포인트 */
+
+}
+.table-2 tr td {
+    height: 80px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #eee;
+    color: #444;
+    padding: 10px;
+}
+.table-2 tr:hover td {
+  background: #faf7ff;
+}
+
+.table-2 td input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+}
+.table-2 td input:hover {
+    font-weight: bold;
+    color: #4a2f73;
+}
+.table-2 td img {
+  width: 100%;      /* td 너비에 맞춤 */
+  height: 100%;     /* td 높이에 맞춤 */
+  object-fit: cover; /* 비율 유지하면서 넘치는 부분은 잘라냄 */
+}
+
+.h3-2 {
+    margin: 7px 0px 0px 12px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4a2f73; /* 진한 보라 */
+    position: relative;
+}
+
+.h3-2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 35px;
+  height: 3px;
+  background: linear-gradient(90deg, #a77ece, #6c3fc9);
+  border-radius: 2px;
+}
+
+
+
+
+
+
+.h2-3 {
+    margin: 30px 0 15px;
+    font-size: 21px;
+    font-weight: bold;
+    position: relative;
+    color: #4a2f73; /* 진한 보라 */
+}
+.h2-3::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #a77ece, #6c3fc9);
+    border-radius: 2px;
+}
+
+.gray-3 {
+    background: linear-gradient(90deg, #f1f3f2, #ececec);
+    height: 38px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    border-left: 4px solid #a77ece; /* 포인트 */
+}
+
+.table-3 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 35px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.table-3 th {
+    background: #f3effa;
+    border: 1px solid #ddd;
+    font-weight: 600;
+    color: #333;
+    width: 200px;
+}
+.table-3 td {
+    border: 1px solid #eee;
+    padding: 12px 15px;
+    color: #444;
+    transition: background 0.2s ease;
+    overflow: auto;
+}
+.table-3 tr:hover td {
+    background: #faf7ff;
+}
+.table-3 .submit-1 {
+    border: 0;
+    padding: 0px;
+    padding-right: 42px;
+
+}
+
+.table-3 textarea {
+    width: 95%;
+    height: 300px;
+    padding: 12px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fafafa;
+    font-size: 15px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.table-3 textarea:focus {
+    border-color: #a77ece;
+    box-shadow: 0 0 4px rgba(167,126,206,0.5);
+    outline: none;
+    background: #fff;
+}
+
+.submit-btn-3 {
+    border: 0;
+    height: 40px;
+    width: 110px;
+    margin: 10px 0;
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    float: right;
+}
+.submit-btn-3:hover {
+    background: linear-gradient(135deg, #6c3fc9, #4a2f73);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+
+
+
+/* 전체 컨테이너 */
+.category-list-4 {
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  overflow: hidden;
+  width: 500px;
+}
+
+/* 메인 카테고리 */
+.category-item-4 {
+  border-bottom: 1px solid #eee;
+}
+
+.category-header-4 {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4a2f73; /* 보라 포인트 */
+  background: #f3effa; /* 연보라 */
+  cursor: grab;
+  transition: background 0.2s ease;
+}
+
+.category-header-4:hover {
+  background: #ede7f6; /* hover 진한 보라톤 */
+}
+
+.category-header-4 .toggle-btn-4 {
+  margin-right: 8px;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+/* 드래그 중 */
+.dragging-4 {
+  opacity: 0.5;
+}
+
+/* 서브카테고리 */
+.subcategory-4 {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 28px; /* 들여쓰기 */
+  display: none;
+  background: #fafafa;
+}
+
+.subcategory-4.active {
+  display: block;
+}
+
+.subcategory-item-4 {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #444;
+  border-bottom: 1px solid #eee;
+  cursor: grab;
+  transition: background 0.2s ease;
+}
+
+.subcategory-item-4:hover {
+  background: #faf7ff; /* 보라빛 hover */
+}
+
+/* 마지막 서브 아이템은 경계선 제거 */
+.subcategory-item-4:last-child {
+  border-bottom: none;
+}
+
+
+
+.delete-btn-4 {
+    border: 1px solid;
+    padding: 3px 10px;
+    margin-left: auto; /* 오른쪽 끝으로 */
+    color: #4a2f73;
+    border-color: #4a2f73;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 10px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+}
+.subcategory-item-4 .delete-btn-4{
+    margin-left: 5px;
+}
+
+.delete-btn-4:hover {
+  background: #e9e1f7;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+
+.add-btn-4 {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px dashed #bbb;
+  background: #fafafa;
+  color: #555;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 6px 0 6px 10px; /* 들여쓰기 맞춤 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-btn-4:hover {
+  background: #f3effa; /* 연보라 hover */
+  border-color: #a77ece;
+  color: #4a2f73;
+}
+
+.category-header-4 > .add-btn-4 {
+    margin: 0px;
+    padding: 10px 10px;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: 14px;
+}
+
+.yellow-4 {
+    background: rgb(245, 245, 229);
+    height: 50px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+
+
+
+.table-5 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+
+  border-radius: 6px;
+}
+.table-5 tr th {
+    height: 40px;
+    background-color:#f3effa; /* 연보라 배경 */
+    border: 1px solid #ddd;
+    color: #4a2f73; /* 보라 포인트 */
+
+}
+.table-5 tr td {
+    height: 40px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #eee;
+    color: #444;
+    padding: 3px;
+
+}
+.table-5 tr:hover td {
+  background: #faf7ff;
+}
+
+.table-5 td input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+}
+.table-5 td input:hover {
+    font-weight: bold;
+    color: #4a2f73;
+}
+.table-5 td img {
+  width: 100%;      /* td 너비에 맞춤 */
+  height: 100%;     /* td 높이에 맞춤 */
+  object-fit: cover; /* 비율 유지하면서 넘치는 부분은 잘라냄 */
+}
+
+.h3-5 {
+    margin: 7px 0px 20px 0px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4a2f73; /* 진한 보라 */
+    position: relative;
+}
+
+.h3-5::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 35px;
+  height: 3px;
+  background: linear-gradient(90deg, #a77ece, #6c3fc9);
+  border-radius: 2px;
+}
+
+.gray-5 {
+    background: linear-gradient(90deg, #f1f3f2, #ececec);
+    height: 38px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    border-left: 4px solid #a77ece; /* 포인트 */
+}
+
+
+.page-5 {
+    text-align: center;
+    margin-top: 5px;
+}
+.page-5 > a {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #d7d7d7;
+    background: #f2f2f2;
+}
+
+.page-5 > .current-5 {
+    border: 1px solid #6d6d6d;
+    background: #888;
+    color: #fff;
+}
+
+
+
+
+.modal-content .form-group textarea {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-height: 200px;
+}
+.modal-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal-table th {
+  width: 150px;
+  text-align: left;
+  font-weight: bold;
+  padding: 8px;
+
+}
+
+.modal-table td {
+  padding: 8px;
+}
+.modal-table .changed-5{
+  height: 200px;
+}

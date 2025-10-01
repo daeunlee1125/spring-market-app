@@ -1,0 +1,138 @@
+/* 현재 페이지 강조 (active) */
+.company.menu a.active {
+  color: orangered;          /* 강조 색상 (주황) */
+  font-weight: 700;        /* 굵게 */
+
+}
+
+/* 문화 소개 */
+.culture-intro {
+  padding: 80px 20px;
+  text-align: center;
+  background: #fff;
+}
+
+.culture-intro h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.culture-intro p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* 문화 카드 */
+.culture-values {
+  background: #fafafa;
+  padding: 80px 20px;
+}
+
+.culture-values .grid {
+  max-width: 1000px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 🔹 2열 고정 */
+  gap: 30px;
+}
+
+.culture-values .card {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: left;
+  transition: transform 0.3s ease;
+}
+
+.culture-values .card:hover {
+  transform: translateY(-5px);
+}
+
+.culture-values .card img {
+  width: 50px;
+  margin-bottom: 15px;
+}
+
+.culture-values .card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.culture-values .card p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+
+
+/* 카드 아이콘 (Font Awesome) */
+.culture-values .card i {
+  font-size: 40px;       /* 아이콘 크기 */
+  color: #5f5f5f;        /* 노란색 포인트 (원하는 색으로 변경 가능) */
+  margin-bottom: 15px;
+  display: block;
+  text-align: left;      /* 아이콘 왼쪽 정렬 */
+}
+
+
+
+/* 마지막 강조 Section */
+.culture-highlight {
+  position: relative;
+  width: 100%;
+  height: 300px;   /* 높이만 원하는 대로 조절 */
+  overflow: hidden;
+}
+
+.culture-highlight .highlight-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.culture-highlight .highlight-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;   /* 🔹 세로 배치 */
+  justify-content: center;  /* 🔹 세로 가운데 */
+  align-items: center;      /* 🔹 가로 가운데 */
+  color: #fff;
+  text-align: center;
+  z-index: 1;
+}
+
+.culture-highlight .highlight-overlay h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* 마지막 강조 Section 텍스트 */
+.culture-highlight .highlight-overlay {
+  color: #fff;  /* 기본 텍스트 흰색 */
+}
+
+.culture-highlight .highlight-overlay a {
+  color: #fff;             /* 링크도 흰색 */
+  text-decoration: none;   /* 밑줄 제거 */
+  font-weight: 500;
+  margin-left: 10px;       /* 글자랑 살짝 간격 */
+}
+
+.culture-highlight .highlight-overlay a:hover {
+  text-decoration: underline; /* 호버 시 강조 효과 */
+}

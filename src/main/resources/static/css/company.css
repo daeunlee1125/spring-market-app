@@ -1,0 +1,499 @@
+/* ===========================================기본 레이아웃=== */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;            /* 화면 전체 높이 */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;       /* sticky footer */
+}
+
+main.container {
+  flex: 1;              
+  background: #ffffff;  /* ✅ 본문은 흰색 */
+}
+
+.company.menu a.active {
+  color: orangered;     /* 강조 색상 */
+  font-weight: 700;     /* 굵게 */
+}
+
+/* ===========================================헤더 === */
+header {
+  padding-top: 20px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.top-header {
+  max-width: 1250px;
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.logo {
+  height: 40px;
+}
+
+.bottom-header {
+  max-width: 1250px;
+  margin: 0 auto;
+  height: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* 회사 메뉴 */
+.company.menu {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.company.menu a {
+  text-decoration: none;
+  color: #555;
+}
+
+.company.menu a:hover {
+  color: #000;
+}
+
+/* ===========================================푸터 === */
+.footer {
+  background: #f9f9f9;  /* ✅ 푸터만 회색 */
+  border-top: 1px solid #ddd;
+  padding: 20px 0;
+  font-size: 14px;
+  color: #555;
+  position: relative;
+}
+
+.footer-container {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 20px;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* SNS 아이콘 오른쪽 */
+.footer-sns {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.footer-sns a {
+  margin-left: 15px;
+}
+
+.footer-sns img {
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.footer-sns img:hover {
+  transform: scale(1.15);
+}
+
+.footer-top {
+  margin-bottom: 10px;
+}
+
+.footer-top h2 {
+  display: inline-block;
+  font-size: 18px;
+  margin: 0;
+  margin-right: 12px;
+  font-weight: bold;
+  color: #222;
+}
+
+.footer-top a {
+  margin-right: 8px;
+  font-size: 13px;
+  color: #d33;
+  text-decoration: none;
+  border: 1px solid #d33;
+  padding: 3px 7px;
+  border-radius: 3px;
+}
+
+.footer-info {
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #444;
+}
+
+.footer-info p {
+  margin: 2px 0;
+}
+
+.footer-bottom {
+  font-size: 13px;
+  color: #333;
+}
+
+
+/* === About Section === */
+.about {
+  background: #fff;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.about-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.about-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+  letter-spacing: 1px;
+}
+
+.about-desc {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555;
+}
+
+.about-desc strong {
+  font-size: 18px;
+  color: #000;
+}
+
+
+
+
+
+/* ===========================================메인 이미지 === */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  z-index: 0; 
+}
+.hero-overlay {
+  position: relative;
+  z-index: 1; 
+  animation: fadeUp 6s ease-in-out infinite; /* 5초마다 무한 반복 */
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: #333;
+  letter-spacing: 2px;
+}
+
+.hero-title span {
+  color: black;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  color: #333;
+}
+
+@keyframes fadeUp {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+
+/* 기업문화 페이지 전용 덮어쓰기 */
+.culture-page .hero-title,
+.culture-page .hero-subtitle {
+  color: #fff;   /* 흰색 */
+}
+
+
+/* ===========================================경쟁력 === */
+.strengths {
+  background: #fff;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.strengths-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #222;
+}
+
+/* Slider Container */
+.slider-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.slider {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  position: relative;   /* 버튼 위치 기준 */
+  min-width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.slide img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.slide h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.slide p {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 버튼 공통 */
+.prev, .next {
+  position: absolute;
+  top: 35%;                       
+  transform: translateY(-50%);    
+  width: 50px;
+  height: 50px;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  line-height: 50px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+  z-index: 10;
+}
+
+/* 버튼 위치 */
+.prev { left: 20px; }
+.next { right: 20px; }
+
+
+.prev:hover, .next:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+
+
+
+
+/* ===========================================최근소식 === */
+
+.news {
+  background: #fff;
+  padding: 60px 20px;
+  border-top: 1px solid #eee;
+}
+
+.news-container {
+  max-width: 800px;   /* ✅ 조금 더 좁게 해서 가운데 배치 */
+  margin: 0 auto;
+  text-align: center; /* ✅ 전체 텍스트 가운데 정렬 */
+}
+
+.news-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #222;
+  text-align: center;
+}
+
+.news-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.news-list li {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.news-date {
+  display: block;    
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.news-list a {
+  font-size: 15px;
+  color: #0056d6;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.news-list a:hover {
+  color: #ff6600;
+  text-decoration: underline;
+}
+
+
+
+
+
+/* ===========================================연혁 === */
+.history {
+  width: 80%;
+  margin: auto;
+  position: relative;
+  padding: 40px 0;
+  font-family: 'Open Sans', sans-serif;
+  background: #fff;
+}
+
+.history h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #222;
+}
+
+.history .timeline {
+  position: relative;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* 중앙 회색 라인 */
+.history .timeline::after {
+  content: '';
+  position: absolute;
+  width: 0.5px;           
+  background-color: #ccc;  
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -0.75px;
+}
+
+/* 공통 container */
+.history .container {
+  padding: 10px 20px;   
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+/* 원 */
+.history .container::before {
+  content: '';
+  position: absolute;
+  width: 7px;   
+  height: 7px;
+  border-radius: 50%;
+  background-color: #c0c0c0;  
+  top: 20px;  
+  z-index: 2;
+}
+
+/* 왼쪽 */
+.history .container.left {
+  left: 0;
+  text-align: right;   
+}
+.history .container.left::before {
+  right: -3.5px;   
+}
+
+/* 오른쪽 */
+.history .container.right {
+  left: 50%;
+  text-align: left;
+}
+.history .container.right::before {
+  left: -3.5px;  
+}
+
+/* 내용 박스 */
+.history .content {
+  display: inline-block;   
+  background: #fff;
+  position: relative;
+  padding: 10px 0;
+}
+
+.history .content h3 {
+  margin: 0 0 10px;
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #111;
+}
+
+.history .content p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #444;
+  margin: 0;
+}
+
+
+
+

@@ -1,0 +1,52 @@
+logging:
+  file:
+    name: logs/shoply.log
+  level:
+    root: info
+mybatis:
+  mapper-locations: classpath:mappers/**/*.xml
+server:
+  port: 8080
+  servlet:
+    context-path: /shoply
+spring:
+  application:
+    name: shoply
+    version: ${version}
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    password: 1234
+    url: jdbc:oracle:thin:@//3.37.16.64:1522/XEPDB1
+    username: shoply
+  devtools:
+    livereload:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: bisunesskyu@gmail.com
+    password: detvitlhtcjlqtah
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+
+  servlet:
+    multipart:
+      location: upload
+      max-file-size: 10MB

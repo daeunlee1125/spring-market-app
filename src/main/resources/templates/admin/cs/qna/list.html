@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>문의하기 목록 - SHOPLY Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/common.css">
+  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/admin_temp.css">
+  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/coupon.css">
+  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/cs_list.css">
+  
+</head>
+<body>
+  <!-- 사이드바 -->
+ <aside class="sidebar">
+        <div class="sidebar-header">
+            SHOPLY Admin
+        </div>
+        <nav>
+            <ul class="mainSideBar">
+                <li>
+                    <div><i class="fas fa-cog"></i> 환경설정</div>
+                    <ul class="subSideBar">
+                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+                    </ul>
+                </li>
+            <li>
+                <div><i class="fas fa-store"></i> 상점관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
+                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-users"></i> 회원관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
+                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-box-open"></i> 상품관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
+                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-truck"></i> 주문관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
+                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
+                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-headset"></i> 고객센터</div>
+                <ul class="subSideBar">
+                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
+                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
+                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
+                </ul>
+            </li>
+        </ul>
+        </nav>
+    </aside>
+
+    <header>
+        <div class="middle">
+            <div id="logo">
+                <a href="/kmarket/admin/admin.html"><img src="/project2/kmarket/inc/image/logo.jpg" alt="logo"></a>
+            </div>
+            
+            <div class="header-nav">
+                <ul class="header-menu">
+                    <li><a href="/kmarket/index.html">홈</a></li>
+                    <li><a href="#">로그아웃</a></li>
+                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+  <!-- 메인 -->
+  <div class="main">
+    <div class="middle main-content">
+      <div class="main-common">
+        <div class="main-head">
+          <div><h3>문의하기 목록</h3></div>
+          <div class="main-head-right">
+            <a href="#">HOME</a><div>&nbsp;>&nbsp;</div>
+            <a href="#">고객센터</a><div>&nbsp;>&nbsp;</div>
+            <a href="#" class="nav-last">문의하기</a>
+          </div>
+        </div>
+
+        <!-- 검색 영역 -->
+        <div class="main-content-top" style="border:none; margin:15px 0;">
+          <form class="search-bar">
+            <select name="1차">
+              <option>1차선택</option>
+              <option>회원</option>
+              <option>주문</option>
+            </select>
+            <select name="2차">
+                <option>2차선택</option>
+                <option>가입</option>
+                <option>탈퇴</option>
+            </select>
+          </form>
+        </div>
+
+    <main>
+        <table class="table">
+        <thead>
+            <tr>
+            <th class="checkbox-cell" id="selectAll" onclick="toggleAll(this)">
+                <input type="checkbox">
+            </th>
+            <th>번호</th>
+            <th>1차유형</th>
+            <th>2차유형</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>상태</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td class="checkbox-cell">
+                <input type="checkbox" name="itemCheck">
+            </td>
+            <td>100</td>
+            <td>회원</td>
+            <td>가입</td>
+            <td>[안내] 해외결제사칭문자주의</td>
+            <td>chhok</td>
+            <td>2025.09.27</td>
+            <td style="color: blue;">답변완료</td>
+            </tr>
+        </tbody>
+        </table>
+
+    <!-- 페이지네이션 -->
+    <div class="page">
+    <a href="#" class="prev">이전</a>
+    <a href="#" class="num current">1</a>
+    <a href="#" class="num">2</a>
+    <a href="#" class="num">3</a>
+    <a href="#" class="next">다음</a>
+    </div>
+
+    <!-- 버튼 영역 -->
+    <div class="button-container">
+    <div class="left-buttons">
+        <button class="openModalBtn delete-btn" data-target="confirmEndModal">선택삭제</button>
+    </div>
+    </div>
+    </main>
+</div>
+</div>
+    </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="middle">
+      <p id="footer-p">
+        Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+      </p>
+    </div>
+  </footer>
+
+  <!-- 종료 확인 모달 -->
+  <div class="modal hidden" id="confirmEndModal">
+    <div class="modal-popup">
+      <div class="modal-header">
+        <h2>선택삭제 확인</h2>
+        <span class="closeModalBtn">&times;</span>
+      </div>
+      <div class="modal-content">
+        <p>해당 문의하기 목록을 삭제하시겠습니까?</p>
+        <div style="text-align:center; margin-top:20px;">
+          <button class="register-btn">확인</button>
+          <button class="closeModalBtn delete-btn">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+  <!-- JS 공통 로직 -->
+   <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        // 열기 버튼
+        document.querySelectorAll(".openModalBtn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetId = btn.dataset.target;
+            document.getElementById(targetId).classList.remove("hidden");
+            });
+        });
+
+        // 닫기 버튼 + 배경 클릭
+        document.querySelectorAll(".modal").forEach(modal => {
+            modal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
+                modal.classList.add("hidden");
+            }
+            });
+        });
+        });
+
+</script>
+</body>
+</html>

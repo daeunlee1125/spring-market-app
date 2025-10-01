@@ -1,0 +1,129 @@
+
+.recruit-hero {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.recruit-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recruit-hero .hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+}
+
+.recruit-hero .hero-text h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.recruit-hero .hero-text p {
+  font-size: 18px;
+}
+
+
+/* 전체 레이아웃 */
+.recruit-detail {
+  padding: 60px 20px;
+  background: #fff;
+}
+
+.recruit-detail .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 제목 */
+.recruit-detail h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #222;
+  border-bottom: 3px solid #ff7e5f;
+  padding-bottom: 8px;
+}
+
+/* 기본 정보 */
+.recruit-detail .detail-info {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.8;
+}
+
+.recruit-detail .detail-info li strong {
+  display: inline-block;
+  width: 100px; /* 항목 이름 폭 고정 */
+  color: #333;
+}
+
+/* 상세 내용 */
+.recruit-detail .detail-content h3 {
+  font-size: 20px;
+  margin: 25px 0 10px;
+  color: #333;
+  border-left: 4px solid #ff7e5f;
+  padding-left: 10px;
+}
+
+.recruit-detail .detail-content p,
+.recruit-detail .detail-content ul {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.recruit-detail .detail-content ul {
+  padding-left: 20px;
+  list-style: disc;
+}
+
+/* 버튼 */
+.detail-btns {
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
+}
+
+.detail-btns .btn-back,
+.detail-btns .btn-apply {
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.detail-btns .btn-back {
+  background: #f2f2f2;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.detail-btns .btn-apply {
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  color: #fff;
+  border: none;
+}
+
+.detail-btns .btn-back:hover {
+  background: #e6e6e6;
+}
+
+.detail-btns .btn-apply:hover {
+  background: linear-gradient(90deg, #e76a4f, #fd9a60);
+}

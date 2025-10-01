@@ -1,0 +1,144 @@
+/* 아마 height 정도만 수정하면 될 것 같아요 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+.table tr th {
+    height: 40px;
+    background-color:#f3effa; 
+    border: 1px solid #ddd;
+    color: #4a2f73; 
+
+}
+.table tr td {
+    height: 40px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #eee;
+    color: #444;
+    padding: 3px;
+
+}
+.table tr:hover td {
+  background: #faf7ff;
+}
+
+.table td input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+}
+.table td input:hover {
+    font-weight: bold;
+    color: #4a2f73;
+}
+.table td img {
+  width: 100%;      /* td 너비에 맞춤 */
+  height: 100%;     /* td 높이에 맞춤 */
+  object-fit: cover; /* 비율 유지하면서 넘치는 부분은 잘라냄 */
+}
+
+
+
+/* (여기부터 수정X) */
+.page {
+    text-align: center;
+    margin-top: 5px;
+}
+.page > a {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #d7d7d7;
+    background: #f2f2f2;
+}
+
+.page > .current {
+    border: 1px solid #6d6d6d;
+    background: #888;
+    color: #fff;
+}
+
+.sub-top {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+
+  margin-top: 30px;
+
+}
+
+.search-bar {
+    width: 300px;
+    position: relative;
+    bottom: 8px;
+}
+.search-bar form {
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+  gap: 8px;            /* 간격 */
+}
+
+.search-bar select {
+  width: 111px;
+  height: 35px; /* search-place 높이와 맞춰주면 깔끔 */
+  font-size: 14px;
+  border: 1px solid rgb(201, 201, 201);
+  background-color: white;
+  
+}
+
+
+.search-bar .search-place {
+  flex: 1; /* 남은 공간 차지 */
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  background-color: white;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background-color: transparent;
+}
+
+
+.search-bar button {
+  background-color: transparent;
+  border: 0;
+  height: 25px;
+  padding-top: 2px;
+  cursor: pointer;
+}
+.search-bar button img {
+  width: 20px;
+}
+
+
+
+.select-2 {
+  width: 111px;
+  height: 35px;
+  font-size: 14px;
+  border: 1px solid rgb(201, 201, 201);
+  background-color: white;
+  margin-bottom: 10px;
+  margin-top: 23px;
+  
+}
+
+
+
+.transpar {
+    background-color: transparent;
+    border: none;
+    padding: 13px 32px;
+    font-size: 16px;
+    color: transparent;
+}

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>kmarket/admin - Final Version</title>
+  <!-- Font Awesome 아이콘 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/admin_temp.css">
+  <link rel="stylesheet" href="/kmarket/inc/css/admin/admin_list.css">
+</head>
+<body>
+  <!-- 사이드바 -->
+<aside class="sidebar">
+    <div class="sidebar-header">SHOPLY Admin</div>
+    <nav>
+      <ul class="mainSideBar">
+        <li>
+          <div><i class="fas fa-cog"></i> 환경설정</div>
+          <ul class="subSideBar">
+            <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
+            <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
+            <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
+            <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
+            <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-store"></i> 상점관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">상점목록</a></li>
+            <li><a href="#">매출현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-users"></i> 회원관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">회원목록</a></li>
+            <li><a href="#">포인트관리</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-box-open"></i> 상품관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">상품목록</a></li>
+            <li><a href="#">상품등록</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-truck"></i> 주문관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">주문현황</a></li>
+            <li><a href="#">배송현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-truck"></i> 쿠폰관리</div>
+          <ul class="subSideBar">
+            <li><a href="#">쿠폰목록</a></li>
+            <li><a href="#">쿠폰발급현황</a></li>
+          </ul>
+        </li>
+        <li>
+          <div><i class="fas fa-headset"></i> 고객센터</div>
+          <ul class="subSideBar">
+            <li><a href="#">공지사항</a></li>
+            <li><a href="#">자주묻는질문</a></li>
+            <li><a href="#">문의하기</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- 헤더 -->
+  <header>
+    <div class="middle">
+      <div id="logo">
+        <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+      </div>
+      <div class="header-nav">
+        <ul class="header-menu">
+          <li><a href="#">홈</a></li>
+          <li><a href="#">로그아웃</a></li>
+          <li><a href="#">고객센터</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 -->
+  <div class="main">
+    <div class="middle main-content">
+      <div class="main-common">
+        <div class="main-head">
+          <div><h3>상점목록</h3></div>
+          <div class="main-head-right">
+            <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
+            <a href="">상점관리</a><div>&nbsp;>&nbsp;</div>
+            <a href="" class="nav-last">상점목록</a>
+          </div>
+        </div>
+        <div class="main-content-top"></div>
+
+        <main>
+          <!-- 주문현황 테이블 -->
+          <table class="table order-table">
+            <thead>
+              <tr>
+                <th>주문번호</th>
+                <th>주문자</th>
+                <th>주문자명</th>
+                <th>주문건수</th>
+                <th>주문합계</th>
+                <th>결제수단</th>
+                <th>주문상태</th>
+                <th>주문일</th>
+                <th>배송</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><a href="#" class="openModalBtn" data-target="orderDetailModal">10121211341</a></td>
+                <td>abc123</td>
+                <td>김유신</td>
+                <td>2</td>
+                <td>102,900</td>
+                <td>신용카드</td>
+                <td class="status complete">결제완료</td>
+                <td>2025/09/26 12:34:56</td>
+                <td><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
+            </tr>
+              <tr>
+                <td><a href="#" class="openModalBtn" data-target="orderDetailModal">10121211341</a></td>
+                <td>afea123</td>
+                <td>김춘추</td>
+                <td>1</td>
+                <td>36,000</td>
+                <td>계좌이체</td>
+                <td class="status wait">결제대기</td>
+                <td>2025/09/26 11:11:11</td>
+                <td><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
+              </tr>
+              <tr>
+                <td><a href="#" class="openModalBtn" data-target="orderDetailModal">10121211341</a></td>
+                <td>yaoww33</td>
+                <td>강감찬</td>
+                <td>1</td>
+                <td>89,000</td>
+                <td>휴대폰</td>
+                <td class="status cancel">주문취소</td>
+                <td>2025/09/26 10:00:00</td>
+                <td><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 페이지네이션 -->
+          <div class="page">
+            <a href="#" class="prev">이전</a>
+            <a href="#" class="num current">1</a>
+            <a href="#" class="num">2</a>
+            <a href="#" class="num">3</a>
+            <a href="#" class="next">다음</a>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="middle">
+      <p id="footer-p">
+        Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+      </p>
+    </div>
+  </footer>
+
+<!-- 주문상세 모달 -->
+<div class="modal hidden" id="orderDetailModal">
+  <div class="modal-popup large">
+    <div class="modal-header">
+        <h2>주문상세 <span id="detailOrderNo">10121211341</span></h2>
+        <span class="closeModalBtn">&times;</span>
+    </div>
+    <div class="modal-content">
+      <!-- 상품정보 -->
+      <h3>상품정보</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>상품이미지</th>
+            <th>상품번호</th>
+            <th>상품명</th>
+            <th>판매자</th>
+            <th>가격</th>
+            <th>할인</th>
+            <th>수량</th>
+            <th>배송비</th>
+            <th>결제금액</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img src="/kmarket/inc/image/sample.png" alt="상품" style="width:60px;"></td>
+            <td>120120021</td>
+            <td>OOO</td>
+            <td>(주)상호명</td>
+            <td>24,000</td>
+            <td>-1,200</td>
+            <td>3</td>
+            <td>3,000</td>
+            <td>68,400</td>
+          </tr>
+          <tr>
+            <td><img src="/kmarket/inc/image/sample.png" alt="상품" style="width:60px;"></td>
+            <td>114514328</td>
+            <td>OOO</td>
+            <td>(주)상호명</td>
+            <td>35,000</td>
+            <td>-3,500</td>
+            <td>1</td>
+            <td>0</td>
+            <td>31,500</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 상품 합계 영역 -->
+      <div class="summary-box">
+        <p>총 상품금액 : 107,000원</p>
+        <p>총 할인금액 : -7,100원</p>
+        <p>배송비 : 3,000원</p>
+        <p class="total"><span class="label">총 결제금액</span> <span class="value">102,900원</span></p>
+      </div>
+
+      <!-- 결제정보 -->
+      <h3>결제정보</h3>
+      <div class="info-box payment-box">
+        <div class="left">
+          <p>주문번호 : 10121211341</p>
+          <p>결제방법 : 신용카드 / 1234 **** **** 4432</p>
+          <p>주문자 : 김유신 / 010-1234-1234</p>
+          <p>결제상태 : <span class="status complete">결제완료</span></p>
+        </div>
+        <div class="right">
+        </div>
+      </div>
+
+      <!-- 배송정보 -->
+      <h3>배송정보</h3>
+      <div class="info-box">
+        <p>수취인 : 김유신</p>
+        <p>연락처 : 010-1234-1234</p>
+        <p>주소 : 부산 부산진구 123-11 10층</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 배송입력 모달 -->
+<div class="modal hidden" id="deliveryModal">
+  <div class="modal-popup">
+    <div class="modal-header">
+        <h2>배송입력 <span id="deliveryOrderNo">10121211341</span></h2>
+        <span class="closeModalBtn">&times;</span>
+    </div>
+     <div class="modal-content">
+      <div class="form-group">
+        <label>주문번호</label>
+        <input type="text" value="" readonly>
+      </div>
+      <div class="form-group">
+        <label>수취인</label>
+        <input type="text" placeholder="">
+      </div>
+      <div class="form-group">
+        <label>우편번호</label>
+        <input type="text" placeholder="">
+      </div>
+      <div class="form-group">
+        <label>기본주소</label>
+        <input type="text" placeholder="">
+      </div>
+      <div class="form-group">
+        <label>상세주소</label>
+        <input type="text" placeholder="">
+      </div>
+      <div class="form-group">
+        <label>택배사</label>
+        <select>
+          <option>택배사 선택</option>
+          <option>대한통운</option>
+          <option>한진택배</option>
+          <option>롯데택배</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>운송장번호</label>
+        <input type="text" placeholder="발급받은 운송장번호 입력">
+      </div>
+      <div class="form-group">
+        <label>기타</label>
+        <input type="text" placeholder="기타정보입력">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="register-btn">등록하기</button>
+    </div>
+  </div>
+</div>
+
+  <!-- JS -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    // 열기 버튼
+    document.querySelectorAll(".openModalBtn").forEach(btn => {
+        btn.addEventListener("click", e => {
+        e.preventDefault();
+        const targetId = btn.dataset.target;
+        document.getElementById(targetId).classList.remove("hidden");
+        });
+    });
+
+    // 닫기 버튼 + 배경 클릭
+    document.querySelectorAll(".modal").forEach(modal => {
+        modal.addEventListener("click", e => {
+        if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
+            modal.classList.add("hidden");
+        }
+        });
+    });
+    });
+    </script>
+
+</body>
+</html>

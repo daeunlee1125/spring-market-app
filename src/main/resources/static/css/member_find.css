@@ -1,0 +1,382 @@
+/* userId.html, password.html css */
+
+/* 아이디,비밀번호 찾기 메인 콘텐츠 */
+.id-find-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.id-find-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+/* 탭 스타일 */
+.tab-container {
+    margin-bottom: 30px;
+}
+
+.tab-buttons {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px;
+    background-color: #e9ecef;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.tab-button:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.tab-button:last-child {
+    border-radius: 0 4px 4px 0;
+    border-left: none;
+}
+
+.tab-button.active {
+    background-color: white;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+}
+
+/* 폼 스타일 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    align-items: end;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+.btn-verify {
+    padding: 12px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.btn-verify:hover {
+    background-color: #5a6268;
+}
+
+.verification-info {
+    font-size: 13px;
+    color: #666;
+    margin-top: 15px;
+    line-height: 1.4;
+}
+
+/* 버튼 스타일 */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+/* 탭 콘텐츠 */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+
+/* 아이디 찾기 결과 페이지 스타일 */
+
+.id-result-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+}
+
+.result-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+}
+
+.result-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 40px;
+    background-color: white;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.result-table tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.result-table tr:last-child {
+    border-bottom: none;
+}
+
+.result-table th {
+    width: 150px;
+    padding: 18px 20px;
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.result-table td {
+    padding: 18px 20px;
+    color: #555;
+}
+
+.result-notice {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+    padding-left: 5px;
+}
+
+.result-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-result-cancel,
+.btn-result-submit {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-result-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-result-cancel:hover {
+    background-color: #5a6268;
+}
+
+.btn-result-submit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-result-submit:hover {
+    background-color: #0056b3;
+}
+
+/* 비밀번호 변경 페이지 스타일 */
+
+.password-change-container {
+    max-width: 860px;
+    margin: 50px auto;
+    padding: 30px;
+}
+
+.password-change-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 40px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+}
+
+.password-change-form {
+    background-color: white;
+}
+
+.password-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.password-table tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.password-table th {
+    width: 200px;
+    padding: 25px 30px;
+    text-align: left;
+    font-weight: 500;
+    color: #333;
+    background-color: #f8f9fa;
+    vertical-align: middle;
+}
+
+.password-table td {
+    padding: 25px 30px;
+}
+
+.user-id {
+    font-size: 15px;
+    color: #333;
+}
+
+.password-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.password-input {
+    width: 100%;
+    max-width: 320px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.password-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.password-hint-inline {
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+}
+
+.password-notice {
+    margin-bottom: 35px;
+    padding-left: 5px;
+}
+
+.password-notice p {
+    font-size: 14px;
+    color: #333;
+    margin: 8px 0;
+}
+
+.password-notice p:first-child {
+    font-weight: 500;
+}
+
+.password-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-password-cancel,
+.btn-password-submit {
+    min-width: 120px;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-password-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-password-cancel:hover {
+    background-color: #5a6268;
+}
+
+.btn-password-submit {
+    background-color: #5b9cde;
+    color: white;
+}
+
+.btn-password-submit:hover {
+    background-color: #4a8acc;
+}

@@ -1,0 +1,639 @@
+/* =========================================== 더보기 링크 스타일 =========================================== */
+.more-link {
+    display: inline-block;
+    padding: 6px 12px; /* 버튼 크기 */
+    font-size: 13px;
+    color: #555;
+    text-decoration: none;
+    border: 1px solid #ddd; /* 테두리 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    background-color: #f7f7f7;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    margin-left: 90%;
+}
+.more-link:hover {
+    background-color: #eee; /* hover 시 색상 변경 */
+    border-color: #ccc;
+    color: #333;
+}
+/* =========================================== 전역 및 기본 레이아웃 스타일 =========================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+/* 메인 컨테이너 (사이드바 + 콘텐츠 영역) */
+main.container {
+    flex: 1;
+    background: #ffffff;
+    width: 1060px;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+}
+.company.menu a.active {
+    color: orangered;
+    font-weight: 700;
+}
+/* =========================================== 헤더 스타일 =========================================== */
+header {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+}
+.main-header {
+    max-width: 1060px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+.header-left .logo {
+    height: 40px;
+    vertical-align: middle;
+}
+.header-left span {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.header-right a {
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+}
+.header-right a:hover {
+    color: #000;
+}
+/* 로그인/로그아웃 메뉴 상태 */
+.header-right .login-menu {
+    display: none;
+    gap: 15px;
+}
+.header-right .user-menu {
+    display: flex;
+    gap: 15px;
+}
+body.logged-in .login-menu {
+    display: none;
+}
+body.logged-in .user-menu {
+    display: flex;
+}
+/* =========================================== 푸터 스타일 =========================================== */
+footer {
+    background: #f9f9f9;
+    border-top: 1px solid #ddd;
+    padding: 20px 0;
+    font-size: 14px;
+    color: #555;
+    position: relative;
+    width: 100%;
+}
+.footer-container {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 20px;
+    line-height: 1.6;
+    position: relative;
+}
+.footer-sns {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.footer-sns a {
+    margin-left: 15px;
+}
+.footer-sns img {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.footer-sns img:hover {
+    transform: scale(1.15);
+}
+.footer-top {
+    margin-bottom: 10px;
+}
+.footer-top h2 {
+    display: inline-block;
+    font-size: 18px;
+    margin: 0;
+    margin-right: 12px;
+    font-weight: bold;
+    color: #222;
+}
+.footer-top a {
+    margin-right: 8px;
+    font-size: 13px;
+    color: #d33;
+    text-decoration: none;
+    border: 1px solid #d33;
+    padding: 3px 7px;
+    border-radius: 3px;
+}
+.footer-info {
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #444;
+}
+.footer-info p {
+    margin: 2px 0;
+}
+.footer-bottom {
+    font-size: 13px;
+    color: #333;
+}
+/* =========================================== 사이드바 및 콘텐츠 스타일 =========================================== */
+.sidebar {
+    width: 250px;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+.sidebar h2 {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar li {
+    margin-bottom: 10px;
+}
+.sidebar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 5px;
+}
+.sidebar a:hover, .sidebar a.active {
+    background-color: #eee;
+}
+.content {
+    width: 810px;
+    padding: 20px;
+}
+.main-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.main-content-header .info-summary {
+    display: flex;
+    gap: 20px;
+    text-align: center;
+}
+.main-content-header .info-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.main-content-header .info-item .count {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.banner {
+    width: 810px;
+    height: 86px;
+    background-color: #eee;
+    text-align: center;
+    line-height: 86px;
+    margin-bottom: 20px;
+}
+/* =========================================== 테이블 및 섹션 스타일 =========================================== */
+/* 리뷰 테이블 스타일 */
+.review-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.review-table th, .review-table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+}
+.review-table th {
+    background-color: #f9f9f9;
+}
+/* 별점 스타일 */
+.rating {
+    color: #ffc107;
+    font-size: 1.2em;
+}
+/* 공통 테이블 스타일 (이전 답변에서 제공) */
+.table-container {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.table-container th, .table-container td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.table-container th {
+    background-color: #f9f9f9;
+}
+.table-container td:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+}
+.table-container td button {
+    background-color: #946ccf;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    white-space: nowrap;
+}
+.table-container td button:hover {
+    opacity: 0.9;
+}
+.table-container td strong.star-rating {
+    color: gold;
+}
+/* 쿠폰 섹션 스타일 */
+.coupon-section {
+    margin-bottom: 30px;
+}
+.coupon-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.coupon-table th, .coupon-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+.coupon-table th {
+    background-color: #f9f9f9;
+}
+/* 정보 섹션 스타일 */
+.info-section {
+    margin-bottom: 30px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.info-table th, .info-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+}
+.info-table th {
+    width: 150px;
+    background-color: #f9f9f9;
+}
+.info-table input[type="text"], .info-table input[type="email"], .info-table select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.info-table input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+.info-table .email-input-group, .info-table .phone-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.info-table .address-input {
+    width: 100%;
+    margin-top: 5px;
+}
+.info-table button {
+    padding: 8px 15px;
+    border: none;
+    background-color: #946ccf;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+.info-table .zip-code-btn {
+    margin-left: 5px;
+}
+.address-row td > div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.address-row input {
+    width: 200px;
+}
+.address-row input[type="text"]:nth-child(2) {
+    flex-grow: 1;
+}
+.info-table tr:nth-child(6) input:first-child {
+    width: 100px;
+}
+.info-table tr:nth-child(6) input:last-child {
+    width: 100px;
+}
+.info-table tr:nth-child(7) div:nth-child(1) input {
+    width: 100px;
+}
+.info-table tr:nth-child(7) div:nth-child(3) input {
+    width: 300px;
+}
+.button-group {
+    text-align: right;
+    margin-top: 20px;
+}
+.button-group button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+.button-group .save-btn {
+    background-color: #946ccf;
+    color: #fff;
+}
+.withdrawal-btn {
+    padding: 8px 15px;
+    border: 1px solid #dc3545;
+    background-color: #dc3545;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.withdrawal-btn:hover {
+    background-color: #c82333;
+}
+/* Q&A 테이블 스타일 */
+.qna-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.qna-table th, .qna-table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+}
+.qna-table th {
+    background-color: #f9f9f9;
+}
+.status.pending {
+    color: gray;
+}
+.status.completed {
+    color: green;
+}
+/* 주문 테이블 스타일 */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.order-table th, .order-table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+}
+.order-table th {
+    background-color: #f9f9f9;
+}
+.order-table .product-info {
+    display: flex;
+    align-items: center;
+}
+.order-table .product-info img {
+    width: 80px;
+    height: 80px;
+    vertical-align: middle;
+    margin-right: 15px;
+    border: 1px solid #eee;
+}
+.order-table .product-details {
+    display: flex;
+    flex-direction: column;
+}
+.order-table .product-details p {
+    margin: 2px 0;
+    line-height: 1.2;
+}
+.order-table .product-details strong {
+    font-size: 1.1em;
+}
+.order-table .product-details a {
+    color: #007BFF;
+    text-decoration: none;
+    cursor: pointer;
+}
+.order-table .action-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.order-table .action-btn {
+    padding: 8px 15px;
+    border: none;
+    background-color: #946ccf;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+.order-table .action-btn:hover {
+    background-color: #7b58a8;
+}
+.info-text {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #555;
+    line-height: 1.6;
+}
+.info-text li::before {
+    content: "• ";
+    color: #888;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+/* =========================================== 페이지네이션 스타일 =========================================== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+.pagination button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.pagination button:hover {
+    background-color: #f0f0f0;
+}
+.pagination span {
+    padding: 8px 12px;
+}
+/* =========================================== 모달 (팝업) 스타일 =========================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.modal-header h4 {
+    margin: 0;
+}
+.modal .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+.modal .close-btn:hover {
+    color: #333;
+}
+.modal h4 {
+    margin-top: 0;
+}
+.modal-content input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.modal-content .modal-buttons {
+    margin-top: 20px;
+}
+.modal-content .modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 5px;
+}
+.modal-content .modal-buttons .confirm-btn {
+    background-color: #946ccf;
+    color: #fff;
+}
+.modal-content .modal-buttons .cancel-btn {
+    background-color: #ccc;
+    color: #333;
+}
+.message {
+    color: red;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+.hidden {
+    display: none;
+}
+/* 리뷰 관련 테이블/별점 스타일 */
+.review-table td {
+    vertical-align: top;
+}
+.review-table input[type="file"] {
+    width: 100%;
+}
+.review-table button {
+    width: 100%;
+}
+.rating-container {
+    direction: rtl;
+    display: inline-block;
+}
+.rating-container input {
+    display: none;
+}
+.rating-container label {
+    font-size: 1.5em;
+    color: lightgray;
+    cursor: pointer;
+}
+.rating-container label:hover, .rating-container label:hover ~ label, .rating-container input:checked ~ label {
+    color: gold;
+}
+.modal-content .product-details p {
+    margin: 2px 0;
+    line-height: 1.2;
+}
+.filter-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.filter-section button {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.filter-section input, .filter-section select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

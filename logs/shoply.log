@@ -1,0 +1,44 @@
+2025-10-01T15:00:21.892+09:00  INFO 15520 --- [shoply] [restartedMain] kr.co.shoply.ShoplyApplication           : Starting ShoplyApplication v0.0.1-SNAPSHOT using Java 21.0.8 with PID 15520 (C:\Users\GGG\Desktop\Workspace\shoply\build\classes\java\main started by GGG in C:\Users\GGG\Desktop\Workspace\shoply)
+2025-10-01T15:00:21.894+09:00  INFO 15520 --- [shoply] [restartedMain] kr.co.shoply.ShoplyApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-10-01T15:00:21.945+09:00  INFO 15520 --- [shoply] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\GGG\.gradle\caches\modules-2\files-2.1\com.oracle.database.jdbc\ojdbc11\23.7.0.25.01\665f52abef9122ce003b5cfc1d9d44f7302e2cfe\ojdbc11-23.7.0.25.01.jar referenced one or more files that do not exist: file:/C:/Users/GGG/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/23.7.0.25.01/665f52abef9122ce003b5cfc1d9d44f7302e2cfe/oraclepki.jar
+2025-10-01T15:00:21.946+09:00  INFO 15520 --- [shoply] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-10-01T15:00:21.946+09:00  INFO 15520 --- [shoply] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-10-01T15:00:22.572+09:00  INFO 15520 --- [shoply] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-01T15:00:22.586+09:00  INFO 15520 --- [shoply] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 JPA repository interfaces.
+2025-10-01T15:00:22.694+09:00  WARN 15520 --- [shoply] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[kr.co.shoply]' package. Please check your configuration.
+2025-10-01T15:00:23.073+09:00  INFO 15520 --- [shoply] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-01T15:00:23.086+09:00  INFO 15520 --- [shoply] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-01T15:00:23.086+09:00  INFO 15520 --- [shoply] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-01T15:00:23.126+09:00  INFO 15520 --- [shoply] [restartedMain] o.a.c.c.C.[.[localhost].[/shoply]        : Initializing Spring embedded WebApplicationContext
+2025-10-01T15:00:23.126+09:00  INFO 15520 --- [shoply] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1179 ms
+2025-10-01T15:00:23.297+09:00  INFO 15520 --- [shoply] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-01T15:00:23.351+09:00  INFO 15520 --- [shoply] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-01T15:00:23.387+09:00  INFO 15520 --- [shoply] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-01T15:00:23.674+09:00  INFO 15520 --- [shoply] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-01T15:00:23.705+09:00  INFO 15520 --- [shoply] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-01T15:00:23.708+09:00  WARN 15520 --- [shoply] [restartedMain] c.zaxxer.hikari.util.DriverDataSource    : Registered driver with driverClassName=oracle.jdbc.driver.OracleDriver was not found, trying direct instantiation.
+2025-10-01T15:00:24.213+09:00  INFO 15520 --- [shoply] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@22df66f8
+2025-10-01T15:00:24.214+09:00  INFO 15520 --- [shoply] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-01T15:00:24.571+09:00  INFO 15520 --- [shoply] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-01T15:00:24.878+09:00  INFO 15520 --- [shoply] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-01T15:00:24.883+09:00  INFO 15520 --- [shoply] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-01T15:00:24.943+09:00  WARN 15520 --- [shoply] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-01T15:00:24.971+09:00  INFO 15520 --- [shoply] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-10-01T15:00:25.402+09:00  INFO 15520 --- [shoply] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-10-01T15:00:25.432+09:00  INFO 15520 --- [shoply] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/shoply'
+2025-10-01T15:00:25.439+09:00  INFO 15520 --- [shoply] [restartedMain] kr.co.shoply.ShoplyApplication           : Started ShoplyApplication in 4.044 seconds (process running for 4.755)
+2025-10-01T15:00:35.250+09:00  INFO 15520 --- [shoply] [http-nio-8080-exec-3] o.a.c.c.C.[.[localhost].[/shoply]        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-01T15:00:35.250+09:00  INFO 15520 --- [shoply] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-01T15:00:35.251+09:00  INFO 15520 --- [shoply] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-10-01T15:03:41.771+09:00  INFO 15520 --- [shoply] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-01T15:03:41.775+09:00  INFO 15520 --- [shoply] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-10-01T15:03:41.779+09:00  INFO 15520 --- [shoply] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-01T15:03:41.781+09:00  INFO 15520 --- [shoply] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-01T15:03:41.879+09:00  INFO 15520 --- [shoply] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

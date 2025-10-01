@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 쿠폰</title>
+  <link rel="stylesheet" href="/kmarket/inc/css/my.css">
+</head>
+<body class="logged-in">
+    <header>
+        <div class="main-header">
+            <div class="header-left">
+                <a href="./index.html">
+                    <img src="../image/logo.jpg" alt="SHOPLY 로고" class="logo">
+                </a>
+                <span>쇼핑의 플레이리스트</span>
+            </div>
+            <div class="header-right">
+                <div class="login-menu">
+                    <a href="./login.html">로그인</a> |
+                    <a href="./register.html">회원가입</a> |
+                </div>
+                <div class="user-menu">
+                    <a href="#">로그아웃</a> |
+                    <a href="./my/home.html">마이페이지</a> |
+                    <a href="./cart.html">장바구니</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        <div class="sidebar">
+            
+            <ul>
+                <li><a href="home.html">마이페이지 홈</a></li>
+                <li><a href="order.html">전체주문내역</a></li>
+                <li><a href="point.html">포인트내역</a></li>
+                <li><a href="#" class="active">쿠폰</a></li>
+                <li><a href="review.html">나의리뷰</a></li>
+                <li><a href="qna.html">문의하기</a></li>
+                <li><a href="info.html">나의설정</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="main-content-header">
+                <h2>나의 쇼핑 정보</h2>
+                <div class="info-summary">
+                    <div class="info-item">
+                        <div class="count">2</div>
+                        <div>주문</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="count">1</div>
+                        <div>쿠폰</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="count">1,000</div>
+                        <div>포인트</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="count">1</div>
+                        <div>문의</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="banner">
+                810 x 86 배너 광고
+            </div>
+
+            <div class="coupon-section">
+                <h3>쿠폰내역</h3>
+                <table class="coupon-table">
+                    <thead>
+                        <tr>
+                            <th>쿠폰명</th>
+                            <th>할인금액</th>
+                            <th>적용기준 / 제한조건</th>
+                            <th>상태</th>
+                            <th>유효기간</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1만원 할인 중복쿠폰</td>
+                            <td>10,000원</td>
+                            <td>10,000원 이상 구매시</td>
+                            <td>사용가능</td>
+                            <td>~12/31</td>
+                        </tr>
+                        <tr>
+                            <td>회원가입 축하 5천원 할인쿠폰</td>
+                            <td>5,000원</td>
+                            <td>5,000원 이상 구매시</td>
+                            <td>사용가능</td>
+                            <td>~12/31</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-section">
+                <h3>쿠폰사용안내</h3>
+                <ul class="info-text">
+                    <li>현금/골드/환불/상품권 등 현금성 카테고리 및 일부 프로모션 상품에는 쿠폰 사용이 제한됩니다.</li>
+                    <li>상품/구매/할인 쿠폰은 한 상품당 한 장만 사용 가능하며, 총 주문금액이 일정 금액 이상일 경우에만 사용 가능합니다.</li>
+                    <li>쿠폰은 쿠폰 한정으로 적용되므로, 사용 시 유의하시기 바랍니다.</li>
+                    <li>쿠폰은 회원당 한 번씩만 발행되며, 재발행이 불가능합니다.</li>
+                    <li>유효기간이 지난 쿠폰은 자동 소멸됩니다.</li>
+                </ul>
+            </div>
+            
+            <div class="pagination">
+                <button>&lt; 이전</button>
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>4</button>
+                <button>5</button>
+                <button>다음 &gt;</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <h2>(주)샵플리닷컴</h2>
+                <a href="#">사업자정보확인</a>
+                <a href="#">소비자보호 서비스 가입사실확인</a>
+            </div>
+            <div class="footer-info">
+                <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
+                <p>부산광역시 부산진구 중앙대로 103</p>
+                <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
+                <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="#">개인정보처리방침</a> |
+                    <a href="#">영상정보처리기기 운영·관리방침</a> |
+                    <a href="#">고객센터</a> |
+                    <a href="#">FAQ</a>
+                </div>
+                <div class="footer-sns">
+                    <a href="#"><img src="../image/facebook.png" alt="Facebook"></a>
+                    <a href="#"><img src="../image/instagram.png" alt="Instagram"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // 로그인 상태 시뮬레이션
+        const isLoggedIn = true; // 실제로는 서버에서 로그인 상태를 확인
+
+        const loginMenu = document.querySelector('.login-menu');
+        const userMenu = document.querySelector('.user-menu');
+
+        if (isLoggedIn) {
+            document.body.classList.add('logged-in');
+        }
+    </script>
+</body>
+</html>

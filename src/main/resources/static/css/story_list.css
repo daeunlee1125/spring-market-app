@@ -1,0 +1,113 @@
+/* 전체 레이아웃 */
+.stories {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: auto;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 소개 */
+.intro {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.intro h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.intro p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* 카테고리 메뉴 */
+.category-menu {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 50px;
+}
+.category-menu a {
+  text-decoration: none;
+  color: #444;
+  font-size: 15px;
+  padding-bottom: 5px;
+}
+.category-menu a.active {
+  border-bottom: 2px solid #111;
+  font-weight: bold;
+  color: #111;
+}
+
+
+
+/* 상세 페이지 레이아웃 */
+.story-detail {
+  padding: 60px 20px;
+  background: #fff;
+}
+
+.story-detail .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.story-detail h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+/* ✅ 카드 서브 설명 스타일 */
+.story-detail .subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.story-detail .date {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 20px;
+}
+
+.story-detail .detail-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.story-detail .content {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #444;
+}
+
+.story-detail .content p {
+  margin-bottom: 20px;
+}
+
+/* 버튼 */
+.detail-btns {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.detail-btns .btn-back {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #f2f2f2;
+  color: #333;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.detail-btns .btn-back:hover {
+  background: #ddd;
+}

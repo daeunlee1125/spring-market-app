@@ -11,11 +11,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class SysCouponDTO {
-    private String cpCode;
-    private String cpName;
-    private Integer cpType;
-    private Integer cpValue;
-    private Integer cpMinPrice;
-    private Date cpIssueDate;
-    private Date cpExpDate;
+    private String cp_code;
+    private String cp_name;
+    private int cp_type;
+    private int cp_value;
+    private int cp_min_price;
+    private String cp_issue_date;
+    private String cp_exp_date;
 }

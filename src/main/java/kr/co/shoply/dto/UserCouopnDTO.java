@@ -11,10 +11,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class UserCouopnDTO {
-    private String cpNo;
-    private String cpCode;
-    private String memId;
-    private Date cpIssuedDate;
-    private Date cpUsedDate;
-    private Integer cpStat;
+    private String cp_no;
+
+    private String cp_code;
+    private String mem_id;
+    private String cp_issued_date;
+    private String cp_used_date;
+    private int cp_stat;
 }

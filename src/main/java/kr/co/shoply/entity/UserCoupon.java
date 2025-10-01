@@ -5,33 +5,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString
 @Entity
-@Table(name = "user_coupon")
+@Table(name = "USER_COUPON")
 public class UserCoupon {
+
     @Id
-    @Column(name = "cp_no", length = 11)
-    private String cpNo;
+    private String cp_no;
 
-    @Column(name = "cp_code", length = 11, nullable = false)
-    private String cpCode;
+    private String cp_code;
+    private String mem_id;
 
-    @Column(name = "mem_id", length = 30, nullable = false)
-    private String memId;
+    @CreationTimestamp
+    private LocalDateTime cp_issued_date;
 
-    @Column(name = "cp_issued_date", nullable = false)
-    private Date cpIssuedDate;
+    private LocalDateTime cp_used_date;
 
-    @Column(name = "cp_used_date")
-    private Date cpUsedDate;
 
-    @Column(name = "cp_stat")
-    private Integer cpStat;
+    private int cp_stat;
 }

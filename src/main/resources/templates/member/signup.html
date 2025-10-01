@@ -1,221 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="/kmarket/inc/css/index.css">
-        <link rel="stylesheet" href="/kmarket/inc/css/member.css">
-    </head>
-    <body>
-        <header>
-          <div class="top-bar-back">
-            <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
-          </div>
-          <!-- 1번째 줄 -->
-          <div class="top-header">
-            <!-- 로고 -->
-            <div class="header-left">
-              <img src="/kmarket/inc/image/logo.jpg" alt="로고" class="logo">
-            </div>
-            <!-- 검색창 -->
-            <div class="header-center">
-              <form action="">
-                <input type="text" placeholder="검색">
-                <button type="submit">
-                  <img src="/kmarket/inc/image/search.png" alt="검색">
-                </button>
-              </form>
-            </div>
-            <!-- 아이콘 + 로그인 메뉴 -->
-            <div class="header-right">
-              <img src="/kmarket/inc/image/user.png" alt="유저" class="icon">
-              <img src="/kmarket/inc/image/cart.png" alt="장바구니" class="icon" style="width: 30px;">
-            </div>
-          </div>
-          <div class="bottom-header">
-            <div class="header-left">
-              <a href="#" id="categoryBtn"> 전체 카테고리</a>
-              <a href="#">히트상품</a>
-              <a href="#">추천상품</a>
-              <a href="#">최신상품</a>
-              <a href="#">인기상품</a>
-              <a href="#">할인상품</a>
-            </div>
-           <div class="header-right login-menu"> 
-                <a href="#">로그인</a> | 
-                <a href="#">회원가입</a> | 
-                <a href="#">고객센터</a>
-            </div>
-          </div>
-        </header>
-        <div class="container">
-            <div class="wrapper">
-              <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
-              <div id="categoryBox" class="category-box">
-                <div class="main-menu">
-                  <ul>
-                    <li data-target="menu1">패션/의류/뷰티</li>
-                    <li data-target="menu2">패션잡화</li>
-                    <li data-target="menu3">명품</li>
-                    <li data-target="menu4">뷰티</li>
-                  </ul>
-                </div>
-                <div class="sub-menu">
-                  <ul id="menu1" class="submenu-content">
-                    <li><a href="#">여성의류</a></li>
-                    <li><a href="#">남성의류</a></li>
-                    <li><a href="#">아동복</a></li>
-                  </ul>
-                  <ul id="menu2" class="submenu-content" style="display:none;">
-                    <li><a href="#">가방</a></li>
-                    <li><a href="#">신발</a></li>
-                  </ul>
-                  <ul id="menu3" class="submenu-content" style="display:none;">
-                    <li><a href="#">해외 명품</a></li>   
-                  </ul>
-                  <ul id="menu4" class="submenu-content" style="display:none;">
-                    <li><a href="#">스킨케어</a></li>
-                    <li><a href="#">메이크업</a></li>
-                  </ul>
-                </div>
-              </div>
-              <main>
-                <!-- 약관동의 섹션 -->
-                <div class="terms-container">
-                    <h2 class="terms-title">약관동의</h2>
-                    
-                    <!-- 이용약관 (필수) -->
-                    <div class="terms-item">
-                        <div class="terms-header">
-                            <span class="terms-label"><span class="required">(필수)</span> 이용약관</span>
-                            <div class="agree-checkbox">
-                                <input type="checkbox" id="terms1" name="terms1">
-                                <label for="terms1" class="agree-text">동의하기</label>
-                            </div>
-                        </div>
-                        <div class="terms-content">
-                            제1조(목적) 이 약관은 샵플리닷컴(이하 "회사"라 한다)이 운영하는 인터넷 쇼핑몰에서 제공하는 인터넷 관련 서비스(이하 "서비스"라 한다)를 이용함에 있어 회사와 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
-                            
-                            제2조(정의) ① "몰"이란 회사가 재화 또는 용역을 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 재화 또는 용역을 거래할 수 있도록 설정한 가상의 영업장을 말하며, 아울러 사이버몰을 운영하는 사업자의 의미로도 사용합니다. ② "이용자"란 "몰"에 접속하여 이 약관에 따라 "몰"이 제공하는 서비스를 받는 회원 및 비회원을 말합니다.
-                        </div>
-                    </div>
-                    
-                    <!-- 전자금융 이용약관 (필수) -->
-                    <div class="terms-item">
-                        <div class="terms-header">
-                            <span class="terms-label"><span class="required">(필수)</span> 전자금융 이용약관</span>
-                            <div class="agree-checkbox">
-                                <input type="checkbox" id="terms2" name="terms2">
-                                <label for="terms2" class="agree-text">동의하기</label>
-                            </div>
-                        </div>
-                        <div class="terms-content">
-                            제1조(목적) 이 약관은 샵플리닷컴(이하 "회사"라 한다)이 제공하는 전자금융거래 서비스를 이용함에 있어 회사와 이용자 사이의 전자금융거래에 관한 기본사항을 정함을 목적으로 합니다.
-                            
-                            제2조(용어의 정의) 이 약관에서 사용하는 용어의 정의는 다음과 같습니다. 1. "전자금융거래"라 함은 회사가 전자적 장치를 통하여 제공하는 금융상품 및 서비스를 이용자가 전자적 장치를 통하여 이용하는 거래를 말합니다. 2. "이용자"라 함은 회사와 전자금융거래계약을 체결하거나 회사가 제공하는 전자금융거래 서비스를 이용하는 자를 말합니다.
-                        </div>
-                    </div>
-                    
-                    <!-- 개인정보 수집동의 (필수) -->
-                    <div class="terms-item">
-                        <div class="terms-header">
-                            <span class="terms-label"><span class="required">(필수)</span> 개인정보 수집 동의</span>
-                            <div class="agree-checkbox">
-                                <input type="checkbox" id="terms3" name="terms3">
-                                <label for="terms3" class="agree-text">동의하기</label>
-                            </div>
-                        </div>
-                        <div class="terms-content">
-                            ■ 개인정보 수집·이용 내역
-                            - 수집목적: 회원 가입 및 관리, 서비스 제공, 계약이행, 요금정산
-                            - 수집항목: 이름, 아이디, 비밀번호, 이메일, 휴대폰번호, 주소
-                            - 보유기간: 회원탈퇴 후 5년
-                            
-                            ■ 개인정보 제3자 제공
-                            - 제공받는 자: 배송업체(CJ대한통운, 롯데택배 등)
-                            - 제공목적: 상품배송
-                            - 제공항목: 이름, 주소, 연락처
-                            - 보유기간: 배송완료 후 1개월
-                        </div>
-                    </div>
-                    
-                    <!-- 위치정보 이용약관 (선택) -->
-                    <div class="terms-item">
-                        <div class="terms-header">
-                            <span class="terms-label"><span class="optional">(선택)</span> 위치정보 이용약관</span>
-                            <div class="agree-checkbox">
-                                <input type="checkbox" id="terms4" name="terms4">
-                                <label for="terms4" class="agree-text">동의하기</label>
-                            </div>
-                        </div>
-                        <div class="terms-content">
-                            제1조(목적) 본 약관은 샵플리닷컴(이하 "회사")이 제공하는 위치기반서비스와 관련하여 회사와 개인위치정보주체와의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
-                            
-                            제2조(약관의 효력 및 변경) ① 본 약관은 개인위치정보주체가 동의함으로써 효력이 발생됩니다. ② 회사는 위치정보의보호및이용등에관한법률, 정보통신망이용촉진및정보보호등에관한법률, 통신비밀보호법, 전기통신사업법 등 관련 법령을 준수합니다.
-                        </div>
-                    </div>
-                    
-                    <!-- 동의하기 버튼 -->
-                    <div class="submit-section">
-                        <button type="button" class="submit-btn" id="submitBtn" onclick="checkAgreement()">동의하기</button>
+<div th:replace="~{member/_head.html}"></div>
+<div class="container">
+    <div class="wrapper">
+      <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
+      <div id="categoryBox" class="category-box">
+        <div class="main-menu">
+          <ul>
+            <li data-target="menu1">패션/의류/뷰티</li>
+            <li data-target="menu2">패션잡화</li>
+            <li data-target="menu3">명품</li>
+            <li data-target="menu4">뷰티</li>
+          </ul>
+        </div>
+        <div class="sub-menu">
+          <ul id="menu1" class="submenu-content">
+            <li><a href="#">여성의류</a></li>
+            <li><a href="#">남성의류</a></li>
+            <li><a href="#">아동복</a></li>
+          </ul>
+          <ul id="menu2" class="submenu-content" style="display:none;">
+            <li><a href="#">가방</a></li>
+            <li><a href="#">신발</a></li>
+          </ul>
+          <ul id="menu3" class="submenu-content" style="display:none;">
+            <li><a href="#">해외 명품</a></li>
+          </ul>
+          <ul id="menu4" class="submenu-content" style="display:none;">
+            <li><a href="#">스킨케어</a></li>
+            <li><a href="#">메이크업</a></li>
+          </ul>
+        </div>
+      </div>
+      <main>
+        <!-- 약관동의 섹션 -->
+        <div class="terms-container">
+            <h2 class="terms-title">약관동의</h2>
+
+            <!-- 이용약관 (필수) -->
+            <div class="terms-item">
+                <div class="terms-header">
+                    <span class="terms-label"><span class="required">(필수)</span> 이용약관</span>
+                    <div class="agree-checkbox">
+                        <input type="checkbox" id="terms1" name="terms1">
+                        <label for="terms1" class="agree-text">동의하기</label>
                     </div>
                 </div>
-              </main>
+                <div class="terms-content">
+                    제1조(목적) 이 약관은 샵플리닷컴(이하 "회사"라 한다)이 운영하는 인터넷 쇼핑몰에서 제공하는 인터넷 관련 서비스(이하 "서비스"라 한다)를 이용함에 있어 회사와 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+
+                    제2조(정의) ① "몰"이란 회사가 재화 또는 용역을 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 재화 또는 용역을 거래할 수 있도록 설정한 가상의 영업장을 말하며, 아울러 사이버몰을 운영하는 사업자의 의미로도 사용합니다. ② "이용자"란 "몰"에 접속하여 이 약관에 따라 "몰"이 제공하는 서비스를 받는 회원 및 비회원을 말합니다.
+                </div>
+            </div>
+
+            <!-- 전자금융 이용약관 (필수) -->
+            <div class="terms-item">
+                <div class="terms-header">
+                    <span class="terms-label"><span class="required">(필수)</span> 전자금융 이용약관</span>
+                    <div class="agree-checkbox">
+                        <input type="checkbox" id="terms2" name="terms2">
+                        <label for="terms2" class="agree-text">동의하기</label>
+                    </div>
+                </div>
+                <div class="terms-content">
+                    제1조(목적) 이 약관은 샵플리닷컴(이하 "회사"라 한다)이 제공하는 전자금융거래 서비스를 이용함에 있어 회사와 이용자 사이의 전자금융거래에 관한 기본사항을 정함을 목적으로 합니다.
+
+                    제2조(용어의 정의) 이 약관에서 사용하는 용어의 정의는 다음과 같습니다. 1. "전자금융거래"라 함은 회사가 전자적 장치를 통하여 제공하는 금융상품 및 서비스를 이용자가 전자적 장치를 통하여 이용하는 거래를 말합니다. 2. "이용자"라 함은 회사와 전자금융거래계약을 체결하거나 회사가 제공하는 전자금융거래 서비스를 이용하는 자를 말합니다.
+                </div>
+            </div>
+
+            <!-- 개인정보 수집동의 (필수) -->
+            <div class="terms-item">
+                <div class="terms-header">
+                    <span class="terms-label"><span class="required">(필수)</span> 개인정보 수집 동의</span>
+                    <div class="agree-checkbox">
+                        <input type="checkbox" id="terms3" name="terms3">
+                        <label for="terms3" class="agree-text">동의하기</label>
+                    </div>
+                </div>
+                <div class="terms-content">
+                    ■ 개인정보 수집·이용 내역
+                    - 수집목적: 회원 가입 및 관리, 서비스 제공, 계약이행, 요금정산
+                    - 수집항목: 이름, 아이디, 비밀번호, 이메일, 휴대폰번호, 주소
+                    - 보유기간: 회원탈퇴 후 5년
+
+                    ■ 개인정보 제3자 제공
+                    - 제공받는 자: 배송업체(CJ대한통운, 롯데택배 등)
+                    - 제공목적: 상품배송
+                    - 제공항목: 이름, 주소, 연락처
+                    - 보유기간: 배송완료 후 1개월
+                </div>
+            </div>
+
+            <!-- 위치정보 이용약관 (선택) -->
+            <div class="terms-item">
+                <div class="terms-header">
+                    <span class="terms-label"><span class="optional">(선택)</span> 위치정보 이용약관</span>
+                    <div class="agree-checkbox">
+                        <input type="checkbox" id="terms4" name="terms4">
+                        <label for="terms4" class="agree-text">동의하기</label>
+                    </div>
+                </div>
+                <div class="terms-content">
+                    제1조(목적) 본 약관은 샵플리닷컴(이하 "회사")이 제공하는 위치기반서비스와 관련하여 회사와 개인위치정보주체와의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
+
+                    제2조(약관의 효력 및 변경) ① 본 약관은 개인위치정보주체가 동의함으로써 효력이 발생됩니다. ② 회사는 위치정보의보호및이용등에관한법률, 정보통신망이용촉진및정보보호등에관한법률, 통신비밀보호법, 전기통신사업법 등 관련 법령을 준수합니다.
+                </div>
+            </div>
+
+            <!-- 동의하기 버튼 -->
+            <div class="submit-section">
+                <button type="button" class="submit-btn" id="submitBtn" onclick="checkAgreement()">동의하기</button>
             </div>
         </div>
-        <footer>
-          <div class="top-footer">
-            <div class="footer-wrapper">
-            <div class="top-f">
-              <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
-              <a href="#">서비스이용약관</a> |
-              <a href="#" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
-              <a href="#">전자금융거래약관</a>
-            </div>
-          </div>
-          </div>
-          <div class="footer-wrapper">
-            <h3 class="cpname">(주)샵플리닷컴</h3>
-            <div class="call-cont">
-              <img src="/kmarket/inc/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
-              <span class="tel">1234-5678</span>
-              <span class="time"> (평일 09:00~18:00)</span>
-            </div>
-            <div style="color: gray; margin-top: 15px">
-              <span>대표이사 : 홍길동</span>
-              <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-              <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
-              <div style="margin-top: 3px;">
-                <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
-              </div>
-            </div>   
-          </div>
-        </footer>
-        
-        <script>
-            function checkAgreement() {
-                const requiredTerms = ['terms1', 'terms2', 'terms3'];
-                const uncheckedRequired = [];
-                
-                for (let termId of requiredTerms) {
-                    if (!document.getElementById(termId).checked) {
-                        uncheckedRequired.push(termId);
-                    }
-                }
-                
-                if (uncheckedRequired.length > 0) {
-                    alert('필수 약관에 모두 동의해주세요.');
-                    return false;
-                }
-                
-                alert('약관 동의가 완료되었습니다.');
-                // 여기에서 다음 페이지로 이동하거나 추가 처리를 할 수 있습니다.
-                return true;
-            }
-            
-            // 기존 카테고리 메뉴 JavaScript가 있다면 여기에 추가
-        </script>
-    </body>
-    <script src="/kmarket/inc/js/index.js"></script>
-</html>
+      </main>
+    </div>
+</div>
+<div th:replace="~{member/_tail.html}"></div>

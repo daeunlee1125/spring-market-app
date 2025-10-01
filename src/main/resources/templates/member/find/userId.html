@@ -1,212 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="/kmarket/inc/css/index.css">
-        <link rel="stylesheet" href="/kmarket/inc/css/member_find.css">
-    </head>
-    <body>
-        <header>
-          <div class="top-bar-back">
-            <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
-          </div>
-          <!-- 1번째 줄 -->
-          <div class="top-header">
-            <!-- 로고 -->
-            <div class="header-left">
-              <img src="/kmarket/inc/image/logo.jpg" alt="로고" class="logo">
-            </div>
-            <!-- 검색창 -->
-            <div class="header-center">
-              <form action="">
-                <input type="text" placeholder="검색">
-                <button type="submit">
-                  <img src="/kmarket/inc/image/search.png" alt="검색">
-                </button>
-              </form>
-            </div>
-            <!-- 아이콘 + 로그인 메뉴 -->
-            <div class="header-right">
-              <img src="/kmarket/inc/image/user.png" alt="유저" class="icon">
-              <img src="/kmarket/inc/image/cart.png" alt="장바구니" class="icon" style="width: 30px;">
-            </div>
-          </div>
-          <div class="bottom-header">
-            <div class="header-left">
-              <a href="#" id="categoryBtn"> 전체 카테고리</a>
-              <a href="#">히트상품</a>
-              <a href="#">추천상품</a>
-              <a href="#">최신상품</a>
-              <a href="#">인기상품</a>
-              <a href="#">할인상품</a>
-            </div>
-           <div class="header-right login-menu"> 
-                <a href="#">로그인</a> | 
-                <a href="#">회원가입</a> | 
-                <a href="#">고객센터</a>
-            </div>
-          </div>
-        </header>
-        
-        <div class="container">
-            <div class="wrapper">
-              <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
-              <div id="categoryBox" class="category-box">
-                <div class="main-menu">
-                  <ul>
-                    <li data-target="menu1">패션/의류/뷰티</li>
-                    <li data-target="menu2">패션잡화</li>
-                    <li data-target="menu3">명품</li>
-                    <li data-target="menu4">뷰티</li>
-                  </ul>
+<div th:replace="~{member/find/_head.html}"></div>
+<div class="container">
+    <div class="wrapper">
+      <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
+      <div id="categoryBox" class="category-box">
+        <div class="main-menu">
+          <ul>
+            <li data-target="menu1">패션/의류/뷰티</li>
+            <li data-target="menu2">패션잡화</li>
+            <li data-target="menu3">명품</li>
+            <li data-target="menu4">뷰티</li>
+          </ul>
+        </div>
+        <div class="sub-menu">
+          <ul id="menu1" class="submenu-content">
+            <li><a href="#">여성의류</a></li>
+            <li><a href="#">남성의류</a></li>
+            <li><a href="#">아동복</a></li>
+          </ul>
+          <ul id="menu2" class="submenu-content" style="display:none;">
+            <li><a href="#">가방</a></li>
+            <li><a href="#">신발</a></li>
+          </ul>
+          <ul id="menu3" class="submenu-content" style="display:none;">
+            <li><a href="#">해외 명품</a></li>
+          </ul>
+          <ul id="menu4" class="submenu-content" style="display:none;">
+            <li><a href="#">스킨케어</a></li>
+            <li><a href="#">메이크업</a></li>
+          </ul>
+        </div>
+      </div>
+      <main>
+        <div class="id-find-container">
+            <h2 class="id-find-title">아이디 찾기</h2>
+
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <div class="tab-button active" data-tab="email">이메일 인증</div>
+                    <div class="tab-button" data-tab="phone">휴대폰 인증</div>
                 </div>
-                <div class="sub-menu">
-                  <ul id="menu1" class="submenu-content">
-                    <li><a href="#">여성의류</a></li>
-                    <li><a href="#">남성의류</a></li>
-                    <li><a href="#">아동복</a></li>
-                  </ul>
-                  <ul id="menu2" class="submenu-content" style="display:none;">
-                    <li><a href="#">가방</a></li>
-                    <li><a href="#">신발</a></li>
-                  </ul>
-                  <ul id="menu3" class="submenu-content" style="display:none;">
-                    <li><a href="#">해외 명품</a></li>   
-                  </ul>
-                  <ul id="menu4" class="submenu-content" style="display:none;">
-                    <li><a href="#">스킨케어</a></li>
-                    <li><a href="#">메이크업</a></li>
-                  </ul>
+
+                <!-- 이메일 인증 탭 -->
+                <div id="email-tab" class="tab-content active">
+                    <form>
+                        <div class="form-group">
+                            <label for="name-email">이름</label>
+                            <input type="text" id="name-email" placeholder="이름 입력">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">이메일</label>
+                            <div class="input-group">
+                                <input type="email" id="email" placeholder="이메일 입력">
+                                <button type="button" class="btn-verify">인증번호 받기</button>
+                            </div>
+                            <div class="input-group" style="margin-top: 10px;">
+                                <input type="text" placeholder="인증번호 입력">
+                                <button type="button" class="btn-verify">확인</button>
+                            </div>
+                        </div>
+
+                        <div class="verification-info">
+                            회원가입시 입력한 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.<br>
+                            인증번호를 입력 후 확인 버튼을 누르세요.
+                        </div>
+                    </form>
                 </div>
-              </div>
-              <main>
-                <div class="id-find-container">
-                    <h2 class="id-find-title">아이디 찾기</h2>
-                    
-                    <div class="tab-container">
-                        <div class="tab-buttons">
-                            <div class="tab-button active" data-tab="email">이메일 인증</div>
-                            <div class="tab-button" data-tab="phone">휴대폰 인증</div>
+
+                <!-- 휴대폰 인증 탭 -->
+                <div id="phone-tab" class="tab-content">
+                    <form>
+                        <div class="form-group">
+                            <label for="name-phone">이름</label>
+                            <input type="text" id="name-phone" placeholder="이름 입력">
                         </div>
-                        
-                        <!-- 이메일 인증 탭 -->
-                        <div id="email-tab" class="tab-content active">
-                            <form>
-                                <div class="form-group">
-                                    <label for="name-email">이름</label>
-                                    <input type="text" id="name-email" placeholder="이름 입력">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <div class="input-group">
-                                        <input type="email" id="email" placeholder="이메일 입력">
-                                        <button type="button" class="btn-verify">인증번호 받기</button>
-                                    </div>
-                                    <div class="input-group" style="margin-top: 10px;">
-                                        <input type="text" placeholder="인증번호 입력">
-                                        <button type="button" class="btn-verify">확인</button>
-                                    </div>
-                                </div>
-                                
-                                <div class="verification-info">
-                                    회원가입시 입력한 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.<br>
-                                    인증번호를 입력 후 확인 버튼을 누르세요.
-                                </div>
-                            </form>
+
+                        <div class="form-group">
+                            <label for="phone">핸드폰번호</label>
+                            <div class="input-group">
+                                <input type="tel" id="phone" placeholder="핸드폰번호 입력">
+                                <button type="button" class="btn-verify">인증번호 받기</button>
+                            </div>
+                            <div class="input-group" style="margin-top: 10px;">
+                                <input type="text" placeholder="인증번호 입력">
+                                <button type="button" class="btn-verify">확인</button>
+                            </div>
                         </div>
-                        
-                        <!-- 휴대폰 인증 탭 -->
-                        <div id="phone-tab" class="tab-content">
-                            <form>
-                                <div class="form-group">
-                                    <label for="name-phone">이름</label>
-                                    <input type="text" id="name-phone" placeholder="이름 입력">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="phone">핸드폰번호</label>
-                                    <div class="input-group">
-                                        <input type="tel" id="phone" placeholder="핸드폰번호 입력">
-                                        <button type="button" class="btn-verify">인증번호 받기</button>
-                                    </div>
-                                    <div class="input-group" style="margin-top: 10px;">
-                                        <input type="text" placeholder="인증번호 입력">
-                                        <button type="button" class="btn-verify">확인</button>
-                                    </div>
-                                </div>
-                                
-                                <div class="verification-info">
-                                    회원가입시 입력한 핸드폰번호가 같아야, 인증번호를 받을 수 있습니다.<br>
-                                    인증번호를 입력 후 확인 버튼을 누르세요.
-                                </div>
-                            </form>
+
+                        <div class="verification-info">
+                            회원가입시 입력한 핸드폰번호가 같아야, 인증번호를 받을 수 있습니다.<br>
+                            인증번호를 입력 후 확인 버튼을 누르세요.
                         </div>
-                    </div>
-                    
-                    <div class="button-group">
-                        <button type="button" class="btn btn-cancel">취소</button>
-                        <button type="button" class="btn btn-submit">다음</button>
-                    </div>
+                    </form>
                 </div>
-              </main>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-cancel">취소</button>
+                <button type="button" class="btn btn-submit">다음</button>
             </div>
         </div>
-        
-        <footer>
-          <div class="top-footer">
-            <div class="footer-wrapper">
-            <div class="top-f">
-              <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
-              <a href="#">서비스이용약관</a> |
-              <a href="#" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
-              <a href="#">전자금융거래약관</a>
-            </div>
-          </div>
-          </div>
-          <div class="footer-wrapper">
-            <h3 class="cpname">(주)샵플리닷컴</h3>
-            <div class="call-cont">
-              <img src="/kmarket/inc/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
-              <span class="tel">1234-5678</span>
-              <span class="time"> (평일 09:00~18:00)</span>
-            </div>
-            <div style="color: gray; margin-top: 15px">
-              <span>대표이사 : 홍길동</span>
-              <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-              <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
-              <div style="margin-top: 3px;">
-                <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
-              </div>
-            </div>   
-          </div>
-        </footer>
-
-    <script src="/kmarket/inc/js/index.js"></script>
-    <script>
-            // 탭 전환 기능
-            document.addEventListener('DOMContentLoaded', function() {
-                const tabButtons = document.querySelectorAll('.tab-button');
-                const tabContents = document.querySelectorAll('.tab-content');
-                
-                tabButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        const targetTab = this.getAttribute('data-tab');
-                        
-                        // 모든 탭 버튼 비활성화
-                        tabButtons.forEach(btn => btn.classList.remove('active'));
-                        // 현재 클릭된 탭 버튼 활성화
-                        this.classList.add('active');
-                        
-                        // 모든 탭 콘텐츠 숨기기
-                        tabContents.forEach(content => content.classList.remove('active'));
-                        // 해당 탭 콘텐츠 보이기
-                        document.getElementById(targetTab + '-tab').classList.add('active');
-                    });
-                });
-            });
-        </script>
-    </body>
-</html>
+      </main>
+    </div>
+</div>
+<div th:replace="~{member/find/_tail.html}"></div>

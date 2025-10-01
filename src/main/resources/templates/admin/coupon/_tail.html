@@ -1,0 +1,35 @@
+
+<footer>
+    <div class="middle">
+        <p id="footer-p">
+            Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+        </p>
+    </div>
+</footer>
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // 열기 버튼
+        document.querySelectorAll(".openModalBtn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const targetId = btn.dataset.target;
+                document.getElementById(targetId).classList.remove("hidden");
+            });
+        });
+
+        // 닫기 버튼 + 배경 클릭
+        document.querySelectorAll(".modal").forEach(modal => {
+            modal.addEventListener("click", (e) => {
+                if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
+                    modal.classList.add("hidden");
+                }
+            });
+        });
+    });
+
+</script>

@@ -14,9 +14,9 @@ spring:
     name: shoply
     version: ${version}
   datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver
+    driver-class-name: oracle.jdbc.OracleDriver
     password: 1234
-    url: jdbc:oracle:thin:@//3.37.16.64:1522/XEPDB1
+    url: jdbc:oracle:thin:@//3.38.140.9:1522/XEPDB1
     username: shoply
   devtools:
     livereload:

@@ -1,0 +1,121 @@
+  /* 버튼 컨테이너 */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.left-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.btn-register {
+background: linear-gradient(135deg, #a77ece, #6c3fc9);
+color: white;
+}
+
+.btn-register:hover {
+background: linear-gradient(135deg, #a77ece, #6c3fc9);
+}
+
+.btn-delete {
+background: linear-gradient(135deg, #a77ece, #6c3fc9);
+color: white;
+
+}
+
+.btn-delete:hover {
+background: linear-gradient(135deg, #a77ece, #6c3fc9);
+}
+
+
+/* 모달 배경 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+/* 모달 창 */
+.confirm-modal {
+    background: white;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 모달 내용 */
+.modal-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-btn {
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 60px;
+}
+
+.modal-btn:hover {
+    background: #e9ecef;
+}
+
+.modal-btn-confirm {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.modal-btn-confirm:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}

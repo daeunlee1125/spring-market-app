@@ -1,4 +1,4 @@
-package kr.co.practice.dto;
+package kr.co.shoply.dto;
 
 import lombok.*;
 
@@ -18,5 +18,6 @@ public class QnaDTO {
     private String q_content;
     private String q_rdate;
     private String q_reply;
+    private String q_channel;
 
 }

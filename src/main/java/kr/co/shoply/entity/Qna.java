@@ -1,4 +1,4 @@
-package kr.co.practice.entity;
+package kr.co.shoply.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +23,7 @@ public class Qna {
     private String q_cate2;
     private String q_title;
     private String q_content;
+    private String q_channel;
 
     @CreationTimestamp
     private LocalDateTime q_rdate;

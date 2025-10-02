@@ -32,4 +32,6 @@ public class SysCoupon {
     private LocalDateTime cp_issue_date;
 
     private LocalDateTime cp_exp_date;
+
+    private int cp_stat;
 }

@@ -18,4 +18,5 @@ public class SysCouponDTO {
     private int cp_min_price;
     private String cp_issue_date;
     private String cp_exp_date;
+    private int cp_stat;
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.MemSellerMapper">
+
+    <insert id="insertMember">
+        INSERT INTO MEMBER
+        (MEM_ID, MEM_PASS, MEM_NAME, MEM_LEVEL, MEM_STAT, MEM_HP, MEM_ZIP, MEM_ADDR1, MEM_ADDR2, MEM_RDATE, MEM_RANK)
+        VALUES
+        (#{mem_id}, #{mem_pass}, #{mem_name}, #{mem_level}, #{mem_stat}, #{mem_hp}, #{mem_zip}, #{mem_addr1}, #{mem_addr2}, SYSDATE, #{mem_rank})
+    </insert>
+
+    <insert id="insertMemSeller">
+        INSERT INTO MEM_SELLER
+        (MEM_ID, CORP_NAME, CORP_REG_HP, CORP_TEL_HP, CORP_FAX)
+        VALUES
+        (#{mem_id}, #{corp_name}, #{corp_reg_hp}, #{corp_tel_hp}, #{corp_fax})
+    </insert>
+
+
+</mapper>

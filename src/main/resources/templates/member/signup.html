@@ -44,11 +44,7 @@
                         <label for="terms1" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content">
-                    제1조(목적) 이 약관은 샵플리닷컴(이하 "회사"라 한다)이 운영하는 인터넷 쇼핑몰에서 제공하는 인터넷 관련 서비스(이하 "서비스"라 한다)를 이용함에 있어 회사와 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
-
-                    제2조(정의) ① "몰"이란 회사가 재화 또는 용역을 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 재화 또는 용역을 거래할 수 있도록 설정한 가상의 영업장을 말하며, 아울러 사이버몰을 운영하는 사업자의 의미로도 사용합니다. ② "이용자"란 "몰"에 접속하여 이 약관에 따라 "몰"이 제공하는 서비스를 받는 회원 및 비회원을 말합니다.
-                </div>
+                <div class="terms-content" th:text="${type == 'seller'} ? ${termsDTO.t_tax} : ${termsDTO.t_terms}"></div>
             </div>
 
             <!-- 전자금융 이용약관 (필수) -->
@@ -60,11 +56,7 @@
                         <label for="terms2" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content">
-                    제1조(목적) 이 약관은 샵플리닷컴(이하 "회사"라 한다)이 제공하는 전자금융거래 서비스를 이용함에 있어 회사와 이용자 사이의 전자금융거래에 관한 기본사항을 정함을 목적으로 합니다.
-
-                    제2조(용어의 정의) 이 약관에서 사용하는 용어의 정의는 다음과 같습니다. 1. "전자금융거래"라 함은 회사가 전자적 장치를 통하여 제공하는 금융상품 및 서비스를 이용자가 전자적 장치를 통하여 이용하는 거래를 말합니다. 2. "이용자"라 함은 회사와 전자금융거래계약을 체결하거나 회사가 제공하는 전자금융거래 서비스를 이용하는 자를 말합니다.
-                </div>
+                <div class="terms-content" th:text="${termsDTO.t_finance}"></div>
             </div>
 
             <!-- 개인정보 수집동의 (필수) -->
@@ -76,22 +68,11 @@
                         <label for="terms3" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content">
-                    ■ 개인정보 수집·이용 내역
-                    - 수집목적: 회원 가입 및 관리, 서비스 제공, 계약이행, 요금정산
-                    - 수집항목: 이름, 아이디, 비밀번호, 이메일, 휴대폰번호, 주소
-                    - 보유기간: 회원탈퇴 후 5년
-
-                    ■ 개인정보 제3자 제공
-                    - 제공받는 자: 배송업체(CJ대한통운, 롯데택배 등)
-                    - 제공목적: 상품배송
-                    - 제공항목: 이름, 주소, 연락처
-                    - 보유기간: 배송완료 후 1개월
-                </div>
+                <div class="terms-content" th:text="${termsDTO.t_privacy}"></div>
             </div>
 
             <!-- 위치정보 이용약관 (선택) -->
-            <div class="terms-item">
+            <div class="terms-item" th:if="${type != 'seller'}">
                 <div class="terms-header">
                     <span class="terms-label"><span class="optional">(선택)</span> 위치정보 이용약관</span>
                     <div class="agree-checkbox">
@@ -99,16 +80,12 @@
                         <label for="terms4" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content">
-                    제1조(목적) 본 약관은 샵플리닷컴(이하 "회사")이 제공하는 위치기반서비스와 관련하여 회사와 개인위치정보주체와의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
-
-                    제2조(약관의 효력 및 변경) ① 본 약관은 개인위치정보주체가 동의함으로써 효력이 발생됩니다. ② 회사는 위치정보의보호및이용등에관한법률, 정보통신망이용촉진및정보보호등에관한법률, 통신비밀보호법, 전기통신사업법 등 관련 법령을 준수합니다.
-                </div>
+                <div class="terms-content" th:text="${termsDTO.t_location}"></div>
             </div>
 
             <!-- 동의하기 버튼 -->
             <div class="submit-section">
-                <button type="button" class="submit-btn" id="submitBtn" onclick="checkAgreement()">동의하기</button>
+                <button type="button" class="submit-btn" id="submitBtn" th:data-type="${type}"  onclick="checkAgreement()">동의하기</button>
             </div>
         </div>
       </main>

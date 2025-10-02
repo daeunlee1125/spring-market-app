@@ -1,7 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 문의하기</title>
+    <link rel="stylesheet" th:href="@{/kmarket/inc/css/my.css}">
+</head>
+<body class="logged-in">
 <div th:replace="~{my/_head.html}"></div>
 
 <main class="container">
     <div class="sidebar">
+
         <ul>
             <li><a th:href="@{/my/home}">마이페이지 홈</a></li>
             <li><a th:href="@{/my/order}">전체주문내역</a></li>
@@ -13,8 +23,8 @@
         </ul>
     </div>
     <div class="content">
+        <h2>나의 쇼핑 정보</h2>
         <div class="main-content-header">
-            <h2>나의 쇼핑 정보</h2>
             <div class="info-summary">
                 <div class="info-item">
                     <div class="count" th:text="${orderCount}">2</div>
@@ -58,8 +68,8 @@
                 <td th:text="${qna.qTitle}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
                 <td th:text="${#dates.format(qna.qRdate, 'yyyy-MM-dd')}">2022-12-12</td>
                 <td>
-                    <span th:if="${#strings.isEmpty(qna.qReply)}" class="status pending">검토 중</span>
-                    <span th:unless="${#strings.isEmpty(qna.qReply)}" class="status completed">답변 완료</span>
+                    <span th:if="${#strings.isEmpty(qna.qReply)}" class="status pending">검토중</span>
+                    <span th:unless="${#strings.isEmpty(qna.qReply)}" class="status completed">답변완료</span>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(qnaList)}">
@@ -68,15 +78,9 @@
             </tbody>
         </table>
 
-        <div class="pagination">
-            <button>&lt; 이전</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-            <button>5</button>
-            <button>다음 &gt;</button>
-        </div>
+
     </div>
 </main>
 <div th:replace="~{my/_tail.html}"></div>
+</body>
+</html>

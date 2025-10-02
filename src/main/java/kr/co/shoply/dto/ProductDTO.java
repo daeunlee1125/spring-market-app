@@ -24,6 +24,8 @@ public class ProductDTO {
     private int prod_hit;
 
     // 추가 필드
-//    private int prodSellingPrice ; // 최종 판매 가격
+    private double avgRating; // 평균 리뷰 점수
+    private int cntRating; // 리뷰 개수
+    private int realPrice; // 실 판매 가격
 
 }

@@ -47,7 +47,7 @@
               <div class="card-content">
                 <h4>개인구매회원 (외국인포함)</h4>
                 <p>만 14 세이상가능</p>
-                <a href="signup.html?type=general" class="signup-btn">회원가입</a>
+                <a th:href="@{/member/signup(type=general)}" class="signup-btn">회원가입</a>
               </div>
             </div>
 
@@ -59,7 +59,7 @@
               <div class="card-content">
                 <h4>사업자판매회원</h4>
                 <p>사업자등록증을 보유한회원</p>
-                <a href="signup.html?type=seller" class="signup-btn">회원가입</a>
+                <a th:href="@{/member/signup(type=seller)}" class="signup-btn">회원가입</a>
               </div>
             </div>
           </div>

@@ -1,5 +1,8 @@
 package kr.co.shoply.controller;
 
+
+public class MemberController {
+
 import kr.co.shoply.dto.MemSellerDTO;
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.TermsDTO;
@@ -68,4 +71,5 @@ public class MemberController {
 
         return "member/signup";
     }
+
 }

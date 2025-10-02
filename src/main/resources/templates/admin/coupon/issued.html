@@ -1,193 +1,185 @@
 <div th:replace="~{admin/coupon/_head.html}"></div>
 
-
-<main>
-  <!-- 메인 -->
-  <div class="main">
+<div class="main">
     <div class="middle main-content">
-      <div class="main-common">
-        <div class="main-head">
-          <div><h3>쿠폰발급현황</h3></div>
-          <div class="main-head-right">
-            <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
-            <a href="">쿠폰관리</a><div>&nbsp;>&nbsp;</div>
-            <a href="" class="nav-last">쿠폰발급현황</a>
-          </div>
-        </div>
-        <div class="main-content-top"></div>
+        <div class="main-common">
 
-
-          <div class="sub-top">
-            <div class="search-bar">
-              <form>
-                <select>
-                  <option value="issueNo">발급번호</option>
-                  <option value="couponNo">쿠폰번호</option>
-                  <option value="couponName">쿠폰명</option>
-                  <option value="user">사용자</option>
-                </select>
-                <div class="search-place">
-                  <input type="text" placeholder="검색어 입력">
+            <!-- 상단 제목/네비 -->
+            <div class="main-head">
+                <div><h3>쿠폰발급현황</h3></div>
+                <div class="main-head-right">
+                    <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
+                    <a href="">쿠폰관리</a><div>&nbsp;>&nbsp;</div>
+                    <a href="" class="nav-last">쿠폰발급현황</a>
                 </div>
-                <button type="submit"><img src="/kmarket/inc/image/search.png" alt="검색"></button>
-              </form>
             </div>
-          </div>
 
-          <table class="table coupon-issue-table">
-            <thead>
-              <tr>
-                <th>발급번호</th>
-                <th>쿠폰번호</th>
-                <th>쿠폰종류</th>
-                <th>쿠폰명</th>
-                <th>사용자</th>
-                <th>상태</th>
-                <th>사용일</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012134</a></td>
-                <td>10121211341</td>
-                <td>개별상품 할인</td>
-                <td>10월 한달 감사 쿠폰</td>
-                <td>akwe121</td>
-                <td class="status not-used">미사용</td>
-                <td>0000-00-00 00:00:00</td>
-                <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
-              </tr>
-              <tr>
-                <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012133</a></td>
-                <td>10121211342</td>
-                <td>배송비 무료</td>
-                <td>회원가입 축하 쿠폰</td>
-                <td>oopow12</td>
-                <td class="status used">사용</td>
-                <td>2025-09-01 10:30:00</td>
-                <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
-              </tr>
-              <tr>
-                <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012132</a></td>
-                <td>10121211343</td>
-                <td>주문상품 할인</td>
-                <td>여름 맞이 할인 쿠폰</td>
-                <td>nappqw7</td>
-                <td class="status not-used">미사용</td>
-                <td>0000-00-00 00:00:00</td>
-                <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
-              </tr>
-              <tr>
-                <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012131</a></td>
-                <td>10121211344</td>
-                <td>개별상품 할인</td>
-                <td>신규 고객 감사 쿠폰</td>
-                <td>kqpoe332</td>
-                <td class="status used">사용</td>
-                <td>2025-08-20 09:00:00</td>
-                <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
-              </tr>
-              <tr>
-                <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012130</a></td>
-                <td>10121211345</td>
-                <td>주문상품 할인</td>
-                <td>가을 시즌 세일 쿠폰</td>
-                <td>klwp12</td>
-                <td class="status not-used">미사용</td>
-                <td>0000-00-00 00:00:00</td>
-                <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
-              </tr>
-            </tbody>
-          </table>
+            <div class="main-content-top"></div>
 
-          <!-- 페이징 -->
-          <div class="page">
-            <a href="#">이전</a>
-            <a href="#" class="current">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">다음</a>
-          </div>
-      </div>
+            <!-- 메인 컨텐츠 시작 -->
+            <main>
+                <div class="sub-top">
+                    <div class="search-bar">
+                        <form>
+                            <select>
+                                <option value="issueNo">발급번호</option>
+                                <option value="couponNo">쿠폰번호</option>
+                                <option value="couponName">쿠폰명</option>
+                                <option value="user">사용자</option>
+                            </select>
+                            <div class="search-place">
+                                <input type="text" placeholder="검색어 입력">
+                            </div>
+                            <button type="submit">검색</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 테이블 -->
+                <table class="table coupon-issue-table">
+                    <thead>
+                    <tr>
+                        <th>발급번호</th>
+                        <th>쿠폰번호</th>
+                        <th>쿠폰종류</th>
+                        <th>쿠폰명</th>
+                        <th>사용자</th>
+                        <th>상태</th>
+                        <th>사용일</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012134</a></td>
+                        <td>10121211341</td>
+                        <td>개별상품 할인</td>
+                        <td>10월 한달 감사 쿠폰</td>
+                        <td>akwe121</td>
+                        <td class="status not-used">미사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012133</a></td>
+                        <td>10121211342</td>
+                        <td>배송비 무료</td>
+                        <td>회원가입 축하 쿠폰</td>
+                        <td>oopow12</td>
+                        <td class="status used">사용</td>
+                        <td>2025-09-01 10:30:00</td>
+                        <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012132</a></td>
+                        <td>10121211343</td>
+                        <td>주문상품 할인</td>
+                        <td>여름 맞이 할인 쿠폰</td>
+                        <td>nappqw7</td>
+                        <td class="status not-used">미사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012131</a></td>
+                        <td>10121211344</td>
+                        <td>개별상품 할인</td>
+                        <td>신규 고객 감사 쿠폰</td>
+                        <td>kqpoe332</td>
+                        <td class="status used">사용</td>
+                        <td>2025-08-20 09:00:00</td>
+                        <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" class="openModalBtn" data-target="couponDetailModal">10120012130</a></td>
+                        <td>10121211345</td>
+                        <td>주문상품 할인</td>
+                        <td>가을 시즌 세일 쿠폰</td>
+                        <td>klwp12</td>
+                        <td class="status not-used">미사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td><button class="openModalBtn stop-btn" data-target="confirmEndModal">중단</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- 페이징 -->
+                <div class="page">
+                    <a href="#">이전</a>
+                    <a href="#" class="current">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">다음</a>
+                </div>
+            </main>
+
+        </div>
     </div>
-  </div>
-</main>
+</div>
 
 <div th:replace="~{admin/coupon/_tail.html}"></div>
 
 
-
-
-<!--모달(팝업창)  모음  -->
-<!-- 발급 쿠폰 상세 모달-->
-
+<!-- 모달 -->
 <div class="modal hidden" id="couponDetailModal">
-  <div class="modal-popup large">
-    <div class="modal-header">
-      <h2>쿠폰정보 <span id="detail-issueNo">10120012134</span></h2>
-      <span class="closeModalBtn">&times;</span>
+    <div class="modal-popup large">
+        <div class="modal-header">
+            <h2>쿠폰정보 <span id="detail-issueNo">10120012134</span></h2>
+            <span class="closeModalBtn">&times;</span>
+        </div>
+        <div class="modal-content">
+            <table class="table coupon-detail">
+                <tr>
+                    <th>쿠폰번호</th><td>10121211341</td>
+                    <th>발급처</th><td>(주)다있어</td>
+                </tr>
+                <tr>
+                    <th>발급번호</th><td>10120012134</td>
+                    <th>사용여부</th><td class="status not-used">미사용</td>
+                </tr>
+                <tr>
+                    <th>쿠폰종류</th><td>개별상품 할인</td>
+                    <th>발급대상</th><td>akwe121</td>
+                </tr>
+                <tr>
+                    <th>쿠폰명</th><td colspan="3">10월 한달 감사 쿠폰 이벤트</td>
+                </tr>
+                <tr>
+                    <th>혜택</th><td colspan="3">2,000원 할인</td>
+                </tr>
+                <tr>
+                    <th>사용기간</th><td colspan="3">0000-00-00 ~ 0000-00-00</td>
+                </tr>
+                <tr>
+                    <th>유의사항</th>
+                    <td colspan="3" class="note">
+                        상품 중복 할인 쿠폰<br>
+                        - 상품 1개에 대해 사용 가능<br>
+                        - 판매자 즉시할인/상품할인 쿠폰과 중복 사용 가능<br><br>
+                        사용자<br>
+                        - (주)다있어
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <div class="modal-content">
-      <table class="table coupon-detail">
-        <tr>
-          <th>쿠폰번호</th><td>10121211341</td>
-          <th>발급처</th><td>(주)다있어</td>
-        </tr>
-        <tr>
-          <th>발급번호</th><td>10120012134</td>
-          <th>사용여부</th><td class="status not-used">미사용</td>
-        </tr>
-        <tr>
-          <th>쿠폰종류</th><td>개별상품 할인</td>
-          <th>발급대상</th><td>akwe121</td>
-        </tr>
-        <tr>
-          <th>쿠폰명</th><td colspan="3">10월 한달 감사 쿠폰 이벤트</td>
-        </tr>
-        <tr>
-          <th>혜택</th><td colspan="3">2,000원 할인</td>
-        </tr>
-        <tr>
-          <th>사용기간</th><td colspan="3">0000-00-00 ~ 0000-00-00</td>
-        </tr>
-        <tr>
-          <th>유의사항</th>
-          <td colspan="3" class="note">
-            상품 중복 할인 쿠폰<br>
-            - 상품 1개에 대해 사용 가능<br>
-            - 판매자 즉시할인/상품할인 쿠폰과 중복 사용 가능<br><br>
-            사용자<br>
-            - (주)다있어
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
 </div>
 
-
-
-
-<!--쿠폰 종료 확인 모달-->
-  <div class="modal hidden" id="confirmEndModal">
+<div class="modal hidden" id="confirmEndModal">
     <div class="modal-popup">
-      <div class="modal-header">
-        <h2>쿠폰 종료 확인</h2>
-        <span class="closeModalBtn">&times;</span>
-      </div>
-      <div class="modal-content">
-        <p>해당 쿠폰의 발급을 종료하시겠습니까?</p>
-        <div style="text-align:center; margin-top:20px;">
-          <button class="register-btn">확인</button>
-          <button class="closeModalBtn delete-btn">취소</button>
+        <div class="modal-header">
+            <h2>쿠폰 종료 확인</h2>
+            <span class="closeModalBtn">&times;</span>
         </div>
-      </div>
+        <div class="modal-content">
+            <p>해당 쿠폰의 발급을 종료하시겠습니까?</p>
+            <div style="text-align:center; margin-top:20px;">
+                <button class="register-btn">확인</button>
+                <button class="closeModalBtn delete-btn">취소</button>
+            </div>
+        </div>
     </div>
-  </div>
-
-
-
+</div>
 
 </body>
 </html>

@@ -188,3 +188,10 @@
 .stop-btn:hover {
   background: linear-gradient(135deg, #8d6dbd, #5936a9); /* hover 시 조금 어둡게 */
 }
+
+
+/* 쿠폰목록 테이블도 굵은 선 적용 */
+.coupon-list-table th,
+.coupon-list-table td {
+    border: 2px solid #ccc; /* 발급현황이랑 맞춰주기 */
+}

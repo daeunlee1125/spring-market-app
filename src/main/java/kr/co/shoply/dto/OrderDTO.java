@@ -11,14 +11,14 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class OrderDTO {
-    private String ordNo;
-    private String memId;
-    private String ordName;
-    private String ordHp;
-    private String ordZip;
-    private String ordAddr1;
-    private String ordAddr2;
-    private Integer ordTotal;
-    private Date ordDate;
-    private String ordPayment;
+    private String ord_No;
+    private String mem_Id;
+    private String ord_Name;
+    private String ord_Hp;
+    private String ord_Zip;
+    private String ord_Addr1;
+    private String ord_Addr2;
+    private Integer ord_Total;
+    private Date ord_Date;
+    private String ord_Payment;
 }

@@ -12,23 +12,16 @@ import lombok.*;
 @Table(name = "order_item")
 public class OrderItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq")
-    @SequenceGenerator(name = "order_item_seq", sequenceName = "ORDER_ITEM_ITEM_NO_SEQ", allocationSize = 1)
-    @Column(name = "item_no")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemNo;
 
-    @Column(name = "ord_no", length = 11, nullable = false)
-    private String ordNo;
+    private String ord_No;
 
-    @Column(name = "prod_no", length = 9, nullable = false)
-    private String prodNo;
+    private String prod_No;
 
-    @Column(name = "item_name", length = 30)
-    private String itemName;
+    private String item_Name;
 
-    @Column(name = "item_cnt")
-    private Integer itemCnt;
+    private Integer item_Cnt;
 
-    @Column(name = "item_stat")
-    private Integer itemStat;
+    private Integer item_Stat;
 }

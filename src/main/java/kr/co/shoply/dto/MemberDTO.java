@@ -23,5 +23,6 @@ public class MemberDTO {
     private String mem_zip;
     private String mem_addr1;
     private String mem_addr2;
+    private String mem_rank;
 
 }

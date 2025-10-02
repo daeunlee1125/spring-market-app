@@ -21,16 +21,20 @@
           <div class="sort-container"> <!-- 상품 정렬 기준 정하기 -->
             <div class="sort-dropdown">
                 <button class="sort-selected">
-                    <span id="selected-sort-text">판매많은순</span>
+                    <span id="selected-sort-text" th:switch="${sort}">
+                    <th:block th:case="'priceAsc'">낮은가격순</th:block>
+                    <th:block th:case="'priceDesc'">높은가격순</th:block>
+                    <th:block th:case="'score'">평점높은순</th:block>
+                    <th:block th:case="'review'">후기많은순</th:block>
+                    <th:block th:case="*">판매많은순</th:block> </span>
                     <span class="arrow">▼</span>
                 </button>
                 <ul class="sort-options">
-                    <li><a th:href="@{/product/list}">판매많은순</a></li> <!-- sold -->
-                    <li><a th:href="@{/product/list}">낮은가격순</a></li> <!-- priceAsc -->
-                    <li><a th:href="@{/product/list}">높은가격순</a></li> <!-- priceDesc -->
-                    <li><a th:href="@{/product/list}">평점높은순</a></li> <!-- score -->
-                    <li><a th:href="@{/product/list}">후기많은순</a></li> <!-- review -->
-                    <li><a th:href="@{/product/list}">최근등록순</a></li> <!-- new -->
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='sold')}">판매많은순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='priceAsc')}">낮은가격순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='priceDesc')}">높은가격순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='score')}">평점높은순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='review')}">후기많은순</a></li>
                 </ul>
             </div>
           </div>
@@ -56,13 +60,17 @@
                             <div class="item-price-box">
                                 <div>
                                     <span class="discount-rate">[[${productDTO.prod_sale}]]%</span>
-                                    <del class="original-price">[[${productDTO.prod_price}]]원</del>
+                                    <del class="original-price">[[${#numbers.formatDecimal(productDTO.prod_price, 0, 'COMMA', 0, 'POINT')}]]원</del>
                                 </div>
-                                <span class="final-price" th:text="|${#numbers.formatInteger(productDTO.prod_price - productDTO.prod_price * (productDTO.prod_sale / 100.0), 0)}원|">50,000원</span>
+                                <span class="final-price"
+                                      th:text="|${#numbers.formatDecimal(productDTO.prod_price - productDTO.prod_price * (productDTO.prod_sale / 100.0), 0, 'COMMA', 0, 'POINT')}원|">
+                                    50,000원
+                                </span>
+
                             </div>
                             <div class="rating-box">
-                                <span><img th:src="@{/image/상품/graystar.png}" alt="" class="rating_star"> 5.0</span>
-                                <span class="rating-good">고객만족우수</span>
+                                <span><img th:src="@{/image/graystar.png}" alt="" class="rating_star">[[${productDTO.avgRating}]]</span>
+                                <span class="rating-good" th:if="${productDTO.avgRating >= 4.0}">고객만족우수</span>
                             </div>
                         </div>
                     </a>

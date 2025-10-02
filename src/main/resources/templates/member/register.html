@@ -36,82 +36,85 @@
             일반 회원가입
           </div>
           <div class="signup-form">
-            <form>
-              <div class="form-row">
-                <div class="form-label">아이디</div>
-                <div class="form-input">
-                  <input type="text" placeholder="">
-                  <span class="input-help">영문, 숫자 4~12자 설정</span>
+            <form th:action="@{/member/register}" method="post">
+                <input type="hidden" name="mem_level" value="1">
+                <input type="hidden" name="mem_rank" value="Family">
+                <input type="hidden" name="mem_stat" value="ACTIVE">
+                <div class="form-row">
+                    <div class="form-label">아이디</div>
+                    <div class="form-input">
+                        <input type="text" name="mem_id" placeholder="">
+                        <span class="input-help">영문, 숫자 4~12자 설정</span>
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-row">
-                <div class="form-label">비밀번호</div>
-                <div class="form-input">
-                  <input type="password" placeholder="">
-                  <span class="input-help">영문, 숫자, 특수문자 8~12자 설정</span>
+                <div class="form-row">
+                    <div class="form-label">비밀번호</div>
+                    <div class="form-input">
+                      <input type="password" name="mem_pass" placeholder="">
+                      <span class="input-help">영문, 숫자, 특수문자 8~12자 설정</span>
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-row section-end">
-                <div class="form-label">비밀번호확인</div>
-                <div class="form-input">
-                  <input type="password" placeholder="">
+                <div class="form-row section-end">
+                    <div class="form-label">비밀번호확인</div>
+                    <div class="form-input">
+                        <input type="password" name="mem_pass2" placeholder="">
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-row section-start">
-                <div class="form-label">이름</div>
-                <div class="form-input">
-                  <input type="text" placeholder="이름입력">
+                <div class="form-row section-start">
+                    <div class="form-label">이름</div>
+                    <div class="form-input">
+                        <input type="text" name="mem_name" placeholder="이름입력">
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-row">
-                <div class="form-label">생년월일</div>
-                <div class="form-input">
-                  <input type="date" style="width: 150px;">
+                <div class="form-row">
+                    <div class="form-label">생년월일</div>
+                    <div class="form-input">
+                        <input type="date" style="width: 150px;">
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-row">
-                <div class="form-label">성별</div>
-                <div class="form-input">
-                  <div class="radio-group">
-                    <label><input type="radio" name="gender" value="male" checked> 남</label>
-                    <label><input type="radio" name="gender" value="female"> 여</label>
-                  </div>
+                <div class="form-row">
+                    <div class="form-label">성별</div>
+                    <div class="form-input">
+                        <div class="radio-group">
+                            <label><input type="radio" name="mem_gen" value="M" checked> 남</label>
+                            <label><input type="radio" name="mem_gen" value="F"> 여</label>
+                        </div>
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-row">
-                <div class="form-label">EMAIL</div>
-                <div class="form-input">
-                  <input type="email" placeholder="이메일입력">
-                  <button type="button" class="btn-check">이메일 인증</button>
+                <div class="form-row">
+                    <div class="form-label">EMAIL</div>
+                    <div class="form-input">
+                        <input type="email" name="mem_email" placeholder="이메일입력">
+                        <button type="button"  class="btn-check">이메일 인증</button>
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-row">
-                <div class="form-label">휴대폰</div>
-                <div class="form-input">
-                  <input type="text" placeholder="휴대폰입력">
-                  <button type="button" class="btn-check">휴대폰 인증</button>
+                <div class="form-row">
+                    <div class="form-label">휴대폰</div>
+                    <div class="form-input">
+                        <input type="text" name="mem_hp" placeholder="휴대폰입력">
+                        <button type="button" class="btn-check">중복 확인</button>
+                    </div>
                 </div>
-              </div>
 
-              <div class="address-section">
-                <div class="address-label">주소</div>
-                <div class="address-inputs">
-                  <input type="text" placeholder="우편번호검색클릭">
-                  <input type="text" placeholder="기본주소검색">
-                  <input type="text" placeholder="상세주소입력">
+                <div class="address-section">
+                    <div class="address-label">주소</div>
+                    <div class="address-inputs">
+                        <input type="text" name="mem_zip" placeholder="우편번호검색클릭">
+                        <input type="text" name="mem_addr1" placeholder="기본주소검색">
+                        <input type="text" name="mem_addr2" placeholder="상세주소입력">
+                    </div>
                 </div>
-              </div>
 
-              <div class="signup-submit">
-                <button type="submit" class="btn-signup">회원가입</button>
-              </div>
+                <div class="signup-submit">
+                    <button type="submit" class="btn-signup">회원가입</button>
+                </div>
             </form>
           </div>
         </div>

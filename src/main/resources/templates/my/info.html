@@ -1,8 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 나의 설정</title>
+</head>
+<body class="logged-in">
 <div th:replace="~{my/_head.html}"></div>
-
 <main class="container">
     <div class="sidebar">
-        <h2>나의 쇼핑 정보</h2>
+
         <ul>
             <li><a th:href="@{/my/home}">마이페이지 홈</a></li>
             <li><a th:href="@{/my/order}">전체주문내역</a></li>
@@ -14,6 +21,7 @@
         </ul>
     </div>
     <div class="content">
+        <h2>나의 쇼핑 정보</h2>
         <div class="main-content-header">
             <div class="info-summary">
                 <div class="info-item">
@@ -46,7 +54,7 @@
                     <tbody>
                     <tr>
                         <th>사용자 ID</th>
-                        <td th:text="${memberInfo.memId}"></td>
+                        <td th:text="${memberInfo != null ? memberInfo.mem_id : '정보 없음'}"></td>
                     </tr>
                     <tr>
                         <th>비밀번호</th>
@@ -56,33 +64,39 @@
                     </tr>
                     <tr>
                         <th>이름</th>
-                        <td th:text="${memberInfo.memName}"></td>
+                        <td th:text="${memberInfo != null ? memberInfo.mem_name : '정보 없음'}"></td>
                     </tr>
                     <tr>
                         <th>생년월일</th>
-                        <td th:text="${memberInfo.memBirth}"></td>
+                        <td th:text="${memberInfo != null ? memberInfo.mem_rdate : '정보 없음'}"></td>
                     </tr>
                     <tr>
                         <th>Email</th>
                         <td>
-                            <input type="text" id="emailId" th:value="${#strings.substringBefore(memberInfo.memEmail, '@')}">@
+                            <input type="text" id="emailId"
+                                   th:value="${memberInfo != null ? #strings.substringBefore(memberInfo.mem_email, '@') : ''}">@
                             <select id="emailDomain" onchange="checkEmailDomain()">
-                                <option th:each="domain : ${{'naver.com', 'gmail.com', 'daum.net', 'self'}}"
-                                        th:value="${domain}" th:text="${domain} == 'self' ? '직접입력' : ${domain}"
-                                        th:selected="${#strings.substringAfter(memberInfo.memEmail, '@') == domain}">
+                                <option th:each="domain : ${emailDomains}"
+                                        th:value="${domain}"
+                                        th:text="${domain} == 'self' ? '직접입력' : ${domain}"
+                                        th:selected="${memberInfo != null and memberInfo.mem_email != null and #strings.contains(memberInfo.mem_email, '@') ? #strings.substringAfter(memberInfo.mem_email, '@') == domain : false}">
                                 </option>
                             </select>
+
                             <input type="text" id="emailInput" placeholder="직접입력"
-                                   th:style="${#strings.substringAfter(memberInfo.memEmail, '@') == 'self'} ? 'display: inline-block;' : 'display: none;'">
+                                   th:style="${memberInfo != null && #strings.substringAfter(memberInfo.mem_email, '@') == 'self'} ? 'display: inline-block;' : 'display: none;'">
                             <button type="button" onclick="editEmail()">수정하기</button>
                         </td>
                     </tr>
                     <tr>
                         <th>휴대폰</th>
                         <td>
-                            <input type="text" th:value="${#strings.arraySplit(memberInfo.memHp, '-')[0]}" style="width: 50px;"> -
-                            <input type="text" th:value="${#strings.arraySplit(memberInfo.memHp, '-')[1]}" style="width: 50px;"> -
-                            <input type="text" th:value="${#strings.arraySplit(memberInfo.memHp, '-')[2]}" style="width: 50px;">
+                            <input type="text"
+                                   th:value="${memberInfo != null ? #strings.arraySplit(memberInfo.mem_hp, '-')[0] : ''}" style="width: 50px;"> -
+                            <input type="text"
+                                   th:value="${memberInfo != null ? #strings.arraySplit(memberInfo.mem_hp, '-')[1] : ''}" style="width: 50px;"> -
+                            <input type="text"
+                                   th:value="${memberInfo != null ? #strings.arraySplit(memberInfo.mem_hp, '-')[2] : ''}" style="width: 50px;">
                             <button type="button" onclick="editPhone()">수정하기</button>
                         </td>
                     </tr>
@@ -90,11 +104,14 @@
                         <th>주소</th>
                         <td>
                             <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                                <input type="text" placeholder="우편번호" style="width: 80px;" th:value="${memberInfo.memZip}" readonly>
+                                <input type="text" placeholder="우편번호" style="width: 80px;"
+                                       th:value="${memberInfo != null ? memberInfo.mem_zip : ''}" readonly>
                                 <button type="button" onclick="searchAddress()">주소검색</button>
                             </div>
-                            <input type="text" class="address-input" placeholder="기본주소입력" style="width: 400px;" th:value="${memberInfo.memAddr1}" readonly>
-                            <input type="text" class="address-input" placeholder="상세주소입력" style="width: 400px; margin-top: 5px;" th:value="${memberInfo.memAddr2}">
+                            <input type="text" class="address-input" placeholder="기본주소입력" style="width: 400px;"
+                                   th:value="${memberInfo != null ? memberInfo.mem_addr1 : ''}" readonly>
+                            <input type="text" class="address-input" placeholder="상세주소입력" style="width: 400px; margin-top: 5px;"
+                                   th:value="${memberInfo != null ? memberInfo.mem_addr2 : ''}">
                         </td>
                     </tr>
                     </tbody>
@@ -110,10 +127,10 @@
         </div>
     </div>
 </main>
-
 <div id="passwordModal" class="modal">
     <div class="modal-content">
         <h3 id="modalTitle">현재 비밀번호 확인</h3>
+
         <div id="currentPasswordSection">
             <input type="password" id="currentPassword" placeholder="현재 비밀번호">
             <div class="message" id="currentPasswordMessage"></div>
@@ -122,6 +139,7 @@
                 <button class="cancel-btn" onclick="closePasswordModal()">취소</button>
             </div>
         </div>
+
         <div id="newPasswordSection" class="hidden">
             <input type="password" id="newPassword" placeholder="새 비밀번호">
             <div class="message" id="newPasswordMessage"></div>
@@ -134,131 +152,32 @@
         </div>
     </div>
 </div>
-
-<script>
-    function checkEmailDomain() {
-        const emailSelect = document.getElementById('emailDomain');
-        const emailInput = document.getElementById('emailInput');
-        if (emailSelect.value === 'self') {
-            emailInput.style.display = 'inline-block';
-        } else {
-            emailInput.style.display = 'none';
-        }
-    }
-    function editEmail() {
-        alert('이메일 수정 기능은 현재 개발 중입니다.');
-    }
-    function editPhone() {
-        alert('휴대폰 번호 수정 기능은 현재 개발 중입니다.');
-    }
-    function saveChanges() {
-        alert('수정 사항이 저장되었습니다.');
-    }
-    function confirmWithdrawal() {
-        if (confirm("정말 회원 탈퇴를 하시겠습니까? 탈퇴 시 모든 정보가 삭제되며 복구할 수 없습니다.")) {
-            alert("회원 탈퇴가 완료되었습니다.");
-            // 실제 서버로 탈퇴 요청을 보내는 로직을 여기에 추가합니다.
-        }
-    }
-    // 로그인 상태 시뮬레이션
-    const isLoggedIn = true;
-    const loginMenu = document.querySelector('.login-menu');
-    const userMenu = document.querySelector('.user-menu');
-    if (isLoggedIn) {
-        document.body.classList.add('logged-in');
-    }
-    // 카카오 주소 찾기 API 함수
-    function searchAddress() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                let fullAddress = '';
-                let extraAddress = '';
-                if (data.userSelectedType === 'R') {
-                    fullAddress = data.roadAddress;
-                } else {
-                    fullAddress = data.jibunAddress;
-                }
-                if (data.userSelectedType === 'R') {
-                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                        extraAddress += data.bname;
-                    }
-                    if (data.buildingName !== '' && data.apartment === 'Y') {
-                        extraAddress += (extraAddress !== '' ? ', ' + data.buildingName : data.buildingName);
-                    }
-                    if (extraAddress !== '') {
-                        extraAddress = ' (' + extraAddress + ')';
-                    }
-                }
-                document.querySelector('input[placeholder="우편번호"]').value = data.zonecode;
-                document.querySelector('input[placeholder="기본주소입력"]').value = fullAddress + extraAddress;
-                document.querySelector('input[placeholder="상세주소입력"]').value = '';
-                document.querySelector('input[placeholder="상세주소입력"]').focus();
-            }
-        }).open();
-    }
-    /* --- 비밀번호 변경 모달 관련 스크립트 --- */
-    const passwordModal = document.getElementById('passwordModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const currentPasswordSection = document.getElementById('currentPasswordSection');
-    const newPasswordSection = document.getElementById('newPasswordSection');
-    const currentPasswordInput = document.getElementById('currentPassword');
-    const newPasswordInput = document.getElementById('newPassword');
-    const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
-    const currentPasswordMessage = document.getElementById('currentPasswordMessage');
-    const newPasswordMessage = document.getElementById('newPasswordMessage');
-    const confirmNewPasswordMessage = document.getElementById('confirmNewPasswordMessage');
-    function showPasswordModal() {
-        passwordModal.style.display = 'flex';
-        modalTitle.textContent = '현재 비밀번호 확인';
-        currentPasswordSection.classList.remove('hidden');
-        newPasswordSection.classList.add('hidden');
-        // 필드 초기화
-        currentPasswordInput.value = '';
-        newPasswordInput.value = '';
-        confirmNewPasswordInput.value = '';
-        currentPasswordMessage.textContent = '';
-        newPasswordMessage.textContent = '';
-        confirmNewPasswordMessage.textContent = '';
-    }
-    function closePasswordModal() {
-        passwordModal.style.display = 'none';
-    }
-    function checkCurrentPassword() {
-        const currentPassword = currentPasswordInput.value;
-        // 실제로는 서버에 현재 비밀번호를 보내서 확인하는 로직이 필요
-        // 여기서는 임시로 "1234"라고 가정
-        const correctPassword = "1234";
-        if (currentPassword === correctPassword) {
-            modalTitle.textContent = '새 비밀번호 입력';
-            currentPasswordSection.classList.add('hidden');
-            newPasswordSection.classList.remove('hidden');
-        } else {
-            currentPasswordMessage.textContent = '현재 비밀번호가 일치하지 않습니다.';
-        }
-    }
-    function changePassword() {
-        const newPassword = newPasswordInput.value;
-        const confirmNewPassword = confirmNewPasswordInput.value;
-        let isValid = true;
-        // 비밀번호 유효성 검사 (예: 8자 이상)
-        if (newPassword.length < 8) {
-            newPasswordMessage.textContent = '비밀번호는 8자 이상이어야 합니다.';
-            isValid = false;
-        } else {
-            newPasswordMessage.textContent = '';
-        }
-        // 비밀번호 확인 일치 여부 검사
-        if (newPassword !== confirmNewPassword) {
-            confirmNewPasswordMessage.textContent = '새 비밀번호가 일치하지 않습니다.';
-            isValid = false;
-        } else {
-            confirmNewPasswordMessage.textContent = '';
-        }
-        if (isValid) {
-            alert('비밀번호가 성공적으로 변경되었습니다!');
-            closePasswordModal();
-            // 실제로는 서버에 새 비밀번호를 보내서 저장하는 로직이 필요
-        }
-    }
-</script>
-<div th:replace="~{my/_tail.html}"></div>
+<footer>
+    <div class="footer-container">
+        <div class="footer-top">
+            <h2>(주)샵플리닷컴</h2>
+            <a href="#">사업자정보확인</a>
+            <a href="#">소비자보호 서비스 가입사실확인</a>
+        </div>
+        <div class="footer-info">
+            <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
+            <p>부산광역시 부산진구 중앙대로 103</p>
+            <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
+            <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-links">
+                <a href="#">개인정보처리방침</a> |
+                <a href="#">영상정보처리기기 운영·관리방침</a> |
+                <a th:href="@{/cs/index}">고객센터</a> |
+                <a th:href="@{/cs/faq}">FAQ</a>
+            </div>
+            <div class="footer-sns">
+                <a href="#"><img th:src="@{/image/facebook.png}" alt="Facebook"></a>
+                <a href="#"><img th:src="@{/image/instagram.png}" alt="Instagram"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

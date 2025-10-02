@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Table(name = "MEMBER")
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String mem_id;
 
     private String mem_pass;
@@ -33,4 +32,5 @@ public class Member {
     private String mem_zip;
     private String mem_addr1;
     private String mem_addr2;
+    private String mem_rank;
 }

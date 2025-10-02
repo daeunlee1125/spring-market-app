@@ -6,14 +6,14 @@
             <nav class="main-nav">
               <a th:href="@{/index}"><span>HOME</span></a>
               <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-              <span>패션 / 의류 / 뷰티</span> <!-- 동적 -->
+              <span>[[${cate2DTO.cate1_name}]]</span> <!-- 동적 -->
               <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-              <span>남성의류</span> <!-- 동적 -->
+              <span>[[${cate2DTO.cate2_name}]]</span> <!-- 동적 -->
             </nav>
           </div>
 
           <div class="main-list-head"> <!-- 상품 헤드 -->
-            <div class="main-list-headName">남성의류</div> <!-- 동적 -->
+            <div class="main-list-headName">[[${cate2DTO.cate2_name}]]</div> <!-- 동적 -->
             <hr>
             <div></div>
           </div>
@@ -58,7 +58,7 @@
                                     <span class="discount-rate">[[${productDTO.prod_sale}]]%</span>
                                     <del class="original-price">[[${productDTO.prod_price}]]원</del>
                                 </div>
-                                <span class="final-price" th:text="|${productDTO.prod_price - productDTO.prod_price * (productDTO.prod_sale / 100.0)}원|">50,000원</span>
+                                <span class="final-price" th:text="|${#numbers.formatInteger(productDTO.prod_price - productDTO.prod_price * (productDTO.prod_sale / 100.0), 0)}원|">50,000원</span>
                             </div>
                             <div class="rating-box">
                                 <span><img th:src="@{/image/상품/graystar.png}" alt="" class="rating_star"> 5.0</span>
@@ -68,214 +68,6 @@
                     </a>
                 </div>
 
-              <div class="product-item">
-                  <a href="#" class="item-link">
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test2.jpeg}" alt="롤렉스 코스모그래프">
-                      </div>
-                      <div class="item-info">
-                          <div class="item-header">
-                              <span class="item-brand">032C</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">롤 코스모그래프 데이토나 40mm 12650 OLN 화이트 오이스터 Rolex Cosmograph Daytona</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <span class="discount-rate">6%</span>
-                                  <del class="original-price">68,559,300원</del>
-                              </div>
-                              <span class="final-price">64,445,742원</span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                      </div>
-                  </a>
-              </div>
-
-              <div class="product-item">
-                  <a href="#" class="item-link">
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test3.jpeg}" alt="헤이즐 버킷햇">
-                      </div>
-                      <div class="item-info">
-                          <div class="item-header">
-                              <span class="item-brand">엘리밀라</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">헤이즐 버킷햇 (7colors)</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <del class="original-price">63,000원</del>
-                              </div>
-                              <span class="final-price">
-                                  <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                  56,700원
-                              </span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                          <span class="free-delivery">무료배송</span>
-                      </div>
-                  </a>
-              </div>
-
-              <div class="product-item">
-                  <a href="#" class="item-link">
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test4.jpeg}" alt="피그먼트 체인 버킷햇">
-                      </div>
-                      <div class="item-info">
-                          <div class="item-header">
-                              <span class="item-brand">엘리밀라</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">피그먼트 체인 버킷햇 (8colors)</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <del class="original-price">63,000원</del>
-                              </div>
-                              <span class="final-price">
-                                  <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                  56,700원
-                              </span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                          <span class="free-delivery">무료배송</span>
-                      </div>
-                  </a>
-              </div>
-              <div class="product-item">
-                  <a href="#" class="item-link">
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test1.jpeg}" alt="롤렉스 데이트저스트">
-                      </div>
-                      <div class="item-info">
-                          <span class="item-delivery">해외직구</span>
-                          <div class="item-header">
-                              <span class="item-brand">032C</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">롤 데이트저스트 36mm 126233 브라이트 블랙 다이아 셋팅 쥬빌리 Rolex Datejust</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <span class="discount-rate">6%</span>
-                                  <del class="original-price">69,273,300원</del>
-                              </div>
-                              <span class="final-price">65,116,902원</span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                      </div>
-                  </a>
-              </div>
-
-              <div class="product-item">
-                  <a href="#" class="item-link">
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test2.jpeg}" alt="롤렉스 코스모그래프">
-                      </div>
-                      <div class="item-info">
-                          <span class="item-delivery">해외직구</span>
-                          <div class="item-header">
-                              <span class="item-brand">032C</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">롤 코스모그래프 데이토나 40mm 12650 OLN 화이트 오이스터 Rolex Cosmograph Daytona</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <span class="discount-rate">6%</span>
-                                  <del class="original-price">68,559,300원</del>
-                              </div>
-                              <span class="final-price">64,445,742원</span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                      </div>
-                  </a>
-              </div>
-
-              <div class="product-item">
-                  <a href="#" class="item-link">
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test3.jpeg}" alt="헤이즐 버킷햇">
-                      </div>
-                      <div class="item-info">
-                          <div class="item-header">
-                              <span class="item-brand">엘리밀라</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">헤이즐 버킷햇 (7colors)</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <del class="original-price">63,000원</del>
-                              </div>
-                              <span class="final-price">
-                                  <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                  56,700원
-                              </span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                          <span class="free-delivery">무료배송</span>
-                      </div>
-                  </a>
-              </div>
-
-              <div class="product-item">
-                  <a href="#" class="item-link">
-                      <div class="item-thumb">
-                          <img th:src="@{/image/test4.jpeg}" alt="피그먼트 체인 버킷햇">
-                      </div>
-                      <div class="item-info">
-                          <div class="item-header">
-                              <span class="item-brand">엘리밀라</span>
-                              <div class="item-icons">
-                                  <button type="button" class="btn-wish"></button>
-                                  <button type="button" class="btn-cart"></button>
-                              </div>
-                          </div>
-                          <p class="item-name">피그먼트 체인 버킷햇 (8colors)</p>
-                          <div class="item-price-box">
-                              <div>
-                                  <del class="original-price">63,000원</del>
-                              </div>
-                              <span class="final-price">
-                                  <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                  56,700원
-                              </span>
-                          </div>
-                          <div class="item-benefit">
-                              <span class="card-discount">3% 카드할인</span>
-                          </div>
-                          <span class="free-delivery">무료배송</span>
-                      </div>
-                  </a>
-              </div>
             </div>
           </div><!-- 상품 list 끝 -->
 

@@ -1,6 +1,8 @@
 package kr.co.shoply.controller;
 
+import kr.co.shoply.dto.Cate2DTO;
 import kr.co.shoply.dto.ProductDTO;
+import kr.co.shoply.service.Cate2Service;
 import kr.co.shoply.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +19,18 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final Cate2Service cate2Service;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
-        List<ProductDTO> productDTOList = productService.getProductAll(cate2No);
+        List<ProductDTO> productDTOList = productService.getProductAll(cate2No); // 상품 리스트 출력
         log.info("productDTOList={}", productDTOList);
+
+        Cate2DTO cate2DTO = cate2Service.getCate(cate2No); // 카테고리 출력
+        log.info("cate2DTO={}", cate2DTO);
+
         model.addAttribute(productDTOList);
+        model.addAttribute(cate2DTO);
 
         return "product/list";
     }

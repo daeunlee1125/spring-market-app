@@ -19,7 +19,6 @@ public class QnaDTO {
     private String q_content;
     private String q_rdate;
     private String q_reply;
-    private String q_channel;
     private String q_comment;
 
 

@@ -24,6 +24,7 @@ public class Qna {
     private String q_channel;
     private String q_title;
     private String q_content;
+    private String q_channel;
 
     @CreationTimestamp
     private LocalDateTime q_rdate;

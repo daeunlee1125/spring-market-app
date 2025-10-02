@@ -2,6 +2,7 @@ package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.Cate2DTO;
 import kr.co.shoply.dto.ProductDTO;
+import kr.co.shoply.dto.ReviewDTO;
 import kr.co.shoply.service.Cate2Service;
 import kr.co.shoply.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,23 @@ public class ProductController {
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
-        List<ProductDTO> productDTOList = productService.getProductAll(cate2No); // 상품 리스트 출력
-        log.info("productDTOList={}", productDTOList);
+        return "redirect:/product/list/" + cate2No + "/sold";
+    }
 
-        Cate2DTO cate2DTO = cate2Service.getCate(cate2No); // 카테고리 출력
-        log.info("cate2DTO={}", cate2DTO);
+    @GetMapping("/product/list/{cate2No}/{sort}")
+    public String sortList(@PathVariable int cate2No, @PathVariable String sort, Model model) {
+        List<ProductDTO> productDTOList = productService.getProductAll(cate2No, sort);
 
-        model.addAttribute(productDTOList);
-        model.addAttribute(cate2DTO);
+        Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
+
+        model.addAttribute("productDTOList", productDTOList);
+        model.addAttribute("cate2DTO", cate2DTO);
+        model.addAttribute("sort", sort);
 
         return "product/list";
     }
 
-    @GetMapping("/product/view")
+    @GetMapping("/product/view/{prodNo}")
     public String view() {
         return "product/view";
     }

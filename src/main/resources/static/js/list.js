@@ -26,7 +26,7 @@ $(document).on('click', function() {
 
 $(document).ready(function() {
 // --- 설정 변수 ---
-const itemsPerPage = 4; // 한 페이지에 보여줄 상품 수
+const itemsPerPage = 8; // 한 페이지에 보여줄 상품 수
 
 // --- DOM 요소 선택 ---
 const $productList = $('.product-list-container');

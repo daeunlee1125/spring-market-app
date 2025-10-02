@@ -21,6 +21,7 @@ public class ReviewDTO {
     private String rev_rdate;
     private String rev_img_path;
 
+    // 추가필드
 
 
 }

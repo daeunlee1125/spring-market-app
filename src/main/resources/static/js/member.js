@@ -1,16 +1,27 @@
-// 로그인 폼 제출
-document.querySelector('.login-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    const userId = document.getElementById('userId').value;
-    const password = document.getElementById('password').value;
+//signup.html 동의하기 버튼 클릭시 작동
+function checkAgreement() {
+    const requiredTerms = ['terms1', 'terms2', 'terms3'];
+    const uncheckedRequired = [];
 
-    if (!userId || !password) {
-        alert('아이디와 비밀번호를 입력해주세요.');
-        return;
+    for (let termId of requiredTerms) {
+        if (!document.getElementById(termId).checked) {
+            uncheckedRequired.push(termId);
+        }
     }
 
-    alert('로그인 기능은 구현되지 않았습니다.');
-});
+    if (uncheckedRequired.length > 0) {
+        alert('필수 약관에 모두 동의해주세요.');
+        return false;
+    }
+
+    // 버튼의 data-type 속성에서 type 가져오기
+    const type = document.getElementById('submitBtn').dataset.type || 'general';
+    window.location.href = (type === 'seller') ? '/shoply/member/registerSeller' : '/shoply/member/register';
+
+    return true;
+}
+
+
 
 // 소셜 로그인 함수들
 function loginWithNaver() {
@@ -28,22 +39,16 @@ function loginWithGoogle() {
     alert('구글 로그인 API를 연동해주세요.');
 }
 
-function checkAgreement() {
-    const requiredTerms = ['terms1', 'terms2', 'terms3'];
-    const uncheckedRequired = [];
+// 로그인 폼 제출
+document.querySelector('.login-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const userId = document.getElementById('userId').value;
+    const password = document.getElementById('password').value;
 
-    for (let termId of requiredTerms) {
-        if (!document.getElementById(termId).checked) {
-            uncheckedRequired.push(termId);
-        }
+    if (!userId || !password) {
+        alert('아이디와 비밀번호를 입력해주세요.');
+        return;
     }
 
-    if (uncheckedRequired.length > 0) {
-        alert('필수 약관에 모두 동의해주세요.');
-        return false;
-    }
-
-    alert('약관 동의가 완료되었습니다.');
-    // 여기에서 다음 페이지로 이동하거나 추가 처리를 할 수 있습니다.
-    return true;
-}
+    alert('로그인 기능은 구현되지 않았습니다.');
+});

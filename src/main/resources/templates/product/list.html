@@ -1,547 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>상품 목록</title>
+<div th:replace="~{product/_head}"></div>
 
-        <link rel="stylesheet" href="/kmarket/inc/css/_tamplateProduct.css">
-        <link rel="stylesheet" href="/kmarket/inc/css/product.css">
-        
-        <!-- bxSlider -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-    </head>
-    <body>
-
-        <header>
-          <div class="top-bar-back">
-            <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
+      <main>
+        <div class="main-size">
+          <div class="main-nav-div"> <!-- 네비 -->
+            <nav class="main-nav">
+              <a th:href="@{/index}"><span>HOME</span></a>
+              <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
+              <span>[[${cate2DTO.cate1_name}]]</span> <!-- 동적 -->
+              <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
+              <span>[[${cate2DTO.cate2_name}]]</span> <!-- 동적 -->
+            </nav>
           </div>
 
-          <!-- 1번째 줄 -->
-          <div class="top-header">
-            
-            <!-- 로고 -->
-            <div class="header-left">
-              <img src="/kmarket/image/logo.jpg" alt="로고" class="logo">
-            </div>
+          <div class="main-list-head"> <!-- 상품 헤드 -->
+            <div class="main-list-headName">[[${cate2DTO.cate2_name}]]</div> <!-- 동적 -->
+            <hr>
+            <div></div>
+          </div>
 
-            <!-- 검색창 -->
-            <div class="header-center">
-              <form action="">
-                <input type="text" placeholder="검색">
-                <button type="submit">
-                  <img src="/kmarket/image/search.png" alt="검색">
+          <div class="sort-container"> <!-- 상품 정렬 기준 정하기 -->
+            <div class="sort-dropdown">
+                <button class="sort-selected">
+                    <span id="selected-sort-text" th:switch="${sort}">
+                    <th:block th:case="'priceAsc'">낮은가격순</th:block>
+                    <th:block th:case="'priceDesc'">높은가격순</th:block>
+                    <th:block th:case="'score'">평점높은순</th:block>
+                    <th:block th:case="'review'">후기많은순</th:block>
+                    <th:block th:case="*">판매많은순</th:block> </span>
+                    <span class="arrow">▼</span>
                 </button>
-              </form>
-            </div>
-
-            <!-- 아이콘 + 로그인 메뉴 -->
-            <div class="header-right">
-              <img src="/kmarket/image/user.png" alt="유저" class="icon">
-              <img src="/kmarket/image/cart.png" alt="장바구니" class="icon" style="width: 30px;">
-    
-            </div>
-          </div>
-
-          <div class="bottom-header">
-            <div class="header-left">
-              <a href="#" id="categoryBtn"> 전체 카테고리</a>
-              <a href="#">히트상품</a>
-              <a href="#">추천상품</a>
-              <a href="#">최신상품</a>
-              <a href="#">인기상품</a>
-              <a href="#">할인상품</a>
-
-            </div>
-
-
-            <div class="header-right login-menu">
-            
-                <a href="#">로그인</a> | 
-                <a href="#">회원가입</a> | 
-                <a href="#">고객센터</a>
-              
-            </div>
-          </div>
-
-        </header>
-        
-
-
-        <div class="container">
-            
-            <!-- 베스트 상품 안 들어가는 창은 여기부터 저 아래 주석까지 삭제하고 작업 -->
-            <div class="left-space">
-              <div class="inner">
-                <h3>베스트 상품</h3>
-
-                <!-- 첫 번째 상품 (카드형) -->
-                <div class="product-card">
-                  <div class="img-box">
-                    <img src="/kmarket/image/prod1.png" alt="침대">
-                  </div>
-                  <a href="#" class="name">가이온 스너그 단면매트리스 침대 화이트</a>
-                  <div class="price-box">
-                    <div class="price-top">
-                      <span class="original" >266,180원</span>
-                      <span class="discount" >54%</span>
-                    </div>
-                    <div class="sale-cont">
-                      
-                      <span class="sale">119,800원</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 나머지 상품 (리스트형) -->
-                <ul class="product-list">
-                  <li class="product-item">
-                    <div class="thumb">
-                      <img src="/kmarket/image/prod2.png" alt="운동화">
-                    </div>
-                    <div class="info">
-                      <a href="#" class="name">여성용 러닝업 트래킹화</a>
-                      <div class="price-box">
-                        <div class="price-top2">
-                          <span class="original" >133,090원</span>
-                          <span class="discount" >54%</span>
-                        </div>
-                        <div class="sale-cont">
-                          
-                          <span class="sale">59,900원</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="product-item">
-                    <div class="thumb">
-                      <img src="/kmarket/image/prod3.png" alt="세제">
-                    </div>
-                    <div class="info">
-                      <a href="#" class="name">듀얼(드럼/일반 겸용) 2.7L x2개 세탁세제</a>
-                      <div class="price-box">
-                        <div class="price-top2">
-                          <span class="original" >66,600원</span>
-                          <span class="discount" >54%</span>
-                        </div>
-                        <div class="sale-cont">
-                          
-                          <span class="sale">29,950원</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="product-item">
-                    <div class="thumb">
-                      <img src="/kmarket/image/prod4.png" alt="화장품">
-                    </div>
-                    <div class="info">
-                      <a href="#" class="name">비건 피톤치드 시카 토너</a>
-                      <div class="price-box">
-                        <div class="price-top2">
-                          <span class="original" >133,090원</span>
-                          <span class="discount" >54%</span>
-                        </div>
-                        <div class="sale-cont">
-                          
-                          <span class="sale">59,900원</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="product-item">
-                    <div class="thumb">
-                      <img src="/kmarket/image/prod5.png" alt="모자">
-                    </div>
-                    <div class="info">
-                      <a href="#" class="name">남녀공용 모자 블랙</a>
-                      <div class="price-box">
-                        <div class="price-top2">
-                          <span class="original" >133,090원</span>
-                          <span class="discount" >54%</span>
-                        </div>
-                        <div class="sale-cont">
-                          
-                          <span class="sale">59,900원</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                <ul class="sort-options">
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='sold')}">판매많은순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='priceAsc')}">낮은가격순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='priceDesc')}">높은가격순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='score')}">평점높은순</a></li>
+                    <li><a th:href="@{/product/list/{cate2No}/{sort}(cate2No=${cate2DTO.getCate2_no()}, sort='review')}">후기많은순</a></li>
                 </ul>
-              </div>
             </div>
-            <!-- 여기까지 베스트 상품!! -->
+          </div>
 
+          <div> <!-- 상품 list -->
 
-            <div class="wrapper">
-              
-              <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
-              <div id="categoryBox" class="category-box">
-                <div class="main-menu">
-                  <ul>
-                    <li data-target="menu1">패션/의류/뷰티</li>
-                    <li data-target="menu2">패션잡화</li>
-                    <li data-target="menu3">명품</li>
-                    <li data-target="menu4">뷰티</li>
-                  </ul>
+            <div class="product-list-container">
+
+                <div class="product-item" th:each="productDTO : ${productDTOList}">
+                    <a th:href="@{/product/view/{prodNo}(prodNo=${productDTO.prod_no})}" class="item-link">
+                        <div class="item-thumb">
+                            <img th:src="@{/image/test1.jpeg}" alt="상품 이미지">
+                        </div>
+                        <div class="item-info">
+                            <div class="item-header">
+                                <span class="item-brand">[[${productDTO.prod_company}]]</span>
+                                <div class="item-icons">
+                                    <button type="button" class="btn-wish"></button>
+                                    <button type="button" class="btn-cart"></button>
+                                </div>
+                            </div>
+                            <p class="item-name">[[${productDTO.prod_name}]]</p>
+                            <div class="item-price-box">
+                                <div>
+                                    <span class="discount-rate">[[${productDTO.prod_sale}]]%</span>
+                                    <del class="original-price">[[${#numbers.formatDecimal(productDTO.prod_price, 0, 'COMMA', 0, 'POINT')}]]원</del>
+                                </div>
+                                <span class="final-price"
+                                      th:text="|${#numbers.formatDecimal(productDTO.prod_price - productDTO.prod_price * (productDTO.prod_sale / 100.0), 0, 'COMMA', 0, 'POINT')}원|">
+                                    50,000원
+                                </span>
+
+                            </div>
+                            <div class="rating-box">
+                                <span><img th:src="@{/image/graystar.png}" alt="" class="rating_star">[[${productDTO.avgRating}]]</span>
+                                <span class="rating-good" th:if="${productDTO.avgRating >= 4.0}">고객만족우수</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
 
-                <div class="sub-menu">
-                  <ul id="menu1" class="submenu-content">
-                    <li><a href="#">여성의류</a></li>
-                    <li><a href="#">남성의류</a></li>
-                    <li><a href="#">아동복</a></li>
-                  </ul>
-                  <ul id="menu2" class="submenu-content" style="display:none;">
-                    <li><a href="#">가방</a></li>
-                    <li><a href="#">신발</a></li>
-                  </ul>
-                  <ul id="menu3" class="submenu-content" style="display:none;">
-                    <li><a href="#">해외 명품</a></li>
-                    
-                  </ul>
-                  <ul id="menu4" class="submenu-content" style="display:none;">
-                    <li><a href="#">스킨케어</a></li>
-                    <li><a href="#">메이크업</a></li>
-                  </ul>
-                </div>
-              </div>
-
-              
-              
-              <main>
-                <div class="main-size">
-                  <div class="main-nav-div"> <!-- 네비 -->
-                    <nav class="main-nav">
-                      <a href="/kmarket/index.html"><span>HOME</span></a>
-                      <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-                      <span>패션 / 의류 / 뷰티</span> <!-- 동적 -->
-                      <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-                      <span>남성의류</span> <!-- 동적 -->
-                    </nav>
-                  </div>
-
-                  <div class="main-list-head"> <!-- 상품 헤드 -->
-                    <div class="main-list-headName">남성의류</div> <!-- 동적 -->
-                    <hr>
-                    <div></div>
-                  </div>
-
-                  <div class="sort-container"> <!-- 상품 정렬 기준 정하기 -->
-                    <div class="sort-dropdown">
-                        <button class="sort-selected">
-                            <span id="selected-sort-text">판매많은순</span>
-                            <span class="arrow">▼</span>
-                        </button>
-                        <ul class="sort-options">
-                            <li><a href="/kmarket/product/list.html?sort=sold">판매많은순</a></li>
-                            <li><a href="/kmarket/product/list.html?sort=priceAsc">낮은가격순</a></li>
-                            <li><a href="/kmarket/product/list.html?sort=priceDesc">높은가격순</a></li>
-                            <li><a href="/kmarket/product/list.html?sort=score">평점높은순</a></li>
-                            <li><a href="/kmarket/product/list.html?sort=review">후기많은순</a></li>
-                            <li><a href="/kmarket/product/list.html?sort=new">최근등록순</a></li>
-                        </ul>
-                    </div>
-                  </div>
-
-                  <div> <!-- 상품 list -->
-                    <div class="product-list-container">
-                      <div class="product-item">
-                          <a href="/kmarket/product/view.html" class="item-link"> <!-- 링크에 GET -->
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test1.jpeg" alt="롤렉스 데이트저스트">
-                              </div>
-                              <div class="item-info">
-                                  
-                                  <div class="item-header">
-                                      <span class="item-brand">032C</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">롤 데이트저스트 36mm 126233 브라이트 블랙 다이아 셋팅 쥬빌리 Rolex Datejust</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <span class="discount-rate">6%</span>
-                                          <del class="original-price">69,273,300원</del>
-                                      </div>
-                                      <span class="final-price">65,116,902원</span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                                  <div class="rating-box">
-                                    <span><img src="/kmarket/inc/image/상품/graystar.png" alt="" class="rating_star"> 5.0</span>
-                                    <span class="rating-good">고객만족우수</span>
-                                  </div>
-                                  
-                              </div>
-                          </a>
-                      </div>
-
-                      <div class="product-item">
-                          <a href="#" class="item-link">
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test2.jpeg" alt="롤렉스 코스모그래프">
-                              </div>
-                              <div class="item-info">
-                                  <div class="item-header">
-                                      <span class="item-brand">032C</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">롤 코스모그래프 데이토나 40mm 12650 OLN 화이트 오이스터 Rolex Cosmograph Daytona</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <span class="discount-rate">6%</span>
-                                          <del class="original-price">68,559,300원</del>
-                                      </div>
-                                      <span class="final-price">64,445,742원</span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                              </div>
-                          </a>
-                      </div>
-
-                      <div class="product-item">
-                          <a href="#" class="item-link">
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test3.jpeg" alt="헤이즐 버킷햇">
-                              </div>
-                              <div class="item-info">
-                                  <div class="item-header">
-                                      <span class="item-brand">엘리밀라</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">헤이즐 버킷햇 (7colors)</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <del class="original-price">63,000원</del>
-                                      </div>
-                                      <span class="final-price">
-                                          <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                          56,700원
-                                      </span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                                  <span class="free-delivery">무료배송</span>
-                              </div>
-                          </a>
-                      </div>
-
-                      <div class="product-item">
-                          <a href="#" class="item-link">
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test4.jpeg" alt="피그먼트 체인 버킷햇">
-                              </div>
-                              <div class="item-info">
-                                  <div class="item-header">
-                                      <span class="item-brand">엘리밀라</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">피그먼트 체인 버킷햇 (8colors)</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <del class="original-price">63,000원</del>
-                                      </div>
-                                      <span class="final-price">
-                                          <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                          56,700원
-                                      </span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                                  <span class="free-delivery">무료배송</span>
-                              </div>
-                          </a>
-                      </div>
-                      <div class="product-item">
-                          <a href="#" class="item-link">
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test1.jpeg" alt="롤렉스 데이트저스트">
-                              </div>
-                              <div class="item-info">
-                                  <span class="item-delivery">해외직구</span>
-                                  <div class="item-header">
-                                      <span class="item-brand">032C</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">롤 데이트저스트 36mm 126233 브라이트 블랙 다이아 셋팅 쥬빌리 Rolex Datejust</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <span class="discount-rate">6%</span>
-                                          <del class="original-price">69,273,300원</del>
-                                      </div>
-                                      <span class="final-price">65,116,902원</span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                              </div>
-                          </a>
-                      </div>
-
-                      <div class="product-item">
-                          <a href="#" class="item-link">
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test2.jpeg" alt="롤렉스 코스모그래프">
-                              </div>
-                              <div class="item-info">
-                                  <span class="item-delivery">해외직구</span>
-                                  <div class="item-header">
-                                      <span class="item-brand">032C</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">롤 코스모그래프 데이토나 40mm 12650 OLN 화이트 오이스터 Rolex Cosmograph Daytona</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <span class="discount-rate">6%</span>
-                                          <del class="original-price">68,559,300원</del>
-                                      </div>
-                                      <span class="final-price">64,445,742원</span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                              </div>
-                          </a>
-                      </div>
-
-                      <div class="product-item">
-                          <a href="#" class="item-link">
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test3.jpeg" alt="헤이즐 버킷햇">
-                              </div>
-                              <div class="item-info">
-                                  <div class="item-header">
-                                      <span class="item-brand">엘리밀라</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">헤이즐 버킷햇 (7colors)</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <del class="original-price">63,000원</del>
-                                      </div>
-                                      <span class="final-price">
-                                          <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                          56,700원
-                                      </span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                                  <span class="free-delivery">무료배송</span>
-                              </div>
-                          </a>
-                      </div>
-
-                      <div class="product-item">
-                          <a href="#" class="item-link">
-                              <div class="item-thumb">
-                                  <img src="/kmarket/image/test4.jpeg" alt="피그먼트 체인 버킷햇">
-                              </div>
-                              <div class="item-info">
-                                  <div class="item-header">
-                                      <span class="item-brand">엘리밀라</span>
-                                      <div class="item-icons">
-                                          <button type="button" class="btn-wish"></button>
-                                          <button type="button" class="btn-cart"></button>
-                                      </div>
-                                  </div>
-                                  <p class="item-name">피그먼트 체인 버킷햇 (8colors)</p>
-                                  <div class="item-price-box">
-                                      <div>
-                                          <del class="original-price">63,000원</del>
-                                      </div>
-                                      <span class="final-price">
-                                          <span class="discount-rate" style="color: black; margin-right: 5px;">10%</span>
-                                          56,700원
-                                      </span>
-                                  </div>
-                                  <div class="item-benefit">
-                                      <span class="card-discount">3% 카드할인</span>
-                                  </div>
-                                  <span class="free-delivery">무료배송</span>
-                              </div>
-                          </a>
-                      </div>
-                    </div>
-                  </div><!-- 상품 list 끝 -->
-                
-                </div>
-                <div class="pagination-container">
-                  <div class="pagination">
-                    </div>
-                  </div>
-                </div>
-              </main>
             </div>
+          </div><!-- 상품 list 끝 -->
+
         </div>
-
-
-        <footer>
-
-          <div class="top-footer">
-            <div class="footer-wrapper">
-            <div class="top-f">
-              <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
-              <a href="#">서비스이용약관</a> |
-              <a href="#" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
-              <a href="#">전자금융거래약관</a>
+        <div class="pagination-container">
+          <div class="pagination">
             </div>
           </div>
-          </div>
-          <div class="footer-wrapper">
-
-            <h3 class="cpname">(주)샵플리닷컴</h3>
-            <div class="call-cont">
-              <img src="/kmarket/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
-              <span class="tel">1234-5678</span>
-              <span class="time"> (평일 09:00~18:00)</span>
-            </div>
-            <div style="color: gray; margin-top: 15px">
-              <span>대표이사 : 홍길동</span>
-              <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-              <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
-
-              <div style="margin-top: 3px;">
-                <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
-              </div>
-            </div>
-            
-          </div>
-
-        </footer>
+        </div>
+      </main>
+    </div>
+</div>
 
 
 
-    </body>
-    <script src="/kmarket/inc/js/list.js"></script>
-    <script src="/kmarket/inc/js/index.js"></script>
-</html>
+<div th:replace="~{product/_tail}"></div>

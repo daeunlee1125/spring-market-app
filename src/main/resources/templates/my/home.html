@@ -1,277 +1,189 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마이페이지 홈</title>
-  <link rel="stylesheet" href="/kmarket/inc/css/my.css">
 </head>
 <body class="logged-in">
-    <header>
-        <div class="main-header">
-            <div class="header-left">
-                <a href="./index.html">
-                    <img src="../image/logo.jpg" alt="SHOPLY 로고" class="logo">
-                </a>
-                <span>쇼핑의 플레이리스트</span>
-            </div>
-            <div class="header-right">
-                <div class="login-menu">
-                    <a href="./login.html">로그인</a> |
-                    <a href="./register.html">회원가입</a>
+
+<div th:replace="~{my/_head.html}"></div>
+
+<main class="container">
+    <div class="sidebar">
+        <ul>
+            <li><a th:href="@{/my/home}" class="active">마이페이지 홈</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
+            <li><a th:href="@{/my/point}">포인트내역</a></li>
+            <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+            <li><a th:href="@{/my/review}">나의리뷰</a></li>
+            <li><a th:href="@{/my/qna}">문의하기</a></li>
+            <li><a th:href="@{/my/info}">나의설정</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="main-content-header">
+            <h2>나의 쇼핑 정보</h2>
+            <div class="info-summary">
+                <div class="info-item">
+                    <div class="count" th:text="${orderCount}">2</div>
+                    <div>주문</div>
                 </div>
-                <div class="user-menu">
-                    <a href="#">로그아웃</a> |
-                    <a href="./my/home.html">마이페이지</a> |
-                    <a href="./cart.html">장바구니</a>
+                <div class="info-item">
+                    <div class="count" th:text="${couponCount}">1</div>
+                    <div>쿠폰</div>
+                </div>
+                <div class="info-item">
+                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 3, 'COMMA')}">1,000</div>
+                    <div>포인트</div>
+                </div>
+                <div class="info-item">
+                    <div class="count" th:text="${qnaCount}">1</div>
+                    <div>문의</div>
                 </div>
             </div>
         </div>
-    </header>
-    <main class="container">
-        <div class="sidebar">
-            
-            <ul>
-                <li><a href="home.html" class="active">마이페이지 홈</a></li>
-                <li><a href="order.html">전체주문내역</a></li>
-                <li><a href="point.html">포인트내역</a></li>
-                <li><a href="coupon.html">쿠폰</a></li>
-                <li><a href="review.html">나의리뷰</a></li>
-                <li><a href="qna.html">문의하기</a></li>
-                <li><a href="info.html">나의설정</a></li>
-            </ul>
+        <div style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
+            810 x 86 배너 광고
         </div>
-        <div class="content">
-            <div class="main-content-header">
-                <h2>나의 쇼핑 정보</h2>
-                <div class="info-summary">
-                    <div class="info-item">
-                        <div class="count">2</div>
-                        <div>주문</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="count">1</div>
-                        <div>쿠폰</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="count">1,000</div>
-                        <div>포인트</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="count">1</div>
-                        <div>문의</div>
-                    </div>
-                </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h3>최근 주문내역</h3>
             </div>
-            <div style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
-                810 x 86 배너 광고
-            </div>
-            <div class="section">
-                <div class="section-header">
-                    <h3>최근 주문내역</h3>
-                    
-                </div>
-                <table class="table-container">
-                    <thead>
-                    <tr>
-                        <th>날짜</th>
-                        <th>상품정보</th>
-                        <th>상태</th>
-                        <th>확인 / 신청</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>2022-12-13</td>
-                        <td>상품명 / 주문번호: 1012211341<br>수량: 1개<br><strong>34,000원</strong></td>
-                        <td>배송완료</td>
-                        <td>
-                            <button onclick="openModal('confirmModal')">구매확정</button>
-                            <button onclick="openModal('reviewModal')">상품평쓰기</button>
-                            <button onclick="openModal('returnModal')">반품신청</button>
-                            <button onclick="openModal('exchangeModal')">교환신청</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2022-12-13</td>
-                        <td>상품명 / 주문번호: 1012211341<br>수량: 1개<br><strong>34,000원</strong></td>
-                        <td>배송완료</td>
-                        <td>
-                            <button onclick="openModal('confirmModal')">구매확정</button>
-                            <button onclick="openModal('reviewModal')">상품평쓰기</button>
-                            <button onclick="openModal('returnModal')">반품신청</button>
-                            <button onclick="openModal('exchangeModal')">교환신청</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br>
-                <a href="order.html" class="more-link">더보기 &gt;</a>
-            </div>
-            <div class="section">
-                <div class="section-header">
-                    <h3>포인트적립내역</h3>
-                    
-                </div>
-                <table class="table-container">
-                    <thead>
-                    <tr>
-                        <th>날짜</th>
-                        <th>구분</th>
-                        <th>주문번호</th>
-                        <th>적립금액</th>
-                        <th>비고</th>
-                        <th>유효기간</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>2022-12-13</td>
-                        <td>적립</td>
-                        <td>2022121001</td>
-                        <td>340</td>
-                        <td>상품구매확정</td>
-                        <td>2024-12-10</td>
-                    </tr>
-                    <tr>
-                        <td>2022-12-13</td>
-                        <td>적립</td>
-                        <td>2022120601</td>
-                        <td>120</td>
-                        <td>상품구매확정</td>
-                        <td>2024-12-06</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>날짜</th>
+                    <th>상품정보</th>
+                    <th>상태</th>
+                    <th>확인 / 신청</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="orderItem : ${recentOrders}">
+                    <td th:text="${#dates.format(orderItem.ordDate, 'yyyy-MM-dd')}">2022-12-13</td>
+                    <td>
+                        <span th:text="${orderItem.itemName}">상품명</span> / 주문번호: <span th:text="${orderItem.ordNo}">1012211341</span><br>
+                        수량: <span th:text="${orderItem.itemCnt}">1</span>개<br>
+                        <strong><span th:text="${#numbers.formatInteger(orderItem.itemPrice, 3, 'COMMA')}">34,000</span>원</strong>
+                    </td>
+                    <td th:text="${orderItem.itemStatus}">배송완료</td>
+                    <td>
+                        <button onclick="openModal('confirmModal')">구매확정</button>
+                        <button onclick="openModal('reviewModal')">상품평쓰기</button>
+                        <button onclick="openModal('returnModal')">반품신청</button>
+                        <button onclick="openModal('exchangeModal')">교환신청</button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentOrders)}">
+                    <td colspan="4" style="text-align: center;">최근 주문 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
             <br>
-            <a href="point.html" class="more-link">더보기 &gt;</a>
-
-
-            <div class="section">
-                <div class="section-header">
-                    <h3>상품평</h3>
-                    
-                </div>
-                <table class="table-container">
-                    <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>상품명</th>
-                        <th>내용</th>
-                        <th>별점</th>
-                        <th>작성일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>상품번호 / 상품명</td>
-                        <td>배송이 빠릅니다.. 잘 사용하겠습니다.</td>
-                        <td><strong class="star-rating">★★★★★</strong></td>
-                        <td>2022-12-10</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>상품번호 / 상품명</td>
-                        <td>배송이 빠릅니다.. 잘 사용하겠습니다.</td>
-                        <td><strong class="star-rating">★★★★★</strong></td>
-                        <td>2022-12-06</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br>
-            <a href="review.html" class="more-link">더보기 &gt;</a>
-
-            <div class="section">
-                <div class="section-header">
-                    <h3>나의 문의</h3>
-                    
-                </div>
-                <table class="table-container">
-                    <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>문의제목</th>
-                        <th>문의유형</th>
-                        <th>제목</th>
-                        <th>작성일</th>
-                        <th>상태</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>고객센터</td>
-                        <td>주문 / 결제</td>
-                        <td>신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                        <td>2022-12-12</td>
-                        <td>답변 완료</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>고객센터</td>
-                        <td>주문 / 결제</td>
-                        <td>신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                        <td>2022-12-12</td>
-                        <td>답변 완료</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br>
-            <a href="qna.html" class="more-link">더보기 &gt;</a>
-
+            <a th:href="@{/my/order}" class="more-link">더보기 &gt;</a>
         </div>
 
-        
-    </main>
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-top">
-                <h2>(주)샵플리닷컴</h2>
-                <a href="#">사업자정보확인</a>
-                <a href="#">소비자보호 서비스 가입사실확인</a>
+        <div class="section">
+            <div class="section-header">
+                <h3>포인트적립내역</h3>
             </div>
-            <div class="footer-info">
-                <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
-                <p>부산광역시 부산진구 중앙대로 103</p>
-                <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
-                <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-links">
-                    <a href="#">개인정보처리방침</a> |
-                    <a href="#">영상정보처리기기 운영·관리방침</a> |
-                    <a href="#">고객센터</a> |
-                    <a href="#">FAQ</a>
-                </div>
-                <div class="footer-sns">
-                    <a href="#"><img src="../image/facebook.png" alt="Facebook"></a>
-                    <a href="#"><img src="../image/instagram.png" alt="Instagram"></a>
-                </div>
-            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>날짜</th>
+                    <th>구분</th>
+                    <th>주문번호</th>
+                    <th>적립금액</th>
+                    <th>비고</th>
+                    <th>유효기간</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="point : ${recentPoints}">
+                    <td th:text="${#dates.format(point.pDate, 'yyyy-MM-dd')}">2022-12-13</td>
+                    <td th:text="${point.pType}">적립</td>
+                    <td th:text="${point.ordNo}">2022121001</td>
+                    <td th:text="${#numbers.formatInteger(point.pPoint, 3, 'COMMA')}">340</td>
+                    <td th:text="${point.pInfo}">상품구매확정</td>
+                    <td th:text="${#dates.format(point.pExpDate, 'yyyy-MM-dd')}">2024-12-10</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentPoints)}">
+                    <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </footer>
-    <script>
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
+        <br>
+        <a th:href="@{/my/point}" class="more-link">더보기 &gt;</a>
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+        <div class="section">
+            <div class="section-header">
+                <h3>상품평</h3>
+            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>상품명</th>
+                    <th>내용</th>
+                    <th>별점</th>
+                    <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="review, status : ${recentReviews}">
+                    <td th:text="${status.count}">1</td>
+                    <td th:text="${review.prodName}">상품번호 / 상품명</td>
+                    <td th:text="${review.revContent}">배송이 빠릅니다.. 잘 사용하겠습니다.</td>
+                    <td>
+                        <strong class="star-rating" th:text="${review.revRating}">★★★★★</strong>
+                    </td>
+                    <td th:text="${#dates.format(review.revRdate, 'yyyy-MM-dd')}">2022-12-10</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentReviews)}">
+                    <td colspan="5" style="text-align: center;">상품평 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <a th:href="@{/my/review}" class="more-link">더보기 &gt;</a>
 
-        // 로그인 상태 시뮬레이션
-        const isLoggedIn = true; // 실제로는 서버에서 로그인 상태를 확인
+        <div class="section">
+            <div class="section-header">
+                <h3>나의 문의</h3>
+            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>문의유형</th>
+                    <th>문의제목</th>
+                    <th>작성일</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="qna, status : ${recentQnas}">
+                    <td th:text="${status.count}">1</td>
+                    <td th:text="${qna.qCate1}">고객센터</td>
+                    <td th:text="${qna.qTitle}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
+                    <td th:text="${#dates.format(qna.qRdate, 'yyyy-MM-dd')}">2022-12-12</td>
+                    <td th:text="${#strings.isEmpty(qna.qReply)} ? '답변 대기' : '답변 완료'">답변 완료</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentQnas)}">
+                    <td colspan="5" style="text-align: center;">문의 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <a th:href="@{/my/qna}" class="more-link">더보기 &gt;</a>
+    </div>
+</main>
+<div th:replace="~{my/_tail.html}"></div>
 
-        const loginMenu = document.querySelector('.login-menu');
-        const userMenu = document.querySelector('.user-menu');
-
-        if (isLoggedIn) {
-            document.body.classList.add('logged-in');
-        }
-    </script>
 </body>
 </html>

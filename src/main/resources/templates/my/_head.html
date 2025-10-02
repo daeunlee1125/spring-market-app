@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <link rel="stylesheet" th:href="@{/css/my.css}">
+    <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+</head>
+
+<body class="logged-in">
+<header>
+    <div class="main-header">
+        <div class="header-left">
+            <a th:href="@{/index}">
+                <img th:src="@{/image/logo.jpg}" alt="SHOPLY 로고" class="logo">
+            </a>
+            <span>쇼핑의 플레이리스트</span>
+        </div>
+        <div class="header-right">
+            <div th:if="${#strings.isEmpty(session.sessUser)}">
+                <div class="login-menu">
+                    <a th:href="@{/member/login}">로그인</a> |
+                    <a th:href="@{/member/register}">회원가입</a>
+                </div>
+            </div>
+            <div th:unless="${#strings.isEmpty(session.sessUser)}">
+                <div class="user-menu">
+                    <span th:text="${session.sessUser.memName} + '님'">홍길동님</span> |
+                    <a th:href="@{/member/logout}">로그아웃</a> |
+                    <a th:href="@{/my/home}">마이페이지</a> |
+                    <a th:href="@{/cart}">장바구니</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

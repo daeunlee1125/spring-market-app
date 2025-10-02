@@ -1,93 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>쿠폰목록 - SHOPLY Admin</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-  <link rel="stylesheet" href="/kmarket/inc/css/admin/admin_temp.css">
-  <link rel="stylesheet" href="/kmarket/inc/css/admin/coupon.css">
-</head>
-<body>
-  <!-- 사이드바 -->
-  <aside class="sidebar">
-    <div class="sidebar-header">SHOPLY Admin</div>
-    <nav>
-      <ul class="mainSideBar">
-        <li>
-          <div><i class="fas fa-cog"></i> 환경설정</div>
-          <ul class="subSideBar">
-            <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-            <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-            <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-            <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-            <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-          </ul>
-        </li>
-        <li>
-          <div><i class="fas fa-store"></i> 상점관리</div>
-          <ul class="subSideBar">
-            <li><a href="#">상점목록</a></li>
-            <li><a href="#">매출현황</a></li>
-          </ul>
-        </li>
-        <li>
-          <div><i class="fas fa-users"></i> 회원관리</div>
-          <ul class="subSideBar">
-            <li><a href="#">회원목록</a></li>
-            <li><a href="#">포인트관리</a></li>
-          </ul>
-        </li>
-        <li>
-          <div><i class="fas fa-box-open"></i> 상품관리</div>
-          <ul class="subSideBar">
-            <li><a href="#">상품목록</a></li>
-            <li><a href="#">상품등록</a></li>
-          </ul>
-        </li>
-        <li>
-          <div><i class="fas fa-truck"></i> 주문관리</div>
-          <ul class="subSideBar">
-            <li><a href="#">주문현황</a></li>
-            <li><a href="#">배송현황</a></li>
-          </ul>
-        </li>
-        <li>
-          <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-          <ul class="subSideBar">
-            <li><a href="#">쿠폰목록</a></li>
-            <li><a href="#">쿠폰발급현황</a></li>
-          </ul>
-        </li>
-        <li>
-          <div><i class="fas fa-headset"></i> 고객센터</div>
-          <ul class="subSideBar">
-            <li><a href="#">공지사항</a></li>
-            <li><a href="#">자주묻는질문</a></li>
-            <li><a href="#">문의하기</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-  </aside>
+<div th:replace="~{admin/coupon/_head.html}"></div>
 
-  <!-- 헤더 -->
-  <header>
-    <div class="middle">
-      <div id="logo">
-        <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
-      </div>
-      <div class="header-nav">
-        <ul class="header-menu">
-          <li><a href="#">홈</a></li>
-          <li><a href="#">로그아웃</a></li>
-          <li><a href="#">고객센터</a></li>
-        </ul>
-      </div>
-    </div>
-  </header>
-
-  <!-- 메인 -->
+<main>
   <div class="main">
     <div class="middle main-content">
       <div class="main-common">
@@ -172,15 +85,10 @@
       </div>
     </div>
   </div>
+  </div>
+</main>
 
-  <!-- 푸터 -->
-  <footer>
-    <div class="middle">
-      <p id="footer-p">
-        Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-      </p>
-    </div>
-  </footer>
+<div th:replace="~{admin/coupon/_tail.html}"></div>
 
   <!-- ================== 모달 ================== -->
 
@@ -320,28 +228,5 @@
   </div>
 </div>
 
-  <!-- JS 공통 로직 -->
-  <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        // 열기 버튼
-        document.querySelectorAll(".openModalBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetId = btn.dataset.target;
-            document.getElementById(targetId).classList.remove("hidden");
-            });
-        });
-
-        // 닫기 버튼 + 배경 클릭
-        document.querySelectorAll(".modal").forEach(modal => {
-            modal.addEventListener("click", (e) => {
-            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                modal.classList.add("hidden");
-            }
-            });
-        });
-        });
-
-    </script>
 </body>
 </html>

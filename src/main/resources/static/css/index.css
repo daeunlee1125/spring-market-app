@@ -20,7 +20,7 @@ header {
 }
 
 .top-bar-back{
-  width: 100%; height: 30px; background-image: url('/kmarket/inc/image/test333.PNG'); background-size: cover;
+  width: 100%; height: 30px; background-image: url('../image/test333.PNG'); background-size: cover;
 }
 .top-bar {
   color: rgb(165, 5, 130); 

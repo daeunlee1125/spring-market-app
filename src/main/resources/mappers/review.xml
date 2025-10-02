@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.ReviewMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="cno" keyColumn="CNO">
+    </insert>
+
+    <select id="select" parameterType="string" resultType="double">
+        SELECT NVL(ROUND(AVG(REV_RATING),1),0)
+        FROM REVIEW
+        WHERE PROD_NO = #{prod_no}
+    </select>
+
+    <select id="selectAll" resultType="kr.co.shoply.dto.ReviewDTO">
+    </select>
+
+    <update id="update">
+    </update>
+
+    <delete id="delete">
+    </delete>
+
+</mapper>

@@ -2,578 +2,594 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shoply 메인</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoply 메인</title>
 
-  <link rel="stylesheet" th:href="@{/css/index.css}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
 
-  <!-- bxSlider -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-  <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <!-- bxSlider -->
+    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}">
+    <script th:src="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js}"></script>
 </head>
 
 <body>
 
-  <header>
+<header>
 
     <!-- 메인화면 빼고는 이 줄 지우시면 됩니다! -->
-    <div class="top-adv"><img src="/kmarket/inc/image/qqq.PNG" alt="" style="width: 100%; height: 100%;"></div>
+    <div class="top-adv"><img th:src="@{/image/qqq.png}" alt="" style="width: 100%; height: 100%;"></div>
 
 
 
     <div class="top-bar-back">
-      <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
+        <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
     </div>
 
     <!-- 1번째 줄 -->
     <div class="top-header">
 
-      <!-- 로고 -->
-      <div class="header-left">
-        <a href="/kmarket/index.html">
-          <img src="/kmarket/inc/image/logo.jpg" alt="로고" class="logo">
-        </a>
-      </div>
+        <!-- 로고 -->
+        <div class="header-left">
+            <a th:href="@{/index}">
+                <img th:src="@{/image/logo.jpg}" alt="로고" class="logo">
+            </a>
+        </div>
 
-      <!-- 검색창 -->
-      <div class="header-center">
-        <form action="/kmarket/product/search.html" method="get">
-          <input type="text" placeholder="검색">
-          <button type="submit">
-            <img src="/kmarket/inc/image/search.png" alt="검색">
-          </button>
-        </form>
-      </div>
+        <!-- 검색창 -->
+        <div class="header-center">
+            <form action="" method="get">
+                <input type="text" placeholder="검색">
+                <button type="submit">
+                    <img th:src="@{/image/search.png}" alt="검색">
+                </button>
+            </form>
+        </div>
 
-      <!-- 아이콘 + 로그인 메뉴 -->
-      <div class="header-right">
-        <a href="/kmarket/my/home.html">
-          <img src="/kmarket/inc/image/user.png" alt="유저" class="icon">
-        </a>
-        <a href="/kmarket/product/cart.html">
-          <img src="/kmarket/inc/image/cart.png" alt="장바구니" class="icon" style="width: 30px;">
-        </a>
+        <!-- 아이콘 + 로그인 메뉴 -->
+        <div class="header-right">
+            <a th:href="@{/my/home}">
+                <img th:src="@{/image/user.png}" alt="유저" class="icon">
+            </a>
+            <a th:href="@{/product/cart}">
+                <img th:src="@{/image/cart.png}" alt="장바구니" class="icon" style="width: 30px;">
+            </a>
 
-      </div>
+        </div>
     </div>
 
     <div class="bottom-header">
-      <div class="header-left">
-        <a href="#" id="categoryBtn"> 전체 카테고리</a>
-        <a href="#hit-products">히트상품</a>
-        <a href="#recommended-products">추천상품</a>
-        <a href="#recent-products">최신상품</a>
-        <a href="#best-products">인기상품</a>
-        <a href="#discount-products">할인상품</a>
-      </div>
+        <div class="header-left">
+            <a href="#" id="categoryBtn"> 전체 카테고리</a>
+            <a href="#hit-products">히트상품</a>
+            <a href="#recommended-products">추천상품</a>
+            <a href="#recent-products">최신상품</a>
+            <a href="#best-products">인기상품</a>
+            <a href="#discount-products">할인상품</a>
+        </div>
 
 
-      <div class="header-right login-menu">
+        <div class="header-right login-menu">
 
-        <a href="/kmarket/member/login.html">로그인</a> |
-        <a href="/kmarket/member/join.html">회원가입</a> |
-        <a href="/kmarket/cs/index.html">고객센터</a>
+            <a th:href="@{/member/login}">로그인</a> |
+            <a th:href="@{/member/join}">회원가입</a> |
+            <a th:href="@{/cs/index}">고객센터</a>
 
-      </div>
+        </div>
     </div>
 
-  </header>
+</header>
 
 
 
-  <div class="container">
+<div class="container">
 
     <!-- 베스트 상품 안 들어가는 창은 여기부터 저 아래 주석까지 삭제하고 작업 -->
     <div class="left-space">
-      <div class="inner">
-        <h3>베스트 상품</h3>
+        <div class="inner">
+            <h3>베스트 상품</h3>
 
-        <!-- 첫 번째 상품 (카드형) -->
-        <div class="product-card">
-          <div class="img-box">
-            <img src="/kmarket/inc/image/prod1.png" alt="침대">
-          </div>
-          <a href="/kmarket/product/view.html?" class="name">가이온 스너그 단면매트리스 침대 화이트</a>
-          <div class="price-box">
-            <div class="price-top">
-              <span class="original">266,180원</span>
-              <span class="discount">54%</span>
-            </div>
-            <div class="sale-cont">
+            <!-- 첫 번째 상품 (카드형) -->
+            <div class="product-card">
+                <div class="img-box">
+                    <img th:src="@{/image/prod1.png}" alt="침대">
+                </div>
+                <a th:href="@{/product/view}" class="name">가이온 스너그 단면매트리스 침대 화이트</a>
+                <div class="price-box">
+                    <div class="price-top">
+                        <span class="original">266,180원</span>
+                        <span class="discount">54%</span>
+                    </div>
+                    <div class="sale-cont">
 
-              <span class="sale">119,800원</span>
+                        <span class="sale">119,800원</span>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <!-- 나머지 상품 (리스트형) -->
+            <ul class="product-list">
+                <li class="product-item">
+                    <div class="thumb">
+                        <img th:src="@{/image/prod2.png}" alt="운동화">
+                    </div>
+                    <div class="info">
+                        <a th:href="@{/product/view}" class="name">여성용 러닝업 트래킹화</a>
+                        <div class="price-box">
+                            <div class="price-top2">
+                                <span class="original">133,090원</span>
+                                <span class="discount">54%</span>
+                            </div>
+                            <div class="sale-cont">
+
+                                <span class="sale">59,900원</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="product-item">
+                    <div class="thumb">
+                        <img th:src="@{/image/prod3.png}" alt="세제">
+                    </div>
+                    <div class="info">
+                        <a th:href="@{/product/view}" class="name">듀얼(드럼/일반 겸용) 2.7L x2개 세탁세제</a>
+                        <div class="price-box">
+                            <div class="price-top2">
+                                <span class="original">66,600원</span>
+                                <span class="discount">54%</span>
+                            </div>
+                            <div class="sale-cont">
+
+                                <span class="sale">29,950원</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="product-item">
+                    <div class="thumb">
+                        <img th:src="@{/image/prod4.png}" alt="화장품">
+                    </div>
+                    <div class="info">
+                        <a th:href="@{/product/view}" class="name">비건 피톤치드 시카 토너</a>
+                        <div class="price-box">
+                            <div class="price-top2">
+                                <span class="original">133,090원</span>
+                                <span class="discount">54%</span>
+                            </div>
+                            <div class="sale-cont">
+
+                                <span class="sale">59,900원</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="product-item">
+                    <div class="thumb">
+                        <img th:src="@{/image/prod5.png}" alt="모자">
+                    </div>
+                    <div class="info">
+                        <a th:href="@{/product/view}" class="name">남녀공용 모자 블랙</a>
+                        <div class="price-box">
+                            <div class="price-top2">
+                                <span class="original">133,090원</span>
+                                <span class="discount">54%</span>
+                            </div>
+                            <div class="sale-cont">
+
+                                <span class="sale">59,900원</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
-
-        <!-- 나머지 상품 (리스트형) -->
-        <ul class="product-list">
-          <li class="product-item">
-            <div class="thumb">
-              <img src="/kmarket/inc/image/prod2.png" alt="운동화">
-            </div>
-            <div class="info">
-              <a href="/kmarket/product/view.html?" class="name">여성용 러닝업 트래킹화</a>
-              <div class="price-box">
-                <div class="price-top2">
-                  <span class="original">133,090원</span>
-                  <span class="discount">54%</span>
-                </div>
-                <div class="sale-cont">
-
-                  <span class="sale">59,900원</span>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="product-item">
-            <div class="thumb">
-              <img src="/kmarket/inc/image/prod3.png" alt="세제">
-            </div>
-            <div class="info">
-              <a href="/kmarket/product/view.html?" class="name">듀얼(드럼/일반 겸용) 2.7L x2개 세탁세제</a>
-              <div class="price-box">
-                <div class="price-top2">
-                  <span class="original">66,600원</span>
-                  <span class="discount">54%</span>
-                </div>
-                <div class="sale-cont">
-
-                  <span class="sale">29,950원</span>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="product-item">
-            <div class="thumb">
-              <img src="/kmarket/inc/image/prod4.png" alt="화장품">
-            </div>
-            <div class="info">
-              <a href="/kmarket/product/view.html?" class="name">비건 피톤치드 시카 토너</a>
-              <div class="price-box">
-                <div class="price-top2">
-                  <span class="original">133,090원</span>
-                  <span class="discount">54%</span>
-                </div>
-                <div class="sale-cont">
-
-                  <span class="sale">59,900원</span>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="product-item">
-            <div class="thumb">
-              <img src="/kmarket/inc/image/prod5.png" alt="모자">
-            </div>
-            <div class="info">
-              <a href="/kmarket/product/view.html?" class="name">남녀공용 모자 블랙</a>
-              <div class="price-box">
-                <div class="price-top2">
-                  <span class="original">133,090원</span>
-                  <span class="discount">54%</span>
-                </div>
-                <div class="sale-cont">
-
-                  <span class="sale">59,900원</span>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
     </div>
     <!-- 여기까지 베스트 상품!! -->
 
 
     <div class="wrapper">
 
-      <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
-      <div id="categoryBox" class="category-box">
-        <div class="main-menu">
-          <ul>
-            <li data-target="menu1">패션/의류/뷰티</li>
-            <li data-target="menu2">패션잡화</li>
-            <li data-target="menu3">명품</li>
-            <li data-target="menu4">뷰티</li>
-          </ul>
-        </div>
-
-        <div class="sub-menu">
-          <ul id="menu1" class="submenu-content">
-            <li><a href="/kmarket/product/list.html?">여성의류</a></li>
-            <li><a href="/kmarket/product/list.html?">남성의류</a></li>
-            <li><a href="/kmarket/product/list.html?">아동복</a></li>
-          </ul>
-          <ul id="menu2" class="submenu-content" style="display:none;">
-            <li><a href="/kmarket/product/list.html?">가방</a></li>
-            <li><a href="/kmarket/product/list.html?">신발</a></li>
-          </ul>
-          <ul id="menu3" class="submenu-content" style="display:none;">
-            <li><a href="/kmarket/product/list.html?">해외 명품</a></li>
-
-          </ul>
-          <ul id="menu4" class="submenu-content" style="display:none;">
-            <li><a href="/kmarket/product/list.html?">스킨케어</a></li>
-            <li><a href="/kmarket/product/list.html?">메이크업</a></li>
-          </ul>
-        </div>
-      </div>
-
-
-      <main>
-        <!-- 메인화면 빼고 다른 분들은 주석부터 주석까지(bxslider) 삭제하고 -->
-        <!-- main 태그 안에서 작업 -->
-        <!--  -->
-        <div class="slider">
-          <div class="slides">
-            <img src="/kmarket/image/slider_item1.jpg" alt="이미지1">
-            <img src="/kmarket/image/slider_item2.jpg" alt="이미지2">
-            <img src="/kmarket/image/slider_item3.jpg" alt="이미지3">
-            <img src="/kmarket/image/slider_item4.jpg" alt="이미지4">
-            <img src="/kmarket/image/slider_item5.jpg" alt="이미지5">
-          </div>
-          <button class="prev"><i class="fas fa-chevron-left"></i></button>
-          <button class="next"><i class="fas fa-chevron-right"></i></button>
-          <div class="indicators">
-            <span class="active"></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </main>
-
-      <!-- 히트상품 -->
-      <section id="hit-products" class="product-section">
-        <h3>🔥 히트상품</h3>
-        <div class="product-grid">
-          <a href="/kmarket/product/view.html?">
-            <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-              <p class="name">히트상품1</p>
-              <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-              <div class="sale-wrap"><span class="sale">27,000원</span><img
-                  src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
+        <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
+        <div id="categoryBox" class="category-box">
+            <div class="main-menu">
+                <ul>
+                    <li data-target="menu1">패션/의류/뷰티</li>
+                    <li data-target="menu2">패션잡화</li>
+                    <li data-target="menu3">생활용품</li>
+                    <li data-target="menu4">반려동물</li>
+                    <li data-target="menu5">디지털/가전</li>
+                </ul>
             </div>
-          </a>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">히트상품2</p>
-            <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-            <div class="sale-wrap"><span class="sale">27,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">히트상품3</p>
-            <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-            <div class="sale-wrap"><span class="sale">27,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">히트상품4</p>
-            <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-            <div class="sale-wrap"><span class="sale">27,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">히트상품5</p>
-            <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-            <div class="sale-wrap"><span class="sale">27,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">히트상품6</p>
-            <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-            <div class="sale-wrap"><span class="sale">27,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">히트상품7</p>
-            <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-            <div class="sale-wrap"><span class="sale">27,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">히트상품8</p>
-            <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-            <div class="sale-wrap"><span class="sale">27,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-        </div>
-      </section>
 
-      <!-- 추천상품 -->
-      <section id="recommended-products" class="product-section">
-        <h3>💎 추천상품</h3>
-        <div class="product-grid">
-          <a href="/kmarket/product/view.html?">
-            <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-              <p class="name">추천상품1</p>
-              <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-              <div class="sale-wrap"><span class="sale">32,000원</span><img
-                  src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-            </div>
-          </a>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">추천상품2</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">추천상품3</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">추천상품4</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">추천상품5</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">추천상품6</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">추천상품7</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">추천상품8</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-        </div>
-      </section>
+            <div class="sub-menu">
+                <ul id="menu1" class="submenu-content">
+                    <li><a th:href="@{/product/list}">여성의류</a></li>
+                    <li><a th:href="@{/product/list}">남성의류</a></li>
+                    <li><a th:href="@{/product/list}">이너웨어/잠옷</a></li>
+                    <li><a th:href="@{/product/list}">남여공용의류</a></li>
+                </ul>
+                <ul id="menu2" class="submenu-content" style="display:none;">
+                    <li><a th:href="@{/product/list}">모자/장갑</a></li>
+                    <li><a th:href="@{/product/list}">신발</a></li>
+                    <li><a th:href="@{/product/list}">가방/지갑</a></li>
+                    <li><a th:href="@{/product/list}">목걸이/반지/팔찌</a></li>
+                </ul>
+                <ul id="menu3" class="submenu-content" style="display:none;">
+                    <li><a th:href="@{/product/list}">청소용품</a></li>
+                    <li><a th:href="@{/product/list}">주방용품</a></li>
+                    <li><a th:href="@{/product/list}">욕실용품</a></li>
+                    <li><a th:href="@{/product/list}">수납/정리</a></li>
 
-      <!-- 최신상품 -->
-      <section id="recent-products" class="product-section">
-        <h3>💎 최신상품</h3>
-        <div class="product-grid">
-          <a href="/kmarket/product/view.html?">
-            <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-              <p class="name">최신상품1</p>
-              <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-              <div class="sale-wrap"><span class="sale">32,000원</span><img
-                  src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
+                </ul>
+                <ul id="menu4" class="submenu-content" style="display:none;">
+                    <li><a th:href="@{/product/list}">강아지 사료/간식</a></li>
+                    <li><a th:href="@{/product/list}">고양이 사료/간식</a></li>
+                    <li><a th:href="@{/product/list}">산책용품</a></li>
+                    <li><a th:href="@{/product/list}">관상어 용품</a></li>
+                </ul>
+                <ul id="menu5" class="submenu-content" style="display:none;">
+                    <li><a th:href="@{/product/list}">TV</a></li>
+                    <li><a th:href="@{/product/list}">냉장고</a></li>
+                    <li><a th:href="@{/product/list}">세탁기/건조기</a></li>
+                    <li><a th:href="@{/product/list}">데스크탑/노트북</a></li>
+                </ul>
             </div>
-          </a>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">최신상품2</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">최신상품3</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">최신상품4</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">최신상품5</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">최신상품6</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">최신상품7</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">최신상품8</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
         </div>
-      </section>
 
-      <!-- 인기상품 -->
-      <section id="best-products" class="product-section">
-        <h3>💎 인기상품</h3>
-        <div class="product-grid">
-          <a href="/kmarket/product/view.html?">
-            <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-              <p class="name">인기상품1</p>
-              <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-              <div class="sale-wrap"><span class="sale">32,000원</span><img
-                  src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-            </div>
-          </a>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">인기상품2</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">인기상품3</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">인기상품4</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">인기상품5</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">인기상품6</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">인기상품7</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">인기상품8</p>
-            <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-            <div class="sale-wrap"><span class="sale">32,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-        </div>
-      </section>
 
-      <!-- 할인상품 -->
-      <section id="discount-products" class="product-section">
-        <h3>💸 할인상품</h3>
-        <div class="product-grid">
-          <a href="/kmarket/product/view.html?">
-            <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-              <p class="name">할인상품1</p>
-              <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-              <div class="sale-wrap"><span class="sale">35,000원</span><img
-                  src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
+        <main>
+            <!-- 메인화면 빼고 다른 분들은 주석부터 주석까지(bxslider) 삭제하고 -->
+            <!-- main 태그 안에서 작업 -->
+            <!--  -->
+            <div class="slider">
+                <div class="slides">
+                    <img th:src="@{/image/메인/slider_item1.jpg}" alt="이미지1">
+                    <img th:src="@{/image/메인/slider_item2.jpg}" alt="이미지2">
+                    <img th:src="@{/image/메인/slider_item3.jpg}" alt="이미지3">
+                    <img th:src="@{/image/메인/slider_item4.jpg}" alt="이미지4">
+                    <img th:src="@{/image/메인/slider_item5.jpg}" alt="이미지5">
+                </div>
+                <button class="prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="next"><i class="fas fa-chevron-right"></i></button>
+                <div class="indicators">
+                    <span class="active"></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
-          </a>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">할인상품2</p>
-            <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-            <div class="sale-wrap"><span class="sale">35,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">할인상품3</p>
-            <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-            <div class="sale-wrap"><span class="sale">35,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">할인상품4</p>
-            <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-            <div class="sale-wrap"><span class="sale">35,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">할인상품5</p>
-            <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-            <div class="sale-wrap"><span class="sale">35,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">할인상품6</p>
-            <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-            <div class="sale-wrap"><span class="sale">35,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">할인상품7</p>
-            <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-            <div class="sale-wrap"><span class="sale">35,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-          <div class="product-box"><img src="/kmarket/inc/image/prod2.png" alt="상품" class="prod-img">
-            <p class="name">할인상품8</p>
-            <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-            <div class="sale-wrap"><span class="sale">35,000원</span><img
-                src="/kmarket/inc/image/메인/ico_freeshipping.gif" alt="무료배송" class="free-icon"></div>
-          </div>
-        </div>
-      </section>
+
+
+        <!-- 히트상품 -->
+        <section id="hit-products" class="product-section">
+            <h3>🔥 히트상품</h3>
+            <div class="product-grid">
+                <a th:href="@{/product/view}">
+                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                        <p class="name">히트상품1</p>
+                        <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                        <div class="sale-wrap"><span class="sale">27,000원</span><img
+                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                    </div>
+                </a>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">히트상품2</p>
+                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">27,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">히트상품3</p>
+                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">27,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">히트상품4</p>
+                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">27,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">히트상품5</p>
+                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">27,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">히트상품6</p>
+                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">27,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">히트상품7</p>
+                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">27,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">히트상품8</p>
+                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">27,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 추천상품 -->
+        <section id="recommended-products" class="product-section">
+            <h3>💎 추천상품</h3>
+            <div class="product-grid">
+                <a th:href="@{/product/view}">
+                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                        <p class="name">추천상품1</p>
+                        <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                        <div class="sale-wrap"><span class="sale">32,000원</span><img
+                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                    </div>
+                </a>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">추천상품2</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">추천상품3</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">추천상품4</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">추천상품5</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">추천상품6</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">추천상품7</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">추천상품8</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 최신상품 -->
+        <section id="recent-products" class="product-section">
+            <h3>💎 최신상품</h3>
+            <div class="product-grid">
+                <a th:href="@{/product/view}">
+                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                        <p class="name">최신상품1</p>
+                        <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                        <div class="sale-wrap"><span class="sale">32,000원</span><img
+                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                    </div>
+                </a>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">최신상품2</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">최신상품3</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">최신상품4</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">최신상품5</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">최신상품6</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">최신상품7</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">최신상품8</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 인기상품 -->
+        <section id="best-products" class="product-section">
+            <h3>💎 인기상품</h3>
+            <div class="product-grid">
+                <a th:href="@{/product/view}">
+                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                        <p class="name">인기상품1</p>
+                        <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                        <div class="sale-wrap"><span class="sale">32,000원</span><img
+                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                    </div>
+                </a>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">인기상품2</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">인기상품3</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">인기상품4</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">인기상품5</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">인기상품6</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">인기상품7</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">인기상품8</p>
+                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">32,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 할인상품 -->
+        <section id="discount-products" class="product-section">
+            <h3>💸 할인상품</h3>
+            <div class="product-grid">
+                <a th:href="@{/product/view}">
+                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                        <p class="name">할인상품1</p>
+                        <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                        <div class="sale-wrap"><span class="sale">35,000원</span><img
+                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                    </div>
+                </a>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">할인상품2</p>
+                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">35,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">할인상품3</p>
+                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">35,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">할인상품4</p>
+                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">35,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">할인상품5</p>
+                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">35,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">할인상품6</p>
+                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">35,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">할인상품7</p>
+                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">35,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
+                    <p class="name">할인상품8</p>
+                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
+                    <div class="sale-wrap"><span class="sale">35,000원</span><img
+                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                </div>
+            </div>
+        </section>
     </div>
-  </div>
+</div>
 
+</main>
 
-  <footer>
+<footer>
 
     <div class="top-footer">
-      <div class="footer-wrapper">
-        <div class="top-f">
-          <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
-          <a href="/kmarket/policy/buyer.html">서비스이용약관</a> |
-          <a href="/kmarket/policy/privacy.html" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
-          <a href="/kmarket/policy/finance.html">전자금융거래약관</a>
+        <div class="footer-wrapper">
+            <div class="top-f">
+                <a th:href="@{/company/index}" style="margin-left: 0px;">회사소개</a> |
+                <a th:href="@{/policy/buyer}">서비스이용약관</a> |
+                <a th:href="@{/policy/privacy}" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
+                <a th:href="@{/policy/finance}">전자금융거래약관</a>
+            </div>
         </div>
-      </div>
     </div>
     <div class="footer-wrapper">
 
-      <h3 class="cpname">(주)샵플리닷컴</h3>
-      <div class="call-cont">
-        <img src="/kmarket/inc/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
-        <span class="tel">1234-5678</span>
-        <span class="time"> (평일 09:00~18:00)</span>
-      </div>
-      <div style="color: gray; margin-top: 15px">
-        <span>대표이사 : 홍길동</span>
-        <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-        <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
-
-        <div style="margin-top: 3px;">
-          <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
+        <h3 class="cpname">(주)샵플리닷컴</h3>
+        <div class="call-cont">
+            <img th:src="@{/image/call3.png}" alt="" style="height: 45px; margin-top: 5px;">
+            <span class="tel">1234-5678</span>
+            <span class="time"> (평일 09:00~18:00)</span>
         </div>
-      </div>
+        <div style="color: gray; margin-top: 15px">
+            <span>대표이사 : 홍길동</span>
+            <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
+            <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
+
+            <div style="margin-top: 3px;">
+                <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
+            </div>
+        </div>
 
     </div>
 
-  </footer>
+</footer>
 
 
 
 </body>
 
-<script src="/kmarket/inc/js/index.js"></script>
+<script th:src="@{/js/index.js}"></script>
 
 </html>

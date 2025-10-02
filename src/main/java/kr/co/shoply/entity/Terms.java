@@ -9,14 +9,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "MEM_SELLER")
-public class MemSeller {
+@Table(name = "TERMS")
+public class Terms {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String mem_id;
+    private int t_no;
 
-    private String corp_name;
-    private String corp_reg_hp;
-    private String corp_tel_hp;
-    private String corp_fax;
+    private String t_terms;
+    private String t_tax;
+    private String t_finance;
+    private String t_privacy;
+    private String t_location;
 }

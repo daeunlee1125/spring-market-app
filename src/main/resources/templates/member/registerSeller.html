@@ -36,11 +36,14 @@
                 판매자 회원가입
               </div>
               <div class="signup-form">
-                <form>
+                <form th:action="@{/member/registerSeller}" method="post">
+                    <input type="hidden" name="mem_level" value="2">
+                    <input type="hidden" name="mem_stat" value="ACTIVE">
+                    <input type="hidden" name="mem_rank" value="Family">
                   <div class="form-row">
                     <div class="form-label">아이디</div>
                     <div class="form-input">
-                      <input type="text" placeholder="">
+                      <input type="text" name="mem_id" placeholder="">
                       <span class="input-help">영문, 숫자 4~12자 설정</span>
                     </div>
                   </div>
@@ -48,7 +51,7 @@
                   <div class="form-row">
                     <div class="form-label">비밀번호</div>
                     <div class="form-input">
-                      <input type="password" placeholder="">
+                      <input type="password" name="mem_pass" placeholder="">
                       <span class="input-help">영문, 숫자, 특수문자 8~12자 설정</span>
                     </div>
                   </div>
@@ -56,28 +59,28 @@
                   <div class="form-row section-end">
                     <div class="form-label">비밀번호확인</div>
                     <div class="form-input">
-                      <input type="password" placeholder="">
+                      <input type="password" name="mem_pass2" placeholder="">
                     </div>
                   </div>
 
                   <div class="form-row section-start">
                     <div class="form-label">회사명</div>
                     <div class="form-input">
-                      <input type="text" placeholder="회사명입력 예) (주)샵플리">
+                      <input type="text" name="corp_name" placeholder="회사명입력 예) (주)샵플리">
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-label">대표</div>
                     <div class="form-input">
-                      <input type="text" placeholder="대표입력">
+                      <input type="text" name="mem_name" placeholder="대표입력">
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-label">사업자등록번호</div>
                     <div class="form-input">
-                      <input type="text" placeholder="사업자입력" style="margin-right: 10px;">
+                      <input type="text" name="corp_reg_hp" placeholder="사업자입력" style="margin-right: 10px;">
                       <span style="color: #666; font-size: 12px;">- 포함 12 자리 입력</span>
                     </div>
                   </div>
@@ -85,30 +88,30 @@
                   <div class="form-row">
                     <div class="form-label">통신판매업번호</div>
                     <div class="form-input">
-                      <input type="text" placeholder="통신판매업">
+                      <input type="text" name="corp_tel_hp" placeholder="통신판매업">
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-label">전화번호</div>
                     <div class="form-input">
-                      <input type="text" placeholder="전화번호입력">
+                      <input type="text" name="mem_hp" placeholder="전화번호입력">
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-label">팩스</div>
                     <div class="form-input">
-                      <input type="text" placeholder="팩스번호입력">
+                      <input type="text" name="corp_fax" placeholder="팩스번호입력">
                     </div>
                   </div>
 
                   <div class="address-section">
                     <div class="address-label">주소</div>
                     <div class="address-inputs">
-                      <input type="text" placeholder="우편번호입력 예) 대전특별시">
-                      <input type="text" placeholder="기본주소 입력">
-                      <input type="text" placeholder="상세주소 입력">
+                      <input type="text" name="mem_zip" placeholder="우편번호입력 예) 대전특별시">
+                      <input type="text" name="mem_addr1" placeholder="기본주소 입력">
+                      <input type="text" name="mem_addr2" placeholder="상세주소 입력">
                     </div>
                   </div>
 

@@ -1,9 +1,9 @@
 package kr.co.shoply.repository;
 
-import kr.co.shoply.entity.MemSeller;
+import kr.co.shoply.entity.Terms;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MemSellerRepository extends JpaRepository<MemSeller, String> {
+public interface TermsRepository extends JpaRepository<Terms,Integer> {
 }

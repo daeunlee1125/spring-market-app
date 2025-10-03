@@ -124,9 +124,9 @@ flex-direction: column;
 
 /* 공통 헤더 스타일 (공지사항, 문의하기에서 공통 사용) */
 .main-content .notice-header{
-border-bottom: solid 2px;
+border-bottom: solid 1px;
 padding: 20px 0px;
-}   
+}
 
 .notice-header h2, .inquiry-header h2 {
 font-size: 20px;
@@ -139,9 +139,9 @@ color: #777;
 }
 
 .notice-header {
-border-bottom: 1px solid #ccc;
-width: 90%; 
+width: 90%;
 margin: 0 auto;
+    border-bottom: 2px solid;
 }
 
 /* 공지사항 리스트 */
@@ -166,9 +166,11 @@ border-top: none;
 display: flex;
 justify-content: space-between;
 align-items: center;
-padding: 12px 10px;
+padding: 7px 10px;
 text-decoration: none;
 color: inherit;
+width: 100%;
+box-sizing: border-box;
 }
 
 .notice-item:hover {
@@ -519,9 +521,9 @@ background: #555;
     display: none;
 }
 
-.faq-page .notice-header {
-    border-bottom: none;
-}
+/*.faq-page .notice-header {*/
+/*    border-bottom: none;*/
+/*}*/
 
 /* 문의등록 폼 컨테이너 */
 .inquiry-register-container {
@@ -648,7 +650,6 @@ background: #555;
     background: #0056b3;
 }
 
-
 /* 폼 포커스 스타일 */
 .inquiry-text-input:focus,
 .inquiry-textarea:focus,
@@ -656,5 +657,50 @@ background: #555;
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+/* 모달 내용 */
+.modal-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-btn {
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 60px;
+}
+
+.modal-btn:hover {
+    background: #e9ecef;
+}
+
+.modal-btn-confirm {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.modal-btn-confirm:hover {
+    background: #0056b3;
+    border-color: #0056b3;
 }
 

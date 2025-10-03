@@ -16,4 +16,8 @@ public class CsNoticeDTO {
     private String cs_content;
     private int cs_hit;
     private String cs_rdate;
+
+    public String getCs_rdate() {
+        return cs_rdate.substring(2, 10).replace("T", " ");
+    }
 }

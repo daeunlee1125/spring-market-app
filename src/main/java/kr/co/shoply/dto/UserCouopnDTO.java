@@ -2,13 +2,15 @@ package kr.co.shoply.dto;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserCouponDTO {
+public class UserCouopnDTO {
     private String cp_no;
 
     private String cp_code;

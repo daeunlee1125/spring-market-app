@@ -1,4 +1,3 @@
-
 //signup.html 동의하기 버튼 클릭시 작동
 function checkAgreement() {
     const requiredTerms = ['terms1', 'terms2', 'terms3'];

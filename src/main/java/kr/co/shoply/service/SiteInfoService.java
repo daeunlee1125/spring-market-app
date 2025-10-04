@@ -14,13 +14,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SiteInfoService {
 
-    private final VersionMapper versionMapper;
+
     private final SiteInfoMapper siteInfoMapper;
 
-    public VersionDTO getVersion() {
-        VersionDTO versionDTO = versionMapper.selectRecentOne();
-        return versionDTO;
-    }
+
 
     public SiteInfoDTO getSiteInfo(int s_no) {
         SiteInfoDTO siteInfoDTO = siteInfoMapper.selectRecentOne(s_no);

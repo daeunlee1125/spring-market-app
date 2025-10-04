@@ -6,9 +6,9 @@
                         <nav class="main-nav">
                             <a th:href="@{/index}"><span>HOME</span></a>
                             <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-                            <span>패션 / 의류 / 뷰티</span> <!-- 동적 -->
+                            <span>[[${cate2DTO.cate1_name}]]</span> <!-- 동적 -->
                             <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-                            <span>남성의류</span> <!-- 동적 -->
+                            <span>[[${cate2DTO.cate2_name}]]</span> <!-- 동적 -->
                         </nav>
                     </div>
                     <div class="product-view-container">
@@ -20,27 +20,34 @@
                         </div>
                         <div class="product-info-section" data-product-price="16830">
                             <div class="info-header">
-                                <span class="brand-store">신세계백화점</span>
+                                <span class="brand-store" th:text="${productDTO.getProd_company()}">신세계백화점</span>
                                 <h2>
-                                    <span class="brand-name">지오다노</span>
-                                    <span class="product-name">베이직 레더 벨트 130004</span>
+                                    <span class="brand-name" th:text="${productDTO.getProd_company()}">지오다노</span>
+                                    <span class="product-name" th:text="${productDTO.getProd_name()}">베이직 레더 벨트 130004</span>
                                 </h2>
                                 <a href="#"> <!-- 리뷰로 넘어가는 링크 -->
                                     <div class="rating">
-                                        <span class="stars">★★★★★</span>
-                                        <span class="rating-score">4.6</span>
-                                        <span class="review-count">(152건)</span>
+                                        <div class="star-rating" th:data-score="${productDTO.getAvgRating()}">
+                                            <div class="star-rating-fill">
+                                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                            </div>
+                                            <div class="star-rating-base">
+                                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                            </div>
+                                        </div>
+                                        <span class="rating-score" th:text="${productDTO.getAvgRating()}">4.6</span>
+                                        <span class="review-count" th:text="'('+${productDTO.getCntRating()}+'건)'">(152건)</span>
                                     </div>
                                 </a>
                             </div>
 
                             <div class="info-price">
                                 <div class="price-original">
-                                    <span class="original">18,700원</span>
+                                    <span class="original" th:text="${#numbers.formatDecimal(productDTO.getProd_price(), 0, 'COMMA', 0, 'POINT')}">18,700원</span>
                                 </div>
                                 <div class="price-final">
-                                    <span class="discount-rate">10%</span>
-                                    <span class="final">16,830</span>
+                                    <span class="discount-rate" th:text="${productDTO.getProd_sale()}+'%'">10%</span>
+                                    <span class="final" th:text="${#numbers.formatDecimal(productDTO.getRealPrice(), 0, 'COMMA', 0, 'POINT')}">16,830</span>
                                     <span class="unit">원</span>
                                 </div>
                             </div>
@@ -48,7 +55,8 @@
                             <div class="info-delivery">
                                 <div class="delivery-row">
                                     <span class="label">배송비</span>
-                                    <span class="content">3,000원 (3만원 이상 무료)</span>
+                                    <span class="content" th:text="${#numbers.formatDecimal(productDTO.getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')}">3,000원 (3만원 이상 무료)</span>
+                                    <span class="unit">원</span>
                                 </div>
                                 <div class="delivery-row">
                                     <span class="label"></span>

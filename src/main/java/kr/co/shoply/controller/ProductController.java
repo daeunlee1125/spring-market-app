@@ -29,7 +29,7 @@ public class ProductController {
 
     @GetMapping("/product/list/{cate2No}/{sort}")
     public String sortList(@PathVariable int cate2No, @PathVariable String sort, Model model) {
-        List<ProductDTO> productDTOList = productService.getProductAll(cate2No, sort);
+        List<ProductDTO> productDTOList = productService.getProductAll3(cate2No, sort);
 
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
 
@@ -40,8 +40,14 @@ public class ProductController {
         return "product/list";
     }
 
-    @GetMapping("/product/view/{prodNo}")
-    public String view() {
+    @GetMapping("/product/view/{cate2No}/{prodNo}")
+    public String view(@PathVariable int cate2No, @PathVariable int prodNo, Model model) {
+        Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
+        model.addAttribute("cate2DTO", cate2DTO);
+
+        ProductDTO productDTO = productService.getProduct3(prodNo);
+        model.addAttribute("productDTO", productDTO);
+
         return "product/view";
     }
 

@@ -516,6 +516,30 @@ a {
     background-color: #f1f1f1;
 }
 
+/* 별점 컨테이너 */
+.star-rating {
+    position: relative; /* 자식 요소의 position 기준 */
+    font-size: 2rem; /* 별 크기 */
+    display: inline-block; /* 다른 요소와 한 줄에 배치 */
+    color: #ddd; /* 기본 별 색상 (빈 별) */
+}
+
+/* 채워진 별 (상단 레이어) */
+.star-rating-fill {
+    position: absolute; /* 배경 별 위에 겹치도록 설정 */
+    top: 0;
+    left: 0;
+    white-space: nowrap; /* 별들이 한 줄로 나열되도록 함 */
+    overflow: hidden; /* 컨테이너 너비를 벗어나는 부분은 숨김 */
+    color: #ffc107; /* 채워진 별 색상 (노란색) */
+    /* 너비는 JavaScript로 조절합니다 */
+}
+
+/* 배경 별 (하단 레이어) */
+.star-rating-base {
+    /* 특별한 스타일은 필요 없으며, 기본 색상과 위치를 담당 */
+}
+
 /* -------------------- 상품 목록 스타일 시작 -------------------- */
 
 /* 상품 목록을 감싸는 그리드 컨테이너 */
@@ -595,7 +619,7 @@ a {
     background-image: url('/kmarket/image/icon_wish.svg'); /* 찜 아이콘 경로 */
 }
 .product-item .btn-cart {
-    background-image: url('/kmarket/image/icon_cart.svg'); /* 장바구니 아이콘 경로 */
+    background-image: url('../image/icon_cart.svg'); /* 장바구니 아이콘 경로 */
 }
 
 /* 상품 이름 */

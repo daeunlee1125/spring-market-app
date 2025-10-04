@@ -20,6 +20,7 @@ import java.util.Date;
 @Table(name = "SYS_COUPON")
 public class SysCoupon {
 
+
     @Id
     private String cp_code;
 

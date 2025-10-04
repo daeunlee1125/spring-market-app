@@ -19,8 +19,11 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final ReviewMapper reviewMapper;
 
-    public List<ProductDTO> getProductAll(int cate2_no, String sort){
-        return productMapper.selectAll(cate2_no, sort);
+    public List<ProductDTO> getProductAll3(int cate2_no, String sort){
+        return productMapper.selectAll3(cate2_no, sort);
     }
 
+    public ProductDTO getProduct3(int prod_no){
+        return productMapper.select3(prod_no);
+    }
 }

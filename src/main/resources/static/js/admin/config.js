@@ -270,5 +270,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     // '우편번호 검색' 버튼 클릭 시 함수를 실행합니다.
-    searchAddressBtn.addEventListener('click', execDaumPostcode);
+    if (searchAddressBtn){
+        searchAddressBtn.addEventListener('click', execDaumPostcode);
+    }
 })

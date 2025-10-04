@@ -26,5 +26,6 @@ public class SiteInfoDTO {
     private String s_cs_email;
     private String s_cs_hp2;
     private String s_copy;
+    private int s_no;
 
 }

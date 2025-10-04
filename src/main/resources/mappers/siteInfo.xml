@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.SiteInfoMapper">
+
+
+    <select id="selectRecentOne" resultType="kr.co.shoply.dto.SiteInfoDTO">
+        SELECT * FROM Site_Info
+        where s_no=#{s_no}
+    </select>
+    
+    <update id="modifyTitles">
+        UPDATE site_info SET s_title=#{s_title}, s_subtitle=#{s_subtitle}
+        WHERE s_no=#{s_no}
+    </update>
+
+    <update id="modifyLogos">
+        UPDATE Site_info SET s_logo1=#{s_logo1}, s_logo2=#{s_logo2}, s_logo3=#{s_logo3}
+        WHERE s_no=#{s_no}
+    </update>
+
+    <update id="modifyFooters">
+        UPDATE site_info SET s_corp_name=#{s_corp_name}, s_ceo=#{s_ceo}, s_reg_hp=#{s_reg_hp}, s_tel_reg=#{s_tel_reg}, s_addr1=#{s_addr1}, s_addr2=#{s_addr2}
+        WHERE s_no=#{s_no}
+    </update>
+
+    <update id="modifyCsInfos">
+        UPDATE site_info SET s_cs_hp=#{s_cs_hp}, s_cs_time=#{s_cs_time}, s_cs_email=#{s_cs_email}, s_cs_hp2=#{s_cs_hp2}
+        WHERE s_no=#{s_no}
+    </update>
+
+    <update id="modifyCopy">
+        UPDATE Site_info SET s_copy=#{s_copy}
+        WHERE s_no=#{s_no}
+    </update>
+
+</mapper>

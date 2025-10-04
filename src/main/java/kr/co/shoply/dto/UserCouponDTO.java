@@ -16,4 +16,5 @@ public class UserCouponDTO {
     private String cp_issued_date;
     private String cp_used_date;
     private int cp_stat;
+
 }

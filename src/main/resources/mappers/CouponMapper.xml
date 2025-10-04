@@ -53,6 +53,7 @@
         WHERE rn &gt; ((#{pg}-1) * #{size})
     </select>
 
+
     <!-- 전체 쿠폰 수 -->
     <select id="selectCouponTotal"
             parameterType="kr.co.shoply.dto.PageRequestDTO"

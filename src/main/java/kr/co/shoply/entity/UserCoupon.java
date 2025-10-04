@@ -22,6 +22,7 @@ public class UserCoupon {
     @Id
     private String cp_no;
 
+
     private String cp_code;
     private String mem_id;
 

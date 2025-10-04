@@ -26,4 +26,5 @@ public class SysCouponDTO {
     private int issuecount; //쿠폰 발급 수
     private int usedcount; // 쿠폰 사용 수
 
+
 }

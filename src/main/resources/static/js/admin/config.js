@@ -197,6 +197,8 @@ document.addEventListener("DOMContentLoaded", function(){
     const closeModalBtn = document.getElementById('closeModalBtn');
     const modal = document.getElementById('modal');
 
+
+
     if (openModalBtn && closeModalBtn && modal) {
         openModalBtn.addEventListener('click', () => modal.classList.remove('hidden'));
         closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
@@ -212,11 +214,16 @@ document.addEventListener("DOMContentLoaded", function(){
     const closeModalBtn2_1 = document.getElementById('closeModalBtn2-1');
     const modal2 = document.getElementById('modal2');
 
+    const modalVersion = document.getElementById('modalVersion');
+    const modalDescription = document.getElementById('modalDescription');
+
     if (modal2) {
         // '확인' 버튼들을 클릭하면 모달을 보여줍니다.
         if (openModalBtn2.length > 0) {
             for (const btn of openModalBtn2) {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    modalVersion.textContent = e.target.dataset.version;
+                    modalDescription.innerHTML = e.target.dataset.description.replace(/\n/g, '<br>');
                     modal2.classList.remove('hidden');
                 });
             }

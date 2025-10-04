@@ -356,6 +356,13 @@ footer .middle {
     font-size: 16px;
 }
 
+.modal-footer button input {
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 16px;
+}
+
 .hidden {
     display: none !important;
 }

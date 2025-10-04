@@ -12,6 +12,13 @@
         FETCH FIRST 1 ROW ONLY
     </select>
 
-
+    <insert id="save">
+        INSERT INTO version (ver_version, ver_rdate, ver_writer, ver_description) VALUES (#{ver_version}, SYSDATE, #{ver_writer}, #{ver_description})
+    </insert>
+    
+    <select id="findAllOrdered" resultType="kr.co.shoply.dto.VersionDTO">
+        SELECT * from version
+        order by ver_no ASC
+    </select>
 
 </mapper>

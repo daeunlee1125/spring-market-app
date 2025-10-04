@@ -35,71 +35,21 @@
                             <th>등록일시</th>
                             <th>변경내역</th>
                         </tr>
-                        <tr>
+                        <tr th:each="ver : ${versions}">
                             <td><input type="checkbox"></td>
-                            <td>1</td>
+                            <td>[[${ver.ver_no}]]</td>
                             
-                            <td>0.0.1-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
+                            <td>[[${ver.ver_version}]]</td>
+                            <td>[[${ver.ver_writer}]]</td>
+                            <td>[[${ver.ver_rdate}]]</td>
                             <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
+                                <input type="button" value="[ 확인 ]" class="openModalBtn2"
+                                       th:data-version="${ver.ver_version}"
+                                       th:data-description="${ver.ver_description}"
+                                        />
                             </td>
                         </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>2</td>
-                            
-                            <td>0.0.2-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>3</td>
-                            
-                            <td>0.0.3-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>4</td>
-                            
-                            <td>0.0.4-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>5</td>
-                            
-                            <td>0.0.5-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
+
                     </table>
                     
                     <div class="banner-actions">
@@ -136,18 +86,12 @@
             <hr>
             <table class="modal-table">
                 <tr>
-                <th>버전</th>
-                <td>0.0.1-SNAPSHOT</td>
+                    <th>버전</th>
+                    <td id="modalVersion"></td>
                 </tr>
                 <tr>
-                <th class="changed-5">변경내역</th>
-                <td class="changed-5">
-                        - 프로젝트 생성 및 구조 설계<br>
-                        - 회원가입 아이디 중복체크 완료<br>
-                        - 관리자 상품 등록 완료<br>
-                        - 쇼핑몰 메인 및 개별 페이지 링크 작업<br>
-                        - 개발을 위한 제반 사항 처리
-                </td>
+                    <th class="changed-5">변경내역</th>
+                    <td class="changed-5" id="modalDescription"></td>
                 </tr>
             </table>
             <hr>
@@ -169,23 +113,26 @@
                 <h2>버전등록</h2>
                 <button class="close-btn" id="closeModalBtn">&times;</button>
             </div>
-            <div class="modal-content">
-                <hr>
-                <div class="form-group">
-                    <label for="id1">버전</label>
-                    <input type="text" id="id1" placeholder="배너명 입력">
-                </div>
-                <div class="form-group">
-                    <label for="id2">변경내역</label>
-                    <textarea id="id2" placeholder="변경내역 작성하기"></textarea>
-                </div>
+            <form method="post">
+                <div class="modal-content">
+                    <hr>
+                    <input type="hidden" name="ver_writer" th:value="${#authentication.principal.member.mem_id}">
+                    <div class="form-group">
+                        <label for="id1">버전</label>
+                        <input type="text" id="id1" name="ver_version" placeholder="버전 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="id2">변경내역</label>
+                        <textarea id="id2" name="ver_description" placeholder="변경내역 작성하기"></textarea>
+                    </div>
 
-                
-                <hr>
-            </div>
-            <div class="modal-footer">
-                <button>등록하기</button>
-            </div>
+
+                    <hr>
+                </div>
+                <div class="modal-footer">
+                    <button><input type="submit" value="등록하기"></button>
+                </div>
+            </form>
         </div>
     </div>
 

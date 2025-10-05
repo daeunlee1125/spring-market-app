@@ -19,6 +19,13 @@
 
     </select>
 
+    <select id="selectOption3" resultType="kr.co.shoply.dto.ProdOptionDTO">
+        SELECT *
+        FROM PROD_OPTION
+        WHERE PROD_NO = #{prod_no}
+
+    </select>
+
     <sql id="sorting">
         <choose>
             <when test="sort == 'sold'">

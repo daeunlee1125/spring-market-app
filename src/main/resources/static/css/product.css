@@ -519,7 +519,7 @@ a {
 /* 별점 컨테이너 */
 .star-rating {
     position: relative; /* 자식 요소의 position 기준 */
-    font-size: 2rem; /* 별 크기 */
+    font-size: 1rem; /* 별 크기 */
     display: inline-block; /* 다른 요소와 한 줄에 배치 */
     color: #ddd; /* 기본 별 색상 (빈 별) */
 }

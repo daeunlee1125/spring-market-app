@@ -1,5 +1,6 @@
 package kr.co.shoply.service;
 
+import kr.co.shoply.dto.ProdOptionDTO;
 import kr.co.shoply.dto.ProductDTO;
 import kr.co.shoply.dto.ReviewDTO;
 import kr.co.shoply.entity.Product;
@@ -25,5 +26,11 @@ public class ProductService {
 
     public ProductDTO getProduct3(int prod_no){
         return productMapper.select3(prod_no);
+    }
+
+    public List<ProdOptionDTO> getProductOption3(int prod_no){
+
+
+        return productMapper.selectOption3(prod_no);
     }
 }

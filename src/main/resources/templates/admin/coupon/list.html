@@ -67,9 +67,13 @@
                     </td>
 
                     <td th:text="${coupon.cp_name}">쿠폰명</td>
-                    <td th:text="${coupon.cp_value + ' 할인'}"></td>
+                    <td th:text="${coupon.cp_type == 3 ? '배송비 무료'
+                    : (coupon.cp_type == 1 or coupon.cp_type == 2) ?
+                       (coupon.cp_value + (coupon.cp_value <= 100 ? '%' : '원') + ' 할인') : ''}">
+                    </td>
+
                     <td th:text="${#temporals.format(coupon.cp_issue_date, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(coupon.cp_exp_date, 'yyyy-MM-dd')}"></td>
-                    <td>(주)다있어</td>
+                    <td th:text="${coupon.cp_issuer_name != null ? coupon.cp_issuer_name : ''}"></td>
                     <td th:text="${coupon.issuecount}">0</td>
                     <td th:text="${coupon.usedcount}">0</td>
                     <td th:text="${coupon.cp_stat == 1 ? '발급중' : '종료'}"
@@ -131,7 +135,7 @@
                         <th>쿠폰번호</th>
                         <td th:text="${coupon.cp_code}"></td>
                         <th>발급처</th>
-                        <td>(주)다있어</td>
+                        <td th:text="${coupon.cp_issuer_name != null ? coupon.cp_issuer_name : ''}"></td>
                     </tr>
                     <tr>
                         <th>쿠폰종류</th>
@@ -195,10 +199,12 @@
         <div class="modal-content">
             <form id="couponRegisterForm">
 
-                <!-- 발급처 (DB 컬럼 없음, 고정 표시용) -->
+                <!-- 발급처 -->
                 <div class="form-group">
                     <label>발급처</label>
-                    <input type="text" name="issuer" value="(주)다있어" readonly>
+                    <input type="text" name="issuer"
+                           th:value="${loginName}"
+                           readonly>
                 </div>
 
                 <!-- 쿠폰종류 -->
@@ -230,11 +236,11 @@
                         <label><input type="radio" name="cp_value" value="5000"> 5,000원 할인</label><br>
 
                         <!-- 퍼센트 할인 -->
-                        <label><input type="radio" name="cp_value" value="10%"> 10% 할인</label>
-                        <label><input type="radio" name="cp_value" value="20%"> 20% 할인</label>
-                        <label><input type="radio" name="cp_value" value="30%"> 30% 할인</label>
-                        <label><input type="radio" name="cp_value" value="40%"> 40% 할인</label>
-                        <label><input type="radio" name="cp_value" value="50%"> 50% 할인</label><br>
+                        <label><input type="radio" name="cp_value" value="10"> 10% 할인</label>
+                        <label><input type="radio" name="cp_value" value="20"> 20% 할인</label>
+                        <label><input type="radio" name="cp_value" value="30"> 30% 할인</label>
+                        <label><input type="radio" name="cp_value" value="40"> 40% 할인</label>
+                        <label><input type="radio" name="cp_value" value="50"> 50% 할인</label><br>
 
                         <!-- 배송비 무료 -->
                         <label><input type="radio" name="cp_value" value="0"> 배송비 무료</label>

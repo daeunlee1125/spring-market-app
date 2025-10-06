@@ -48,15 +48,31 @@ public class CouponService {
     }
 
 
-    // 랜덤 11자리 숫자 쿠폰번호 생성
+    // 랜덤 쿠폰 11자리 생성
     private String generateCouponCode() {
         Random random = new Random();
-        StringBuilder sb = new StringBuilder();
+        String code;
 
-        for (int i = 0; i < 11; i++) {
-            sb.append(random.nextInt(10));
+        while (true) {
+            // 11자리 랜덤 숫자 생성
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 11; i++) {
+                sb.append(random.nextInt(10));
+            }
+            code = sb.toString();
+
+            //DB 중복 검사
+            boolean exists = couponMapper.existsByCode(code);
+            if (!exists) break; // 중복이 없으면 사용
+
+            //중복이면 다시 루프
         }
-        return sb.toString();
+        return code;
+    }
+
+
+    public String findMemberNameById(String memId) {
+        return couponMapper.selectMemberNameById(memId);
     }
 
 

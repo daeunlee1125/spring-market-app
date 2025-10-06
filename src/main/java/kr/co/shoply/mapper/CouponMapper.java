@@ -3,6 +3,7 @@ package kr.co.shoply.mapper;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.SysCouponDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -20,6 +21,14 @@ public interface CouponMapper {
     int insertCoupon(SysCouponDTO couponDTO);
 
 
+
+    @Select("SELECT COUNT(*) FROM SYS_COUPON WHERE CP_CODE = #{code}")
+    boolean existsByCode(String code);
+
+
+
+    @Select("SELECT MEM_NAME FROM MEMBER WHERE MEM_ID = #{memId}")
+    String selectMemberNameById(String memId);
 
 
 }

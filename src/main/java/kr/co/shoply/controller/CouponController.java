@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -18,11 +20,20 @@ public class CouponController {
     private final CouponService couponService;
 
     @GetMapping("admin/coupon/list")
-    public String list(PageRequestDTO pageRequestDTO, Model model) {
+    public String list(PageRequestDTO pageRequestDTO, Model model, Principal principal) {
         PageResponseDTO<SysCouponDTO> pageResponse = couponService.selectCouponList(pageRequestDTO);
         model.addAttribute("pageResponse", pageResponse);
+
+        // 로그인한 사용자 이름 조회 및 전달
+        if (principal != null) {
+            String loginId = principal.getName();
+            String memName = couponService.findMemberNameById(loginId);
+            model.addAttribute("loginName", memName);
+        }
+
         return "admin/coupon/list";
     }
+
 
 
     // list에서 쿠폰 종료 확인하는거
@@ -37,10 +48,15 @@ public class CouponController {
     // 쿠폰 등록 처리
     @ResponseBody
     @PostMapping("/admin/coupon/register")
-    public String registerCoupon(@ModelAttribute SysCouponDTO couponDTO) {
+    public String registerCoupon(@ModelAttribute SysCouponDTO couponDTO,
+                                 Principal principal) { // 로그인 유저 정보 가져오기
         log.info("쿠폰 등록 요청: {}", couponDTO);
 
         try {
+            // 로그인한 사용자의 ID 저장
+            String loginId = principal.getName();
+            couponDTO.setCp_issuer_id(loginId);
+
             couponService.registerCoupon(couponDTO);
             return "success";
         } catch (Exception e) {

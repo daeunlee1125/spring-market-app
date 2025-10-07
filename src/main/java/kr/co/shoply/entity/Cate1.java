@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +17,6 @@ public class Cate1 {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cate1_no;
 
-    private String cate_name;
+    private String cate1_name;
 
 }

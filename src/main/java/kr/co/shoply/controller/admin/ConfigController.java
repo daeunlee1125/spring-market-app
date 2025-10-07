@@ -1,20 +1,16 @@
 package kr.co.shoply.controller.admin;
 
-import kr.co.shoply.dto.SiteInfoDTO;
-import kr.co.shoply.dto.TermsDTO;
-import kr.co.shoply.dto.VersionDTO;
-import kr.co.shoply.service.SiteInfoService;
-import kr.co.shoply.service.TermsService;
-import kr.co.shoply.service.VersionService;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import kr.co.shoply.dto.*;
+import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.Console;
 import java.util.List;
 
 @Controller
@@ -24,6 +20,9 @@ public class ConfigController {
     private final SiteInfoService siteInfoService;
     private final TermsService termsService;
     private final VersionService  versionService;
+    private final Cate1Service cate1Service;
+    private final Cate2Service cate2Service;
+    private final EntityManager entityManager;
 
     @GetMapping("/admin/config/banner")
     public String banner()
@@ -48,9 +47,35 @@ public class ConfigController {
         return "redirect:/admin/config/basic";
     }
     @GetMapping("/admin/config/category")
-    public String category()
+    public String category(Model model)
     {
+        List<Cate1DTO> cate1List = cate1Service.getCate1List();
+        List<Cate2DTO> cate2List = cate2Service.getCate2List();
+
+        model.addAttribute("cate1List", cate1List);
+        model.addAttribute("cate2List", cate2List);
+
         return "admin/config/category";
+    }
+
+    @Transactional
+    @PostMapping("/admin/config/category")
+    public String category(@ModelAttribute CateformDTO cateformDTO){
+
+        for (Cate1DTO dto : cateformDTO.getMainCategories()){
+            log.info("dto : " + dto.toString());
+            cate1Service.updateCate1(dto);
+        }
+
+        entityManager.flush();
+
+        for (Cate2DTO dto : cateformDTO.getSubCategories()){
+            log.info("dto : " + dto.toString());
+            cate2Service.updateCate2(dto);
+        }
+
+
+        return "redirect:/admin/config/category";
     }
 
     @GetMapping("/admin/config/policy")
@@ -81,4 +106,6 @@ public class ConfigController {
         versionService.saveVersion(versionDTO);
         return "redirect:/admin/config/version";
     }
+
+
 }

@@ -51,7 +51,8 @@ public class Cate1Service {
     }
 
     @Transactional
-    public void syncCate1(List<Cate1DTO> dtoList) {
+    public List<Cate1DTO> syncCate1(List<Cate1DTO> dtoList) {
+        List<Cate1DTO> result = new ArrayList<>();
 
         // 현재 DB에 존재하는 cate1_no 목록 조회
         List<Integer> existingIds = cate1Repository.findAll()
@@ -67,16 +68,21 @@ public class Cate1Service {
 
 
         for (Cate1DTO dto : dtoList) {
+            Cate1 saved;
             if (dto.getCate1_no() != 0 && cate1Repository.existsById(dto.getCate1_no())) {
                 Cate1 cate1 = cate1Repository.findById(dto.getCate1_no()).get();
                 cate1.setCate1_name(dto.getCate1_name());
+                saved = cate1;
             } else {
                 // 새 항목 추가
-                cate1Repository.save(Cate1.builder()
+                saved = cate1Repository.save(Cate1.builder()
                                 .cate1_no(dto.getCate1_no())
                         .cate1_name(dto.getCate1_name())
                         .build());
+
             }
+            dto.setCate1_no(saved.getCate1_no());
+            result.add(dto);
         }
 
         //  삭제 대상: 기존엔 있었는데, 이번 dtoList에는 없는 id
@@ -88,6 +94,8 @@ public class Cate1Service {
             cate1Repository.deleteById(id);
 
         }
+
+        return result;
     }
 
 }

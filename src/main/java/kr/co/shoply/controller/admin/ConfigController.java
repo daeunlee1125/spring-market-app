@@ -65,7 +65,9 @@ public class ConfigController {
     @PostMapping("/admin/config/category")
     public String category(@ModelAttribute CateformDTO cateformDTO){
 
-        cate1Service.syncCate1(cateformDTO.getMainCategories());
+        java.util.List<Cate1DTO> newCate1 = cate1Service.syncCate1(cateformDTO.getMainCategories());
+        cateformDTO.setMainCategories(newCate1);
+
 
         cate2Service.syncCate2(cateformDTO.getSubCategories());
 

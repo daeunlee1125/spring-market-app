@@ -3,6 +3,7 @@ package kr.co.shoply.controller.admin;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import kr.co.shoply.dto.*;
+import kr.co.shoply.entity.Cate1;
 import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,22 +59,15 @@ public class ConfigController {
         return "admin/config/category";
     }
 
-    @Transactional
+    // 카테고리 삭제 시, cate2부터 다 삭제하고, 그 다음에 cate1 삭제해야 함
+    // cate1 삭제할 때 하위 cate2도 자동으로 삭제시키려면 entity에서 외래키 매핑을 해줘야 하는데
+    // product 쪽에서 짠 코드랑 어케저케 꼬일까봐....
     @PostMapping("/admin/config/category")
     public String category(@ModelAttribute CateformDTO cateformDTO){
 
-        for (Cate1DTO dto : cateformDTO.getMainCategories()){
-            log.info("dto : " + dto.toString());
-            cate1Service.updateCate1(dto);
-        }
+        cate1Service.syncCate1(cateformDTO.getMainCategories());
 
-        entityManager.flush();
-
-        for (Cate2DTO dto : cateformDTO.getSubCategories()){
-            log.info("dto : " + dto.toString());
-            cate2Service.updateCate2(dto);
-        }
-
+        cate2Service.syncCate2(cateformDTO.getSubCategories());
 
         return "redirect:/admin/config/category";
     }

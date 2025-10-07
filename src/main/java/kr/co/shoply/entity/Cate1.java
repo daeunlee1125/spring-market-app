@@ -14,7 +14,7 @@ import lombok.*;
 public class Cate1 {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+            // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cate1_no;
 
     private String cate1_name;

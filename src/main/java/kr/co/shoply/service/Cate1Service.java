@@ -20,6 +20,7 @@ public class Cate1Service {
     private final Cate1Repository cate1Repository;
     private final ModelMapper modelMapper;
 
+
     public void updateCate1(Cate1DTO dto) {
 
         if (cate1Repository.existsById(dto.getCate1_no())) {
@@ -29,11 +30,10 @@ public class Cate1Service {
             cate1Repository.save(cate1);
         } else {
             cate1Repository.save(Cate1.builder()
+
                     .cate1_name(dto.getCate1_name())
                     .build());
         }
-
-        cate1Repository.flush();
 
 
 
@@ -49,4 +49,45 @@ public class Cate1Service {
 
         return cate1DTOList;
     }
+
+    @Transactional
+    public void syncCate1(List<Cate1DTO> dtoList) {
+
+        // 현재 DB에 존재하는 cate1_no 목록 조회
+        List<Integer> existingIds = cate1Repository.findAll()
+                .stream()
+                .map(Cate1::getCate1_no)
+                .toList();
+
+        // 요청으로 들어온 cate1_no 목록
+        List<Integer> incomingIds = dtoList.stream()
+                .filter(dto -> dto.getCate1_no() != 0)
+                .map(Cate1DTO::getCate1_no)
+                .toList();
+
+
+        for (Cate1DTO dto : dtoList) {
+            if (dto.getCate1_no() != 0 && cate1Repository.existsById(dto.getCate1_no())) {
+                Cate1 cate1 = cate1Repository.findById(dto.getCate1_no()).get();
+                cate1.setCate1_name(dto.getCate1_name());
+            } else {
+                // 새 항목 추가
+                cate1Repository.save(Cate1.builder()
+                                .cate1_no(dto.getCate1_no())
+                        .cate1_name(dto.getCate1_name())
+                        .build());
+            }
+        }
+
+        //  삭제 대상: 기존엔 있었는데, 이번 dtoList에는 없는 id
+        List<Integer> toDelete = existingIds.stream()
+                .filter(id -> !incomingIds.contains(id))
+                .toList();
+
+        for (Integer id : toDelete) {
+            cate1Repository.deleteById(id);
+
+        }
+    }
+
 }

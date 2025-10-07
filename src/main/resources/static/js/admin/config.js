@@ -74,50 +74,135 @@ document.addEventListener("DOMContentLoaded", function(){
         e.preventDefault();
         if (!dragging) return;
 
+        // =========================
         // 메인 카테고리 이동
-        if (dragging.matches(".category-item-4")) {
+        // =========================
+        if (dragging.matches(".category-item-4") && !dragging.querySelector(".add-main")) {
             const mainList = document.querySelector(".category-list-4");
-            const after = getDragAfterElement(mainList, e.clientY, ".category-item-4");
+
+            // "+ 1차카테고리추가" li 제외
+            const mainItems = [...mainList.querySelectorAll(".category-item-4")]
+                .filter(li => !li.querySelector(".add-main"));
+
+            const after = getDragAfterElement(mainList, e.clientY, ".category-item-4", true);
+
+            const lastLi = mainList.lastElementChild; // "+ 1차카테고리추가" li
+
             if (after == null) {
-                mainList.appendChild(dragging);
+                mainList.insertBefore(dragging, lastLi);
             } else {
                 mainList.insertBefore(dragging, after);
             }
         }
 
-        // 서브 카테고리 이동
+        // =========================
+        // 서브 카테고리 이동 (같은 1차 내에서만)
+        // =========================
         if (dragging.matches(".subcategory-item-4")) {
+            const originMain = dragging.closest(".category-item-4");
             const mainTarget = e.target.closest(".category-item-4");
-            if (mainTarget) {
-                const subList = mainTarget.querySelector(".subcategory-4");
-                subList.classList.add("active"); // 자동 펼치기
-                const after = getDragAfterElement(subList, e.clientY, ".subcategory-item-4");
-                if (after == null) {
-                    subList.appendChild(dragging);
-                } else {
-                    subList.insertBefore(dragging, after);
-                }
+
+            if (!mainTarget || mainTarget !== originMain) return; // 다른 1차로 이동 금지
+
+            const subList = mainTarget.querySelector(".subcategory-4");
+            subList.classList.add("active");
+
+            const after = getDragAfterElement(subList, e.clientY, ".subcategory-item-4", false);
+
+            if (after == null) {
+                const addButtonLi = subList.lastElementChild; // "+ 2차카테고리추가" li
+                subList.insertBefore(dragging, addButtonLi);
+            } else {
+                subList.insertBefore(dragging, after);
             }
         }
+
+
+
     });
 
-// 헬퍼: 위치 계산
-    function getDragAfterElement(container, y, selector) {
-        const els = [...container.querySelectorAll(`${selector}:not(.dragging-4)`)];
 
-        return els.reduce(
-            (closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            },
-            { offset: Number.NEGATIVE_INFINITY }
-        ).element;
+    // =========================
+    // 위치 계산 함수
+    // =========================
+    function getDragAfterElement(container, y, selector, excludeAddBtn) {
+        const els = [...container.querySelectorAll(selector)]
+            .filter(el => !el.classList.contains("dragging-4"))
+            .filter(el => !excludeAddBtn || !el.querySelector(".add-main")); // 마지막 li 제외
+
+        let closest = { offset: Number.NEGATIVE_INFINITY, element: null };
+
+        els.forEach(child => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                closest = { offset, element: child };
+            }
+        });
+
+        return closest.element;
     }
+
+
+    document.getElementById("cateForm").addEventListener("submit", function(e) {
+        const mainItems = document.querySelectorAll(".category-item-4:not(:last-child)");
+
+        let mainIndex = 0;
+        let subIndex = 0;
+        let cate1_no_cnt = 1;
+        let cate2_no_cnt = 1;
+
+        mainItems.forEach(mainItem => {
+            const header = mainItem.querySelector(".category-header-4");
+            const mainNameInput = header.querySelector('input[name^="mainCategories"][name$=".cate1_name"]');
+
+            let mainNoInput = header.querySelector('input[name^="mainCategories"][name$=".cate1_no"]');
+            if (!mainNoInput) {
+                mainNoInput = document.createElement("input");
+                mainNoInput.type = "hidden";
+                header.appendChild(mainNoInput);
+            }
+
+            // 1차 인덱스/번호 재할당
+            if (mainNameInput) mainNameInput.name = `mainCategories[${mainIndex}].cate1_name`;
+            mainNoInput.name = `mainCategories[${mainIndex}].cate1_no`;
+            mainNoInput.value = cate1_no_cnt++;
+
+            // 하위 2차들 처리
+            const subItems = mainItem.querySelectorAll(".subcategory-item-4");
+            subItems.forEach(subItem => {
+                const subNameInput = subItem.querySelector('input[name^="subCategories"][name$=".cate2_name"]');
+
+                let cate2NoInput = subItem.querySelector('input[name^="subCategories"][name$=".cate2_no"]');
+                if (!cate2NoInput) {
+                    cate2NoInput = document.createElement("input");
+                    cate2NoInput.type = "hidden";
+                    subItem.appendChild(cate2NoInput);
+                }
+
+                let cate1NoInput = subItem.querySelector('input[name^="subCategories"][name$=".cate1_no"]');
+                if (!cate1NoInput) {
+                    cate1NoInput = document.createElement("input");
+                    cate1NoInput.type = "hidden";
+                    subItem.appendChild(cate1NoInput);
+                }
+
+                if (subNameInput) subNameInput.name = `subCategories[${subIndex}].cate2_name`;
+
+                cate2NoInput.name = `subCategories[${subIndex}].cate2_no`;
+                cate2NoInput.value = cate2_no_cnt++;
+
+                // ★ 외래키를 "현재 li의 최신 cate1_no"로 재매핑
+                cate1NoInput.name = `subCategories[${subIndex}].cate1_no`;
+                cate1NoInput.value = mainNoInput.value;
+
+                subIndex++;
+            });
+
+            mainIndex++;
+        });
+    });
+
 
 
 
@@ -140,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 li.innerHTML = `
           <div class="category-header-4">
             <span class="toggle-btn-4">▶</span> ${name}
-            <input type="hidden" name="mainCategories[].name" value="${name}">
+            <input type="hidden" name="mainCategories[].cate1_name" value="${name}">
             <button type="button" class="delete-btn-4">삭제</button>
           </div>
           <ul class="subcategory-4">
@@ -156,26 +241,35 @@ document.addEventListener("DOMContentLoaded", function(){
         });
 
         // ========== 2차 카테고리 추가 ==========
-        categoryList.addEventListener('click', function (e) {
-            if (e.target.classList.contains('add-sub')) {
+
+        categoryList.addEventListener("click", function (e) {
+            if (e.target.classList.contains("add-sub")) {
                 e.preventDefault();
-                const name = prompt('추가할 2차 카테고리명을 입력하세요:');
+
+                const name = prompt("추가할 2차 카테고리명을 입력하세요:");
                 if (!name) return;
 
-                const subLi = document.createElement('li');
-                subLi.className = 'subcategory-item-4';
-                subLi.setAttribute('draggable', 'true');
+                const mainItem = e.target.closest(".category-item-4");
+                if (!mainItem) return;
+
+                const mainNoInput = mainItem.querySelector('input[name^="mainCategories"][name$=".cate1_no"]');
+                const cate1_no_value = mainNoInput ? mainNoInput.value : "";
+
+                const subLi = document.createElement("li");
+                subLi.className = "subcategory-item-4";
+                subLi.setAttribute("draggable", "true");
                 subLi.innerHTML = `
-          ${name}
-          <input type="hidden" name="subCategories[].name" value="${name}">
-          <button type="button" class="delete-btn-4">삭제</button>
+            ${name}
+            <input type="hidden" name="subCategories.cate2_name" value="${name}">
+            <input type="hidden" name="subCategories.cate1_no" value="${cate1_no_value}">
+            <button type="button" class="delete-btn-4">삭제</button>
         `;
 
-                // 현재 버튼이 있는 li(마지막 li) 앞에 삽입
-                const subUl = e.target.closest('ul');
+                const subUl = e.target.closest("ul");
                 subUl.insertBefore(subLi, subUl.lastElementChild);
             }
         });
+
 
         // ========== 카테고리 삭제 ==========
         categoryList.addEventListener('click', function (e) {

@@ -20,6 +20,7 @@ import java.util.Date;
 @Table(name = "SYS_COUPON")
 public class SysCoupon {
 
+
     @Id
     private String cp_code;
 
@@ -34,4 +35,8 @@ public class SysCoupon {
     private LocalDateTime cp_exp_date;
 
     private int cp_stat;
+
+
+    private String cp_issuer_id;
+    private String cp_issuer_name; // 발급자 이름
 }

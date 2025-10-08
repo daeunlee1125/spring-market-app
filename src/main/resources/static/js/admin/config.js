@@ -143,65 +143,67 @@ document.addEventListener("DOMContentLoaded", function(){
         return closest.element;
     }
 
+    const cateForm = document.getElementById("cateForm");
+    if (cateForm) {
+        cateForm.addEventListener("submit", function(e) {
+            const mainItems = document.querySelectorAll(".category-item-4:not(:last-child)");
 
-    document.getElementById("cateForm").addEventListener("submit", function(e) {
-        const mainItems = document.querySelectorAll(".category-item-4:not(:last-child)");
+            let mainIndex = 0;
+            let subIndex = 0;
+            let cate1_no_cnt = 1;
+            let cate2_no_cnt = 1;
 
-        let mainIndex = 0;
-        let subIndex = 0;
-        let cate1_no_cnt = 1;
-        let cate2_no_cnt = 1;
+            mainItems.forEach(mainItem => {
+                const header = mainItem.querySelector(".category-header-4");
+                const mainNameInput = header.querySelector('input[name^="mainCategories"][name$=".cate1_name"]');
 
-        mainItems.forEach(mainItem => {
-            const header = mainItem.querySelector(".category-header-4");
-            const mainNameInput = header.querySelector('input[name^="mainCategories"][name$=".cate1_name"]');
-
-            let mainNoInput = header.querySelector('input[name^="mainCategories"][name$=".cate1_no"]');
-            if (!mainNoInput) {
-                mainNoInput = document.createElement("input");
-                mainNoInput.type = "hidden";
-                header.appendChild(mainNoInput);
-            }
-
-            // 1차 인덱스/번호 재할당
-            if (mainNameInput) mainNameInput.name = `mainCategories[${mainIndex}].cate1_name`;
-            mainNoInput.name = `mainCategories[${mainIndex}].cate1_no`;
-            mainNoInput.value = cate1_no_cnt++;
-
-            // 하위 2차들 처리
-            const subItems = mainItem.querySelectorAll(".subcategory-item-4");
-            subItems.forEach(subItem => {
-                const subNameInput = subItem.querySelector('input[name^="subCategories"][name$=".cate2_name"]');
-
-                let cate2NoInput = subItem.querySelector('input[name^="subCategories"][name$=".cate2_no"]');
-                if (!cate2NoInput) {
-                    cate2NoInput = document.createElement("input");
-                    cate2NoInput.type = "hidden";
-                    subItem.appendChild(cate2NoInput);
+                let mainNoInput = header.querySelector('input[name^="mainCategories"][name$=".cate1_no"]');
+                if (!mainNoInput) {
+                    mainNoInput = document.createElement("input");
+                    mainNoInput.type = "hidden";
+                    header.appendChild(mainNoInput);
                 }
 
-                let cate1NoInput = subItem.querySelector('input[name^="subCategories"][name$=".cate1_no"]');
-                if (!cate1NoInput) {
-                    cate1NoInput = document.createElement("input");
-                    cate1NoInput.type = "hidden";
-                    subItem.appendChild(cate1NoInput);
-                }
+                // 1차 인덱스/번호 재할당
+                if (mainNameInput) mainNameInput.name = `mainCategories[${mainIndex}].cate1_name`;
+                mainNoInput.name = `mainCategories[${mainIndex}].cate1_no`;
+                mainNoInput.value = cate1_no_cnt++;
 
-                if (subNameInput) subNameInput.name = `subCategories[${subIndex}].cate2_name`;
+                // 하위 2차들 처리
+                const subItems = mainItem.querySelectorAll(".subcategory-item-4");
+                subItems.forEach(subItem => {
+                    const subNameInput = subItem.querySelector('input[name^="subCategories"][name$=".cate2_name"]');
 
-                cate2NoInput.name = `subCategories[${subIndex}].cate2_no`;
-                cate2NoInput.value = cate2_no_cnt++;
+                    let cate2NoInput = subItem.querySelector('input[name^="subCategories"][name$=".cate2_no"]');
+                    if (!cate2NoInput) {
+                        cate2NoInput = document.createElement("input");
+                        cate2NoInput.type = "hidden";
+                        subItem.appendChild(cate2NoInput);
+                    }
 
-                // ★ 외래키를 "현재 li의 최신 cate1_no"로 재매핑
-                cate1NoInput.name = `subCategories[${subIndex}].cate1_no`;
-                cate1NoInput.value = mainNoInput.value;
+                    let cate1NoInput = subItem.querySelector('input[name^="subCategories"][name$=".cate1_no"]');
+                    if (!cate1NoInput) {
+                        cate1NoInput = document.createElement("input");
+                        cate1NoInput.type = "hidden";
+                        subItem.appendChild(cate1NoInput);
+                    }
 
-                subIndex++;
+                    if (subNameInput) subNameInput.name = `subCategories[${subIndex}].cate2_name`;
+
+                    cate2NoInput.name = `subCategories[${subIndex}].cate2_no`;
+                    cate2NoInput.value = cate2_no_cnt++;
+
+                    // ★ 외래키를 "현재 li의 최신 cate1_no"로 재매핑
+                    cate1NoInput.name = `subCategories[${subIndex}].cate1_no`;
+                    cate1NoInput.value = mainNoInput.value;
+
+                    subIndex++;
+                });
+
+                mainIndex++;
             });
-
-            mainIndex++;
         });
-    });
+    }
 
 
 

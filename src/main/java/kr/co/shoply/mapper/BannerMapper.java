@@ -6,4 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface BannerMapper{
     public void saveBanner(BannerDTO bannerDTO);
+    public void statusToZero(int ban_no);
+    public void statusToOne(int ban_no);
+
 }

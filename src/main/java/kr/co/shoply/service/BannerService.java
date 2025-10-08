@@ -34,4 +34,18 @@ public class BannerService {
 
         return bannerDTOS;
     }
+
+    public void deleteAllById(List<Integer> ids){
+        for (Integer id:ids){
+            bannerRepository.deleteById(id);
+        }
+    }
+
+    public void changeBannerStatus(int ban_no, int ban_status) {
+        if (ban_status==0){
+            bannerMapper.statusToZero(ban_no);
+        }else if (ban_status==1){
+            bannerMapper.statusToOne(ban_no);
+        }
+    }
 }

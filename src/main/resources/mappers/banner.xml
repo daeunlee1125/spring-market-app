@@ -12,26 +12,12 @@
             (#{ban_name}, #{ban_img}, #{ban_size}, #{ban_bg_color}, #{ban_location}, #{ban_banner_link}, TO_DATE(#{ban_start_date}, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(#{ban_end_date}, 'YYYY-MM-DD HH24:MI:SS'))
     </insert>
 
-    <select id="select" resultType="kr.co.shoply.dto.Cate2DTO">
-        SELECT c1.CATE1_NAME , c2.*
-        FROM CATE1 c1
-        JOIN CATE2 c2
-        ON	c1.CATE1_NO = c2.CATE1_NO
-        WHERE c2.CATE2_NO = #{cate2_no}
-    </select>
-
-    <select id="selectAll" resultType="kr.co.shoply.dto.Cate2DTO">
-        SELECT *
-        FROM PRODUCT
-        WHERE CATE2_NO = #{cate2_no}
-    </select>
-
-    <update id="update">
-        update TB_COMMENT set content=#{content} where cno=#{cno}
+    <update id="statusToZero">
+        UPDATE banner SET ban_status=0 WHERE ban_no=#{ban_no}
     </update>
 
-    <delete id="delete">
-        delete from TB_COMMENT where cno=#{cno}
-    </delete>
+    <update id="statusToOne">
+        UPDATE banner SET ban_status=1 WHERE ban_no=#{ban_no}
+    </update>
 
 </mapper>

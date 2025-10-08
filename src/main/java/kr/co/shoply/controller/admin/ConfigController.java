@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -78,6 +79,26 @@ public class ConfigController {
         bannerService.saveBanner(bannerDTO);
 
         return "redirect:/admin/config/banner";
+    }
+
+    @PostMapping("/admin/config/banner/delete")
+    public String bannerDelete(@RequestParam("ban_no") List<Integer> ban_nos) {
+
+        bannerService.deleteAllById(ban_nos);
+
+        return "redirect:/admin/config/banner";
+    }
+
+    @PostMapping("/admin/config/banner/status")
+    @ResponseBody
+    public Map<String, Object> bannerStatus(@RequestBody Map<String, Object> req) {
+
+        int ban_no = Integer.parseInt(req.get("ban_no").toString());
+        int status = Integer.parseInt(req.get("status").toString());
+
+        bannerService.changeBannerStatus(ban_no, status);
+
+        return Map.of("success", true);
     }
 
 

@@ -376,4 +376,48 @@ document.addEventListener("DOMContentLoaded", function(){
     if (searchAddressBtn){
         searchAddressBtn.addEventListener('click', execDaumPostcode);
     }
+
+
+
+
+    // 공통 함수
+    function updateStatus(banNo, status) {
+        fetch(contextPath  +'admin/config/banner/status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ban_no: banNo, status: status })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // 새로고침 (서버에서 다시 ban_status 반영)
+                    location.reload();
+                } else {
+                    alert('상태 변경 실패');
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+    // 활성 버튼
+    const activate = document.querySelectorAll('.activate-btn');
+    if (activate) {
+        activate.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const banNo = btn.dataset.id;
+                updateStatus(banNo, 1);
+            });
+        });
+    }
+
+    // 비활성 버튼
+    const deactivate = document.querySelectorAll('.deactivate-btn');
+    if (deactivate) {
+        deactivate.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const banNo = btn.dataset.id;
+                updateStatus(banNo, 0);
+            });
+        });
+    }
 })

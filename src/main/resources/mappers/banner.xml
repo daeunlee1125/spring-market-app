@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.BannerMapper">
+
+    <insert id="saveBanner">
+        INSERT INTO Banner
+            (ban_name, ban_img, ban_size, ban_bg_color, ban_location, ban_banner_link, ban_start_date, ban_end_date)
+        VALUES
+            (#{ban_name}, #{ban_img}, #{ban_size}, #{ban_bg_color}, #{ban_location}, #{ban_banner_link}, TO_DATE(#{ban_start_date}, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(#{ban_end_date}, 'YYYY-MM-DD HH24:MI:SS'))
+    </insert>
+
+    <select id="select" resultType="kr.co.shoply.dto.Cate2DTO">
+        SELECT c1.CATE1_NAME , c2.*
+        FROM CATE1 c1
+        JOIN CATE2 c2
+        ON	c1.CATE1_NO = c2.CATE1_NO
+        WHERE c2.CATE2_NO = #{cate2_no}
+    </select>
+
+    <select id="selectAll" resultType="kr.co.shoply.dto.Cate2DTO">
+        SELECT *
+        FROM PRODUCT
+        WHERE CATE2_NO = #{cate2_no}
+    </select>
+
+    <update id="update">
+        update TB_COMMENT set content=#{content} where cno=#{cno}
+    </update>
+
+    <delete id="delete">
+        delete from TB_COMMENT where cno=#{cno}
+    </delete>
+
+</mapper>

@@ -1,18 +1,23 @@
 package kr.co.shoply.controller.admin;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import kr.co.shoply.dto.*;
-import kr.co.shoply.entity.Cate1;
 import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.Console;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,13 +28,59 @@ public class ConfigController {
     private final VersionService  versionService;
     private final Cate1Service cate1Service;
     private final Cate2Service cate2Service;
-    private final EntityManager entityManager;
+    private final BannerService bannerService;
 
     @GetMapping("/admin/config/banner")
-    public String banner()
+    public String banner(Model model)
     {
+        List<BannerDTO> banners = bannerService.getBanners2();
+        model.addAttribute("banners", banners);
         return "admin/config/banner";
     }
+
+    @PostMapping("/admin/config/banner")
+    public String banner(BannerDTO bannerDTO, @RequestParam("image") MultipartFile image) throws IOException {
+
+        // 위치에 따라 폴더 지정
+        String folder = switch (bannerDTO.getBan_location()) {
+            case 1 -> "top";
+            case 2 -> "slider";
+            case 3 -> "detail";
+            case 4 -> "login";
+            case 5 -> "my";
+            default -> throw new IllegalArgumentException("Invalid location");
+        };
+
+        String baseUploadPath = "/home/ec2-user/shoply/uploads/banner/" + folder + "/";
+        Files.createDirectories(Paths.get(baseUploadPath));
+
+        // 파일명 생성
+        String uuid = UUID.randomUUID().toString();
+        String originalName = image.getOriginalFilename();
+
+        String safeName = StringUtils.cleanPath(originalName);
+        safeName = safeName.replaceAll("[^a-zA-Z0-9._-]", "_");
+
+        String newName = uuid + "_" + safeName;
+
+        // 서버 저장
+        Path filePath = Paths.get(baseUploadPath + newName);
+        image.transferTo(filePath);
+
+        // DB 경로 지정
+        String dbPath = "/uploads/banner/" + folder + "/" + newName;
+        bannerDTO.setBan_img(dbPath);
+
+        bannerDTO.setBan_start_date(bannerDTO.getBan_start_ndate() + " " + bannerDTO.getBan_start_time());
+        bannerDTO.setBan_end_date(bannerDTO.getBan_end_ndate() + " " + bannerDTO.getBan_end_time());
+
+        // DB 저장
+        bannerService.saveBanner(bannerDTO);
+
+        return "redirect:/admin/config/banner";
+    }
+
+
     @GetMapping("/admin/config/basic")
     public String basic(Model model)
     {

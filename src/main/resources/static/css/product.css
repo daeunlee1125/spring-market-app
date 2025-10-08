@@ -1420,7 +1420,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
     border-bottom: 1px solid #eee;
 }
 

@@ -14,7 +14,10 @@
         WHERE PROD_NO = #{prod_no}
     </select>
 
-    <select id="selectAll" resultType="kr.co.shoply.dto.ReviewDTO">
+    <select id="selectAll3" resultType="kr.co.shoply.dto.ReviewDTO">
+        SELECT *
+        FROM REVIEW
+        WHERE PROD_NO = #{prod_no}
     </select>
 
     <update id="update">

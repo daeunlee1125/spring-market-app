@@ -53,7 +53,17 @@ public class ProductController {
         ProductDTO productDTO = productService.getProduct3(prodNo);
         model.addAttribute("productDTO", productDTO);
 
-        List<ReviewDTO> reviewDTOList = reviewService.getReviews3(prodNo);
+        // ✅ 1. 리뷰 총 개수 가져오기 (이전 코드 리뷰에서 수정한 getCountReviews 사용)
+        int totalReviewCount = reviewService.getCountReviews(prodNo);
+
+        // ✅ 2. 총 페이지 수 계산 ( (총 개수 + 페이지당 개수 - 1) / 페이지당 개수 )
+        int totalPages = (totalReviewCount + 4) / 5;
+
+        // ✅ 3. 계산된 총 페이지 수를 모델에 추가
+        model.addAttribute("totalPages", totalPages);
+
+        // 첫 페이지 리뷰 목록 가져오기
+        List<ReviewDTO> reviewDTOList = reviewService.getPageList(prodNo, 1);
         model.addAttribute("reviewDTOList", reviewDTOList);
 
         List<ProdOptionDTO> OpDtoList = productService.getProductOption3(prodNo); // 상품별 옵션들

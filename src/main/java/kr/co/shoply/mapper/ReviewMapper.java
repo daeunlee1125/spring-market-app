@@ -11,10 +11,9 @@ import java.util.List;
 public interface ReviewMapper {
     // 사용
     public List<ReviewDTO> selectAll3(String prod_no);
+    public List<ReviewDTO> selectPageList3(String prod_no, int offset, int limit); // 해당 상품 리뷰 페이지네이션
+    public int selectCountAll3(String prod_no); // 해당 상품 리뷰 개수
 
-
-
-    public double select(String prod_no);
     public void insert(ReviewDTO reviewDTO);
     public void update(ReviewDTO reviewDTO);
     public void delete(int rev_no);

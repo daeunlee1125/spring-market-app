@@ -20,6 +20,21 @@
         WHERE PROD_NO = #{prod_no}
     </select>
 
+    <select id="selectPageList3" resultType="kr.co.shoply.dto.ReviewDTO">
+        SELECT *
+        FROM REVIEW
+        WHERE PROD_NO = #{prod_no}
+        ORDER BY REV_NO DESC
+        offset #{offset} ROWS
+        FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <select id="selectCountAll3" resultType="int">
+        SELECT COUNT(*)
+        FROM REVIEW
+        WHERE PROD_NO = #{prod_no}
+    </select>
+
     <update id="update">
     </update>
 

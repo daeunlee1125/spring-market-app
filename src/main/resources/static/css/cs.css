@@ -142,7 +142,7 @@ section header-sec a:hover {
 .faq-list img {
     width: 70px;
     height: 70px;
-    border: solid 1px black;
+    /*border: solid 1px black;*/
     margin-bottom: 10px;
 }
 

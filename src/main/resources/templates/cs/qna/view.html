@@ -1,50 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../../inc/css/index.css">
-    <link rel="stylesheet" href="../../inc/css/cs_notice.css">
-</head>
-<body>
-<header>
-    <div class="header-right login-menu">
-      <a href="#">로그인</a> | 
-      <a href="#">회원가입</a> | 
-      <a href="#">마이페이지</a> |
-      <a href="#">장바구니</a>
-    </div>
-    <!-- 로고 -->
-    <div class="header-left">
-      <img src="/project2/kmarket/inc/image/logo.jpg" alt="로고" class="logo">
-    </div>
-  </div>
-</header>
-
-    <div class="container">
-        <!-- 브레드크럼 -->
-        <div class="breadcrumb">
-            <a href="#">홈</a> &gt; 문의하기
-        </div>
-
-<!-- 메인 영역 -->
-<div class="main-area">
-    <!-- 사이드바 -->
-    <div class="sidebar">
-        <ul class="sidebar-menu">
-            <li class="category-title">문의하기</li>
-            <li><a href="#" class="active">회원</a></li>
-            <li><a href="#">쿠폰/이벤트</a></li>
-            <li><a href="#">주문/결제</a></li>
-            <li><a href="#">배송</a></li>
-            <li><a href="#">취소/반품</a></li>
-            <li><a href="#">교환</a></li>
-            <li><a href="#">여행/숙박</a></li>
-            <li><a href="#">항공</a></li>
-            <li><a href="#">안전거래</a></li>
-        </ul>
-    </div>
+<div th:replace ="~{cs/_head.html}"></div>
+<div th:replace ="~{cs/_sidebar3.html}"></div>
 
 <!-- 메인 콘텐츠 -->
 <div class="main-content">
@@ -72,45 +27,10 @@
     <p>안녕하세요, 회원님. 회원가입하시면 됩니다.</p>
 </div>
 
-
 <div class="button-area">
     <button class="btn-list" onclick="history.back()">목록으로</button>
 </div>
     </div>
   </div>
 </div>
-
-
-    <footer>
-  <div class="top-footer">
-    <div class="footer-wrapper">
-      <div class="top-f">
-        <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
-        <a href="#">서비스이용약관</a> |
-        <a href="#">개인정보처리방침</a> |
-        <a href="#">전자금융거래약관</a>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="footer-wrapper">
-    <h3 class="cpname">(주)샵플리닷컴</h3>
-    <div class="call-cont">
-      <img src="/kmarket/inc/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
-      <span class="tel">1234-5678</span>
-      <span class="time"> (평일 09:00~18:00)</span>
-    </div>
-    <div style="color: gray; margin-top: 15px">
-      <span>대표이사 : 홍길동</span>
-      <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-      <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
-
-      <div style="margin-top: 3px;">
-        <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
-      </div>
-    </div>
-  </div>
-</footer>
-</body>
-</html>
+<div th:replace ="~{cs/_tail.html}"></div>

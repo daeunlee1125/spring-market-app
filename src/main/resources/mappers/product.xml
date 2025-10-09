@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.ProductMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="cno" keyColumn="CNO">
+    </insert>
+
+    <select id="select3" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT p.*, count(*) AS cntRating, p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE  / 100)) AS realPrice, round(AVG(r.REV_RATING),1) AS avgRating
+        FROM PRODUCT p
+        JOIN REVIEW r ON p.PROD_NO = r.PROD_NO
+        WHERE p.PROD_NO = #{prod_no}
+        GROUP BY p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
+        p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
+        p.PROD_SOLD, p.PROD_HIT
+
+    </select>
+
+    <select id="selectOption3" resultType="kr.co.shoply.dto.ProdOptionDTO">
+        SELECT *
+        FROM PROD_OPTION
+        WHERE PROD_NO = #{prod_no}
+
+    </select>
+
+    <sql id="sorting">
+        <choose>
+            <when test="sort == 'sold'">
+                ORDER BY PROD_SOLD DESC
+            </when>
+            <when test="sort == 'priceAsc'">
+                ORDER BY realPrice ASC
+            </when>
+            <when test="sort == 'priceDesc'">
+                ORDER BY realPrice DESC
+            </when>
+            <when test="sort == 'score'">
+                ORDER BY avgRating DESC
+            </when>
+            <when test="sort == 'review'">
+                ORDER BY cntRating DESC
+            </when>
+            <otherwise> ORDER BY PROD_NO ASC </otherwise>
+        </choose>
+    </sql>
+
+    <select id="selectAll3" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+            p.*,
+            round(avg(r.REV_RATING ),1) AS avgRating,
+            count(*) AS cntRating,
+            p.PROD_PRICE-(p.PROD_PRICE * (p.PROD_SALE/100)) AS realPrice
+        FROM
+            PRODUCT p
+        JOIN
+            REVIEW r ON p.PROD_NO = r.PROD_NO
+        WHERE
+            p.CATE2_NO = #{cate2_no}
+        GROUP BY
+            p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
+            p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
+            p.PROD_SOLD, p.PROD_HIT
+        <include refid="sorting"/>
+    </select>
+
+    <update id="update">
+    </update>
+
+    <delete id="delete">
+    </delete>
+
+</mapper>

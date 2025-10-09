@@ -1,96 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - Final Version</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/config.css">
-
-</head>
-<body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
-
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
+<div th:replace="~{admin/config/_head.html}"></div>
 
     
 
@@ -106,11 +14,11 @@
                         <div>
                             &nbsp;>&nbsp;
                         </div>
-                        <a href="">환경설정</a>
+                        <a th:href="@{/admin/config/basic}">환경설정</a>
                         <div>
                             &nbsp;>&nbsp;
                         </div>
-                        <a href="" class="nav-last">기본설정</a>
+                        <a th:href="@{/admin/config/basic}" class="nav-last">기본설정</a>
                     </div>
                 </div>
                 <div class="main-content-top"></div>
@@ -123,7 +31,7 @@
                     <table class="table-1">
                         <tr>
                             <th>사이트 버전</th>
-                            <td>1.0.1-RELEASE</td>
+                            <td>[[${version.ver_version}]]</td>
                         </tr>
                     </table>
 
@@ -131,14 +39,15 @@
                     <h2 class="h2-1">사이트</h2>
                     <div class="gray-1">브라우저 탭, 헤더/푸터 노출 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="1">
                         <table class="table-1">
                             <tr>
                                 <th>제목</th>
-                                <td><input type="text" name="#" value="Shoply" class="input-1"></td>
+                                <td><input type="text" name="s_title" th:value="${siteInfo.s_title}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <th>부제</th>
-                                <td><input type="text" name="#" value="더 나은 쇼핑을 위한 선택" class="input-1"></td>
+                                <td><input type="text" name="s_subtitle" th:value="${siteInfo.s_subtitle}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <td colspan="2" class="submit-1"><input type="submit" value="수정하기" class="submit-btn-1"></td>
@@ -149,6 +58,7 @@
                     <h2 class="h2-1">로고</h2>
                     <div class="gray-1">브라우저 탭, 헤더/푸터 노출 로고</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="2">
                         <table class="table-1">
                             <tr>
                                 <th>헤더 로고</th>
@@ -171,30 +81,31 @@
                     <h2 class="h2-1">기업 정보</h2>
                     <div class="gray-1">푸터에 노출되는 기업 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="3">
                         <table class="table-1">
                             <tr>
                                 <th>상호명</th>
-                                <td><input type="text" name="#" class="input-1" value="샵플리닷컴"></td>
+                                <td><input type="text" name="s_corp_name" class="input-1" th:value="${siteInfo.s_corp_name}"></td>
                             </tr>
                             <tr>
                                 <th>대표이사</th>
-                                <td><input type="text" name="#" class="input-1" value="홍길동"></td>
+                                <td><input type="text" name="s_ceo" class="input-1" th:value="${siteInfo.s_ceo}"></td>
                             </tr>
                             <tr>
                                 <th>사업자등록번호</th>
-                                <td><input type="text" name="#" class="input-1" value="123-45-12345"></td>
+                                <td><input type="text" name="s_reg_hp" class="input-1" th:value="${siteInfo.s_reg_hp}"></td>
                             </tr>
                             <tr>
                                 <th>통신판매업신고</th>
-                                <td><input type="text" name="#" class="input-1" value="2024-서울강남-1234"></td>
+                                <td><input type="text" name="s_tel_reg" class="input-1" th:value="${siteInfo.s_tel_reg}"></td>
                             </tr>
                             <tr>
                                 <th>기본주소</th>
-                                <td><input type="text" name="#" class="input-1" value="부산광역시 부산진구 중앙동"></td>
+                                <td><input type="text" name="s_addr1" class="input-1" th:value="${siteInfo.s_addr1}"></td>
                             </tr>
                             <tr>
                                 <th>상세주소</th>
-                                <td><input type="text" name="#" class="input-1" value="(삼성동, weWork 빌딩) 7층"></td>
+                                <td><input type="text" name="s_addr2" class="input-1" th:value="${siteInfo.s_addr2}"></td>
                             </tr>
                             <tr>
                                 <td colspan="2" class="submit-1"><input type="submit" value="수정하기" class="submit-btn-1"></td>
@@ -205,22 +116,23 @@
                     <h2 class="h2-1">고객센터 정보</h2>
                     <div class="gray-1">푸터에 노출되는 고객센터 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="4">
                         <table class="table-1">
                             <tr>
                                 <th>전화번호</th>
-                                <td><input type="text" name="#" class="input-1" value="02-1234-5678"></td>
+                                <td><input type="text" name="s_cs_hp" class="input-1" th:value="${siteInfo.s_cs_hp}"></td>
                             </tr>
                             <tr>
                                 <th>업무시간</th>
-                                <td><input type="text" name="#" class="input-1" value="평일 09:00 ~ 18:00"></td>
+                                <td><input type="text" name="s_cs_time" class="input-1" th:value="${siteInfo.s_cs_time}"></td>
                             </tr>
                             <tr>
                                 <th>이메일</th>
-                                <td><input type="text" name="#" class="input-1" value="admin@kmarket.com"></td>
+                                <td><input type="text" name="s_cs_email" class="input-1" th:value="${siteInfo.s_cs_email}"></td>
                             </tr>
                             <tr>
                                 <th>전자금융거래 분쟁담당</th>
-                                <td><input type="text" name="#" class="input-1" value="1234-1234"></td>
+                                <td><input type="text" name="s_cs_hp2" class="input-1" th:value="${siteInfo.s_cs_hp2}"></td>
                             </tr>
 
                             <tr>
@@ -232,10 +144,11 @@
                     <h2 class="h2-1">카피라이트</h2>
                     <div class="gray-1">푸터에 노출되는 카피라이트 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="5">
                         <table class="table-1">
                             <tr>
-                                <th>전화번호</th>
-                                <td><input type="text" name="#" class="input-1" value="Copyright©Kmarket. All rights reserved"></td>
+                                <th>카피라이트</th>
+                                <td><input type="text" name="s_copy" class="input-1" th:value="${siteInfo.s_copy}"></td>
                             </tr>
 
                             <tr>
@@ -251,16 +164,4 @@
         </div>
     </div>
 
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
-
-    
-
-
-</body>
-</html>
+<div th:replace="~{admin/config/_tail.html}"></div>

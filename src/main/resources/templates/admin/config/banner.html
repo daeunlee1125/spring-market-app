@@ -1,96 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - Final Version</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/config.css">
-
-</head>
-<body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
-
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
+<div th:replace="~{admin/config/_head.html}"></div>
 
     
 
@@ -115,685 +23,284 @@
                 </div>
                 <div class="main-content-top"></div>
                 <main>
+                    <form method="post" th:action="@{/admin/config/banner/delete}">
+                        <div class="tab-container-2">
+                            <!-- 탭 메뉴 -->
+                            <ul id="tabMenu-2">
+                                <li data-target="bannerTop" class="active">메인상단배너</li>
+                                <li data-target="bannerSlider">메인슬라이더배너</li>
+                                <li data-target="bannerDetail">상품상세보기배너</li>
+                                <li data-target="bannerLogin">회원로그인 배너</li>
+                                <li data-target="bannerMy">마이페이지 배너</li>
+                            </ul>
 
-                    <div class="tab-container-2">
-                        <!-- 탭 메뉴 -->
-                        <ul id="tabMenu-2">
-                        <li data-target="bannerTop" class="active">메인상단배너</li>
-                        <li data-target="bannerSlider">메인슬라이더배너</li>
-                        <li data-target="bannerDetail">상품상세보기배너</li>
-                        <li data-target="bannerLogin">회원로그인 배너</li>
-                        <li data-target="bannerMy">마이페이지 배너</li>
-                        </ul>
+                            <!-- 탭별 콘텐츠 -->
+                            <div class="tab-wrapper-2">
+                                <div id="bannerTop" class="tab-content-2">
+                                    <h3 class="h3-2">메인 상단배너</h3>
+                                    <table class="table-2">
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th>번호</th>
+                                            <th>이미지</th>
+                                            <th>배너정보</th>
+                                            <th>배너위치</th>
+                                            <th>시작일</th>
+                                            <th>종료일</th>
+                                            <th>시작 시간</th>
+                                            <th>종료 시간</th>
+                                            <th>관리</th>
+                                        </tr>
+                                        <tr th:each="banner, stat : ${banners}" th:if="${banner.ban_location == 1}">
+                                            <td><input type="checkbox" name="ban_no" th:value="${banner.ban_no}"></td>
+                                            <td>[[${stat.count}]]</td>
+                                            <td style="width: 150px;"><img th:src="@{${banner.ban_img}}"></td>
+                                            <td>
+                                                [[${banner.ban_name}]] <br>
+                                                크기 : [[${banner.ban_size}]] <br>
+                                                배경색 : [[${banner.ban_bg_color}]] <br>
+                                                [[${banner.ban_banner_link}]]
+                                            </td>
+                                            <td>MAIN1</td>
+                                            <td>[[${banner.ban_start_ndate}]]</td>
+                                            <td>[[${banner.ban_end_ndate}]]</td>
+                                            <td>[[${banner.ban_start_time}]]</td>
+                                            <td>[[${banner.ban_end_time}]]</td>
+                                            <td>
+                                                <button type="button" class="activate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==0}">[ 활성 ]</button>
+                                                <button type="button" class="deactivate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==1}">[ 비활성 ]</button>
+                                            </td>
+                                        </tr>
 
-                        <!-- 탭별 콘텐츠 -->
-                        <div class="tab-wrapper-2">
-                            <div id="bannerTop" class="tab-content-2">
-                                <h3 class="h3-2">메인 상단배너</h3>
-                                <table class="table-2">
-                                    <tr>
-                                        <th><input type="checkbox"></th>
-                                        <th>번호</th>
-                                        <th>이미지</th>
-                                        <th>배너정보</th>
-                                        <th>배너위치</th>
-                                        <th>시작일</th>
-                                        <th>종료일</th>
-                                        <th>시작 시간</th>
-                                        <th>종료 시간</th>
-                                        <th>관리</th>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>1</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item1.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>2</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item2.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>3</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item3.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    
-                                </table>
+                                    </table>
+                                </div>
+
+                                <div id="bannerSlider" class="tab-content-2" style="display: none;">
+                                    <h3 class="h3-2">메인 슬라이더 배너</h3>
+                                    <table class="table-2">
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th>번호</th>
+                                            <th>이미지</th>
+                                            <th>배너정보</th>
+                                            <th>배너위치</th>
+                                            <th>시작일</th>
+                                            <th>종료일</th>
+                                            <th>시작 시간</th>
+                                            <th>종료 시간</th>
+                                            <th>관리</th>
+                                        </tr>
+                                        <tr th:each="banner, stat : ${banners}" th:if="${banner.ban_location == 2}">
+                                            <td><input type="checkbox"  name="ban_no" th:value="${banner.ban_no}"></td>
+                                            <td>[[${stat.count}]]</td>
+                                            <td style="width: 150px;"><img th:src="@{${banner.ban_img}}"></td>
+                                            <td>
+                                                [[${banner.ban_name}]] <br>
+                                                크기 : [[${banner.ban_size}]] <br>
+                                                배경색 : [[${banner.ban_bg_color}]] <br>
+                                                [[${banner.ban_banner_link}]]
+                                            </td>
+                                            <td>MAIN1</td>
+                                            <td>[[${banner.ban_start_ndate}]]</td>
+                                            <td>[[${banner.ban_end_ndate}]]</td>
+                                            <td>[[${banner.ban_start_time}]]</td>
+                                            <td>[[${banner.ban_end_time}]]</td>
+                                            <td>
+                                                <button type="button" class="activate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==0}">[ 활성 ]</button>
+                                                <button type="button" class="deactivate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==1}">[ 비활성 ]</button>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+
+                                <div id="bannerDetail" class="tab-content-2" style="display:none;">
+                                    <h3 class="h3-2">상품 상세보기 배너</h3>
+                                    <table class="table-2">
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th>번호</th>
+                                            <th>이미지</th>
+                                            <th>배너정보</th>
+                                            <th>배너위치</th>
+                                            <th>시작일</th>
+                                            <th>종료일</th>
+                                            <th>시작 시간</th>
+                                            <th>종료 시간</th>
+                                            <th>관리</th>
+                                        </tr>
+                                        <tr th:each="banner, stat : ${banners}" th:if="${banner.ban_location == 3}">
+                                            <td><input type="checkbox" name="ban_no" th:value="${banner.ban_no}"></td>
+                                            <td>[[${stat.count}]]</td>
+                                            <td style="width: 150px;"><img th:src="@{${banner.ban_img}}"></td>
+                                            <td>
+                                                [[${banner.ban_name}]] <br>
+                                                크기 : [[${banner.ban_size}]] <br>
+                                                배경색 : [[${banner.ban_bg_color}]] <br>
+                                                [[${banner.ban_banner_link}]]
+                                            </td>
+                                            <td>MAIN1</td>
+                                            <td>[[${banner.ban_start_ndate}]]</td>
+                                            <td>[[${banner.ban_end_ndate}]]</td>
+                                            <td>[[${banner.ban_start_time}]]</td>
+                                            <td>[[${banner.ban_end_time}]]</td>
+                                            <td>
+                                                <button type="button" class="activate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==0}">[ 활성 ]</button>
+                                                <button type="button" class="deactivate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==1}">[ 비활성 ]</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div id="bannerLogin" class="tab-content-2" style="display:none;">
+                                    <h3 class="h3-2">회원 로그인 배너</h3>
+                                    <table class="table-2">
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th>번호</th>
+                                            <th>이미지</th>
+                                            <th>배너정보</th>
+                                            <th>배너위치</th>
+                                            <th>시작일</th>
+                                            <th>종료일</th>
+                                            <th>시작 시간</th>
+                                            <th>종료 시간</th>
+                                            <th>관리</th>
+                                        </tr>
+                                        <tr th:each="banner, stat : ${banners}" th:if="${banner.ban_location == 4}">
+                                            <td><input type="checkbox" name="ban_no" th:value="${banner.ban_no}"></td>
+                                            <td>[[${stat.count}]]</td>
+                                            <td style="width: 150px;"><img th:src="@{${banner.ban_img}}"></td>
+                                            <td>
+                                                [[${banner.ban_name}]] <br>
+                                                크기 : [[${banner.ban_size}]] <br>
+                                                배경색 : [[${banner.ban_bg_color}]] <br>
+                                                [[${banner.ban_banner_link}]]
+                                            </td>
+                                            <td>MAIN1</td>
+                                            <td>[[${banner.ban_start_ndate}]]</td>
+                                            <td>[[${banner.ban_end_ndate}]]</td>
+                                            <td>[[${banner.ban_start_time}]]</td>
+                                            <td>[[${banner.ban_end_time}]]</td>
+                                            <td>
+                                                <button type="button" class="activate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==0}">[ 활성 ]</button>
+                                                <button type="button" class="deactivate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==1}">[ 비활성 ]</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div id="bannerMy" class="tab-content-2" style="display:none;">
+                                    <h3 class="h3-2">마이페이지 배너</h3>
+                                    <table class="table-2">
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th>번호</th>
+                                            <th>이미지</th>
+                                            <th>배너정보</th>
+                                            <th>배너위치</th>
+                                            <th>시작일</th>
+                                            <th>종료일</th>
+                                            <th>시작 시간</th>
+                                            <th>종료 시간</th>
+                                            <th>관리</th>
+                                        </tr>
+                                        <tr th:each="banner, stat : ${banners}" th:if="${banner.ban_location == 5}">
+                                            <td><input type="checkbox" name="ban_no" th:value="${banner.ban_no}"></td>
+                                            <td>[[${stat.count}]]</td>
+                                            <td style="width: 150px;"><img th:src="@{${banner.ban_img}}"></td>
+                                            <td>
+                                                [[${banner.ban_name}]] <br>
+                                                크기 : [[${banner.ban_size}]] <br>
+                                                배경색 : [[${banner.ban_bg_color}]] <br>
+                                                [[${banner.ban_banner_link}]]
+                                            </td>
+                                            <td>MAIN1</td>
+                                            <td>[[${banner.ban_start_ndate}]]</td>
+                                            <td>[[${banner.ban_end_ndate}]]</td>
+                                            <td>[[${banner.ban_start_time}]]</td>
+                                            <td>[[${banner.ban_end_time}]]</td>
+                                            <td>
+                                                <button type="button" class="activate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==0}">[ 활성 ]</button>
+                                                <button type="button" class="deactivate-btn" th:data-id="${banner.ban_no}" th:if="${banner.ban_status==1}">[ 비활성 ]</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
                             </div>
-
-                            <div id="bannerSlider" class="tab-content-2" style="display: none;">
-                                <h3 class="h3-2">메인 슬라이더 배너</h3>
-                                <table class="table-2">
-                                    <tr>
-                                        <th><input type="checkbox"></th>
-                                        <th>번호</th>
-                                        <th>이미지</th>
-                                        <th>배너정보</th>
-                                        <th>배너위치</th>
-                                        <th>시작일</th>
-                                        <th>종료일</th>
-                                        <th>시작 시간</th>
-                                        <th>종료 시간</th>
-                                        <th>관리</th>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>1</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item1.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>2</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item2.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>3</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item3.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>4</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item4.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>5</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item5.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <div id="bannerDetail" class="tab-content-2" style="display:none;">
-                                <h3 class="h3-2">상품 상세보기 배너</h3>
-                                <table class="table-2">
-                                    <tr>
-                                        <th><input type="checkbox"></th>
-                                        <th>번호</th>
-                                        <th>이미지</th>
-                                        <th>배너정보</th>
-                                        <th>배너위치</th>
-                                        <th>시작일</th>
-                                        <th>종료일</th>
-                                        <th>시작 시간</th>
-                                        <th>종료 시간</th>
-                                        <th>관리</th>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>1</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item1.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>2</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item2.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>3</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item3.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>4</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item4.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    
-                                </table>
-                            </div>
-
-                            <div id="bannerLogin" class="tab-content-2" style="display:none;">
-                            <h3 class="h3-2">회원 로그인 배너</h3>
-                                <table class="table-2">
-                                    <tr>
-                                        <th><input type="checkbox"></th>
-                                        <th>번호</th>
-                                        <th>이미지</th>
-                                        <th>배너정보</th>
-                                        <th>배너위치</th>
-                                        <th>시작일</th>
-                                        <th>종료일</th>
-                                        <th>시작 시간</th>
-                                        <th>종료 시간</th>
-                                        <th>관리</th>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>1</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item1.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>2</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item2.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>3</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item3.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>4</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item4.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>5</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item5.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <div id="bannerMy" class="tab-content-2" style="display:none;">
-                                <h3 class="h3-2">마이페이지 배너</h3>
-                                <table class="table-2">
-                                    <tr>
-                                        <th><input type="checkbox"></th>
-                                        <th>번호</th>
-                                        <th>이미지</th>
-                                        <th>배너정보</th>
-                                        <th>배너위치</th>
-                                        <th>시작일</th>
-                                        <th>종료일</th>
-                                        <th>시작 시간</th>
-                                        <th>종료 시간</th>
-                                        <th>관리</th>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>1</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item1.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>2</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item2.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>3</td>
-                                        <td style="width: 150px;"><img src="/kmarket/inc/image/메인/slider_item3.jpg"></td>
-                                        <td>
-                                            배너명 <br>
-                                            크기 : 1200 x 80 <br>
-                                            배경색 : #fff000 <br>
-                                            배너링크
-                                        </td>
-                                        <td>MAIN1</td>
-                                        <td>2023/01/01</td>
-                                        <td>2023/01/07</td>
-                                        <td>13:00</td>
-                                        <td>15:00</td>
-                                        <td>
-                                            <form action="#">
-                                                <input type="submit" value="[ 활성 ]"> <br>
-                                                <input type="submit" value="[ 비활성 ]">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    
-                                </table>
-                            </div>
-                            
                         </div>
-                    </div>
-                    <div class="banner-actions">
-                    <button class="delete-btn">선택삭제</button>
-                    <button class="register-btn" id="openModalBtn">배너등록</button>
-                    </div>
+                        <div class="banner-actions">
+                            <button class="delete-btn" type="submit">선택삭제</button>
+                            <button class="register-btn" type="button" id="openModalBtn">배너등록</button>
+                        </div>
+                    </form>
+
                 </main>
             </div>
         </div>
     </div>
 
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
-
     <!-- 모달(팝업) HTML -->
     <div class="modal-overlay hidden" id="modal">
         <div class="modal-popup">
-            <div class="modal-header">
-                <h2>배너등록</h2>
-                <button class="close-btn" id="closeModalBtn">&times;</button>
-            </div>
-            <div class="modal-content">
-                <hr>
-                <div class="form-group">
-                    <label for="id1">배너이름</label>
-                    <input type="text" id="id1" placeholder="배너명 입력">
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2>배너등록</h2>
+                    <button class="close-btn" id="closeModalBtn" type="button">&times;</button>
                 </div>
-                <div class="form-group">
-                    <label for="id2">배너크기</label>
-                    <input type="text" id="id2" placeholder="배너 크기 입력">
+                <div class="modal-content">
+                    <hr>
+                    <div class="form-group">
+                        <label for="id1">배너이름</label>
+                        <input type="text" id="id1" name="ban_name" placeholder="배너명 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="id2">배너크기</label>
+                        <input type="text" id="id2" name="ban_size" placeholder="배너 크기 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="id3">배경색</label>
+                        <input type="color" id="id3" name="ban_bg_color" placeholder="배너 배경색 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="id4">배너링크</label>
+                        <input type="text" id="id4" name="ban_banner_link" placeholder="배너 링크 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="id5">배너위치</label>
+                        <select name="ban_location" id="id5">
+                            <option disabled selected>--- 선택 ---</option>
+                            <option value="1">메인상단배너</option>
+                            <option value="2">메인슬라이더배너</option>
+                            <option value="3">상품상세보기배너</option>
+                            <option value="4">회원로그인배너</option>
+                            <option value="5">마이페이지배너</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id6">노출날짜</label>
+                        <input type="date" name="ban_start_ndate" id="id6">~
+                        <input type="date" name="ban_end_ndate" id="id7">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="id8">노출시간</label>
+                        <input type="time" name="ban_start_time" id="id8">~
+                        <input type="time" name="ban_end_time" id="id9">
+                    </div>
+                    <div class="form-group">
+                        <label for="id10">배너파일</label>
+                        <input type="file" name="image" id="id10">
+                    </div>
+
+                    <hr>
                 </div>
-                <div class="form-group">
-                    <label for="id3">배경색</label>
-                    <input type="color" id="id3" placeholder="배너 배경색 입력">
+                <div class="modal-footer">
+                    <button type="submit">등록하기</button>
                 </div>
-                <div class="form-group">
-                    <label for="id4">배너링크</label>
-                    <input type="text" id="id4" placeholder="배너 링크 입력">
-                </div>
-                <div class="form-group">
-                    <label for="id5">배너위치</label>
-                    <select name="" id="id5">
-                        <option disabled selected>--- 선택 ---</option>
-                        <option value="main1">메인상단배너</option>
-                        <option value="main2">메인슬라이더배너</option>
-                        <option value="product1">상품상세보기배너</option>
-                        <option value="member1">회원로그인배너</option>
-                        <option value="my1">마이페이지배너</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="id6">노출날짜</label>
-                    <input type="date" id="id6">~ 
-                    <input type="date" id="id6">
-                    
-                </div>
-                 <div class="form-group">
-                    <label for="id7">노출시간</label>
-                    <input type="time" id="id7">~ 
-                    <input type="time" id="id7">
-                </div>
-                <div class="form-group">
-                    <label for="id8">배너파일</label>
-                    <input type="file" id="id8">
-                </div>
-                
-                <hr>
-            </div>
-            <div class="modal-footer">
-                <button>등록하기</button>
-            </div>
+            </form>
         </div>
     </div>
 
-    
-    <script>
-        // --- 모달 로직 ---
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modal = document.getElementById('modal');
-
-        // '등록하기' 버튼을 클릭하면 모달을 보여줍니다.
-        openModalBtn.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-
-        // 'x' 버튼을 클릭하면 모달을 숨깁니다.
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-
-        // 모달의 배경(오버레이) 부분을 클릭하면 모달을 숨깁니다.
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-
-        // --- Daum 우편번호 서비스 로직 ---
-        const searchAddressBtn = document.getElementById('searchAddressBtn');
-
-        function execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-                    let addr = ''; // 주소 변수
-
-                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져옵니다.
-                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                        addr = data.roadAddress;
-                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                        addr = data.jibunAddress;
-                    }
-
-                    // 우편번호와 주소 정보를 해당 필드에 넣습니다.
-                    document.getElementById('zipcode').value = data.zonecode;
-                    document.getElementById("address").value = addr;
-                    // 커서를 상세주소 필드로 이동시킵니다.
-                    document.getElementById("address-detail").focus();
-                }
-            }).open();
-        }
-
-        // '우편번호 검색' 버튼 클릭 시 함수를 실행합니다.
-        searchAddressBtn.addEventListener('click', execDaumPostcode);
-
-    </script>
-    <script src="/kmarket/inc/js/admin/config.js"></script>
-
-</body>
-</html>
+<div th:replace="~{admin/config/_tail.html}"></div>

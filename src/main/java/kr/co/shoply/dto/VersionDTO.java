@@ -16,6 +16,10 @@ public class VersionDTO {
     private String ver_version;
     private String ver_description;
     private String ver_writer;
+    public String getVer_rdate() {
+        return ver_rdate.substring(0, 19).replace("T", " ");
+    }
+
     private String ver_rdate;
 
 }

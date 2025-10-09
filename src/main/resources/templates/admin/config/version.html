@@ -1,96 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - Final Version</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/config.css">
-
-</head>
-<body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
-
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
+<div th:replace="~{admin/config/_head.html}"></div>
 
     
 
@@ -127,71 +35,21 @@
                             <th>등록일시</th>
                             <th>변경내역</th>
                         </tr>
-                        <tr>
+                        <tr th:each="ver : ${versions}">
                             <td><input type="checkbox"></td>
-                            <td>1</td>
+                            <td>[[${ver.ver_no}]]</td>
                             
-                            <td>0.0.1-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
+                            <td>[[${ver.ver_version}]]</td>
+                            <td>[[${ver.ver_writer}]]</td>
+                            <td>[[${ver.ver_rdate}]]</td>
                             <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
+                                <input type="button" value="[ 확인 ]" class="openModalBtn2"
+                                       th:data-version="${ver.ver_version}"
+                                       th:data-description="${ver.ver_description}"
+                                        />
                             </td>
                         </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>2</td>
-                            
-                            <td>0.0.2-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>3</td>
-                            
-                            <td>0.0.3-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>4</td>
-                            
-                            <td>0.0.4-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>5</td>
-                            
-                            <td>0.0.5-SNAPSHOT</td>
-                            <td>daeunlee1125</td>
-                            <td>2.25.09.25 17:15:00</td>
-                            <td>
-                                <form action="#">
-                                    <input type="submit" value="[ 확인 ]" class="openModalBtn2">
-                                </form>
-                            </td>
-                        </tr>
+
                     </table>
                     
                     <div class="banner-actions">
@@ -214,13 +72,6 @@
         </div>
     </div>
 
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
 
 
     <!-- 모달2 팝업 -->
@@ -235,18 +86,12 @@
             <hr>
             <table class="modal-table">
                 <tr>
-                <th>버전</th>
-                <td>0.0.1-SNAPSHOT</td>
+                    <th>버전</th>
+                    <td id="modalVersion"></td>
                 </tr>
                 <tr>
-                <th class="changed-5">변경내역</th>
-                <td class="changed-5">
-                        - 프로젝트 생성 및 구조 설계<br>
-                        - 회원가입 아이디 중복체크 완료<br>
-                        - 관리자 상품 등록 완료<br>
-                        - 쇼핑몰 메인 및 개별 페이지 링크 작업<br>
-                        - 개발을 위한 제반 사항 처리
-                </td>
+                    <th class="changed-5">변경내역</th>
+                    <td class="changed-5" id="modalDescription"></td>
                 </tr>
             </table>
             <hr>
@@ -268,87 +113,28 @@
                 <h2>버전등록</h2>
                 <button class="close-btn" id="closeModalBtn">&times;</button>
             </div>
-            <div class="modal-content">
-                <hr>
-                <div class="form-group">
-                    <label for="id1">버전</label>
-                    <input type="text" id="id1" placeholder="배너명 입력">
-                </div>
-                <div class="form-group">
-                    <label for="id2">변경내역</label>
-                    <textarea id="id2" placeholder="변경내역 작성하기"></textarea>
-                </div>
+            <form method="post">
+                <div class="modal-content">
+                    <hr>
+                    <input type="hidden" name="ver_writer" th:value="${#authentication.principal.member.mem_id}">
+                    <div class="form-group">
+                        <label for="id1">버전</label>
+                        <input type="text" id="id1" name="ver_version" placeholder="버전 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="id2">변경내역</label>
+                        <textarea id="id2" name="ver_description" placeholder="변경내역 작성하기"></textarea>
+                    </div>
 
-                
-                <hr>
-            </div>
-            <div class="modal-footer">
-                <button>등록하기</button>
-            </div>
+
+                    <hr>
+                </div>
+                <div class="modal-footer">
+                    <button><input type="submit" value="등록하기"></button>
+                </div>
+            </form>
         </div>
     </div>
 
-    
-    <script>
-        // --- 모달 로직 ---
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modal = document.getElementById('modal');
 
-        // '등록하기' 버튼을 클릭하면 모달을 보여줍니다.
-        openModalBtn.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-
-        // 'x' 버튼을 클릭하면 모달을 숨깁니다.
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-
-        // 모달의 배경(오버레이) 부분을 클릭하면 모달을 숨깁니다.
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-
-
-        // --- 확인 모달 로직 ---
-        const openModalBtn2 = document.getElementsByClassName('openModalBtn2');
-        const closeModalBtn2 = document.getElementById('closeModalBtn2');
-        const closeModalBtn2_1 = document.getElementById('closeModalBtn2-1');
-        const modal2 = document.getElementById('modal2');
-
-        // '확인' 버튼을 클릭하면 모달을 보여줍니다.
-        for (const btn of openModalBtn2) {
-            btn.addEventListener('click', () => {
-                modal2.classList.remove('hidden');
-            });
-        }
-
-        // 'x' 버튼을 클릭하면 모달을 숨깁니다.
-        closeModalBtn2.addEventListener('click', () => {
-            modal2.classList.add('hidden');
-        });
-
-        // '닫기' 버튼을 클릭하면 모달을 숨깁니다.
-        closeModalBtn2_1.addEventListener('click', () => {
-            modal2.classList.add('hidden');
-        });
-
-
-        // 모달의 배경(오버레이) 부분을 클릭하면 모달을 숨깁니다.
-        modal2.addEventListener('click', (event) => {
-            if (event.target === modal2) {
-                modal2.classList.add('hidden');
-            }
-        });
-
-
-        
-
-    </script>
-    <script src="/kmarket/inc/js/admin/config.js"></script>
-
-</body>
-</html>
+<div th:replace="~{admin/config/_tail.html}"></div>

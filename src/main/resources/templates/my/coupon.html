@@ -80,11 +80,7 @@
             </ul>
         </div>
 
-        <div class="pagination">
-            <button>&lt; 이전</button>
-            <button th:each="page : ${#numbers.sequence(1, totalPages)}" th:text="${page}"></button>
-            <button>다음 &gt;</button>
-        </div>
+
     </div>
 </main>
 

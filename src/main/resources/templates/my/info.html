@@ -67,7 +67,7 @@
                         <td>
                             <input type="text" id="emailId" th:value="${#strings.substringBefore(memberInfo.mem_email, '@')}">@
                             <select id="emailDomain" onchange="checkEmailDomain()">
-                                <option th:each="domain : ${{'naver.com', 'gmail.com', 'daum.net', 'self'}}"
+                                <option th:each="domain : ${{'naver.com'}}"
                                         th:value="${domain}" th:text="${domain} == 'self' ? '직접입력' : ${domain}"
                                         th:selected="${#strings.substringAfter(memberInfo.mem_email, '@') == domain}">
                                 </option>

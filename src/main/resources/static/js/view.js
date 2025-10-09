@@ -1,23 +1,56 @@
-$(document).ready(function() {
-    
-    // ==========================================================
-    // 1. 옵션 선택 및 가격 계산 기능
-    // ==========================================================
-    const basePrice = parseInt($('.product-info-section').data('product-price'));
+document.addEventListener('DOMContentLoaded', function() {
 
-    // basePrice 값이 유효한 숫자인지 확인
+    // 별점 기능 (Vanilla JS)
+    const allStarRatings = document.querySelectorAll('.star-rating');
+    allStarRatings.forEach(ratingElement => {
+        const score = parseFloat(ratingElement.dataset.score);
+        if (!isNaN(score)) {
+            const percentage = (score / 5.0) * 100;
+            const starFill = ratingElement.querySelector('.star-rating-fill');
+            if (starFill) {
+                starFill.style.width = percentage + '%';
+            }
+        }
+    });
+
+    // ==========================================================
+    // 1. 옵션 선택 및 가격 계산 기능 (Vanilla JS)
+    // ==========================================================
+    const productInfoSection = document.querySelector('.product-info-section');
+    const basePrice = parseInt(productInfoSection.dataset.productPrice);
+
     if (!isNaN(basePrice)) {
-        // 색상 또는 사이즈 선택 시 이벤트 처리
-        $('#select-color, #select-size').on('change', function() {
-            const color = $('#select-color').val();
-            const size = $('#select-size').val();
+        const selectColor = document.querySelector('#select-color');
+        const selectSize = document.querySelector('#select-size');
+        const selectedOptionsList = document.querySelector('#selected-options-list');
+        const grandTotalPriceEl = document.querySelector('#grand-total-price');
+
+        function updateGrandTotal() {
+            let grandTotal = 0;
+            const selectedItems = document.querySelectorAll('.selected-item');
+            selectedItems.forEach(item => {
+                const quantityInput = item.querySelector('.quantity-input');
+                const quantity = parseInt(quantityInput.value);
+                const itemTotal = basePrice * quantity;
+
+                const itemTotalPriceEl = item.querySelector('.item-total-price');
+                itemTotalPriceEl.textContent = itemTotal.toLocaleString() + '원';
+
+                grandTotal += itemTotal;
+            });
+            grandTotalPriceEl.textContent = grandTotal.toLocaleString() + '원';
+        }
+
+        function handleOptionChange() {
+            const color = selectColor.value;
+            const size = selectSize.value;
 
             if (color && size) {
                 const optionText = `베이직 레더 벨트 / ${color} / ${size}`;
-                
+
                 let isDuplicate = false;
-                $('.selected-item').each(function() {
-                    if ($(this).find('.item-name').text() === optionText) {
+                document.querySelectorAll('.selected-item .item-name').forEach(nameEl => {
+                    if (nameEl.textContent === optionText) {
                         isDuplicate = true;
                     }
                 });
@@ -36,234 +69,219 @@ $(document).ready(function() {
                             <span class="item-total-price">${basePrice.toLocaleString()}원</span>
                             <button class="btn-remove">×</button>
                         </div>`;
-                    
-                    $('#selected-options-list').append(newItemHtml);
+                    selectedOptionsList.insertAdjacentHTML('beforeend', newItemHtml);
                 }
 
-                $('#select-color').val('');
-                $('#select-size').val('');
-                
+                selectColor.value = '';
+                selectSize.value = '';
+                updateGrandTotal();
+            }
+        }
+
+        selectColor.addEventListener('change', handleOptionChange);
+        selectSize.addEventListener('change', handleOptionChange);
+
+        selectedOptionsList.addEventListener('click', function(event) {
+            const target = event.target;
+            if (target.tagName === 'BUTTON') {
+                const item = target.closest('.selected-item');
+                if (!item) return;
+
+                const quantityInput = item.querySelector('.quantity-input');
+                let quantity = parseInt(quantityInput.value);
+
+                if (target.classList.contains('btn-plus')) {
+                    quantity++;
+                } else if (target.classList.contains('btn-minus')) {
+                    if (quantity > 1) {
+                        quantity--;
+                    }
+                } else if (target.classList.contains('btn-remove')) {
+                    item.remove();
+                }
+
+                if (quantityInput) {
+                    quantityInput.value = quantity;
+                }
                 updateGrandTotal();
             }
         });
-
-        // 수량 변경 및 삭제 버튼 이벤트 (이벤트 위임)
-        $('#selected-options-list').on('click', 'button', function() {
-            const $item = $(this).closest('.selected-item');
-            const $quantityInput = $item.find('.quantity-input');
-            let quantity = parseInt($quantityInput.val());
-
-            if ($(this).hasClass('btn-plus')) {
-                quantity++;
-            } else if ($(this).hasClass('btn-minus')) {
-                if (quantity > 1) {
-                    quantity--;
-                }
-            } else if ($(this).hasClass('btn-remove')) {
-                $item.remove();
-            }
-
-            if ($quantityInput.length > 0) {
-                $quantityInput.val(quantity);
-            }
-            updateGrandTotal();
-        });
-
-        // 총 금액 계산 및 업데이트 함수
-        function updateGrandTotal() {
-            let grandTotal = 0;
-            $('.selected-item').each(function() {
-                const $item = $(this);
-                const quantity = parseInt($item.find('.quantity-input').val());
-                const itemTotal = basePrice * quantity;
-                
-                $item.find('.item-total-price').text(itemTotal.toLocaleString() + '원');
-                
-                grandTotal += itemTotal;
-            });
-            
-            $('#grand-total-price').text(grandTotal.toLocaleString() + '원');
-        }
     }
 
     // ==========================================================
-    // 2. 상세정보 펼치기/접기 기능
+    // 2. 상세정보 펼치기/접기 기능 (Vanilla JS)
     // ==========================================================
-    $('.toggle-detail-btn').on('click', function() {
-        const $container = $('.long-detail-container');
-        const $button = $(this);
+    const toggleDetailBtn = document.querySelector('.toggle-detail-btn');
+    if (toggleDetailBtn) {
+        toggleDetailBtn.addEventListener('click', function() {
+            const container = document.querySelector('.long-detail-container');
+            container.classList.toggle('expanded');
 
-        $container.toggleClass('expanded');
-
-        if ($container.hasClass('expanded')) {
-            $button.text('상세정보 접기 ▲');
-        } else {
-            $button.text('상세정보 펼쳐보기 ▼');
-        }
-        
-        recalculateOffsets();
-    });
+            if (container.classList.contains('expanded')) {
+                this.textContent = '상세정보 접기 ▲';
+            } else {
+                this.textContent = '상세정보 펼쳐보기 ▼';
+            }
+            recalculateOffsets();
+        });
+    }
 
     // ==========================================================
-    // 3. Sticky 네비게이션 & Scrollspy 기능
+    // 3. Sticky 네비게이션 & Scrollspy 기능 (Vanilla JS)
     // ==========================================================
-    const $nav = $('.product-detail-nav');
+    const nav = document.querySelector('.product-detail-nav');
     let recalculateOffsets = function() {}; // 함수 선언
 
-    if ($nav.length) {
-        
-        const $navLinks = $nav.find('a');
-        const $navItems = $nav.find('li');
-        const $placeholder = $('.nav-placeholder');
-        let navOffsetTop = $nav.offset().top;
-        const navHeight = $nav.outerHeight();
-        
+    if (nav) {
+        const navLinks = nav.querySelectorAll('a');
+        const navItems = nav.querySelectorAll('li');
+        const placeholder = document.querySelector('.nav-placeholder');
+        let navOffsetTop = nav.offsetTop;
+        const navHeight = nav.offsetHeight;
+
         let isAnimating = false;
         let sectionOffsets = [];
 
-        $placeholder.height(navHeight);
+        placeholder.style.height = navHeight + 'px';
 
         recalculateOffsets = function() {
             sectionOffsets = [];
-            $navLinks.each(function() {
-                const targetId = $(this).attr('href');
-                const $target = $(targetId);
-                if ($target.length) {
+            navLinks.forEach(link => {
+                const targetId = link.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
                     sectionOffsets.push({
                         id: targetId,
-                        top: $target.offset().top
+                        top: target.offsetTop
                     });
                 }
             });
-            navOffsetTop = $nav.is('.sticky') ? navOffsetTop : $nav.offset().top;
+            navOffsetTop = nav.classList.contains('sticky') ? navOffsetTop : nav.offsetTop;
         };
-
-        recalculateOffsets();
-
-        $(window).on('scroll', function() {
-            const scrollTop = $(this).scrollTop();
-
-            if (scrollTop >= navOffsetTop) {
-                $nav.addClass('sticky');
-                $placeholder.show();
-            } else {
-                $nav.removeClass('sticky');
-                $placeholder.hide();
-            }
-            
-            if (!isAnimating) {
-                updateActiveNav(scrollTop);
-            }
-        });
 
         function updateActiveNav(scrollTop) {
             let currentSectionId = null;
             const scrollPosition = scrollTop + navHeight + 20;
 
-            for (const section of sectionOffsets) {
+            sectionOffsets.forEach(section => {
                 if (scrollPosition >= section.top) {
                     currentSectionId = section.id;
                 }
-            }
-            
-            $navItems.removeClass('active');
+            });
+
+            navItems.forEach(item => item.classList.remove('active'));
             if (currentSectionId) {
-                $nav.find(`a[href="${currentSectionId}"]`).parent('li').addClass('active');
+                nav.querySelector(`a[href="${currentSectionId}"]`).parentElement.classList.add('active');
             }
         }
 
-        $navLinks.on('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = $(this).attr('href');
-            const $target = $(targetId);
+        recalculateOffsets();
 
-            if ($target.length) {
-                isAnimating = true;
-                
-                const scrollToPosition = $target.offset().top - navHeight;
-                
-                $navItems.removeClass('active');
-                $(this).parent('li').addClass('active');
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
 
-                $('html, body').stop().animate({
-                    scrollTop: scrollToPosition
-                }, 500, function() {
-                    isAnimating = false;
-                });
+            if (scrollTop >= navOffsetTop) {
+                nav.classList.add('sticky');
+                placeholder.style.display = 'block';
+            } else {
+                nav.classList.remove('sticky');
+                placeholder.style.display = 'none';
             }
+
+            if (!isAnimating) {
+                updateActiveNav(scrollTop);
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+
+                if (target) {
+                    isAnimating = true;
+                    const scrollToPosition = target.offsetTop - navHeight;
+
+                    navItems.forEach(item => item.classList.remove('active'));
+                    this.parentElement.classList.add('active');
+
+                    window.scrollTo({
+                        top: scrollToPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // 'smooth' 스크롤이 끝나는 것을 감지하는 정확한 이벤트가 없으므로
+                    // 일정 시간 후 플래그를 해제합니다.
+                    setTimeout(() => {
+                        isAnimating = false;
+                    }, 800); // 애니메이션 시간보다 넉넉하게 설정
+                }
+            });
         });
     }
 
     // ==========================================================
-    // 4. 리뷰 페이지네이션 기능 (수정된 코드)
+    // 4. 리뷰 페이지네이션 기능 (Vanilla JS)
     // ==========================================================
-    const $reviewContainer = $('#detail-review');
-    const $reviewItems = $reviewContainer.find('.review-item');
+    const reviewContainer = document.querySelector('#detail-review');
+    if (reviewContainer) {
+        const reviewItems = Array.from(reviewContainer.querySelectorAll('.review-item'));
 
-    if ($reviewItems.length > 0) {
-        const reviewsPerPage = 5; // 한 페이지에 보여줄 리뷰 수
-        const totalReviews = $reviewItems.length;
-        const totalPages = Math.ceil(totalReviews / reviewsPerPage);
-        let currentReviewPage = 1;
+        if (reviewItems.length > 0) {
+            const reviewsPerPage = 5;
+            const totalReviews = reviewItems.length;
+            const totalPages = Math.ceil(totalReviews / reviewsPerPage);
+            let currentReviewPage = 1;
 
-        const $reviewPagination = $('.pagination-container .pagination');
+            const reviewPagination = document.querySelector('.pagination-container .pagination');
 
-        function setupReviewPagination() {
-            $reviewPagination.empty();
-            $reviewPagination.append('<a href="#" class="page-link prev">이전</a>');
-            for (let i = 1; i <= totalPages; i++) {
-                $reviewPagination.append(`<a href="#" class="page-link" data-page="${i}">${i}</a>`);
-            }
-            $reviewPagination.append('<a href="#" class="page-link next">다음</a>');
-        }
+            function showReviewPage(page) {
+                currentReviewPage = page;
+                const startIndex = (currentReviewPage - 1) * reviewsPerPage;
+                const endIndex = startIndex + reviewsPerPage;
 
-        function showReviewPage(page) {
-            currentReviewPage = page;
-            const startIndex = (currentReviewPage - 1) * reviewsPerPage;
-            const endIndex = startIndex + reviewsPerPage;
+                reviewItems.forEach(item => item.style.display = 'none');
+                reviewItems.slice(startIndex, endIndex).forEach(item => item.style.display = 'block');
 
-            $reviewItems.hide();
-            $reviewItems.slice(startIndex, endIndex).show();
-
-            updateReviewPaginationLinks();
-        }
-
-        function updateReviewPaginationLinks() {
-            $reviewPagination.find('.page-link').removeClass('active');
-            $reviewPagination.find(`.page-link[data-page="${currentReviewPage}"]`).addClass('active');
-            $reviewPagination.find('.prev').toggleClass('disabled', currentReviewPage === 1);
-            $reviewPagination.find('.next').toggleClass('disabled', currentReviewPage === totalPages);
-        }
-
-        // 페이지네이션 클릭 이벤트 (list 페이지와 동일한 로직)
-        $reviewPagination.on('click', '.page-link', function(e) {
-            e.preventDefault();
-            const $this = $(this);
-
-            if ($this.hasClass('disabled') || $this.hasClass('active')) {
-                return;
+                updateReviewPaginationLinks();
             }
 
-            let targetPage;
-            if ($this.hasClass('prev')) {
-                targetPage = currentReviewPage - 1;
-            } else if ($this.hasClass('next')) {
-                targetPage = currentReviewPage + 1;
-            } else {
-                targetPage = parseInt($this.data('page'));
+            function updateReviewPaginationLinks() {
+                const pageLinks = reviewPagination.querySelectorAll('.page-link');
+                pageLinks.forEach(link => link.classList.remove('active'));
+
+                const activeLink = reviewPagination.querySelector(`.page-link[data-page="${currentReviewPage}"]`);
+                if(activeLink) activeLink.classList.add('active');
+
+                reviewPagination.querySelector('.prev').classList.toggle('disabled', currentReviewPage === 1);
+                reviewPagination.querySelector('.next').classList.toggle('disabled', currentReviewPage === totalPages);
             }
 
-            if (targetPage >= 1 && targetPage <= totalPages) {
-                showReviewPage(targetPage);
-            }
-        });
+            reviewPagination.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = e.target;
 
-        // --- 리뷰 페이지네이션 최초 실행 ---
-        if (totalPages > 1) {
-             // HTML에 페이지네이션이 하드코딩 되어있으므로 이 부분은 필요 시 주석 해제
-            // setupReviewPagination();
+                if (!target.classList.contains('page-link') || target.classList.contains('disabled') || target.classList.contains('active')) {
+                    return;
+                }
+
+                let targetPage;
+                if (target.classList.contains('prev')) {
+                    targetPage = currentReviewPage - 1;
+                } else if (target.classList.contains('next')) {
+                    targetPage = currentReviewPage + 1;
+                } else {
+                    targetPage = parseInt(target.dataset.page);
+                }
+
+                if (targetPage >= 1 && targetPage <= totalPages) {
+                    showReviewPage(targetPage);
+                }
+            });
+
+            showReviewPage(1);
         }
-        showReviewPage(1); // 첫 페이지를 기본으로 보여줌
     }
 });

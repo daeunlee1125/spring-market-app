@@ -13,7 +13,7 @@ import lombok.*;
 public class Cate1DTO {
 
     private int cate1_no;
-    private String cate_name;
+    private String cate1_name;
 
 
 }

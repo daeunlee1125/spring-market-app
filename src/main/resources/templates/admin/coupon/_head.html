@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kmarket/admin - Final Version</title>
+
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/admin_temp.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/coupon.css}">
+
+
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-header">
+        SHOPLY Admin
+    </div>
+    <nav>
+        <ul class="mainSideBar">
+            <li>
+                <div><i class="fas fa-cog"></i> 환경설정</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/config/basic}">기본설정</a></li>
+                    <li><a th:href="@{/admin/config/banner}">배너관리</a></li>
+                    <li><a th:href="@{/admin/config/policy}">약관관리</a></li>
+                    <li><a th:href="@{/admin/config/category}">카테고리</a></li>
+                    <li><a th:href="@{/admin/config/version}">버전관리</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-store"></i> 상점관리</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/shop/list}">상점목록</a></li>
+                    <li><a th:href="@{/admin/shop/sales}">매출현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-users"></i> 회원관리</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/member/list}">회원목록</a></li>
+                    <li><a th:href="@{/admin/member/point}">포인트관리</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-box-open"></i> 상품관리</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/product/list}">상품목록</a></li>
+                    <li><a th:href="@{/admin/product/register}">상품등록</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-truck"></i> 주문관리</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/order/list}">주문현황</a></li>
+                    <li><a th:href="@{/admin/order/delivery}">배송현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/coupon/list}">쿠폰목록</a></li>
+                    <li><a th:href="@{/admin/coupon/issued}">쿠폰발급현황</a></li>
+                </ul>
+            </li>
+            <li>
+                <div><i class="fas fa-headset"></i> 고객센터</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/cs/notice/list}">공지사항</a></li>
+                    <li><a th:href="@{/admin/cs/faq/list}">자주묻는질문</a></li>
+                    <li><a th:href="@{/admin/cs/qna/list}">문의하기</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<!-- 헤더 -->
+<header>
+    <div class="middle">
+        <div id="logo">
+            <a th:href="@{/admin/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
+        </div>
+        <div class="header-nav">
+            <ul class="header-menu">
+                <li><a href="#">홈</a></li>
+                <li><a href="#">로그아웃</a></li>
+                <li><a href="#">고객센터</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

@@ -1,28 +1,32 @@
-package kr.co.shoply.entity;
+package kr.co.shoply.dto;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+@Setter
 @ToString
-@Entity
-@Table(name = "sys_coupon")
-public class SysCoupon {
-    @Id
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class SysCouponDTO {
     private String cp_code;
     private String cp_name;
     private Integer cp_type;
     private Integer cp_value;
     private Integer cp_min_price;
-    private Date cp_issue_date;
-    private Date cp_exp_date;
+    private LocalDate cp_issue_date;
+    private LocalDate cp_exp_date;
+    private Integer cp_stat;
+
+    private String cp_issuer_id;
+    private String cp_issuer_name; // 발급자 이름
+
+
+    private int issuecount; //쿠폰 발급 수
+    private int usedcount; // 쿠폰 사용 수
+
 }

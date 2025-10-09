@@ -1,98 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - Final Version</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/config.css">
+<div th:replace="~{admin/config/_head.html}"></div>
 
-</head>
-<body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
-
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
-
-    
 
     <div class="main">
         <div class="middle main-content">
@@ -121,77 +28,37 @@
                     <h2 class="h2-1">카테고리 관리</h2>
                     <div class="gray-1">쇼핑몰 메인, 상품 페이지 사이드 카테고리 메뉴</div>
 
-                    <form action="">
+                    <form name="cateForm" id="cateForm" method="post">
                         <ul class="category-list-4">
-                            <li class="category-item-4" draggable="true">
-                                <div class="category-header-4">
-                                    <span class="toggle-btn-4">▶</span> 여성패션
-                                    <input type="hidden" name="mainCategories[0].name" value="여성패션">
-                                    <button class="delete-btn-4">삭제</button>
+                            <li class="category-item-4" draggable="true" th:each="cate1, cate1Stat : ${cate1List}">
+                                <div>
+                                    <div class="category-header-4">
+                                        <span class="toggle-btn-4">▶</span> [[${cate1.cate1_name}]]
+                                        <input type="hidden" th:name="${'mainCategories[' + cate1Stat.index + '].cate1_name'}" th:value="${cate1.cate1_name}">
+                                        <input type="hidden" th:name="${'mainCategories[' + cate1Stat.index + '].cate1_no'}" th:value="${cate1.cate1_no}">
+
+                                        <button class="delete-btn-4">삭제</button>
+                                    </div>
+                                    <ul class="subcategory-4">
+                                        <th:block th:each="cate2, cate2Stat : ${cate2List}">
+                                            <li class="subcategory-item-4" draggable="true"
+                                                th:if="${cate2.cate1_no} == ${cate1.cate1_no}">
+                                                [[${cate2.cate2_name}]]
+                                                <input type="hidden" th:name="${'subCategories[' + cate2Stat.index + '].cate2_name'}" th:value="${cate2.cate2_name}">
+                                                <input type="hidden" th:name="${'subCategories[' + cate2Stat.index + '].cate1_no'}"   th:value="${cate1.cate1_no}">
+
+                                                <button class="delete-btn-4" type="button" >삭제</button>
+                                            </li>
+                                        </th:block>
+
+
+                                        <li>
+                                            <button class="add-btn-4 add-sub">+ 2차카테고리추가</button>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <ul class="subcategory-4">
-                                    <li class="subcategory-item-4" draggable="true">브랜드의류
-                                        <input type="hidden" name="subCategories[0].name" value="브랜드의류">
-                                        <button class="delete-btn-4">삭제</button>
-                                    </li>
-                                    <li class="subcategory-item-4" draggable="true">브랜드가방
-                                        <input type="hidden" name="subCategories[1].name" value="브랜드가방">
-                                        <button class="delete-btn-4">삭제</button>
-                                    </li>
-
-
-                                    <li>
-                                        <button class="add-btn-4 add-sub">+ 2차카테고리추가</button>
-                                    </li>
-                                </ul>
                             </li>
 
-                            <li class="category-item-4" draggable="true">
-                                <div class="category-header-4">
-                                    <span class="toggle-btn-4">▶</span> 남성패션
-                                    <input type="hidden" name="mainCategories[1].name" value="남성패션">
-                                    <button class="delete-btn-4">삭제</button>
-                                </div>
-                                <ul class="subcategory-4">
-                                    <li class="subcategory-item-4" draggable="true">브랜드신발
-                                        <input type="hidden" name="subCategories[2].name" value="브랜드신발">
-                                        <button class="delete-btn-4">삭제</button>
-                                    </li>
-                                    <li class="subcategory-item-4" draggable="true">브랜드잡화
-                                        <input type="hidden" name="subCategories[3].name" value="브랜드잡화">
-                                        <button class="delete-btn-4">삭제</button>
-                                    </li>
-
-                                    <li>
-                                        <button class="add-btn-4 add-sub">+ 2차카테고리추가</button>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="category-item-4" draggable="true">
-                                <div class="category-header-4">
-                                    <span class="toggle-btn-4">▶</span> 식품
-                                    <input type="hidden" name="mainCategories[2].name" value="식품">
-                                    <button class="delete-btn-4">삭제</button>
-                                </div>
-                                <ul class="subcategory-4">
-                                    <li class="subcategory-item-4" draggable="true">과일
-                                        <input type="hidden" name="subCategories[4].name" value="과일">
-                                        <button class="delete-btn-4">삭제</button>
-                                    </li>
-                                    <li class="subcategory-item-4" draggable="true">채소
-                                        <input type="hidden" name="subCategories[5].name" value="채소">
-                                        <button class="delete-btn-4">삭제</button>
-                                    </li>
-                                    <li class="subcategory-item-4" draggable="true">쌀/잡곡/견과
-                                        <input type="hidden" name="subCategories[6].name" value="쌀/잡곡/견과">
-                                        <button class="delete-btn-4">삭제</button>
-                                    </li>
-
-                                    <li>
-                                        <button class="add-btn-4 add-sub">+ 2차카테고리추가</button>
-                                    </li>
-                                </ul>
-                            </li>
                             <li class="category-item-4">
                                 <div class="category-header-4" style="padding: 7px 16px;">
                                     <button type="button" class="add-btn-4 add-main">+ 1차카테고리추가</button>
@@ -200,11 +67,11 @@
                         </ul>
 
                         <div class="yellow-4">카테고리 메뉴 순서는 드래그 앤 드롭으로 수정할 수 있습니다.</div>
-                        
+
                         <input type="submit" class="submit-btn-1" value="수정하기">
                     </form>
                     <br><br>
- 
+
 
                 </main>
  
@@ -212,17 +79,4 @@
         </div>
     </div>
 
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
-
-    
-
-
-</body>
-    <script src="/kmarket/inc/js/admin/config.js"></script>
-</html>
+<div th:replace="~{admin/config/_tail.html}"></div>

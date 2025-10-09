@@ -1,4 +1,4 @@
-package kr.co.practice.entity;
+package kr.co.shoply.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

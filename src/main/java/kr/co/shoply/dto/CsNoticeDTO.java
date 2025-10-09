@@ -1,4 +1,4 @@
-package kr.co.practice.dto;
+package kr.co.shoply.dto;
 
 import lombok.*;
 

@@ -57,12 +57,12 @@
             </thead>
             <tbody>
             <tr th:each="point : ${pointList}">
-                <td th:text="${#dates.format(point.pDate, 'yyyy-MM-dd')}">2022-12-13</td>
-                <td th:text="${point.pType}">적립</td>
-                <td th:text="${point.ordNo}">2022121001</td>
-                <td th:text="${#numbers.formatInteger(point.pPoint, 3, 'COMMA')}">340</td>
-                <td th:text="${point.pInfo}">상품구매확정</td>
-                <td th:text="${#dates.format(point.pExpDate, 'yyyy-MM-dd')}">2024-12-10</td>
+                <td th:text="${#dates.format(point.p_date, 'yyyy-MM-dd')}">2022-12-13</td>
+                <td th:text="${point.p_type}">적립</td>
+                <td th:text="${point.ord_no}">2022121001</td>
+                <td th:text="${#numbers.formatInteger(point.p_point, 3, 'COMMA')}">340</td>
+                <td th:text="${point.p_info}">상품구매확정</td>
+                <td th:text="${#dates.format(point.p_exp_date, 'yyyy-MM-dd')}">2024-12-10</td>
             </tr>
             <tr th:if="${#lists.isEmpty(pointList)}">
                 <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>

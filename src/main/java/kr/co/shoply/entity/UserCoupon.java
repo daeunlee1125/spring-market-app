@@ -17,21 +17,10 @@ import java.util.Date;
 @Table(name = "user_coupon")
 public class UserCoupon {
     @Id
-    @Column(name = "cp_no", length = 11)
-    private String cpNo;
-
-    @Column(name = "cp_code", length = 11, nullable = false)
-    private String cpCode;
-
-    @Column(name = "mem_id", length = 30, nullable = false)
-    private String memId;
-
-    @Column(name = "cp_issued_date", nullable = false)
-    private Date cpIssuedDate;
-
-    @Column(name = "cp_used_date")
-    private Date cpUsedDate;
-
-    @Column(name = "cp_stat")
-    private Integer cpStat;
+    private String cp_no;
+    private String cp_code;
+    private String mem_id;
+    private Date cp_issued_date;
+    private Date cp_used_date;
+    private Integer cp_stat;
 }

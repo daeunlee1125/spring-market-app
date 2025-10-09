@@ -8,10 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class OrderItemDTO {
-    private Long itemNo;
-    private String ordNo;
-    private String prodNo;
-    private String itemName;
-    private Integer itemCnt;
-    private Integer itemStat;
+    private Long item_no;
+    private String ord_no;
+    private String prod_no;
+    private String item_name;
+    private Integer item_cnt;
+    private Integer item_stat;
 }

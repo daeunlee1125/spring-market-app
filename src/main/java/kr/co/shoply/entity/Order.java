@@ -18,34 +18,16 @@ import java.time.LocalDateTime;
 @Table(name = "`order`") // Oracle 예약어 처리
 public class Order {
     @Id
-    @Column(name = "ord_no", length = 11)
-    private String ordNo;
-
-    @Column(name = "mem_id", length = 30, nullable = false)
-    private String memId;
-
-    @Column(name = "ord_name", length = 30)
-    private String ordName;
-
-    @Column(name = "ord_hp", length = 13)
-    private String ordHp;
-
-    @Column(name = "ord_zip", length = 30)
-    private String ordZip;
-
-    @Column(name = "ord_addr1", length = 50)
-    private String ordAddr1;
-
-    @Column(name = "ord_addr2", length = 50)
-    private String ordAddr2;
-
-    @Column(name = "ord_total")
-    private Integer ordTotal;
+    private String ord_no;
+    private String mem_id;
+    private String ord_name;
+    private String ord_hp;
+    private String ord_zip;
+    private String ord_addr1;
+    private String ord_addr2;
+    private Integer ord_total;
 
     @CreationTimestamp // 객체 생성 시 현재 시간 자동 입력
-    @Column(name = "ord_date", nullable = false)
-    private LocalDateTime ordDate;
-
-    @Column(name = "ord_payment", length = 50)
-    private String ordPayment;
+    private LocalDateTime ord_date;
+    private String ord_payment;
 }

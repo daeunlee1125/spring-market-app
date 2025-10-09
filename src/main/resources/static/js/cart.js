@@ -4,22 +4,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
 
     // --- 기능: 전체 선택 및 해제 ---
-    selectAllCheckbox.addEventListener('change', function () {
-        itemCheckboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
-        updateSummary();
-    });
-
-    // --- 기능: 개별 상품 선택 시 '전체선택' 체크박스 상태 업데이트 ---
-    itemCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-            const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
-            selectAllCheckbox.checked = allChecked;
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function () {
+            itemCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
             updateSummary();
         });
-    });
-    
+    }
+
+    // --- 기능: 개별 상품 선택 시 '전체선택' 체크박스 상태 업데이트 ---
+    if (itemCheckboxes) {
+        itemCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
+                selectAllCheckbox.checked = allChecked;
+                updateSummary();
+            });
+        });
+    }
+
     // --- 기능: 수량 조절 ---
     document.querySelectorAll('.quantity-selector').forEach(selector => {
         const downBtn = selector.querySelector('.quantity-down');
@@ -42,20 +46,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // --- 기능: 선택 삭제 ---
-    deleteSelectedBtn.addEventListener('click', function () {
-        const checkedItems = document.querySelectorAll('.item-checkbox:checked');
-        if(checkedItems.length === 0) {
-            alert('삭제할 상품을 선택해주세요.');
-            return;
-        }
-        if(confirm('선택한 상품을 장바구니에서 삭제하시겠습니까?')) {
-            checkedItems.forEach(checkbox => {
-                checkbox.closest('.cart-item').remove();
-            });
-            updateSummary();
-        }
-    });
-    
+    if (deleteSelectedBtn) {
+        deleteSelectedBtn.addEventListener('click', function () {
+            const checkedItems = document.querySelectorAll('.item-checkbox:checked');
+            if (checkedItems.length === 0) {
+                alert('삭제할 상품을 선택해주세요.');
+                return;
+            }
+            if (confirm('선택한 상품을 장바구니에서 삭제하시겠습니까?')) {
+                checkedItems.forEach(checkbox => {
+                    checkbox.closest('.cart-item').remove();
+                });
+                updateSummary();
+            }
+        });
+    }
+
     // --- 기능: 개별 상품 삭제 버튼 ---
     document.querySelectorAll('.delete-item').forEach(button => {
         button.addEventListener('click', function() {
@@ -65,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-    
+
     // --- 기능: 주문하기 버튼 클릭 시 확인 대화상자 ---
     document.getElementById('orderBtn').addEventListener('click', function() {
         const checkedItems = document.querySelectorAll('.item-checkbox:checked');
@@ -87,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let orderAmount = 0;
         let discountAmount = 0;
         const shippingFeeThreshold = 30000; // 3만원 이상 무료배송
-        let baseShippingFee = 3000; 
+        let baseShippingFee = 3000;
 
         document.querySelectorAll('.cart-item').forEach(item => {
             const checkbox = item.querySelector('.item-checkbox');
@@ -95,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const price = parseInt(item.dataset.price);
                 const discount = parseInt(item.dataset.discount);
                 const quantity = parseInt(item.querySelector('.quantity-input').value);
-                
+
                 totalItemsCount += quantity;
                 orderAmount += price * quantity;
                 discountAmount += discount * quantity;
@@ -116,7 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 페이지 로드 시 초기 계산 실행
-    itemCheckboxes.forEach(cb => cb.checked = true);
+    if (itemCheckboxes) {
+        itemCheckboxes.forEach(cb => cb.checked = true);
+    }
     if(selectAllCheckbox) {
         selectAllCheckbox.checked = true;
     }

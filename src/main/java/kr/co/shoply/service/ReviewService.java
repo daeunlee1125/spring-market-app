@@ -15,7 +15,7 @@ public class ReviewService {
 
     private final ReviewMapper reviewMapper;
 
-    public double selectByProdNo(String prod_no) {
-        return reviewMapper.select(prod_no);
+    public List<ReviewDTO> getReviews3(String prodNo){
+        return reviewMapper.selectAll3(prodNo);
     }
 }

@@ -69,23 +69,15 @@
                             </div>
 
                             <div class="info-options" th:each="opDTO : ${OpDtoList}">
-                                <select id="select-color" name="color">
+                                <select id="select-option" name="color">
                                     <option value="" th:text="${opDTO.getOpt_name()} + ' 선택하세요'">색상 선택하세요.</option>
                                     <th:block th:each="opVal : ${opDTO.getOptValList()}">
                                         <option th:value="${opVal}" th:text="${opVal}"></option>
                                     </th:block>
                                 </select>
 
-
-<!--                                <select id="select-size" name="size">-->
-<!--                                    <option value="">사이즈 선택하세요.</option>-->
-<!--                                    <option value="M (30-32)">M (30-32)</option>-->
-<!--                                    <option value="L (33-35)">L (33-35)</option>-->
-<!--                                </select>-->
-
-<!--                                <div id="selected-options-list"></div>-->
                             </div>
-
+                            <div id="selected-options-list"></div>
                             <div class="info-purchase">
                                 <div class="total-price">
                                     <span>총 상품금액</span>
@@ -109,22 +101,22 @@
                     <nav class="product-detail-nav">
                         <ul>
                             <li class="active"><a href="#detail-info">상품상세정보</a></li>
-                            <li><a href="#detail-review">고객리뷰 (0)</a></li>
+                            <li><a href="#detail-review" th:text="'고객리뷰(' + ${productDTO.getCntRating()}+')'">고객리뷰 (0)</a></li>
                             <li><a href="#detail-exchange">교환/반품 안내</a></li>
                         </ul>
                     </nav>
                     <div class="nav-placeholder"></div>
 
                     <div id="detail-info" class="detail-content">
-                        <p style="text-align: center; padding: 40px 0; font-size: 18px; color: #888;">
+                        <p style="text-align: center; font-size: 18px; color: #888; margin-top: 10px; padding: 0 0 40px;" th:text="'상품 번호 : ' + ${productDTO.getProd_no()}">
                             상품 번호: 1000722586634<br>
                             모델 번호: Y0251LCL158S1N00125F
                         </p>
-                        <img th:src="@{/inc/image/info.avif}" alt="SSG Guarantee">
-                        <img th:src="@{/inc/image/productDetail.jpg}" alt="짧은 상세 이미지">
+                        <img th:src="@{/image/product/wc_1_thumb1.jpg}" alt="SSG Guarantee">
+                        <img th:src="@{/image/product/wc_1_thumb2.jpg}" alt="짧은 상세 이미지">
 
                         <div class="long-detail-container">
-                            <img th:src="@{/inc/image/productDetail2.jpg}" alt="긴 상세 이미지" class="long-detail-image">
+                            <img th:src="@{/image/product/wc_1_detail.jpg}" alt="긴 상세 이미지" class="long-detail-image">
                             <div class="fade-overlay"></div>
                         </div>
                         <button type="button" class="toggle-detail-btn">상세정보 펼쳐보기 ▼</button>
@@ -133,10 +125,10 @@
                     <div id="detail-review" class="detail-content">
                         <div class="review-header">
                             <div class="review-tabs">
-                                <a href="#" class="active">전체(562)</a>
-                                <a href="#">포토(132)</a>
-                                <a href="#">동영상(2)</a>
-                                <a href="#">선물(11)</a>
+                                <a href="#" class="active" th:text="'전체(' + ${productDTO.getCntRating()} + ')'">전체(562)</a>
+<!--                                <a href="#">포토(132)</a>-->
+<!--                                <a href="#">동영상(2)</a>-->
+<!--                                <a href="#">선물(11)</a>-->
                             </div>
                             <div class="review-sort">
                                 <select>
@@ -149,6 +141,7 @@
                         </div>
 
                         <div class="review-list">
+                            
                             <div class="review-item">
                                 <div class="review-meta-top">
                                     <div class="review-author">

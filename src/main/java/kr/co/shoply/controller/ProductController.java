@@ -6,6 +6,7 @@ import kr.co.shoply.dto.ProductDTO;
 import kr.co.shoply.dto.ReviewDTO;
 import kr.co.shoply.service.Cate2Service;
 import kr.co.shoply.service.ProductService;
+import kr.co.shoply.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final Cate2Service cate2Service;
+    private final ReviewService reviewService;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
@@ -44,12 +46,15 @@ public class ProductController {
     }
 
     @GetMapping("/product/view/{cate2No}/{prodNo}")
-    public String view(@PathVariable int cate2No, @PathVariable int prodNo, Model model) {
+    public String view(@PathVariable int cate2No, @PathVariable String prodNo, Model model) {
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
         model.addAttribute("cate2DTO", cate2DTO);
 
         ProductDTO productDTO = productService.getProduct3(prodNo);
         model.addAttribute("productDTO", productDTO);
+
+        List<ReviewDTO> reviewDTOList = reviewService.getReviews3(prodNo);
+        model.addAttribute("reviewDTOList", reviewDTOList);
 
         List<ProdOptionDTO> OpDtoList = productService.getProductOption3(prodNo); // 상품별 옵션들
         for(ProdOptionDTO opDto : OpDtoList){

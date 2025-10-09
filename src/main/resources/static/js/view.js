@@ -14,23 +14,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ==========================================================
-    // 1. 옵션 선택 및 가격 계산 기능 (Vanilla JS)
+    // 1. 옵션 선택 및 가격 계산 기능
     // ==========================================================
     const productInfoSection = document.querySelector('.product-info-section');
-    const basePrice = parseInt(productInfoSection.dataset.productPrice);
+    if (productInfoSection) {
+        // 1. '.final' 클래스를 가진 span 태그에서 가격 텍스트를 가져옵니다.
+        const finalPriceText = productInfoSection.querySelector('.final').textContent;
 
-    if (!isNaN(basePrice)) {
-        const selectColor = document.querySelector('#select-color');
-        const selectSize = document.querySelector('#select-size');
+        // 2. 텍스트에 포함된 콤마(,)를 제거하고 숫자로 변환합니다.
+        const basePrice = parseInt(finalPriceText.replace(/,/g, ''), 10);
+
+        // 동적으로 상품 이름 가져오기
+        const productNameEl = productInfoSection.querySelector('.product-name');
+        const productName = productNameEl ? productNameEl.textContent.trim() : '';
+
+        // querySelectorAll로 모든 옵션 select 박스를 가져옵니다.
+        const allSelectOptions = document.querySelectorAll('.info-options select');
         const selectedOptionsList = document.querySelector('#selected-options-list');
         const grandTotalPriceEl = document.querySelector('#grand-total-price');
 
+        // 가격 업데이트 함수 (기존과 동일)
         function updateGrandTotal() {
             let grandTotal = 0;
             const selectedItems = document.querySelectorAll('.selected-item');
             selectedItems.forEach(item => {
                 const quantityInput = item.querySelector('.quantity-input');
-                const quantity = parseInt(quantityInput.value);
+                const quantity = parseInt(quantityInput.value, 10);
                 const itemTotal = basePrice * quantity;
 
                 const itemTotalPriceEl = item.querySelector('.item-total-price');
@@ -41,13 +50,25 @@ document.addEventListener('DOMContentLoaded', function() {
             grandTotalPriceEl.textContent = grandTotal.toLocaleString() + '원';
         }
 
-        function handleOptionChange() {
-            const color = selectColor.value;
-            const size = selectSize.value;
+        // 옵션 추가 함수
+        function addSelectedItem() {
+            let allOptionsSelected = true;
+            const selectedValues = [];
 
-            if (color && size) {
-                const optionText = `베이직 레더 벨트 / ${color} / ${size}`;
+            // 모든 옵션이 선택되었는지 확인
+            allSelectOptions.forEach(select => {
+                if (select.value === '') {
+                    allOptionsSelected = false;
+                }
+                selectedValues.push(select.value);
+            });
 
+            // 모든 옵션이 선택되었다면
+            if (allOptionsSelected) {
+                // 상품 이름과 선택된 옵션 값들을 조합
+                const optionText = `${productName} / ${selectedValues.join(' / ')}`;
+
+                // 중복 옵션 체크
                 let isDuplicate = false;
                 document.querySelectorAll('.selected-item .item-name').forEach(nameEl => {
                     if (nameEl.textContent === optionText) {
@@ -59,53 +80,60 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('이미 추가된 옵션입니다.');
                 } else {
                     const newItemHtml = `
-                        <div class="selected-item">
+                        <div class="selected-item" data-option-combo="${optionText}">
                             <span class="item-name">${optionText}</span>
                             <div class="quantity-counter">
-                                <button class="btn-minus">-</button>
+                                <button type="button" class="btn-minus">-</button>
                                 <input type="text" class="quantity-input" value="1" readonly>
-                                <button class="btn-plus">+</button>
+                                <button type="button" class="btn-plus">+</button>
                             </div>
                             <span class="item-total-price">${basePrice.toLocaleString()}원</span>
-                            <button class="btn-remove">×</button>
+                            <button type="button" class="btn-remove">×</button>
                         </div>`;
                     selectedOptionsList.insertAdjacentHTML('beforeend', newItemHtml);
                 }
 
-                selectColor.value = '';
-                selectSize.value = '';
+                // 선택 후 모든 select 박스를 초기화
+                allSelectOptions.forEach(select => {
+                    select.value = '';
+                });
                 updateGrandTotal();
             }
         }
 
-        selectColor.addEventListener('change', handleOptionChange);
-        selectSize.addEventListener('change', handleOptionChange);
-
-        selectedOptionsList.addEventListener('click', function(event) {
-            const target = event.target;
-            if (target.tagName === 'BUTTON') {
-                const item = target.closest('.selected-item');
-                if (!item) return;
-
-                const quantityInput = item.querySelector('.quantity-input');
-                let quantity = parseInt(quantityInput.value);
-
-                if (target.classList.contains('btn-plus')) {
-                    quantity++;
-                } else if (target.classList.contains('btn-minus')) {
-                    if (quantity > 1) {
-                        quantity--;
-                    }
-                } else if (target.classList.contains('btn-remove')) {
-                    item.remove();
-                }
-
-                if (quantityInput) {
-                    quantityInput.value = quantity;
-                }
-                updateGrandTotal();
-            }
+        // 각 select 박스에 이벤트 리스너를 추가합니다.
+        allSelectOptions.forEach(select => {
+            select.addEventListener('change', addSelectedItem);
         });
+
+        // 수량 조절 및 삭제 이벤트 (기존과 동일, 이벤트 위임 방식)
+        if (selectedOptionsList) {
+            selectedOptionsList.addEventListener('click', function(event) {
+                const target = event.target;
+                if (target.tagName === 'BUTTON') {
+                    const item = target.closest('.selected-item');
+                    if (!item) return;
+
+                    const quantityInput = item.querySelector('.quantity-input');
+                    let quantity = quantityInput ? parseInt(quantityInput.value, 10) : 0;
+
+                    if (target.classList.contains('btn-plus')) {
+                        quantity++;
+                    } else if (target.classList.contains('btn-minus')) {
+                        if (quantity > 1) {
+                            quantity--;
+                        }
+                    } else if (target.classList.contains('btn-remove')) {
+                        item.remove();
+                    }
+
+                    if (quantityInput) {
+                        quantityInput.value = quantity;
+                    }
+                    updateGrandTotal();
+                }
+            });
+        }
     }
 
     // ==========================================================

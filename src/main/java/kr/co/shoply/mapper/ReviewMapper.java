@@ -10,10 +10,11 @@ import java.util.List;
 @Mapper
 public interface ReviewMapper {
     // 사용
+    public List<ReviewDTO> selectAll3(String prod_no);
+
+
+
     public double select(String prod_no);
-
-
-    public List<ReviewDTO> selectAll();
     public void insert(ReviewDTO reviewDTO);
     public void update(ReviewDTO reviewDTO);
     public void delete(int rev_no);

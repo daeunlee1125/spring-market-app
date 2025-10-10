@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserCouopnDTO {
+public class UserCouponDTO{
     private String cp_no;
     private String cp_code;
     private String mem_id;

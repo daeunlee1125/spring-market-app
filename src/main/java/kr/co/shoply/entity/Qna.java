@@ -27,7 +27,7 @@ public class Qna {
 
     @CreationTimestamp
     private LocalDateTime q_rdate;
-    
+
     private String q_reply;
     private String q_comment;
 }

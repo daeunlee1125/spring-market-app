@@ -87,20 +87,20 @@
             </thead>
             <tbody>
             <tr th:each="orderItem : ${orderList}">
-                <td th:text="${#dates.format(orderItem.ordDate, 'yyyy-MM-dd')}">2022-12-13</td>
+                <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
                 <td>
                     <div class="product-info">
                         <img th:src="@{/image/placeholder.png}" alt="상품 이미지">
                         <div class="product-details">
-                            <p>주문번호 : <a href="#" onclick="openModal('orderDetailPopup')"><span th:text="${orderItem.ordNo}">1012211341</span></a></p>
+                            <p>주문번호 : <a href="#" onclick="openModal('orderDetailPopup')"><span th:text="${orderItem.ord_no}">1012211341</span></a></p>
                             <p>(주) <a href="#" onclick="openModal('sellerInfoPopup')">상호명</a></p>
-                            <p>상품명 : <span th:text="${orderItem.itemName}">상품명</span></p>
-                            <p>수량 : <span th:text="${orderItem.itemCnt}">1</span>개</p>
-                            <strong><span th:text="${#numbers.formatInteger(orderItem.itemPrice, 3, 'COMMA')}">34,000</span>원</strong>
+                            <p>상품명 : <span th:text="${orderItem.item_name}">상품명</span></p>
+                            <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
+                            <strong><span th:text="${#numbers.formatInteger(orderItem.item_price, 3, 'COMMA')}">34,000</span>원</strong>
                         </div>
                     </div>
                 </td>
-                <td th:text="${orderItem.itemStatus}">배송완료</td>
+                <td th:text="${orderItem.item_stat}">배송완료</td>
                 <td>
                     <div class="action-btns">
                         <button class="action-btn" onclick="openModal('confirmModal')">구매확정</button>
@@ -127,7 +127,6 @@
         </div>
     </div>
 </main>
-
 <div id="orderDetailPopup" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -496,4 +495,3 @@
 </script>
 </body>
 <div th:replace="~{my/_tail.html}"></div>
-</html>

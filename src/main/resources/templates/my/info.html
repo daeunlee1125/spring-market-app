@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 나의 설정</title>
-</head>
-<body class="logged-in">
 <div th:replace="~{my/_head.html}"></div>
+
 <main class="container">
     <div class="sidebar">
-
+        <h2>나의 쇼핑 정보</h2>
         <ul>
             <li><a th:href="@{/my/home}">마이페이지 홈</a></li>
             <li><a th:href="@{/my/order}">전체주문내역</a></li>
@@ -21,7 +14,6 @@
         </ul>
     </div>
     <div class="content">
-        <h2>나의 쇼핑 정보</h2>
         <div class="main-content-header">
             <div class="info-summary">
                 <div class="info-item">
@@ -54,7 +46,7 @@
                     <tbody>
                     <tr>
                         <th>사용자 ID</th>
-                        <td th:text="${memberInfo != null ? memberInfo.mem_id : '정보 없음'}"></td>
+                        <td th:text="${memberInfo.mem_id}"></td>
                     </tr>
                     <tr>
                         <th>비밀번호</th>
@@ -64,39 +56,33 @@
                     </tr>
                     <tr>
                         <th>이름</th>
-                        <td th:text="${memberInfo != null ? memberInfo.mem_name : '정보 없음'}"></td>
+                        <td th:text="${memberInfo.mem_name}"></td>
                     </tr>
                     <tr>
                         <th>생년월일</th>
-                        <td th:text="${memberInfo != null ? memberInfo.mem_rdate : '정보 없음'}"></td>
+                        <td th:text="${memberInfo.mem_birth}"></td>
                     </tr>
                     <tr>
                         <th>Email</th>
                         <td>
-                            <input type="text" id="emailId"
-                                   th:value="${memberInfo != null ? #strings.substringBefore(memberInfo.mem_email, '@') : ''}">@
+                            <input type="text" id="emailId" th:value="${#strings.substringBefore(memberInfo.mem_email, '@')}">@
                             <select id="emailDomain" onchange="checkEmailDomain()">
-                                <option th:each="domain : ${emailDomains}"
-                                        th:value="${domain}"
-                                        th:text="${domain} == 'self' ? '직접입력' : ${domain}"
-                                        th:selected="${memberInfo != null and memberInfo.mem_email != null and #strings.contains(memberInfo.mem_email, '@') ? #strings.substringAfter(memberInfo.mem_email, '@') == domain : false}">
+                                <option th:each="domain : ${{'naver.com'}}"
+                                        th:value="${domain}" th:text="${domain} == 'self' ? '직접입력' : ${domain}"
+                                        th:selected="${#strings.substringAfter(memberInfo.mem_email, '@') == domain}">
                                 </option>
                             </select>
-
                             <input type="text" id="emailInput" placeholder="직접입력"
-                                   th:style="${memberInfo != null && #strings.substringAfter(memberInfo.mem_email, '@') == 'self'} ? 'display: inline-block;' : 'display: none;'">
+                                   th:style="${#strings.substringAfter(memberInfo.mem_email, '@') == 'self'} ? 'display: inline-block;' : 'display: none;'">
                             <button type="button" onclick="editEmail()">수정하기</button>
                         </td>
                     </tr>
                     <tr>
                         <th>휴대폰</th>
                         <td>
-                            <input type="text"
-                                   th:value="${memberInfo != null ? #strings.arraySplit(memberInfo.mem_hp, '-')[0] : ''}" style="width: 50px;"> -
-                            <input type="text"
-                                   th:value="${memberInfo != null ? #strings.arraySplit(memberInfo.mem_hp, '-')[1] : ''}" style="width: 50px;"> -
-                            <input type="text"
-                                   th:value="${memberInfo != null ? #strings.arraySplit(memberInfo.mem_hp, '-')[2] : ''}" style="width: 50px;">
+                            <input type="text" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[0]}" style="width: 50px;"> -
+                            <input type="text" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[1]}" style="width: 50px;"> -
+                            <input type="text" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[2]}" style="width: 50px;">
                             <button type="button" onclick="editPhone()">수정하기</button>
                         </td>
                     </tr>
@@ -104,14 +90,11 @@
                         <th>주소</th>
                         <td>
                             <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                                <input type="text" placeholder="우편번호" style="width: 80px;"
-                                       th:value="${memberInfo != null ? memberInfo.mem_zip : ''}" readonly>
+                                <input type="text" placeholder="우편번호" style="width: 80px;" th:value="${memberInfo.mem_zip}" readonly>
                                 <button type="button" onclick="searchAddress()">주소검색</button>
                             </div>
-                            <input type="text" class="address-input" placeholder="기본주소입력" style="width: 400px;"
-                                   th:value="${memberInfo != null ? memberInfo.mem_addr1 : ''}" readonly>
-                            <input type="text" class="address-input" placeholder="상세주소입력" style="width: 400px; margin-top: 5px;"
-                                   th:value="${memberInfo != null ? memberInfo.mem_addr2 : ''}">
+                            <input type="text" class="address-input" placeholder="기본주소입력" style="width: 400px;" th:value="${memberInfo.mem_addr1}" readonly>
+                            <input type="text" class="address-input" placeholder="상세주소입력" style="width: 400px; margin-top: 5px;" th:value="${memberInfo.mem_addr2}">
                         </td>
                     </tr>
                     </tbody>
@@ -127,57 +110,5 @@
         </div>
     </div>
 </main>
-<div id="passwordModal" class="modal">
-    <div class="modal-content">
-        <h3 id="modalTitle">현재 비밀번호 확인</h3>
 
-        <div id="currentPasswordSection">
-            <input type="password" id="currentPassword" placeholder="현재 비밀번호">
-            <div class="message" id="currentPasswordMessage"></div>
-            <div class="modal-buttons">
-                <button class="confirm-btn" onclick="checkCurrentPassword()">확인</button>
-                <button class="cancel-btn" onclick="closePasswordModal()">취소</button>
-            </div>
-        </div>
-
-        <div id="newPasswordSection" class="hidden">
-            <input type="password" id="newPassword" placeholder="새 비밀번호">
-            <div class="message" id="newPasswordMessage"></div>
-            <input type="password" id="confirmNewPassword" placeholder="새 비밀번호 확인">
-            <div class="message" id="confirmNewPasswordMessage"></div>
-            <div class="modal-buttons">
-                <button class="confirm-btn" onclick="changePassword()">변경</button>
-                <button class="cancel-btn" onclick="closePasswordModal()">취소</button>
-            </div>
-        </div>
-    </div>
-</div>
-<footer>
-    <div class="footer-container">
-        <div class="footer-top">
-            <h2>(주)샵플리닷컴</h2>
-            <a href="#">사업자정보확인</a>
-            <a href="#">소비자보호 서비스 가입사실확인</a>
-        </div>
-        <div class="footer-info">
-            <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
-            <p>부산광역시 부산진구 중앙대로 103</p>
-            <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
-            <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-links">
-                <a href="#">개인정보처리방침</a> |
-                <a href="#">영상정보처리기기 운영·관리방침</a> |
-                <a th:href="@{/cs/index}">고객센터</a> |
-                <a th:href="@{/cs/faq}">FAQ</a>
-            </div>
-            <div class="footer-sns">
-                <a href="#"><img th:src="@{/image/facebook.png}" alt="Facebook"></a>
-                <a href="#"><img th:src="@{/image/instagram.png}" alt="Instagram"></a>
-            </div>
-        </div>
-    </div>
-</footer>
-</body>
-</html>
+<div th:replace="~{my/_tail.html}"></div>

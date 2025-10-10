@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class ReviewDTO {
     private int rev_no;
     private String prod_no;
@@ -18,4 +17,9 @@ public class ReviewDTO {
     private int rev_rating;
     private String rev_rdate;
     private String rev_img_path;
+
+    // 추가필드
+    private String privateMemId; // 화면에 출력할 때 abc123 -> ab****로 출력하기 위한 용도
+
 }
+

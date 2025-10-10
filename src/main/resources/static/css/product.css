@@ -531,8 +531,9 @@ a {
     left: 0;
     white-space: nowrap; /* 별들이 한 줄로 나열되도록 함 */
     overflow: hidden; /* 컨테이너 너비를 벗어나는 부분은 숨김 */
-    color: #ffc107; /* 채워진 별 색상 (노란색) */
-    /* 너비는 JavaScript로 조절합니다 */
+    color: #000000; /* 채워진 별 색상 (노란색) */
+    display: flex;
+    align-items: center;
 }
 
 /* 배경 별 (하단 레이어) */
@@ -698,54 +699,6 @@ a {
 }
 
 /* -------------------- 상품 목록 스타일 끝 -------------------- */
-
-/* -------------------- 페이지네이션 스타일 시작 -------------------- */
-
-.pagination-container {
-    display: flex;
-    justify-content: center; /* 페이지 번호를 중앙에 위치 */
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
-
-.pagination {
-    display: flex;
-    align-items: center;
-}
-
-.pagination a {
-    color: #555;
-    text-decoration: none;
-    padding: 8px 12px;
-    margin: 0 4px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.pagination a:hover {
-    background-color: #f5f5f5;
-}
-
-/* 현재 활성화된 페이지 번호 스타일 */
-.pagination a.active {
-    background-color: #333;
-    color: white;
-    border-color: #333;
-    font-weight: bold;
-}
-
-/* 이전/다음 버튼 비활성화 스타일 */
-.pagination a.disabled {
-    color: #ccc;
-    pointer-events: none; /* 클릭 비활성화 */
-    background-color: #f9f9f9;
-}
-
-/* -------------------- 페이지네이션 스타일 끝 -------------------- */
-
-
 
 /* -------------------- order 주문하기 -------------------- */
 /* 각 섹션 공통 스타일 */
@@ -1235,6 +1188,60 @@ a {
 
 /* ----------------------------------------------------------------- */
 
+/* === 페이지네이션 스타일 === */
+.pagination-container {
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* 버튼 사이 간격 */
+}
+
+.page-link {
+    display: inline-block;
+    min-width: 40px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #555;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.page-link:hover {
+    background-color: #f5f5f5;
+    color: #000;
+}
+
+/* 현재 페이지 스타일 */
+.page-link.active {
+    background-color: #3498db; /* 원하는 메인 색상으로 변경하세요 */
+    color: #fff;
+    border-color: #3498db;
+    font-weight: bold;
+}
+
+/* 비활성화된 버튼 스타일 */
+.page-link.disabled {
+    background-color: #f9f9f9;
+    color: #ccc;
+    border-color: #eee;
+    pointer-events: none; /* 클릭 비활성화 */
+}
+
+.page-link.prev,
+.page-link.next {
+    font-weight: bold;
+}
+
 /* 최종 가격 및 구매 버튼 */
 .info-purchase {
     border-top: 1px solid #eee;
@@ -1420,7 +1427,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
     border-bottom: 1px solid #eee;
 }
 
@@ -1443,12 +1450,12 @@ a {
     border-bottom-color: #000;
 }
 
-.review-sort select {
-    border: 1px solid #ddd;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-}
+/*.review-sort select {*/
+/*    border: 1px solid #ddd;*/
+/*    padding: 5px 10px;*/
+/*    border-radius: 4px;*/
+/*    font-size: 14px;*/
+/*}*/
 
 .review-list {
     margin-top: 20px;

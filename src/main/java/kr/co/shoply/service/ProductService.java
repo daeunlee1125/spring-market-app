@@ -24,11 +24,11 @@ public class ProductService {
         return productMapper.selectAll3(cate2_no, sort);
     }
 
-    public ProductDTO getProduct3(int prod_no){
+    public ProductDTO getProduct3(String prod_no){
         return productMapper.select3(prod_no);
     }
 
-    public List<ProdOptionDTO> getProductOption3(int prod_no){
+    public List<ProdOptionDTO> getProductOption3(String prod_no){
 
 
         return productMapper.selectOption3(prod_no);

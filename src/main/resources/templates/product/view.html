@@ -69,23 +69,15 @@
                             </div>
 
                             <div class="info-options" th:each="opDTO : ${OpDtoList}">
-                                <select id="select-color" name="color">
+                                <select id="select-option" name="color">
                                     <option value="" th:text="${opDTO.getOpt_name()} + ' 선택하세요'">색상 선택하세요.</option>
                                     <th:block th:each="opVal : ${opDTO.getOptValList()}">
                                         <option th:value="${opVal}" th:text="${opVal}"></option>
                                     </th:block>
                                 </select>
 
-
-<!--                                <select id="select-size" name="size">-->
-<!--                                    <option value="">사이즈 선택하세요.</option>-->
-<!--                                    <option value="M (30-32)">M (30-32)</option>-->
-<!--                                    <option value="L (33-35)">L (33-35)</option>-->
-<!--                                </select>-->
-
-<!--                                <div id="selected-options-list"></div>-->
                             </div>
-
+                            <div id="selected-options-list"></div>
                             <div class="info-purchase">
                                 <div class="total-price">
                                     <span>총 상품금액</span>
@@ -109,108 +101,97 @@
                     <nav class="product-detail-nav">
                         <ul>
                             <li class="active"><a href="#detail-info">상품상세정보</a></li>
-                            <li><a href="#detail-review">고객리뷰 (0)</a></li>
+                            <li><a href="#detail-review" th:text="'고객리뷰(' + ${productDTO.getCntRating()}+')'" >고객리뷰 (0)</a></li>
                             <li><a href="#detail-exchange">교환/반품 안내</a></li>
                         </ul>
                     </nav>
                     <div class="nav-placeholder"></div>
 
                     <div id="detail-info" class="detail-content">
-                        <p style="text-align: center; padding: 40px 0; font-size: 18px; color: #888;">
+                        <p style="text-align: center; font-size: 18px; color: #888; margin-top: 10px; padding: 0 0 40px;" th:text="'상품 번호 : ' + ${productDTO.getProd_no()}">
                             상품 번호: 1000722586634<br>
                             모델 번호: Y0251LCL158S1N00125F
                         </p>
-                        <img th:src="@{/inc/image/info.avif}" alt="SSG Guarantee">
-                        <img th:src="@{/inc/image/productDetail.jpg}" alt="짧은 상세 이미지">
+                        <img th:src="@{/image/product/wc_1_thumb1.jpg}" alt="SSG Guarantee">
+                        <img th:src="@{/image/product/wc_1_thumb2.jpg}" alt="짧은 상세 이미지">
 
                         <div class="long-detail-container">
-                            <img th:src="@{/inc/image/productDetail2.jpg}" alt="긴 상세 이미지" class="long-detail-image">
+                            <img th:src="@{/image/product/wc_1_detail.jpg}" alt="긴 상세 이미지" class="long-detail-image">
                             <div class="fade-overlay"></div>
                         </div>
                         <button type="button" class="toggle-detail-btn">상세정보 펼쳐보기 ▼</button>
                     </div>
 
-                    <div id="detail-review" class="detail-content">
+                    <div id="detail-review" class="detail-content" th:data-prod-no="${productDTO.getProd_no()}">
                         <div class="review-header">
                             <div class="review-tabs">
-                                <a href="#" class="active">전체(562)</a>
-                                <a href="#">포토(132)</a>
-                                <a href="#">동영상(2)</a>
-                                <a href="#">선물(11)</a>
+                                <a href="#" class="active" th:text="'상품리뷰(' + ${productDTO.getCntRating()} + ')'">전체(562)</a>
+<!--                                <a href="#">포토(132)</a>-->
+<!--                                <a href="#">동영상(2)</a>-->
+<!--                                <a href="#">선물(11)</a>-->
                             </div>
-                            <div class="review-sort">
-                                <select>
-                                    <option>추천순</option>
-                                    <option>최신순</option>
-                                    <option>평점 높은순</option>
-                                    <option>평점 낮은순</option>
-                                </select>
-                            </div>
+<!--                            <div class="review-sort">-->
+<!--                                <select>-->
+<!--                                    <option>추천순</option>-->
+<!--                                    <option>최신순</option>-->
+<!--                                    <option>평점 높은순</option>-->
+<!--                                    <option>평점 낮은순</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
                         </div>
 
                         <div class="review-list">
-                            <div class="review-item">
+                            <div class="review-item" th:each="reviewDTO : ${reviewDTOList}">
                                 <div class="review-meta-top">
                                     <div class="review-author">
-                                        <div class="rating-stars">★★★★★</div>
-                                        <div class="user-id">rif*******</div>
+                                        <div class="star-rating" th:data-score="${reviewDTO.getRev_rating()}">
+                                            <div class="star-rating-fill">
+                                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                            </div>
+                                            <div class="star-rating-base">
+                                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                            </div>
+                                        </div>
+                                        <div class="rating-stars" th:text="'('+${reviewDTO.getRev_rating()}+')'">★★★★★</div>
+                                        <div class="user-id" th:text="${reviewDTO.getPrivateMemId()}">rif*******</div>
                                     </div>
                                 </div>
-                                <div class="review-content">
+                                <div class="review-content" th:text="${reviewDTO.getRev_content()}">
                                     <p>늘 사용하는 제품인데 특히 환절기 보습에 좋은 것 같습니다. 스킨부터 탄탄하게 수분을 쌓아올리니 덜 건조해요 다만 바뀐 패키지보다는 이전이 더 고급스러운 것 같아 아쉬워요</p>
                                     <div class="review-photo">
                                         <img th:src="@{/inc/image/review1.jpg}" alt="리뷰 사진 1">
                                     </div>
-                                    <div class="review-tags">
-                                        <span class="tag">맞춤정보</span>
-                                        <span class="tag">피부타입: 복합성</span>
-                                        <span class="tag">피부자극: 순해요</span>
-                                        <span class="tag">보습력: 촉촉해요</span>
-                                        <span class="tag">제형: 점성이 있어요</span>
-                                    </div>
+<!--                                    <div class="review-tags">-->
+<!--                                        <span class="tag">맞춤정보</span>-->
+<!--                                        <span class="tag">피부타입: 복합성</span>-->
+<!--                                        <span class="tag">피부자극: 순해요</span>-->
+<!--                                        <span class="tag">보습력: 촉촉해요</span>-->
+<!--                                        <span class="tag">제형: 점성이 있어요</span>-->
+<!--                                    </div>-->
                                 </div>
                                 <div class="review-meta-bottom">
-                                    <span class="date">2025.09.22</span>
-                                    <a href="#" class="report">신고/차단</a>
-                                    <div class="review-actions">
-                                        <button class="btn-helpful">👍 0</button>
-                                    </div>
+                                    <span class="date" th:text="${reviewDTO.getRev_rdate()}">2025.09.22</span>
+<!--                                    <a href="#" class="report">신고/차단</a>-->
+<!--                                    <div class="review-actions">-->
+<!--                                        <button class="btn-helpful">👍 0</button>-->
+<!--                                    </div>-->
                                 </div>
                             </div>
-
-                            <div class="review-item">
-                                <div class="review-meta-top">
-                                    <div class="review-author">
-                                        <div class="rating-stars">★★★★☆</div>
-                                        <div class="user-id">hoi*******</div>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <p>내가 먼저 써 본후 부드럽고 향도 은은해서 며느리 생일선물 했네요. 며늘이 아주 좋아하네요</p>
-                                    <div class="review-photo">
-                                        <img th:src="@{/inc/image/review2.jpg}" alt="리뷰 사진 2">
-                                    </div>
-                                </div>
-                                <div class="review-meta-bottom">
-                                    <span class="date">2025.09.25</span>
-                                    <a href="#" class="report">신고/차단</a>
-                                    <div class="review-actions">
-                                        <button class="btn-helpful">👍 0</button>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
+                        </div>
                     </div>
 
                     <div class="pagination-container">
-                        <div class="pagination">
-                            <a href="#" class="page-link prev disabled">이전</a>
-                            <a href="#" class="page-link active">1</a>
-                            <a href="#" class="page-link">2</a>
-                            <a href="#" class="page-link">3</a>
-                            <a href="#" class="page-link">4</a>
-                            <a href="#" class="page-link">5</a>
-                            <a href="#" class="page-link next">다음</a>
+                        <div class="pagination" id="review-pagination" th:data-total-pages="${totalPages}">
+                            <a href="#" class="page-link prev disabled" th:if="${totalPages > 1}">이전</a>
+
+                            <th:block th:if="${totalPages > 0}">
+                                <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                   th:class="${i == 1} ? 'page-link active' : 'page-link'"
+                                   href="#" th:data-page="${i}" th:text="${i}"></a>
+                            </th:block>
+
+                            <a href="#" class="page-link next" th:if="${totalPages > 1}"
+                               th:classappend="${totalPages <= 1 ? 'disabled' : ''}">다음</a>
                         </div>
                     </div>
 

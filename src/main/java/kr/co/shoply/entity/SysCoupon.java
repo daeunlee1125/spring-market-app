@@ -1,10 +1,12 @@
-package kr.co.shoply.dto;
+package kr.co.shoply.entity;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
+import jakarta.persistence.Entity;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Getter
 @Setter
@@ -12,8 +14,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SysCouponDTO {
+@Entity
+@Table(name = "SYS_COUPON")
+public class SysCoupon {
+
+    @Id
     private String cp_code;
+
+
     private String cp_name;
     private Integer cp_type;
     private Integer cp_value;

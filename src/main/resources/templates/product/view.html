@@ -144,21 +144,10 @@
                         <div class="review-header">
                             <div class="review-tabs">
                                 <a href="#" class="active" th:text="'상품리뷰(' + ${productDTO.getCntRating()} + ')'">전체(562)</a>
-<!--                                <a href="#">포토(132)</a>-->
-<!--                                <a href="#">동영상(2)</a>-->
-<!--                                <a href="#">선물(11)</a>-->
                             </div>
-<!--                            <div class="review-sort">-->
-<!--                                <select>-->
-<!--                                    <option>추천순</option>-->
-<!--                                    <option>최신순</option>-->
-<!--                                    <option>평점 높은순</option>-->
-<!--                                    <option>평점 낮은순</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
                         </div>
 
-                        <div class="review-list">
+                        <div id="review-list-container" class="review-list">
                             <div class="review-item" th:each="reviewDTO : ${reviewDTOList}">
                                 <div class="review-meta-top">
                                     <div class="review-author">
@@ -179,20 +168,9 @@
                                     <div class="review-photo">
                                         <img th:src="@{/inc/image/review1.jpg}" alt="리뷰 사진 1">
                                     </div>
-<!--                                    <div class="review-tags">-->
-<!--                                        <span class="tag">맞춤정보</span>-->
-<!--                                        <span class="tag">피부타입: 복합성</span>-->
-<!--                                        <span class="tag">피부자극: 순해요</span>-->
-<!--                                        <span class="tag">보습력: 촉촉해요</span>-->
-<!--                                        <span class="tag">제형: 점성이 있어요</span>-->
-<!--                                    </div>-->
                                 </div>
                                 <div class="review-meta-bottom">
                                     <span class="date" th:text="${reviewDTO.getRev_rdate()}">2025.09.22</span>
-<!--                                    <a href="#" class="report">신고/차단</a>-->
-<!--                                    <div class="review-actions">-->
-<!--                                        <button class="btn-helpful">👍 0</button>-->
-<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>

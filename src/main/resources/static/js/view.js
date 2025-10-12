@@ -236,14 +236,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==========================================================
-// 4. 리뷰 페이지네이션 (비동기) 기능 (수정)
-// ==========================================================
+    // 4. 리뷰 페이지네이션 (비동기) 기능
+    // ==========================================================
     const pagination = document.getElementById('review-pagination');
     const reviewListContainer = document.getElementById('review-list-container');
     const detailReviewSection = document.getElementById('detail-review');
 
     if (pagination && reviewListContainer && detailReviewSection) {
-        const prodNo = detailReviewSection.dataset.prodNo;
+        const prodNo = detailReviewSection.dataset.prod_no;
         const totalPages = parseInt(pagination.dataset.totalPages, 10); // 총 페이지 수
 
         // 리뷰를 불러오고 UI를 업데이트하는 함수

@@ -21,19 +21,24 @@ document.addEventListener('DOMContentLoaded', function() {
     renderStarRatings();
 
     // ==========================================================
-    // 1. 옵션 선택 및 가격 계산 기능 (기존과 동일)
+    // 1. 옵션 선택 및 가격 계산 기능
     // ==========================================================
-    const productInfoSection = document.querySelector('.product-info-section');
-    if (productInfoSection) {
-        const finalPriceText = productInfoSection.querySelector('.final').textContent;
-        const basePrice = parseInt(finalPriceText.replace(/,/g, ''), 10);
-        const productNameEl = productInfoSection.querySelector('.product-name');
-        const productName = productNameEl ? productNameEl.textContent.trim() : '';
-        const allSelectOptions = document.querySelectorAll('.info-options select');
-        const selectedOptionsList = document.querySelector('#selected-options-list');
-        const grandTotalPriceEl = document.querySelector('#grand-total-price');
+    // 옵션 선택 select 박스가 있는지 확인
+    const allSelectOptions = document.querySelectorAll('.info-options select.select-option');
+    const grandTotalPriceEl = document.querySelector('#grand-total-price');
 
-        function updateGrandTotal() {
+    // ==========================================================
+    // CASE 1: 옵션이 있는 경우
+    // ==========================================================
+    if (allSelectOptions && allSelectOptions.length > 0) {
+        // #selected-options-list 요소를 먼저 찾습니다.
+        const selectedOptionsList = document.querySelector('#selected-options-list');
+
+        // .final과 .product-name 대신 data-* 속성에서 값을 가져옵니다.
+        const basePrice = parseInt(selectedOptionsList.dataset.price, 10);
+        const productName = selectedOptionsList.dataset.name;
+
+        function updateGrandTotalWithOptions() {
             let grandTotal = 0;
             const selectedItems = document.querySelectorAll('.selected-item');
             selectedItems.forEach(item => {
@@ -86,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 allSelectOptions.forEach(select => {
                     select.value = '';
                 });
-                updateGrandTotal();
+                updateGrandTotalWithOptions();
             }
         }
 
@@ -110,8 +115,39 @@ document.addEventListener('DOMContentLoaded', function() {
                         item.remove();
                     }
                     if (quantityInput) quantityInput.value = quantity;
-                    updateGrandTotal();
+                    updateGrandTotalWithOptions();
                 }
+            });
+        }
+    // ==========================================================
+    // CASE 2: 옵션이 없는 경우
+    // ==========================================================
+    }else {
+        const noOptionProductEl = document.querySelector('#no-option-product');
+        if (noOptionProductEl) {
+            const basePrice = parseInt(noOptionProductEl.dataset.price, 10);
+            const quantityController = noOptionProductEl.querySelector('.quantity-counter');
+            const quantityInput = noOptionProductEl.querySelector('.quantity-input');
+
+            // 옵션 없는 단일 상품의 총 가격을 업데이트하는 함수
+            function updateGrandTotalForSingleItem() {
+                const quantity = parseInt(quantityInput.value, 10);
+                const total = basePrice * quantity;
+                grandTotalPriceEl.textContent = total.toLocaleString() + '원';
+            }
+
+            quantityController.addEventListener('click', function (e) {
+                let quantity = parseInt(quantityInput.value, 10);
+
+                if (e.target.classList.contains('btn-plus')) {
+                    quantity++;
+                } else if (e.target.classList.contains('btn-minus')) {
+                    if (quantity > 1) {
+                        quantity--;
+                    }
+                }
+                quantityInput.value = quantity;
+                updateGrandTotalForSingleItem(); // 총 가격 업데이트
             });
         }
     }
@@ -200,14 +236,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==========================================================
-// 4. 리뷰 페이지네이션 (비동기) 기능 (수정)
-// ==========================================================
+    // 4. 리뷰 페이지네이션 (비동기) 기능
+    // ==========================================================
     const pagination = document.getElementById('review-pagination');
     const reviewListContainer = document.getElementById('review-list-container');
     const detailReviewSection = document.getElementById('detail-review');
 
     if (pagination && reviewListContainer && detailReviewSection) {
-        const prodNo = detailReviewSection.dataset.prodNo;
+        const prodNo = detailReviewSection.dataset.prod_no;
         const totalPages = parseInt(pagination.dataset.totalPages, 10); // 총 페이지 수
 
         // 리뷰를 불러오고 UI를 업데이트하는 함수

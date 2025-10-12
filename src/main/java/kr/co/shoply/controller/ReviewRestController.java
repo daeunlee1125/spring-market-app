@@ -3,7 +3,6 @@ package kr.co.shoply.controller;
 import kr.co.shoply.dto.ReviewDTO;
 import kr.co.shoply.service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

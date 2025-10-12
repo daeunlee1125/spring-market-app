@@ -32,6 +32,7 @@ public class SecurityConfig {
 
         // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/api/**").permitAll() // view.html에서 리뷰 확인가능하도록 전체 허가
                 .requestMatchers("/admin/config/**").hasRole("7") // 관리자 - 샵플리 기본 정보 관리
                 .requestMatchers("/admin/cs/**").hasRole("7") // 관리자 - 고객센터
                 .requestMatchers("/admin/**").hasAnyRole("7", "2") // 그 외 관리자 페이지 전체

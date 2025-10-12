@@ -18,7 +18,9 @@
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 const targetId = btn.dataset.target;
-                document.getElementById(targetId).classList.remove("hidden");
+                if (targetId && document.getElementById(targetId)) {
+                    document.getElementById(targetId).classList.remove("hidden");
+                }
             });
         });
 
@@ -31,5 +33,4 @@
             });
         });
     });
-
 </script>

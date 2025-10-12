@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
 import kr.co.shoply.dto.SysCouponDTO;
+import kr.co.shoply.dto.UserCouponDTO;
 import kr.co.shoply.mapper.CouponMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,11 @@ public class CouponService {
 
     @Transactional
     public void endCoupon(String cpCode) {
+        // SYS_COUPON : 1 → 0
         couponMapper.updateCouponEnd(cpCode);
+
+        // USER_COUPON : 1 → 3 (발급 종료 반영)
+        couponMapper.updateSysCouponStatus(cpCode);
     }
 
 
@@ -74,6 +79,31 @@ public class CouponService {
     public String findMemberNameById(String memId) {
         return couponMapper.selectMemberNameById(memId);
     }
+
+
+
+    public PageResponseDTO<UserCouponDTO> selectUserCouponList(PageRequestDTO pageRequestDTO) {
+        List<UserCouponDTO> list = couponMapper.selectUserCouponList(pageRequestDTO);
+        int total = couponMapper.countUserCouponList(pageRequestDTO);
+
+        return PageResponseDTO.<UserCouponDTO>builder()
+                .dtoList(list)
+                .total(total)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+
+    public UserCouponDTO selectUserCouponDetail(String cpNo) {
+        return couponMapper.selectUserCouponDetail(cpNo);
+    }
+
+    public void updateUserCouponStatus(String cpNo, int cpStat) {
+        couponMapper.updateUserCouponStatus(cpNo, cpStat);
+    }
+
+
+
 
 
 

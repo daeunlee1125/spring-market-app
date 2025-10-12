@@ -1,8 +1,6 @@
 package kr.co.shoply.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -17,6 +15,7 @@ import lombok.*;
 public class UserCoupon{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String cp_no;
 
 
@@ -25,4 +24,10 @@ public class UserCoupon{
     private String cp_issued_date;
     private String cp_used_date;
     private int cp_stat;
+
+
+
+    private String cp_issuer_name;
+    private String cp_note;
+
 }

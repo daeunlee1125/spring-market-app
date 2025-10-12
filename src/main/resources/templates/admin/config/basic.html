@@ -57,20 +57,20 @@
 
                     <h2 class="h2-1">로고</h2>
                     <div class="gray-1">브라우저 탭, 헤더/푸터 노출 로고</div>
-                    <form action="" method="post">
+                    <form enctype="multipart/form-data" method="post">
                         <input type="hidden" name="type" value="2">
                         <table class="table-1">
                             <tr>
                                 <th>헤더 로고</th>
-                                <td><input type="file" name="#" class="input-1"></td>
+                                <td><input type="file" name="img1" th:value="${siteInfo.s_logo1}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <th>푸터 로고</th>
-                                <td><input type="file" name="#" class="input-1"></td>
+                                <td><input type="file" name="img2" th:value="${siteInfo.s_logo2}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <th>파비콘</th>
-                                <td><input type="file" name="#" class="input-1"></td>
+                                <td><input type="file" name="img3" th:value="${siteInfo.s_logo3}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <td colspan="2" class="submit-1"><input type="submit" value="수정하기" class="submit-btn-1"></td>

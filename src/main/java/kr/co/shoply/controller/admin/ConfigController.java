@@ -4,7 +4,6 @@ import kr.co.shoply.dto.*;
 import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -112,10 +111,11 @@ public class ConfigController {
         model.addAttribute("siteInfo", siteInfoDTO);
         return "admin/config/basic";
     }
-    @PostMapping("/admin/config/basic")
-    public String basic(SiteInfoDTO siteInfoDTO, @RequestParam int type){
 
-        siteInfoService.modifySiteInfo(siteInfoDTO, type);
+    @PostMapping("/admin/config/basic")
+    public String basic(SiteInfoDTO siteInfoDTO, @RequestParam int type, @RequestParam("img1") MultipartFile img1, @RequestParam("img2") MultipartFile img2, @RequestParam("img3") MultipartFile img3) throws IOException {
+
+        siteInfoService.modifySiteInfo(siteInfoDTO, type, img1, img2, img3);
 
         return "redirect:/admin/config/basic";
     }

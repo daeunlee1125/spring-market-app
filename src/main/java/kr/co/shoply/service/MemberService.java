@@ -12,6 +12,7 @@ import kr.co.shoply.repository.TermsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,15 +26,22 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final TermsRepository termsRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public void insertMember(MemberDTO memberDTO){
+        memberDTO.setMem_pass(passwordEncoder.encode(memberDTO.getMem_pass()));
+
+        memberDTO.setMem_stat("정상");
 
         Member member = modelMapper.map(memberDTO,Member.class);
+
         memberRepository.save(member);
     }
 
     @Transactional
     public void insertSeller(MemSellerDTO memSellerDTO) {
+        memSellerDTO.setMem_pass(passwordEncoder.encode(memSellerDTO.getMem_pass()));
+        memSellerDTO.setMem_stat("운영중");
         memSellerMapper.insertMember(memSellerDTO);
         memSellerMapper.insertMemSeller(memSellerDTO);
     }

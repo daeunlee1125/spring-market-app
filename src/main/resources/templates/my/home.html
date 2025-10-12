@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 홈</title>
-</head>
-<body class="logged-in">
-
 <div th:replace="~{my/_head.html}"></div>
 
 <main class="container">
@@ -62,13 +53,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="orderItem : ${recentOrders}">
-                    <td th:text="${#dates.format(orderItem.ordDate, 'yyyy-MM-dd')}">2022-12-13</td>
+                    <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
                     <td>
-                        <span th:text="${orderItem.itemName}">상품명</span> / 주문번호: <span th:text="${orderItem.ordNo}">1012211341</span><br>
-                        수량: <span th:text="${orderItem.itemCnt}">1</span>개<br>
-                        <strong><span th:text="${#numbers.formatInteger(orderItem.itemPrice, 3, 'COMMA')}">34,000</span>원</strong>
+                        <span th:text="${orderItem.item_name}">상품명</span> / 주문번호: <span th:text="${orderItem.ord_no}">1012211341</span><br>
+                        수량: <span th:text="${orderItem.item_cnt}">1</span>개<br>
+                        <strong><span th:text="${#numbers.formatInteger(0, 3, 'COMMA')}">0</span>원</strong>
                     </td>
-                    <td th:text="${orderItem.itemStatus}">배송완료</td>
+                    <td th:text="${orderItem.item_stat}">배송완료</td>
                     <td>
                         <button onclick="openModal('confirmModal')">구매확정</button>
                         <button onclick="openModal('reviewModal')">상품평쓰기</button>
@@ -102,12 +93,12 @@
                 </thead>
                 <tbody>
                 <tr th:each="point : ${recentPoints}">
-                    <td th:text="${#dates.format(point.pDate, 'yyyy-MM-dd')}">2022-12-13</td>
-                    <td th:text="${point.pType}">적립</td>
-                    <td th:text="${point.ordNo}">2022121001</td>
-                    <td th:text="${#numbers.formatInteger(point.pPoint, 3, 'COMMA')}">340</td>
-                    <td th:text="${point.pInfo}">상품구매확정</td>
-                    <td th:text="${#dates.format(point.pExpDate, 'yyyy-MM-dd')}">2024-12-10</td>
+                    <td th:text="${#dates.format(point.p_date, 'yyyy-MM-dd')}">2022-12-13</td>
+                    <td th:text="${point.p_type}">적립</td>
+                    <td th:text="${point.ord_no}">2022121001</td>
+                    <td th:text="${#numbers.formatInteger(point.p_point, 3, 'COMMA')}">340</td>
+                    <td th:text="${point.p_info}">상품구매확정</td>
+                    <td th:text="${#dates.format(point.p_exp_date, 'yyyy-MM-dd')}">2024-12-10</td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(recentPoints)}">
                     <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>
@@ -136,11 +127,11 @@
                 <tr th:each="review, status : ${recentReviews}">
                     <td th:text="${status.count}">1</td>
                     <td th:text="${review.prodName}">상품번호 / 상품명</td>
-                    <td th:text="${review.revContent}">배송이 빠릅니다.. 잘 사용하겠습니다.</td>
+                    <td th:text="${review.rev_content}">배송이 빠릅니다.. 잘 사용하겠습니다.</td>
                     <td>
-                        <strong class="star-rating" th:text="${review.revRating}">★★★★★</strong>
+                        <strong class="star-rating" th:text="${review.rev_rating}">★★★★★</strong>
                     </td>
-                    <td th:text="${#dates.format(review.revRdate, 'yyyy-MM-dd')}">2022-12-10</td>
+                    <td th:text="${#dates.format(review.rev_rdate, 'yyyy-MM-dd')}">2022-12-10</td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(recentReviews)}">
                     <td colspan="5" style="text-align: center;">상품평 내역이 없습니다.</td>
@@ -168,10 +159,10 @@
                 <tbody>
                 <tr th:each="qna, status : ${recentQnas}">
                     <td th:text="${status.count}">1</td>
-                    <td th:text="${qna.qCate1}">고객센터</td>
-                    <td th:text="${qna.qTitle}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                    <td th:text="${#dates.format(qna.qRdate, 'yyyy-MM-dd')}">2022-12-12</td>
-                    <td th:text="${#strings.isEmpty(qna.qReply)} ? '답변 대기' : '답변 완료'">답변 완료</td>
+                    <td th:text="${qna.q_cate1}">고객센터</td>
+                    <td th:text="${qna.q_title}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
+                    <td th:text="${#dates.format(qna.q_rdate, 'yyyy-MM-dd')}">2022-12-12</td>
+                    <td th:text="${#strings.isEmpty(qna.q_reply)} ? '답변 대기' : '답변 완료'">답변 완료</td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(recentQnas)}">
                     <td colspan="5" style="text-align: center;">문의 내역이 없습니다.</td>
@@ -184,6 +175,3 @@
     </div>
 </main>
 <div th:replace="~{my/_tail.html}"></div>
-
-</body>
-</html>

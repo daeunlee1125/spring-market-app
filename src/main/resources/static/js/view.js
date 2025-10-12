@@ -1,27 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // 별점 기능 (Vanilla JS)
-    const allStarRatings = document.querySelectorAll('.star-rating');
-    allStarRatings.forEach(ratingElement => {
-        const score = parseFloat(ratingElement.dataset.score);
-        if (!isNaN(score)) {
-            const percentage = (score / 5.0) * 100;
-            const starFill = ratingElement.querySelector('.star-rating-fill');
-            if (starFill) {
-                starFill.style.width = percentage + '%';
+    // ==========================================================
+    // 별점 렌더링을 재사용 가능하도록 함수로 변경
+    // ==========================================================
+    function renderStarRatings() {
+        const allStarRatings = document.querySelectorAll('.star-rating');
+        allStarRatings.forEach(ratingElement => {
+            const score = parseFloat(ratingElement.dataset.score);
+            if (!isNaN(score)) {
+                const percentage = (score / 5.0) * 100;
+                const starFill = ratingElement.querySelector('.star-rating-fill');
+                if (starFill) {
+                    starFill.style.width = percentage + '%';
+                }
             }
-        }
-    });
+        });
+    }
+
+    // 페이지 최초 로드 시 별점 렌더링 실행
+    renderStarRatings();
 
     // ==========================================================
-    // 1. 옵션 선택 및 가격 계산 기능 (Vanilla JS)
+    // 1. 옵션 선택 및 가격 계산 기능 (기존과 동일)
     // ==========================================================
     const productInfoSection = document.querySelector('.product-info-section');
-    const basePrice = parseInt(productInfoSection.dataset.productPrice);
-
-    if (!isNaN(basePrice)) {
-        const selectColor = document.querySelector('#select-color');
-        const selectSize = document.querySelector('#select-size');
+    if (productInfoSection) {
+        const finalPriceText = productInfoSection.querySelector('.final').textContent;
+        const basePrice = parseInt(finalPriceText.replace(/,/g, ''), 10);
+        const productNameEl = productInfoSection.querySelector('.product-name');
+        const productName = productNameEl ? productNameEl.textContent.trim() : '';
+        const allSelectOptions = document.querySelectorAll('.info-options select');
         const selectedOptionsList = document.querySelector('#selected-options-list');
         const grandTotalPriceEl = document.querySelector('#grand-total-price');
 
@@ -30,24 +38,27 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectedItems = document.querySelectorAll('.selected-item');
             selectedItems.forEach(item => {
                 const quantityInput = item.querySelector('.quantity-input');
-                const quantity = parseInt(quantityInput.value);
+                const quantity = parseInt(quantityInput.value, 10);
                 const itemTotal = basePrice * quantity;
-
                 const itemTotalPriceEl = item.querySelector('.item-total-price');
                 itemTotalPriceEl.textContent = itemTotal.toLocaleString() + '원';
-
                 grandTotal += itemTotal;
             });
             grandTotalPriceEl.textContent = grandTotal.toLocaleString() + '원';
         }
 
-        function handleOptionChange() {
-            const color = selectColor.value;
-            const size = selectSize.value;
+        function addSelectedItem() {
+            let allOptionsSelected = true;
+            const selectedValues = [];
+            allSelectOptions.forEach(select => {
+                if (select.value === '') {
+                    allOptionsSelected = false;
+                }
+                selectedValues.push(select.value);
+            });
 
-            if (color && size) {
-                const optionText = `베이직 레더 벨트 / ${color} / ${size}`;
-
+            if (allOptionsSelected) {
+                const optionText = `${productName} / ${selectedValues.join(' / ')}`;
                 let isDuplicate = false;
                 document.querySelectorAll('.selected-item .item-name').forEach(nameEl => {
                     if (nameEl.textContent === optionText) {
@@ -59,127 +70,107 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('이미 추가된 옵션입니다.');
                 } else {
                     const newItemHtml = `
-                        <div class="selected-item">
+                        <div class="selected-item" data-option-combo="${optionText}">
                             <span class="item-name">${optionText}</span>
                             <div class="quantity-counter">
-                                <button class="btn-minus">-</button>
+                                <button type="button" class="btn-minus">-</button>
                                 <input type="text" class="quantity-input" value="1" readonly>
-                                <button class="btn-plus">+</button>
+                                <button type="button" class="btn-plus">+</button>
                             </div>
                             <span class="item-total-price">${basePrice.toLocaleString()}원</span>
-                            <button class="btn-remove">×</button>
+                            <button type="button" class="btn-remove">×</button>
                         </div>`;
                     selectedOptionsList.insertAdjacentHTML('beforeend', newItemHtml);
                 }
 
-                selectColor.value = '';
-                selectSize.value = '';
+                allSelectOptions.forEach(select => {
+                    select.value = '';
+                });
                 updateGrandTotal();
             }
         }
 
-        selectColor.addEventListener('change', handleOptionChange);
-        selectSize.addEventListener('change', handleOptionChange);
-
-        selectedOptionsList.addEventListener('click', function(event) {
-            const target = event.target;
-            if (target.tagName === 'BUTTON') {
-                const item = target.closest('.selected-item');
-                if (!item) return;
-
-                const quantityInput = item.querySelector('.quantity-input');
-                let quantity = parseInt(quantityInput.value);
-
-                if (target.classList.contains('btn-plus')) {
-                    quantity++;
-                } else if (target.classList.contains('btn-minus')) {
-                    if (quantity > 1) {
-                        quantity--;
-                    }
-                } else if (target.classList.contains('btn-remove')) {
-                    item.remove();
-                }
-
-                if (quantityInput) {
-                    quantityInput.value = quantity;
-                }
-                updateGrandTotal();
-            }
+        allSelectOptions.forEach(select => {
+            select.addEventListener('change', addSelectedItem);
         });
+
+        if (selectedOptionsList) {
+            selectedOptionsList.addEventListener('click', function(event) {
+                const target = event.target;
+                if (target.tagName === 'BUTTON') {
+                    const item = target.closest('.selected-item');
+                    if (!item) return;
+                    const quantityInput = item.querySelector('.quantity-input');
+                    let quantity = quantityInput ? parseInt(quantityInput.value, 10) : 0;
+                    if (target.classList.contains('btn-plus')) {
+                        quantity++;
+                    } else if (target.classList.contains('btn-minus')) {
+                        if (quantity > 1) quantity--;
+                    } else if (target.classList.contains('btn-remove')) {
+                        item.remove();
+                    }
+                    if (quantityInput) quantityInput.value = quantity;
+                    updateGrandTotal();
+                }
+            });
+        }
     }
 
     // ==========================================================
-    // 2. 상세정보 펼치기/접기 기능 (Vanilla JS)
+    // 2. 상세정보 펼치기/접기 기능 (기존과 동일)
     // ==========================================================
     const toggleDetailBtn = document.querySelector('.toggle-detail-btn');
     if (toggleDetailBtn) {
         toggleDetailBtn.addEventListener('click', function() {
             const container = document.querySelector('.long-detail-container');
             container.classList.toggle('expanded');
-
-            if (container.classList.contains('expanded')) {
-                this.textContent = '상세정보 접기 ▲';
-            } else {
-                this.textContent = '상세정보 펼쳐보기 ▼';
-            }
-            recalculateOffsets();
+            this.textContent = container.classList.contains('expanded') ? '상세정보 접기 ▲' : '상세정보 펼쳐보기 ▼';
+            if (typeof recalculateOffsets === 'function') recalculateOffsets();
         });
     }
 
     // ==========================================================
-    // 3. Sticky 네비게이션 & Scrollspy 기능 (Vanilla JS)
+    // 3. Sticky 네비게이션 & Scrollspy 기능 (기존과 동일)
     // ==========================================================
     const nav = document.querySelector('.product-detail-nav');
-    let recalculateOffsets = function() {}; // 함수 선언
-
+    let recalculateOffsets = function() {};
     if (nav) {
+        // ... (이 부분은 기존 코드와 완전히 동일합니다) ...
         const navLinks = nav.querySelectorAll('a');
         const navItems = nav.querySelectorAll('li');
         const placeholder = document.querySelector('.nav-placeholder');
         let navOffsetTop = nav.offsetTop;
         const navHeight = nav.offsetHeight;
-
         let isAnimating = false;
         let sectionOffsets = [];
-
         placeholder.style.height = navHeight + 'px';
-
         recalculateOffsets = function() {
             sectionOffsets = [];
             navLinks.forEach(link => {
                 const targetId = link.getAttribute('href');
                 const target = document.querySelector(targetId);
                 if (target) {
-                    sectionOffsets.push({
-                        id: targetId,
-                        top: target.offsetTop
-                    });
+                    sectionOffsets.push({id: targetId, top: target.offsetTop});
                 }
             });
             navOffsetTop = nav.classList.contains('sticky') ? navOffsetTop : nav.offsetTop;
         };
-
         function updateActiveNav(scrollTop) {
             let currentSectionId = null;
             const scrollPosition = scrollTop + navHeight + 20;
-
             sectionOffsets.forEach(section => {
                 if (scrollPosition >= section.top) {
                     currentSectionId = section.id;
                 }
             });
-
             navItems.forEach(item => item.classList.remove('active'));
             if (currentSectionId) {
                 nav.querySelector(`a[href="${currentSectionId}"]`).parentElement.classList.add('active');
             }
         }
-
         recalculateOffsets();
-
         window.addEventListener('scroll', function() {
             const scrollTop = window.scrollY;
-
             if (scrollTop >= navOffsetTop) {
                 nav.classList.add('sticky');
                 placeholder.style.display = 'block';
@@ -187,101 +178,120 @@ document.addEventListener('DOMContentLoaded', function() {
                 nav.classList.remove('sticky');
                 placeholder.style.display = 'none';
             }
-
             if (!isAnimating) {
                 updateActiveNav(scrollTop);
             }
         });
-
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
-
                 const targetId = this.getAttribute('href');
                 const target = document.querySelector(targetId);
-
                 if (target) {
                     isAnimating = true;
                     const scrollToPosition = target.offsetTop - navHeight;
-
                     navItems.forEach(item => item.classList.remove('active'));
                     this.parentElement.classList.add('active');
-
-                    window.scrollTo({
-                        top: scrollToPosition,
-                        behavior: 'smooth'
-                    });
-
-                    // 'smooth' 스크롤이 끝나는 것을 감지하는 정확한 이벤트가 없으므로
-                    // 일정 시간 후 플래그를 해제합니다.
-                    setTimeout(() => {
-                        isAnimating = false;
-                    }, 800); // 애니메이션 시간보다 넉넉하게 설정
+                    window.scrollTo({top: scrollToPosition, behavior: 'smooth'});
+                    setTimeout(() => { isAnimating = false; }, 800);
                 }
             });
         });
     }
 
     // ==========================================================
-    // 4. 리뷰 페이지네이션 기능 (Vanilla JS)
-    // ==========================================================
-    const reviewContainer = document.querySelector('#detail-review');
-    if (reviewContainer) {
-        const reviewItems = Array.from(reviewContainer.querySelectorAll('.review-item'));
+// 4. 리뷰 페이지네이션 (비동기) 기능 (수정)
+// ==========================================================
+    const pagination = document.getElementById('review-pagination');
+    const reviewListContainer = document.getElementById('review-list-container');
+    const detailReviewSection = document.getElementById('detail-review');
 
-        if (reviewItems.length > 0) {
-            const reviewsPerPage = 5;
-            const totalReviews = reviewItems.length;
-            const totalPages = Math.ceil(totalReviews / reviewsPerPage);
-            let currentReviewPage = 1;
+    if (pagination && reviewListContainer && detailReviewSection) {
+        const prodNo = detailReviewSection.dataset.prodNo;
+        const totalPages = parseInt(pagination.dataset.totalPages, 10); // 총 페이지 수
 
-            const reviewPagination = document.querySelector('.pagination-container .pagination');
-
-            function showReviewPage(page) {
-                currentReviewPage = page;
-                const startIndex = (currentReviewPage - 1) * reviewsPerPage;
-                const endIndex = startIndex + reviewsPerPage;
-
-                reviewItems.forEach(item => item.style.display = 'none');
-                reviewItems.slice(startIndex, endIndex).forEach(item => item.style.display = 'block');
-
-                updateReviewPaginationLinks();
+        // 리뷰를 불러오고 UI를 업데이트하는 함수
+        function fetchAndUpdateReviews(page) {
+            if (page < 1 || page > totalPages) {
+                return; // 유효하지 않은 페이지 요청은 무시
             }
 
-            function updateReviewPaginationLinks() {
-                const pageLinks = reviewPagination.querySelectorAll('.page-link');
-                pageLinks.forEach(link => link.classList.remove('active'));
+            fetch(`/api/reviews?prod_no=${prodNo}&page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    // 리뷰 목록 HTML 생성 및 업데이트
+                    let newReviewsHtml = '';
+                    data.forEach(review => {
+                        newReviewsHtml += `
+                            <div class="review-item">
+                                <div class="review-meta-top">
+                                    <div class="review-author">
+                                        <div class="star-rating" data-score="${review.rev_rating}">
+                                            <div class="star-rating-fill"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                                            <div class="star-rating-base"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                                        </div>
+                                        <div class="rating-stars">(${review.rev_rating})</div>
+                                        <div class="user-id">${review.privateMemId}</div>
+                                    </div>
+                                </div>
+                                <div class="review-content">${review.rev_content}</div>
+                                <div class="review-meta-bottom">
+                                    <span class="date">${review.rev_rdate}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    reviewListContainer.innerHTML = newReviewsHtml;
 
-                const activeLink = reviewPagination.querySelector(`.page-link[data-page="${currentReviewPage}"]`);
-                if(activeLink) activeLink.classList.add('active');
+                    // 페이지네이션 UI 상태 업데이트
+                    updatePaginationUI(page);
 
-                reviewPagination.querySelector('.prev').classList.toggle('disabled', currentReviewPage === 1);
-                reviewPagination.querySelector('.next').classList.toggle('disabled', currentReviewPage === totalPages);
-            }
-
-            reviewPagination.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = e.target;
-
-                if (!target.classList.contains('page-link') || target.classList.contains('disabled') || target.classList.contains('active')) {
-                    return;
-                }
-
-                let targetPage;
-                if (target.classList.contains('prev')) {
-                    targetPage = currentReviewPage - 1;
-                } else if (target.classList.contains('next')) {
-                    targetPage = currentReviewPage + 1;
-                } else {
-                    targetPage = parseInt(target.dataset.page);
-                }
-
-                if (targetPage >= 1 && targetPage <= totalPages) {
-                    showReviewPage(targetPage);
-                }
-            });
-
-            showReviewPage(1);
+                    // 별점 UI 다시 렌더링
+                    renderStarRatings();
+                })
+                .catch(error => console.error('리뷰를 불러오는 데 실패했습니다:', error));
         }
+
+        // 페이지네이션 UI 상태를 업데이트하는 함수
+        function updatePaginationUI(currentPage) {
+            // 모든 페이지 링크에서 active 클래스 제거
+            pagination.querySelectorAll('.page-link').forEach(link => link.classList.remove('active'));
+
+            // 현재 페이지 번호에 active 클래스 추가
+            const activeLink = pagination.querySelector(`.page-link[data-page="${currentPage}"]`);
+            if (activeLink) activeLink.classList.add('active');
+
+            // '이전', '다음' 버튼 활성화/비활성화 처리
+            const prevButton = pagination.querySelector('.prev');
+            const nextButton = pagination.querySelector('.next');
+            if (prevButton) prevButton.classList.toggle('disabled', currentPage === 1);
+            if (nextButton) nextButton.classList.toggle('disabled', currentPage === totalPages);
+        }
+
+
+        pagination.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = e.target;
+
+            if (!target.classList.contains('page-link') || target.classList.contains('disabled')) {
+                return;
+            }
+
+            const activeLink = pagination.querySelector('.page-link.active');
+            const currentPage = activeLink ? parseInt(activeLink.dataset.page, 10) : 1;
+            let targetPage;
+
+            if (target.classList.contains('prev')) {
+                targetPage = currentPage - 1;
+            } else if (target.classList.contains('next')) {
+                targetPage = currentPage + 1;
+            } else {
+                targetPage = parseInt(target.dataset.page, 10);
+            }
+
+            if (targetPage !== currentPage) {
+                fetchAndUpdateReviews(targetPage);
+            }
+        });
     }
 });

@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 포인트내역</title>
-    <link rel="stylesheet" th:href="@{/kmarket/inc/css/my.css}">
-</head>
-<body class="logged-in">
 <div th:replace="~{my/_head.html}"></div>
 
 <main class="container">
     <div class="sidebar">
-
+        <h2>나의 쇼핑 정보</h2>
         <ul>
             <li><a th:href="@{/my/home}">마이페이지 홈</a></li>
             <li><a th:href="@{/my/order}">전체주문내역</a></li>
@@ -23,7 +14,7 @@
         </ul>
     </div>
     <div class="content">
-        <h2>나의 쇼핑 정보</h2>
+
         <div class="main-content-header">
             <div class="info-summary">
                 <div class="info-item">
@@ -49,36 +40,35 @@
             810 x 86 배너 광고
         </div>
 
-        <div class="section">
-            <div class="section-header">
-                <h3>포인트적립내역</h3>
-            </div>
-            <table class="table-container">
-                <thead>
-                <tr>
-                    <th>날짜</th>
-                    <th>구분</th>
-                    <th>주문번호</th>
-                    <th>적립금액</th>
-                    <th>비고</th>
-                    <th>유효기간</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="point : ${pointList}">
-                    <td th:text="${#dates.format(point.pDate, 'yyyy-MM-dd')}">2022-12-13</td>
-                    <td th:text="${point.pType}">적립</td>
-                    <td th:text="${point.ordNo}">2022121001</td>
-                    <td th:text="${#numbers.formatInteger(point.pPoint, 3, 'COMMA')}">340</td>
-                    <td th:text="${point.pInfo}">상품구매확정</td>
-                    <td th:text="${#dates.format(point.pExpDate, 'yyyy-MM-dd')}">2024-12-10</td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(pointList)}">
-                    <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="point-summary">
+            <p>총 적립 포인트 : <span th:text="${#numbers.formatInteger(pointTotal, 3, 'COMMA')}">1,000</span> P</p>
         </div>
+
+        <table class="point-table">
+            <thead>
+            <tr>
+                <th>날짜</th>
+                <th>구분</th>
+                <th>주문번호</th>
+                <th>적립금액</th>
+                <th>비고</th>
+                <th>유효기간</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="point : ${pointList}">
+                <td th:text="${#dates.format(point.p_date, 'yyyy-MM-dd')}">2022-12-13</td>
+                <td th:text="${point.p_type}">적립</td>
+                <td th:text="${point.ord_no}">2022121001</td>
+                <td th:text="${#numbers.formatInteger(point.p_point, 3, 'COMMA')}">340</td>
+                <td th:text="${point.p_info}">상품구매확정</td>
+                <td th:text="${#dates.format(point.p_exp_date, 'yyyy-MM-dd')}">2024-12-10</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(pointList)}">
+                <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
 
         <div class="info-section">
             <h3>포인트 안내</h3>
@@ -90,9 +80,11 @@
             </ul>
         </div>
 
-
+        <div class="pagination">
+            <button>&lt; 이전</button>
+            <button th:each="page : ${#numbers.sequence(1, totalPages)}" th:text="${page}"></button>
+            <button>다음 &gt;</button>
+        </div>
     </div>
 </main>
 <div th:replace="~{my/_tail.html}"></div>
-</body>
-</html>

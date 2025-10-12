@@ -3,8 +3,7 @@ package kr.co.shoply.dto;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Getter
 @Setter
@@ -28,5 +27,4 @@ public class SysCouponDTO {
 
     private int issuecount; //쿠폰 발급 수
     private int usedcount; // 쿠폰 사용 수
-
 }

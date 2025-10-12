@@ -16,8 +16,18 @@
         WHERE s_no=#{s_no}
     </update>
 
-    <update id="modifyLogos">
-        UPDATE Site_info SET s_logo1=#{s_logo1}, s_logo2=#{s_logo2}, s_logo3=#{s_logo3}
+    <update id="modifyLogo1">
+        UPDATE Site_info SET s_logo1=#{s_logo1}
+        WHERE s_no=#{s_no}
+    </update>
+
+    <update id="modifyLogo2">
+        UPDATE Site_info SET s_logo2=#{s_logo2}
+        WHERE s_no=#{s_no}
+    </update>
+
+    <update id="modifyLogo3">
+        UPDATE Site_info SET s_logo3=#{s_logo3}
         WHERE s_no=#{s_no}
     </update>
 
@@ -35,5 +45,7 @@
         UPDATE Site_info SET s_copy=#{s_copy}
         WHERE s_no=#{s_no}
     </update>
+
+
 
 </mapper>

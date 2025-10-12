@@ -11,7 +11,7 @@ import lombok.*;
 public class SiteInfoDTO {
     private String s_title;
     private String s_subtitle;
-    private String s_logo;
+    private String s_logo1;
     private String s_logo2;
     private String s_logo3;
     private String s_corp_name;

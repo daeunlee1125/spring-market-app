@@ -20,6 +20,7 @@ public class SysCouponDTO {
     private LocalDate cp_issue_date;
     private LocalDate cp_exp_date;
     private Integer cp_stat;
+    private String cp_note;
 
     private String cp_issuer_id;
     private String cp_issuer_name; // 발급자 이름

@@ -149,6 +149,26 @@
 .status.not-used { color: red; font-weight: bold; }
 .status.used { color: green; font-weight: bold; }
 
+
+
+.cp-status {
+    font-weight: 600;
+}
+
+.cp-status.used {
+    color: #007bff; /* 파란색: 사용 완료 */
+}
+
+.cp-status.available {
+    color: #28a745; /* 초록색: 사용 가능 */
+}
+
+.cp-status.stopped {
+    color: #dc3545; /* 빨간색: 발급 중단 */
+}
+
+
+
 .stop-btn {
     background: #aaa;
     border: 1px solid #888;

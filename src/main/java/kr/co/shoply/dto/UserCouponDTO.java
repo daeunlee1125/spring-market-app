@@ -17,4 +17,18 @@ public class UserCouponDTO{
     private Date cp_issued_date;
     private Date cp_used_date;
     private Integer cp_stat;
+
+
+    private int cp_type;
+    private int cp_value;
+    private String cp_note;
+
+
+    private String mem_name;
+    private String cp_issuer_name;
+    private String cp_name;
+
+
+    private Date cp_exp_date; // 만료일
+
 }

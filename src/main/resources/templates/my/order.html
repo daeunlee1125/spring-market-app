@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 전체주문내역</title>
-</head>
-<body class="logged-in">
-
 <div th:replace="~{my/_head.html}"></div>
 
 <main class="container">
     <div class="sidebar">
         <ul>
-            <li><a th:href="@{/my/home}">마이페이지 홈</a></li>
-            <li><a th:href="@{/my/order}" class="active">전체주문내역</a></li>
+            <li><a th:href="@{/my/home}" class="active">마이페이지 홈</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
             <li><a th:href="@{/my/point}">포인트내역</a></li>
             <li><a th:href="@{/my/coupon}">쿠폰</a></li>
             <li><a th:href="@{/my/review}">나의리뷰</a></li>
@@ -44,454 +35,144 @@
             </div>
         </div>
 
-        <div class="banner">
+        <div style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
             810 x 86 배너 광고
         </div>
 
-        <div class="filter-section">
-            <span>기간별 조회</span>
-            <button>1주일</button>
-            <button>15일</button>
-            <button>1개월</button>
-            <button>2개월</button>
-            <select>
-                <option>년</option>
-            </select>
-            <select>
-                <option>월</option>
-            </select>
-            <select>
-                <option>일</option>
-            </select>
-            <span>~</span>
-            <select>
-                <option>년</option>
-            </select>
-            <select>
-                <option>월</option>
-            </select>
-            <select>
-                <option>일</option>
-            </select>
-            <button>조회</button>
+        <div class="section">
+            <div class="section-header">
+                <h3>최근 주문내역</h3>
+            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>날짜</th>
+                    <th>상품정보</th>
+                    <th>상태</th>
+                    <th>확인 / 신청</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="orderItem : ${recentOrders}">
+                    <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
+                    <td>
+                        <span th:text="${orderItem.item_name}">상품명</span> / 주문번호: <span th:text="${orderItem.ord_no}">1012211341</span><br>
+                        수량: <span th:text="${orderItem.item_cnt}">1</span>개<br>
+                        <strong><span th:text="${#numbers.formatInteger(0, 3, 'COMMA')}">0</span>원</strong>
+                    </td>
+                    <td th:text="${orderItem.item_stat}">배송완료</td>
+                    <td>
+                        <button onclick="openModal('confirmModal')">구매확정</button>
+                        <button onclick="openModal('reviewModal')">상품평쓰기</button>
+                        <button onclick="openModal('returnModal')">반품신청</button>
+                        <button onclick="openModal('exchangeModal')">교환신청</button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentOrders)}">
+                    <td colspan="4" style="text-align: center;">최근 주문 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+            <a th:href="@{/my/order}" class="more-link">더보기 &gt;</a>
         </div>
 
-        <table class="order-table">
-            <thead>
-            <tr>
-                <th>날짜</th>
-                <th>상품정보</th>
-                <th>상태</th>
-                <th>확인/신청</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="orderItem : ${orderList}">
-                <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
-                <td>
-                    <div class="product-info">
-                        <img th:src="@{/image/placeholder.png}" alt="상품 이미지">
-                        <div class="product-details">
-                            <p>주문번호 : <a href="#" onclick="openModal('orderDetailPopup')"><span th:text="${orderItem.ord_no}">1012211341</span></a></p>
-                            <p>(주) <a href="#" onclick="openModal('sellerInfoPopup')">상호명</a></p>
-                            <p>상품명 : <span th:text="${orderItem.item_name}">상품명</span></p>
-                            <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
-                            <strong><span th:text="${#numbers.formatInteger(orderItem.item_price, 3, 'COMMA')}">34,000</span>원</strong>
-                        </div>
-                    </div>
-                </td>
-                <td th:text="${orderItem.item_stat}">배송완료</td>
-                <td>
-                    <div class="action-btns">
-                        <button class="action-btn" onclick="openModal('confirmModal')">구매확정</button>
-                        <button class="action-btn" onclick="openModal('reviewModal')">상품평쓰기</button>
-                        <button class="action-btn" onclick="openModal('exchangeModal')">교환신청</button>
-                        <button class="action-btn" onclick="openModal('returnModal')">반품신청</button>
-                    </div>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(orderList)}">
-                <td colspan="4" style="text-align: center;">주문 내역이 없습니다.</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div class="pagination">
-            <button>&lt; 이전</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-            <button>5</button>
-            <button>다음 &gt;</button>
+        <div class="section">
+            <div class="section-header">
+                <h3>포인트적립내역</h3>
+            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>날짜</th>
+                    <th>구분</th>
+                    <th>주문번호</th>
+                    <th>적립금액</th>
+                    <th>비고</th>
+                    <th>유효기간</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="point : ${recentPoints}">
+                    <td th:text="${#temporals.format(point.p_date, 'yyyy-MM-dd')}">2022-12-13</td>
+                    <td th:text="${point.p_type}">적립</td>
+                    <td th:text="${point.ord_no}">2022121001</td>
+                    <td th:text="${#numbers.formatInteger(point.p_point, 3, 'COMMA')}">340</td>
+                    <td th:text="${point.p_info}">상품구매확정</td>
+                    <td th:text="${#temporals.format(point.p_exp_date, 'yyyy-MM-dd')}">2024-12-10</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentPoints)}">
+                    <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+        <br>
+        <a th:href="@{/my/point}" class="more-link">더보기 &gt;</a>
+
+        <div class="section">
+            <div class="section-header">
+                <h3>상품평</h3>
+            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>상품명</th>
+                    <th>내용</th>
+                    <th>별점</th>
+                    <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="review, status : ${recentReviews}">
+                    <td th:text="${status.count}">1</td>
+                    <td th:text="${review.prodName}">상품번호 / 상품명</td>
+                    <td th:text="${review.rev_content}">배송이 빠릅니다.. 잘 사용하겠습니다.</td>
+                    <td>
+                        <strong class="star-rating" th:text="${review.rev_rating}">★★★★★</strong>
+                    </td>
+                    <td th:text="${#dates.format(review.rev_rdate, 'yyyy-MM-dd')}">2022-12-10</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentReviews)}">
+                    <td colspan="5" style="text-align: center;">상품평 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <a th:href="@{/my/review}" class="more-link">더보기 &gt;</a>
+
+        <div class="section">
+            <div class="section-header">
+                <h3>나의 문의</h3>
+            </div>
+            <table class="table-container">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>문의유형</th>
+                    <th>문의제목</th>
+                    <th>작성일</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="qna, status : ${recentQnas}">
+                    <td th:text="${status.count}">1</td>
+                    <td th:text="${qna.q_cate1}">고객센터</td>
+                    <td th:text="${qna.q_title}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
+                    <td th:text="${#dates.format(qna.q_rdate, 'yyyy-MM-dd')}">2022-12-12</td>
+                    <td th:text="${#strings.isEmpty(qna.q_reply)} ? '답변 대기' : '답변 완료'">답변 완료</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentQnas)}">
+                    <td colspan="5" style="text-align: center;">문의 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <a th:href="@{/my/qna}" class="more-link">더보기 &gt;</a>
     </div>
 </main>
-<div id="orderDetailPopup" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4>주문상세 20xx-12-13</h4>
-            <span class="close-btn" onclick="closeModal('orderDetailPopup')">&times;</span>
-        </div>
-
-        <div class="order-info">
-            <h5>주문정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td colspan="2">
-                        <div class="product-details">
-                            <img src="placeholder.png" alt="상품 이미지">
-                            <div>
-                                <p>주문번호 : 1012211341</p>
-                                <p>(주) 상호명</p>
-                                <p>상품명 : 상품명</p>
-                                <p>수량 : 1개</p>
-                                <strong>34,000원</strong>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>결제금액</td>
-                    <td>
-                        <p>판매가 34,000원</p>
-                        <p>할인 -3,000원</p>
-                        <p>결제금액 <strong>34,000원</strong></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>상태</td>
-                    <td>배송완료</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="delivery-info">
-            <h5>배송정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td>이름</td>
-                    <td>홍길동</td>
-                </tr>
-                <tr>
-                    <td>연락처</td>
-                    <td>010-1234-1001</td>
-                </tr>
-                <tr>
-                    <td>주소</td>
-                    <td>부산광역시 부산진구 대연동 121 10층 1004호</td>
-                </tr>
-                <tr>
-                    <td>배송요청사항</td>
-                    <td>없음</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div id="sellerInfoPopup" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4>판매자 정보</h4>
-            <span class="close-btn" onclick="closeModal('sellerInfoPopup')">&times;</span>
-        </div>
-        <table class="info-table">
-            <tbody>
-            <tr>
-                <td class="label">상호</td>
-                <td>(주) 상호명</td>
-            </tr>
-            <tr>
-                <td class="label">대표자</td>
-                <td>홍길동</td>
-            </tr>
-            <tr>
-                <td class="label">전화번호</td>
-                <td>051-123-1000</td>
-            </tr>
-            <tr>
-                <td class="label">FAX</td>
-                <td>051-123-1001</td>
-            </tr>
-            <tr>
-                <td class="label">Email</td>
-                <td>company@abc.com</td>
-            </tr>
-            <tr>
-                <td class="label">사업자번호</td>
-                <td>123-12-123457</td>
-            </tr>
-            <tr>
-                <td class="label">영업장소재지</td>
-                <td>부산광역시 부산진구 대연동 121 10층 1004호</td>
-            </tr>
-            </tbody>
-        </table>
-        <div style="text-align: right; margin-top: 20px;">
-            <button onclick="openModal('qnaPopup'); closeModal('sellerInfoPopup');">문의하기</button>
-        </div>
-    </div>
-</div>
-
-<div id="qnaPopup" class="modal">
-    <div class="modal-content" style="width: 500px;">
-        <div class="modal-header">
-            <h4>문의하기</h4>
-            <span class="close-btn" onclick="closeModal('qnaPopup')">&times;</span>
-        </div>
-        <form>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td class="label">문의유형</td>
-                    <td>
-                        <input type="radio" name="qna_type" value="상품">상품
-                        <input type="radio" name="qna_type" value="배송">배송
-                        <input type="radio" name="qna_type" value="환불/반품">환불/반품
-                        <input type="radio" name="qna_type" value="교환">교환
-                        <input type="radio" name="qna_type" value="기타">기타
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">Email</td>
-                    <td><input type="email" value="chh**@gmail.com" readonly></td>
-                </tr>
-                <tr>
-                    <td class="label">제목</td>
-                    <td><input type="text" style="width: 95%;"></td>
-                </tr>
-                <tr>
-                    <td class="label">내용</td>
-                    <td><textarea style="width: 95%; height: 150px;"></textarea></td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="text-align: right; margin-top: 20px;">
-                <button type="submit">등록하기</button>
-                <button type="button" onclick="openModal('sellerInfoPopup'); closeModal('qnaPopup');">취소</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div id="confirmModal" class="modal">
-    <div class="modal-content" style="width: 400px; text-align: center;">
-        <div class="modal-header">
-            <h4>구매확정</h4>
-            <span class="close-btn" onclick="closeModal('confirmModal')">&times;</span>
-        </div>
-        <p>상품을 받으셨나요?</p>
-        <p>상품을 받으신 분만 구매확정을 해주세요.</p>
-        <div style="margin-top: 20px;">
-            <button>확인</button>
-            <button onclick="closeModal('confirmModal')">취소</button>
-        </div>
-    </div>
-</div>
-
-<div id="reviewModal" class="modal">
-    <div class="modal-content" style="width: 500px;">
-        <div class="modal-header">
-            <h4>상품평 작성하기</h4>
-            <span class="close-btn" onclick="closeModal('reviewModal')">&times;</span>
-        </div>
-        <form>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td class="label">상품명</td>
-                    <td><p>상품명 출력</p></td>
-                </tr>
-                <tr>
-                    <td class="label">만족도</td>
-                    <td>
-                        <div class="rating-container">
-                            <input type="radio" name="rating" id="star5" value="5">
-                            <label for="star5">★</label>
-                            <input type="radio" name="rating" id="star4" value="4">
-                            <label for="star4">★</label>
-                            <input type="radio" name="rating" id="star3" value="3">
-                            <label for="star3">★</label>
-                            <input type="radio" name="rating" id="star2" value="2">
-                            <label for="star2">★</label>
-                            <input type="radio" name="rating" id="star1" value="1">
-                            <label for="star1">★</label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">내용</td>
-                    <td>
-                        <textarea style="width: 95%; height: 100px;" placeholder="최소 10자 이상 200자 이내로 작성하세요"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">사진</td>
-                    <td>
-                        <input type="file"><br>
-                        <input type="file"><br>
-                        <input type="file">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="text-align: right; margin-top: 20px;">
-                <button type="submit">작성완료</button>
-                <button type="button" onclick="closeModal('reviewModal')">취소</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div id="returnModal" class="modal">
-    <div class="modal-content" style="width: 600px;">
-        <div class="modal-header">
-            <h4>반품신청</h4>
-            <span class="close-btn" onclick="closeModal('returnModal')">&times;</span>
-        </div>
-
-        <div class="order-info">
-            <h5>상품정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td colspan="2">
-                        <div class="product-details">
-                            <img src="placeholder.png" alt="상품 이미지">
-                            <div>
-                                <p>주문번호 : 1012211341</p>
-                                <p>(주) 상호명</p>
-                                <p>상품명 : 상품명</p>
-                                <p>수량 : 1개</p>
-                                <strong>34,000원</strong>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="delivery-info">
-            <h5>반품정보 입력</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td class="label">반품유형</td>
-                    <td>
-                        <input type="radio" name="return_type" value="단순 변심">단순 변심
-                        <input type="radio" name="return_type" value="파손 및 불량">파손 및 불량
-                        <input type="radio" name="return_type" value="주문 실수">주문 실수
-                        <input type="radio" name="return_type" value="기타">기타
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">사유입력</td>
-                    <td><textarea style="width: 95%; height: 100px;"></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label">사진첨부(선택)</td>
-                    <td>
-                        <input type="file">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div style="text-align: right; margin-top: 20px;">
-            <button>반품신청</button>
-            <button onclick="closeModal('returnModal')">취소</button>
-        </div>
-    </div>
-</div>
-
-<div id="exchangeModal" class="modal">
-    <div class="modal-content" style="width: 600px;">
-        <div class="modal-header">
-            <h4>교환신청</h4>
-            <span class="close-btn" onclick="closeModal('exchangeModal')">&times;</span>
-        </div>
-
-        <div class="order-info">
-            <h5>상품정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td colspan="2">
-                        <div class="product-details">
-                            <img src="placeholder.png" alt="상품 이미지">
-                            <div>
-                                <p>주문번호 : 1012211341</p>
-                                <p>(주) 상호명</p>
-                                <p>상품명 : 상품명</p>
-                                <p>수량 : 1개</p>
-                                <strong>34,000원</strong>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="delivery-info">
-            <h5>교환정보 입력</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td class="label">교환유형</td>
-                    <td>
-                        <input type="radio" name="exchange_type" value="단순 변심">단순 변심
-                        <input type="radio" name="exchange_type" value="파손 및 불량">파손 및 불량
-                        <input type="radio" name="exchange_type" value="주문 실수">주문 실수
-                        <input type="radio" name="exchange_type" value="기타">기타
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">사유입력</td>
-                    <td><textarea style="width: 95%; height: 100px;"></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label">사진첨부(선택)</td>
-                    <td>
-                        <input type="file">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div style="text-align: right; margin-top: 20px;">
-            <button>교환신청</button>
-            <button onclick="closeModal('exchangeModal')">취소</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    function openModal(modalId) {
-        document.getElementById(modalId).style.display = 'flex';
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-    }
-
-    // 로그인 상태 시뮬레이션
-    const isLoggedIn = true; // 실제로는 서버에서 로그인 상태를 확인
-
-    const loginMenu = document.querySelector('.login-menu');
-    const userMenu = document.querySelector('.user-menu');
-
-    if (isLoggedIn) {
-        document.body.classList.add('logged-in');
-    }
-</script>
-</body>
 <div th:replace="~{my/_tail.html}"></div>

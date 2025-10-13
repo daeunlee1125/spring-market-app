@@ -2,6 +2,8 @@ package kr.co.shoply.dto;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
@@ -15,7 +17,7 @@ public class ReviewDTO {
     private String prodName;
     private String rev_content;
     private int rev_rating;
-    private String rev_rdate;
+    private Date rev_rdate;
     private String rev_img_path;
 
     // 추가필드

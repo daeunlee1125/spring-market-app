@@ -50,7 +50,7 @@ public class MyService {
                 .limit(5)
                 .collect(Collectors.toList());
 
-        List<Point> recentPointsEntity = pointRepository.findTop5ByMem_idOrderByP_dateDesc(memId);
+        List<Point> recentPointsEntity = pointRepository.findByMem_idOrderByP_dateDesc(memId);
         List<PointDTO> recentPoints = recentPointsEntity.stream()
                 .map(entity -> modelMapper.map(entity, PointDTO.class))
                 .collect(Collectors.toList());
@@ -157,4 +157,91 @@ public class MyService {
         qna.setQ_rdate(currentDate);
         qnaRepository.save(qna);
     }
+
+    @Transactional(readOnly = true)
+    public List<ReviewDTO> getReviewsByMemId(String memId) {
+        List<Review> reviewEntities = reviewRepository.findByMem_idOrderByRev_rdateDesc(memId);
+        return reviewEntities.stream()
+                .map(entity -> {
+                    ReviewDTO dto = modelMapper.map(entity, ReviewDTO.class);
+                    productRepository.findByProd_no(entity.getProd_no())
+                            .ifPresent(p -> dto.setProdName(p.getProd_name()));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserCouponDTO> getUserCouponsByMemId(String memId) {
+        // 네이티브 쿼리로 Object[] 리스트 가져오기
+        List<Object[]> results = userCouponRepository.findUserCouponsNative(memId);
+
+        // Object[] -> UserCouponDTO 변환
+        return results.stream().map(row -> {
+            UserCouponDTO dto = new UserCouponDTO();
+
+            dto.setCp_no((String) row[0]);
+            dto.setCp_code((String) row[1]);
+            dto.setMem_id((String) row[2]);
+
+            // java.sql.Date → java.util.Date 변환
+            dto.setCp_issued_date(row[3] != null ? new Date(((java.sql.Date) row[3]).getTime()) : null);
+            dto.setCp_used_date(row[4] != null ? new Date(((java.sql.Date) row[4]).getTime()) : null);
+
+            dto.setCp_stat(row[5] != null ? ((Number) row[5]).intValue() : null);
+
+            dto.setCp_type(row[6] != null ? ((Number) row[6]).intValue() : 0);
+            dto.setCp_value(row[7] != null ? ((Number) row[7]).intValue() : 0);
+            dto.setCp_name((String) row[8]);
+
+            dto.setCp_issuer_name((String) row[9]);
+
+            // sc.cp_exp_date → java.sql.Date → java.util.Date
+            dto.setCp_exp_date(row[10] != null ? new Date(((java.sql.Date) row[10]).getTime()) : null);
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PointDTO> getPointHistory(String memId) {
+        List<Point> points = pointRepository.findByMem_idOrderByP_dateDesc(memId);
+        return points.stream()
+                .map(point -> modelMapper.map(point, PointDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void cancelOrder(Long itemNo, String memId) {
+        OrderItem orderItem = orderItemRepository.findById(itemNo)
+                .orElseThrow(() -> new IllegalArgumentException("주문 상품을 찾을 수 없습니다."));
+
+        Order order = orderRepository.findById(orderItem.getOrd_no())
+                .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
+
+        if (!order.getMem_id().equals(memId)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+
+        orderItem.setItem_stat(0); // 취소 상태 코드
+        orderItemRepository.save(orderItem);
+    }
+    @Transactional(readOnly = true)
+    public List<OrderItemDTO> getOrdersByMemId(String memId) {
+        // 회원 주문 조회
+        List<Order> orders = orderRepository.findTop5ByMem_idOrderByOrd_dateDesc(memId);
+
+        // Order -> OrderItemDTO 변환
+        return orders.stream()
+                .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
+                        .map(item -> {
+                            OrderItemDTO dto = modelMapper.map(item, OrderItemDTO.class);
+                            dto.setOrd_date(order.getOrd_date());
+                            return dto;
+                        }))
+                .collect(Collectors.toList());
+    }
+
+
+
 }

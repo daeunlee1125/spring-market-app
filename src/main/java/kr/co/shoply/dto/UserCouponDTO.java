@@ -21,7 +21,7 @@ public class UserCouponDTO{
 
     private int cp_type;
     private int cp_value;
-    private String cp_note;
+    //private String cp_note;
 
 
     private String mem_name;

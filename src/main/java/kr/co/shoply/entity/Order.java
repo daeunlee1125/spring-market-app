@@ -1,21 +1,18 @@
 package kr.co.shoply.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
+import java.util.Date; // LocalDateTime 대신 java.util.Date를 import
 
 @Getter
+@Setter // MyService에서 setter를 사용하려면 필요합니다.
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "`order`") // Oracle 예약어 처리
+@Table(name = "`order`")
 public class Order {
     @Id
     private String ord_no;
@@ -27,7 +24,9 @@ public class Order {
     private String ord_addr2;
     private Integer ord_total;
 
-    @CreationTimestamp // 객체 생성 시 현재 시간 자동 입력
-    private LocalDateTime ord_date;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP) // Date 타입에 맞게 TemporalType 설정
+    private Date ord_date; // LocalDateTime -> Date로 변경
+
     private String ord_payment;
 }

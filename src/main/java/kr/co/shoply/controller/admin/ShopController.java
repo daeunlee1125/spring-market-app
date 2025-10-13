@@ -65,7 +65,20 @@ public class ShopController {
     }
 
     @GetMapping("/admin/shop/sales")
-    public String sales(){
+    public String sales(Model model, PageRequestDTO pageRequestDTO){
+
+        PageResponseDTO<MemSellerDTO> pageResponseDTO = memSellerService.getSellerSales(pageRequestDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
+        return "admin/shop/sales";
+    }
+
+    @GetMapping("/admin/shop/range")
+    public String sales2(Model model, PageRequestDTO pageRequestDTO, String range){
+
+        PageResponseDTO<MemSellerDTO> pageResponseDTO = memSellerService.getSellerRange(pageRequestDTO, range);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
         return "admin/shop/sales";
     }
 

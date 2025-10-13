@@ -215,3 +215,668 @@
     background: linear-gradient(135deg, #a77ece, #6c3fc9);
     color: white;
 }
+
+
+/* 버튼 컨테이너 */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.left-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.btn-register {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}
+
+.btn-register:hover {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+
+}
+
+.btn-delete:hover {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+}
+
+
+/* 모달 배경 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+/* 모달 창 */
+.confirm-modal {
+    background: white;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 모달 내용 */
+.modal-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-btn {
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 60px;
+}
+
+.modal-btn:hover {
+    background: #e9ecef;
+}
+
+.modal-btn-confirm {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.modal-btn-confirm:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/*///////////////////////////////////////  */
+/* 공지사항 보기(view) 전용 스타일 */
+/*///////////////////////////////////////  */
+
+.notice-view-table_2 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+}
+
+.notice-view-table_2 tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notice-view-table_2 th {
+    width: 120px;
+    padding: 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #4a2f73;
+    /* color: #333; */
+    border-right: 1px solid #e0e0e0;
+    background-color:#f3effa;
+    /* background: #4a2f73; */
+}
+
+.notice-view-table_2 td {
+    padding: 20px;
+    color: #555;
+    line-height: 1.8;
+}
+
+.notice-content_2 {
+    min-height: 200px;
+    white-space: pre-line;
+}
+
+.notice-buttons_2 {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+    padding-bottom: 40px;
+}
+
+.notice-btn_2 {
+    padding: 13px 32px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-delete_2 {
+    background: #aaa;
+    color: white;
+}
+
+.btn-edit_2 {
+    background: #aaa;
+    color: white;
+}
+
+.btn-list_2 {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}
+
+/*///////////////////////////////////////  */
+/* 공지사항 작성,수정(write, modify) 폼 스타일 */
+/*///////////////////////////////////////  */
+
+.notice-form_3 {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.notice-table_3 {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #e0e0e0;
+}
+
+.notice-table_3 tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notice-th_3 {
+    width: 150px;
+    padding: 30px;
+    text-align: left;
+    font-weight: bold;
+    background-color:#f3effa;
+    vertical-align: top;
+    color: #4a2f73;
+}
+
+.notice-td_3 {
+    padding: 20px;
+}
+
+.notice-select_3 {
+    width: 200px;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #666;
+    background-color: #fff;
+}
+
+.notice-select_3:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.notice-input_3 {
+    width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.notice-input_3::placeholder {
+    color: #999;
+}
+
+.notice-input_3:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.notice-textarea_3 {
+    width: 100%;
+    height: 200px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.notice-textarea_3::placeholder {
+    color: #999;
+}
+
+.notice-textarea_3:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.notice-buttons_3 {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.notice-btn-cancel_3,
+.notice-btn-submit_3 {
+    padding: 12px 40px;
+    font-size: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.notice-btn-cancel_3 {
+    background: #aaa;
+    color: white;
+}
+
+.notice-btn-submit_3 {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}
+
+
+/*문의하기 답변*/
+
+.qna-textarea_2 {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.qna-textarea_2::placeholder {
+    color: #999;
+}
+
+.qna-textarea_2:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.btn-add_2 {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}
+
+
+/* 버튼 컨테이너 */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.left-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.btn-register {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+}
+
+.btn-register:hover {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    color: white;
+
+}
+
+.btn-delete:hover {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+}
+
+
+/* 모달 배경 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+/* 모달 창 */
+.confirm-modal {
+    background: white;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 모달 내용 */
+.modal-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-btn {
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 60px;
+}
+
+.modal-btn:hover {
+    background: #e9ecef;
+}
+
+.modal-btn-confirm {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.modal-btn-confirm:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+/* 아마 height 정도만 수정하면 될 것 같아요 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+.table tr th {
+    height: 40px;
+    background-color:#f3effa;
+    border: 1px solid #ddd;
+    color: #4a2f73;
+
+}
+.table tr td {
+    height: 40px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #eee;
+    color: #444;
+    padding: 3px;
+
+}
+.table tr:hover td {
+    background: #faf7ff;
+}
+
+.table td input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+}
+.table td input:hover {
+    font-weight: bold;
+    color: #4a2f73;
+}
+.table td img {
+    width: 100%;      /* td 너비에 맞춤 */
+    height: 100%;     /* td 높이에 맞춤 */
+    object-fit: cover; /* 비율 유지하면서 넘치는 부분은 잘라냄 */
+}
+
+
+
+/* (여기부터 수정X) */
+.page {
+    text-align: center;
+    margin-top: 5px;
+}
+.page > a {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #d7d7d7;
+    background: #f2f2f2;
+}
+
+.page > .current {
+    border: 1px solid #6d6d6d;
+    background: #888;
+    color: #fff;
+}
+
+.sub-top {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+
+    margin-top: 30px;
+
+}
+
+.search-bar {
+    width: 300px;
+    position: relative;
+    bottom: 8px;
+}
+.search-bar form {
+    display: flex;
+    align-items: center; /* 세로 정렬 */
+    gap: 8px;            /* 간격 */
+}
+
+.search-bar select {
+    width: 111px;
+    height: 35px; /* search-place 높이와 맞춰주면 깔끔 */
+    font-size: 14px;
+    border: 1px solid rgb(201, 201, 201);
+    background-color: white;
+
+}
+
+
+.search-bar .search-place {
+    flex: 1; /* 남은 공간 차지 */
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    background-color: white;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background-color: transparent;
+}
+
+
+.search-bar button {
+    background-color: transparent;
+    border: 0;
+    height: 25px;
+    padding-top: 2px;
+    cursor: pointer;
+}
+.search-bar button img {
+    width: 20px;
+}
+
+
+
+.select-2 {
+    width: 111px;
+    height: 35px;
+    font-size: 14px;
+    border: 1px solid rgb(201, 201, 201);
+    background-color: white;
+    margin-bottom: 10px;
+    margin-top: 23px;
+
+}
+
+
+
+.transpar {
+    background-color: transparent;
+    border: none;
+    padding: 13px 32px;
+    font-size: 16px;
+    color: transparent;
+}
+
+
+/* =================== 공지사항 모달 스타일 재정의 =================== */
+#confirmEndModal {
+    position: fixed !important; /* ✅ 문서 흐름 무시하고 화면 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999 !important; /* ✅ footer보다 위로 */
+}
+
+#confirmEndModal.hidden {
+    display: none !important;
+}
+
+#confirmEndModal .modal-popup {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 10000;
+}
+
+#confirmEndModal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4a2f73;
+    color: white;
+    padding: 15px 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#confirmEndModal .modal-content {
+    padding: 20px;
+    text-align: center;
+}
+
+#confirmEndModal .modal-content button {
+    margin: 0 10px;
+}

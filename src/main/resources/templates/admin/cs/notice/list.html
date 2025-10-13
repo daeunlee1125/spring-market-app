@@ -1,94 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>공지사항목록 - SHOPLY Admin</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/common.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/admin_temp.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/coupon.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/cs_list.css">
-</head>
-<body>
-  <!-- 사이드바 -->
-  <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
-
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/project2/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
+<div th:replace="~{admin/cs/notice/_head.html}"></div>
 
   <!-- 메인 -->
   <div class="main">
@@ -103,18 +13,20 @@
           </div>
         </div>
 
-        <!-- 검색 영역 -->
-        <div class="main-content-top" style="border:none; margin:15px 0;">
-          <form class="search-bar">
-            <select>
-              <option>유형선택</option>
-              <option>고객서비스</option>
-              <option>이벤트 당첨</option>
-              <option>안전거래</option>
-              <option>위해상품</option>
-            </select>
-          </form>
-        </div>
+
+          <!-- 검색 영역 -->
+          <div class="main-content-top" style="border:none; margin:15px 0;">
+              <form class="search-bar" th:action="@{/admin/cs/notice/list}" method="get">
+                  <select name="csType" onchange="this.form.submit()">
+                      <option value="">유형선택</option>
+                      <option value="전체">전체 글 보기</option>
+                      <option th:value="'고객서비스'" th:selected="${param.csType == '고객서비스'}">고객서비스</option>
+                      <option th:value="'이벤트 당첨'" th:selected="${param.csType == '이벤트 당첨'}">이벤트 당첨</option>
+                      <option th:value="'안전거래'" th:selected="${param.csType == '안전거래'}">안전거래</option>
+                      <option th:value="'위해상품'" th:selected="${param.csType == '위해상품'}">위해상품</option>
+                  </select>
+              </form>
+          </div>
 
     <main>
         <table class="table">
@@ -131,99 +43,129 @@
             <th>관리</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-            <td class="checkbox-cell">
-                <input type="checkbox" name="itemCheck">
-            </td>
-            <td>100</td>
-            <td>고객서비스</td>
-            <td>[안내] 해외결제사칭문자주의</td>
-            <td>120</td>
-            <td>2025.09.27</td>
-            <td>
-                <a href="#">[삭제]</a>
-                <a href="#">[수정]</a>
-            </td>
-
+            <tbody>
+            <tr th:each="notice : ${pageResponse.dtoList}">
+                <td><input type="checkbox" name="itemCheck"></td>
+                <td th:text="${notice.cs_no}"></td>
+                <td th:text="${notice.cs_type}"></td>
+                <td>
+                    <a th:href="@{'/admin/cs/notice/view/' + ${notice.cs_no}}"
+                       th:text="${notice.cs_title}"></a>
+                </td>
+                <td th:text="${notice.cs_hit}"></td>
+                <td th:text="${notice.cs_rdate}"></td>
+                <td>
+                    <a th:href="@{'/admin/cs/notice/delete/' + ${notice.cs_no}}"
+                       onclick="return confirm('정말 삭제하시겠습니까?');">[삭제]</a>
+                    <a th:href="@{'/admin/cs/notice/modify/' + ${notice.cs_no}}">[수정]</a>
+                </td>
             </tr>
-        </tbody>
+            </tbody>
+
         </table>
 
-    <!-- 페이지네이션 -->
-    <div class="page">
-    <a href="#" class="prev">이전</a>
-    <a href="#" class="num current">1</a>
-    <a href="#" class="num">2</a>
-    <a href="#" class="num">3</a>
-    <a href="#" class="next">다음</a>
-    </div>
+        <!-- 페이지네이션 -->
+        <div class="page">
+            <a th:if="${pageResponse.prev}"
+               th:href="@{/admin/cs/notice/list(pg=${pageResponse.start - 1}, size=${pageResponse.size}, csType=${csType})}">
+                이전
+            </a>
+
+            <a th:each="num : ${#numbers.sequence(pageResponse.start, pageResponse.end)}"
+               th:href="@{/admin/cs/notice/list(pg=${num}, size=${pageResponse.size}, csType=${csType})}"
+               th:classappend="${num == pageResponse.pg} ? 'current'"
+               th:text="${num}">
+            </a>
+
+            <a th:if="${pageResponse.next}"
+               th:href="@{/admin/cs/notice/list(pg=${pageResponse.end + 1}, size=${pageResponse.size}, csType=${csType})}">
+                다음
+            </a>
+        </div>
 
     <!-- 버튼 영역 -->
-    <div class="button-container">
-    <div class="left-buttons">
-        <button class="openModalBtn delete-btn" data-target="confirmEndModal">선택삭제</button>
-    </div>
-    <div class="right-buttons">
-        <button class="openModalBtn register-btn">작성하기</button>
-    </div>
-    </div>
+        <!-- 버튼 영역 -->
+        <div class="button-container">
+            <div class="left-buttons">
+                <button type="button" class="openModalBtn delete-btn" data-target="confirmEndModal">
+                    선택삭제
+                </button>
+            </div>
+            <div class="right-buttons">
+                <a th:href="@{/admin/cs/notice/write}" class="register-btn">
+                    작성하기
+                </a>
+            </div>
+        </div>
+
+
+
+        <form id="deleteForm" th:action="@{/admin/cs/notice/delete}" method="post">
+            <input type="hidden" name="deleteIds" id="deleteIds">
+        </form>
+
+
+
     </main>
 </div>
 </div>
-    </div>
-
-  <!-- 푸터 -->
-  <footer>
-    <div class="middle">
-      <p id="footer-p">
-        Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-      </p>
-    </div>
-  </footer>
-
-  <!-- 종료 확인 모달 -->
-  <div class="modal hidden" id="confirmEndModal">
-    <div class="modal-popup">
-      <div class="modal-header">
-        <h2>선택삭제 확인</h2>
-        <span class="closeModalBtn">&times;</span>
-      </div>
-      <div class="modal-content">
-        <p>해당 공지사항 목록을 삭제하시겠습니까?</p>
-        <div style="text-align:center; margin-top:20px;">
-          <button class="register-btn">확인</button>
-          <button class="closeModalBtn delete-btn">취소</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-  </div>
 </div>
 
-  <!-- JS 공통 로직 -->
-   <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        // 열기 버튼
-        document.querySelectorAll(".openModalBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetId = btn.dataset.target;
-            document.getElementById(targetId).classList.remove("hidden");
-            });
+<!-- 종료 확인 모달 -->
+<div class="modal hidden" id="confirmEndModal">
+    <div class="modal-popup">
+        <div class="modal-header">
+            <h2>선택삭제 확인</h2>
+            <span class="closeModalBtn">&times;</span>
+        </div>
+        <div class="modal-content">
+            <p>해당 공지사항 목록을 삭제하시겠습니까?</p>
+            <div style="text-align:center; margin-top:20px;">
+                <button class="register-btn">확인</button>
+                <button class="closeModalBtn delete-btn">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <div th:replace="~{admin/coupon/_tail.html}"></div>
+
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const deleteBtn = document.querySelector('#confirmEndModal .register-btn');
+        const checkboxes = document.querySelectorAll('input[name="itemCheck"]');
+        const deleteForm = document.getElementById('deleteForm');
+        const deleteIdsInput = document.getElementById('deleteIds');
+
+        // 전체 선택 토글
+        document.querySelector('#selectAll input').addEventListener('change', (e) => {
+            checkboxes.forEach(cb => cb.checked = e.target.checked);
         });
 
-        // 닫기 버튼 + 배경 클릭
-        document.querySelectorAll(".modal").forEach(modal => {
-            modal.addEventListener("click", (e) => {
-            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                modal.classList.add("hidden");
+        // 모달 '확인' 버튼 클릭 → 선택된 항목 삭제
+        deleteBtn.addEventListener('click', () => {
+            const selected = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.closest('tr').querySelector('td:nth-child(2)').innerText.trim());
+
+            if (selected.length === 0) {
+                alert("삭제할 항목을 선택해주세요.");
+                return;
             }
-            });
-        });
-        });
 
+            deleteIdsInput.value = selected.join(',');
+            deleteForm.submit();
+        });
+    });
 </script>
+
 </body>
 </html>
+
+

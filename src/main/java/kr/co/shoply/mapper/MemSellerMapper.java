@@ -15,4 +15,6 @@ public interface MemSellerMapper {
     public List<MemSellerDTO> getSellerPage2(PageRequestDTO pageRequestDTO);
     public int selectCountTotal2(PageRequestDTO pageRequestDTO);
     public void updateStat2(MemberDTO memberDTO);
+    public List<MemSellerDTO> sellerWithSales(PageRequestDTO pageRequestDTO);
+    public List<MemSellerDTO> sellerWithRange(PageRequestDTO pageRequestDTO, String range);
 }

@@ -31,38 +31,57 @@
 
     <select id="getSellerPage2" resultType="kr.co.shoply.dto.MemSellerDTO">
         SELECT
-        mem_id, corp_name, mem_name, corp_reg_hp, corp_tel_hp, mem_hp, mem_stat
+        m.mem_id, corp_name, mem_name, corp_reg_hp, corp_tel_hp, mem_hp, mem_stat
         FROM MEMBER m
-        LEFT JOIN mem_seller USING (mem_id)
+        LEFT JOIN mem_seller s ON m.mem_id=s.mem_id
         <include refid="searchWhere2"/>
-        OFFSET #{pageRequestDTO.offset} ROWS
-        FETCH NEXT #{pageRequestDTO.size} ROWS ONLY
+        OFFSET #{offset} ROWS
+        FETCH NEXT #{size} ROWS ONLY
     </select>
 
 
     <sql id="searchWhere2">
         <where>
-            <if test="pageRequestDTO.searchType != null and pageRequestDTO.keyword != ''">
+            mem_level=2
+            <if test="searchType != null and keyword != ''">
                 <choose>
-                    <when test="pageRequestDTO.searchType == 'title'">
-                        AND corp_name LIKE '%' || #{pageRequestDTO.keyword} || '%'
+                    <when test="searchType == 'corp_name'">
+                        AND corp_name LIKE '%' || #{keyword} || '%'
                     </when>
-                    <when test="pageRequestDTO.searchType == 'content'">
-                        AND mem_name LIKE '%' || #{pageRequestDTO.keyword} || '%'
+                    <when test="searchType == 'mem_name'">
+                        AND mem_name LIKE '%' || #{keyword} || '%'
                     </when>
-                    <when test="pageRequestDTO.searchType == 'writer'">
-                        AND mem_hp LIKE '%' || #{pageRequestDTO.keyword} || '%'
+                    <when test="searchType == 'corp_reg_hp'">
+                        AND corp_reg_hp LIKE '%' || #{keyword} || '%'
                     </when>
+                    <when test="searchType == 'mem_hp'">
+                        AND mem_hp LIKE '%' || #{keyword} || '%'
+                    </when>
+
                 </choose>
             </if>
         </where>
     </sql>
 
-    <select id="selectCountTotal" resultType="int">
-        SELECT COUNT(*) FROM MEMBER
-        WHERE mem_level=2
+    <select id="selectCountTotal2" resultType="int">
+        SELECT COUNT(*) FROM MEMBER m
+        LEFT JOIN mem_seller s ON m.mem_id = s.mem_id
         <include refid="searchWhere2"/>
     </select>
+
+    <update id="updateStat2">
+        <choose>
+            <when test="mem_stat == '운영중'">
+                UPDATE member SET mem_stat='운영중지' WHERE mem_id=#{mem_id}
+            </when>
+            <when test="mem_stat == '운영중지'">
+                UPDATE member SET mem_stat='운영준비' WHERE mem_id=#{mem_id}
+            </when>
+            <when test="mem_stat == '운영준비'">
+                UPDATE member SET mem_stat='운영중' WHERE mem_id=#{mem_id}
+            </when>
+        </choose>
+    </update>
 
 
 </mapper>

@@ -6,9 +6,9 @@
                         <nav class="main-nav">
                             <a th:href="@{/index}"><span>HOME</span></a>
                             <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-                            <span>[[${cate2DTO.cate1_name}]]</span> <!-- 동적 -->
+                            <span>[[${cate2DTO.cate1_name}]]</span>
                             <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
-                            <span>[[${cate2DTO.cate2_name}]]</span> <!-- 동적 -->
+                            <span>[[${cate2DTO.cate2_name}]]</span>
                         </nav>
                     </div>
                     <div class="product-view-container">
@@ -25,7 +25,7 @@
                                     <span class="brand-name" th:text="${productDTO.getProd_company()}">지오다노</span>
                                     <span class="product-name" th:text="${productDTO.getProd_name()}">베이직 레더 벨트 130004</span>
                                 </h2>
-                                <a href="#"> <!-- 리뷰로 넘어가는 링크 -->
+                                <a href="#review-list-container"> <!-- 리뷰로 넘어가는 링크 -->
                                     <div class="rating">
                                         <div class="star-rating" th:data-score="${productDTO.getAvgRating()}">
                                             <div class="star-rating-fill">
@@ -60,11 +60,11 @@
                                 </div>
                                 <div class="delivery-row">
                                     <span class="label"></span>
-                                    <span class="content arrival-info">9/29(월) 도착 예정</span>
+                                    <span class="content arrival-info" th:text="${formattedDate + '(' + week + ')' + ' 도착예정'}">9/29(월) 도착 예정</span>
                                 </div>
                                 <div class="delivery-row">
-                                    <span class="label">포장안내</span>
-                                    <span class="content">쇼핑백 제공이 가능합니다.</span>
+                                    <span class="label">원산지</span>
+                                    <span class="content">상세설명 참조</span>
                                 </div>
                             </div>
                             <th:block th:if="${OpDtoList == null or #lists.isEmpty(OpDtoList)}">
@@ -215,7 +215,7 @@
                                     </tr>
                                     <tr>
                                         <th>보내실 곳</th>
-                                        <td>(12345) OO광역시 OO구 OO로 123, K마켓 물류센터</td>
+                                        <td th:text="${'('+memberDTO.getMem_zip() + ') ' + memberDTO.getMem_addr1() + ', ' + memberDTO.getMem_addr2()}">(12345) OO광역시 OO구 OO로 123, K마켓 물류센터</td>
                                     </tr>
                                 </tbody>
                             </table>

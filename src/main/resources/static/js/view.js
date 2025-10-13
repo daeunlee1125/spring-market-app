@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const detailReviewSection = document.getElementById('detail-review');
 
     if (pagination && reviewListContainer && detailReviewSection) {
-        const prodNo = detailReviewSection.dataset.prod_no;
+        const prodNo = detailReviewSection.dataset.prodNo;
         const totalPages = parseInt(pagination.dataset.totalPages, 10); // 총 페이지 수
 
         // 리뷰를 불러오고 UI를 업데이트하는 함수
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return; // 유효하지 않은 페이지 요청은 무시
             }
 
-            fetch(`/api/reviews?prod_no=${prodNo}&page=${page}`)
+            fetch(`/shoply/api/reviews?prod_no=${prodNo}&page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     // 리뷰 목록 HTML 생성 및 업데이트

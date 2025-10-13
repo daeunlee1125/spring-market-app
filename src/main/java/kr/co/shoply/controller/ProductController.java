@@ -1,16 +1,20 @@
 package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.*;
+import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.Cate2Service;
 import kr.co.shoply.service.MemberService;
 import kr.co.shoply.service.ProductService;
 import kr.co.shoply.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -97,8 +101,23 @@ public class ProductController {
     }
 
     @GetMapping("/product/cart")
-    public String cart() {
+    public String cart(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
+        if (myUserDetails == null) { // 로그인 확인
+            return "redirect:/member/login";
+        }
+        String userName = myUserDetails.getUsername(); // 현재 로그인 된 id 가져오기
+        List<CartDTO> cartDTOList = productService.getCartAll3(userName);
+        model.addAttribute("cartDTOList", cartDTOList);
+
         return "product/cart";
+    }
+
+    @PostMapping("/product/delete")
+    public String delete(@RequestParam("cart_no") int cart_no) {
+        log.info("delete cart_no: " + cart_no);
+        productService.deleteCart3(cart_no);
+
+        return  "redirect:/product/cart";
     }
 
     @GetMapping("/product/complete")

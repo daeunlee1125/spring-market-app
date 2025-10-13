@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.MemberMapper">
+
+    <select id="selectADDR3" resultType="kr.co.shoply.dto.MemberDTO">
+        SELECT m.MEM_ZIP, m.MEM_ADDR1, m.MEM_ADDR2
+        FROM PRODUCT p
+        JOIN "MEMBER" m ON p.MEM_ID = m.MEM_ID
+        WHERE p.MEM_ID = #{mem_id} AND p.PROD_NO = #{prod_no}
+    </select>
+
+
+</mapper>

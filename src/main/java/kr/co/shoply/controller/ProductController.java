@@ -1,10 +1,8 @@
 package kr.co.shoply.controller;
 
-import kr.co.shoply.dto.Cate2DTO;
-import kr.co.shoply.dto.ProdOptionDTO;
-import kr.co.shoply.dto.ProductDTO;
-import kr.co.shoply.dto.ReviewDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.service.Cate2Service;
+import kr.co.shoply.service.MemberService;
 import kr.co.shoply.service.ProductService;
 import kr.co.shoply.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 @Slf4j
@@ -26,6 +30,7 @@ public class ProductController {
     private final ProductService productService;
     private final Cate2Service cate2Service;
     private final ReviewService reviewService;
+    private final MemberService memberService;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
@@ -52,6 +57,20 @@ public class ProductController {
 
         ProductDTO productDTO = productService.getProduct3(prodNo);
         model.addAttribute("productDTO", productDTO);
+
+        MemberDTO memberDTO = memberService.getMemberAddr(productDTO.getMem_id(), productDTO.getProd_no());
+        model.addAttribute("memberDTO", memberDTO);
+
+        LocalDate localDate = LocalDate.now(); // 배송예정일
+        localDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일");
+        String formattedDate = localDate.format(formatter);
+        model.addAttribute("formattedDate", formattedDate);
+
+        DayOfWeek dayOfWeek = localDate.getDayOfWeek(); // 배송예정 요일
+        String week = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN);
+        week = week.substring(0,1);
+        model.addAttribute("week", week);
 
         // ✅ 1. 리뷰 총 개수 가져오기 (이전 코드 리뷰에서 수정한 getCountReviews 사용)
         int totalReviewCount = reviewService.getCountReviews(prodNo);

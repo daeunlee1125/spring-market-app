@@ -16,7 +16,7 @@
     <div class="top-header">
         <!-- 로고 -->
         <div class="header-left">
-            <img th:src="@{/image/logo.jpg}" alt="로고" class="logo">
+            <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="로고" class="logo"></a>
         </div>
         <!-- 검색창 -->
         <div class="header-center">
@@ -29,7 +29,7 @@
         </div>
         <!-- 아이콘 + 로그인 메뉴 -->
         <div class="header-right">
-            <img th:src="@{/image/user.png}" alt="유저" class="icon">
+            <a th:href="@{/my/home}"><img th:src="@{/image/user.png}" alt="유저" class="icon"></a>
             <img th:src="@{/image/cart.png}" alt="장바구니" class="icon" style="width: 30px;">
         </div>
     </div>
@@ -43,7 +43,8 @@
             <a href="#">할인상품</a>
         </div>
         <div class="header-right login-menu">
-            <a th:href="@{/member/login}">로그인</a> |
+            <a th:if="${#authorization.expr('!isAuthenticated()')}" th:href="@{/member/login}">로그인</a><a th:if="${#authorization.expr('isAuthenticated()')}" th:href="@{/member/login}">로그아웃</a>
+            |
             <a th:href="@{/member/join}">회원가입</a> |
             <a href="#">고객센터</a>
         </div>

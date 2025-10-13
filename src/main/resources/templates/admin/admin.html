@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- Daum 우편번호 서비스를 위한 스크립트 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/admin.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/main.css"
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/main.css}"
 
 </head>
 <body>
@@ -20,50 +20,57 @@
         </div>
         <nav>
             <ul class="mainSideBar">
-                <li>
+                <li th:if="${#authentication.principal.member.mem_level==7}">
                     <div><i class="fas fa-cog"></i> 환경설정</div>
                     <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+                        <li><a th:href="@{/admin/config/basic}">기본설정</a></li>
+                        <li><a th:href="@{/admin/config/banner}">배너관리</a></li>
+                        <li><a th:href="@{/admin/config/policy}">약관관리</a></li>
+                        <li><a th:href="@{/admin/config/category}">카테고리</a></li>
+                        <li><a th:href="@{/admin/config/version}">버전관리</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-store"></i> 상점관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">상점목록</a></li>
-                        <li><a href="#">매출현황</a></li>
+                        <li><a th:href="@{/admin/shop/list}">상점목록</a></li>
+                        <li><a th:href="@{/admin/shop/sales}">매출현황</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-users"></i> 회원관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">회원목록</a></li>
-                        <li><a href="#">포인트관리</a></li>
+                        <li><a th:href="@{/admin/member/list}">회원목록</a></li>
+                        <li><a th:href="@{/admin/member/point}">포인트관리</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-box-open"></i> 상품관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">상품목록</a></li>
-                        <li><a href="#">상품등록</a></li>
+                        <li><a th:href="@{/admin/product/list}">상품목록</a></li>
+                        <li><a th:href="@{/admin/product/register}">상품등록</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-truck"></i> 주문관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">주문현황</a></li>
-                        <li><a href="#">배송현황</a></li>
+                        <li><a th:href="@{/admin/order/list}">주문현황</a></li>
+                        <li><a th:href="@{/admin/order/delivery}">배송현황</a></li>
                     </ul>
                 </li>
                 <li>
+                    <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+                    <ul class="subSideBar">
+                        <li><a th:href="@{/admin/coupon/list}">쿠폰목록</a></li>
+                        <li><a th:href="@{/admin/coupon/issued}">쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+                <li th:if="${#authentication.principal.member.mem_level==7}">
                     <div><i class="fas fa-headset"></i> 고객센터</div>
                     <ul class="subSideBar">
-                        <li><a href="#">공지사항</a></li>
-                        <li><a href="#">자주묻는질문</a></li>
-                        <li><a href="#">문의하기</a></li>
+                        <li><a th:href="@{/admin/cs/notice/list}">공지사항</a></li>
+                        <li><a th:href="@{/admin/cs/faq/list}">자주묻는질문</a></li>
+                        <li><a th:href="@{/admin/cs/qna/list}">문의하기</a></li>
                     </ul>
                 </li>
             </ul>
@@ -73,14 +80,14 @@
     <header>
         <div class="middle">
             <div id="logo">
-                <img src="/kmarket/inc/image/logo.jpg" alt="logo">
+                <a th:href="@{/admin/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
             </div>
-            
+
             <div class="header-nav">
                 <ul class="header-menu">
-                    <li><a href="#">홈</a></li>
+                    <li><a th:href="@{/}">홈</a></li>
                     <li><a href="#">로그아웃</a></li>
-                    <li><a href="#">고객센터</a></li>
+                    <li><a th:href="@{/admin/cs/notice/list}">고객센터</a></li>
                 </ul>
             </div>
         </div>
@@ -114,11 +121,11 @@
                             <div class="dashboard-charts">
                                 <div class="chart-box">
                                     <h5>결제현황</h5>
-                                    <img src="/kmarket/inc/image/chart1.png" alt="결제현황 차트">
+                                    <img th:src="@{/image/chart1.png}" alt="결제현황 차트">
                                 </div>
                                 <div class="chart-box">
                                     <h5>주요매출</h5>
-                                    <img src="/kmarket/inc/image/chart2.png" alt="매출 차트">
+                                    <img th:src="@{/image/chart2.png}" alt="매출 차트">
                                 </div>
                             </div>
                     </section>
@@ -235,7 +242,7 @@
     <footer>
         <div class="middle">
             <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+                Copyright ©[[${appInfo.appName}]].co.kr All rights reserved. [[${appInfo.appName}]] ADMINISTRATOR Version [[${appInfo.appVersion}]]
             </p>
         </div>
     </footer>

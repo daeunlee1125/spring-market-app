@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -109,6 +110,14 @@ public class ProductController {
         model.addAttribute("cartDTOList", cartDTOList);
 
         return "product/cart";
+    }
+
+    @PostMapping("/product/delete")
+    public String delete(@RequestParam("cart_no") int cart_no) {
+        log.info("delete cart_no: " + cart_no);
+        productService.deleteCart3(cart_no);
+
+        return  "redirect:/product/cart";
     }
 
     @GetMapping("/product/complete")

@@ -41,7 +41,19 @@ public class ProductService {
         return cartMapper.selectCartList3(mem_id);
     }
 
+    public Boolean checkCart3(String mem_id, String prod_no, String cart_option){
+        if (cartMapper.selectCartCount3(mem_id, prod_no, cart_option) > 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public void insertCart3(String mem_id, String prod_no, int cart_item_cnt, String cart_option){
         cartMapper.insertCart3(mem_id, prod_no, cart_item_cnt, cart_option);
+    }
+
+    public void deleteCart3(int cart_no){
+        cartMapper.deleteCart3(cart_no);
     }
 }

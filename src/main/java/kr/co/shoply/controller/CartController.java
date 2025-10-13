@@ -25,7 +25,6 @@ public class CartController {
     public ResponseEntity<?> addCartItem(@RequestBody List<CartAddDTO> cartItems,
                                          @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
-        log.info("장바구니 접근 성공 " + cartItems);
         if (myUserDetails == null) {
             // 비로그인 사용자는 로그인 페이지로 보내야 함 (프론트에서 처리해도 됨)
             return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인이 필요합니다."));
@@ -33,8 +32,12 @@ public class CartController {
 
         try {
             String mem_id = myUserDetails.getUsername();
-            log.info("try문 접근 성공" + cartItems);
             for (CartAddDTO item : cartItems) {
+                // insert 하기 전 중복 방지 확인
+                if (productService.checkCart3(mem_id, item.getProd_no(), item.getCart_option())){
+                    return ResponseEntity.status(409).body(Map.of("success", false, "message", "이미 존재합니다."));
+                }
+
                 // 서비스의 insert 메서드 호출
                 productService.insertCart3(
                         mem_id,
@@ -43,7 +46,7 @@ public class CartController {
                         item.getCart_option()
                 );
             }
-            log.info("insert 성공" + cartItems);
+
             // 성공 시 success: true JSON 응답 반환
             return ResponseEntity.ok(Map.of("success", true));
 

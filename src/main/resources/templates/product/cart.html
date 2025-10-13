@@ -29,15 +29,14 @@
                     <div class="cart-item-actions">
                         <button class="buy-now">바로구매</button>
                         <div class="action-icons">
-                            <button>&#x2661;</button> <button class="delete-item">&#x1F5D1;</button>
+                            <form th:action="@{/product/delete}" method="post">
+                                <input type="hidden" name="cart_no" th:value="${dto.getCart_no()}">
+                                <button type="submit" class="delete-item">&#x1F5D1;</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </th:block>
-        </div>
-
-        <div class="cart-summary-bar">
-            상품금액 <strong>58,000원</strong> + 배송비 <strong>0원</strong> = <strong>58,000원</strong> (3만원 이상 무료배송)
         </div>
 
     </div>

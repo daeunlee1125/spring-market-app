@@ -387,6 +387,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(cartItems) // 배열을 JSON 문자열로 변환
             })
                 .then(response => {
+                    if (response.status === 401) {
+                        alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+                        // 2. 로그인 페이지로 리다이렉트시킵니다.
+                        window.location.href = '/shoply/member/login';
+                        return null; // 여기서 함수 실행을 중단
+                    }
+                    if (response.status === 409) {
+                        // 1. response.json()으로 응답 본문을 읽어옵니다.
+                        // 2. .then()으로 읽어온 데이터(errorData)에 접근합니다.
+                        response.json().then(errorData => {
+                            // 3. 이제 errorData.message로 서버가 보낸 메시지를 사용할 수 있습니다.
+                            alert(errorData.message);
+                        });
+                        return null; // 이후 .then() 체인을 멈추기 위해 null 반환
+                    }
                     if (!response.ok) {
                         throw new Error('서버 응답이 올바르지 않습니다.');
                     }
@@ -395,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     if (data.success) {
                         if (confirm('상품을 장바구니에 담았습니다. 장바구니로 이동하시겠습니까?')) {
-                            location.href = '/product/cart'; // 장바구니 페이지로 이동
+                            window.location.href = '/shoply/product/cart'; // 장바구니 페이지로 이동
                         }
                     } else {
                         alert('장바구니 담기에 실패했습니다: ' + data.message);
@@ -403,7 +418,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('장바구니 추가 중 오류가 발생했습니다.');
                 });
         });
     }

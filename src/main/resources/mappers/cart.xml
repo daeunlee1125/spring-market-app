@@ -24,10 +24,10 @@
 
     <select id="selectCartList3" parameterType="string" resultMap="cartWithProductMap">
         SELECT
-            c.CART_NO, -- DTO의 cart_no와 매핑하기 위해 추가
+            c.CART_NO,
             c.MEM_ID,
             c.CART_ITEM_CNT,
-            c.CART_OPTION, -- DTO에 cart_option 필드가 없어서 현재는 매핑되지 않음
+            c.CART_OPTION,
             p.PROD_NO,
             p.PROD_NAME,
             p.PROD_COMPANY,
@@ -44,7 +44,13 @@
             c.MEM_ID = #{mem_id} AND pf.F_DIST = 1
     </select>
 
-    <insert id="" parameterType="kr.co.shoply.dto.CartDTO">
+    <select id="selectCartCount3" resultType="int">
+        SELECT count(*)
+        FROM CART
+        WHERE MEM_ID = #{mem_id} AND PROD_NO = #{prod_no} AND CART_OPTION = #{cart_option}
+    </select>
+
+    <insert id="insertCart3" parameterType="kr.co.shoply.dto.CartDTO">
         INSERT INTO CART(MEM_ID, PROD_NO, CART_ITEM_CNT, CART_OPTION)
         VALUES (
                 #{mem_id},
@@ -53,5 +59,9 @@
                 #{cart_option}
         )
     </insert>
+
+    <delete id="deleteCart3" parameterType="kr.co.shoply.dto.CartDTO">
+        DELETE FROM CART WHERE CART_NO=#{cart_no}
+    </delete>
 
 </mapper>

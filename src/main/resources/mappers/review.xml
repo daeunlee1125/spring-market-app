@@ -25,8 +25,8 @@
         FROM REVIEW
         WHERE PROD_NO = #{prod_no}
         ORDER BY REV_NO DESC
-        offset #{offset} ROWS
-        FETCH NEXT #{limit} ROWS ONLY
+        OFFSET #{offset} ROWS
+        FETCH NEXT 5 ROWS ONLY
     </select>
 
     <select id="selectCountAll3" resultType="int">

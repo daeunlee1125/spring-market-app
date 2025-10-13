@@ -1,9 +1,11 @@
 package kr.co.shoply.service;
 
+import kr.co.shoply.dto.CartDTO;
 import kr.co.shoply.dto.ProdOptionDTO;
 import kr.co.shoply.dto.ProductDTO;
 import kr.co.shoply.dto.ReviewDTO;
 import kr.co.shoply.entity.Product;
+import kr.co.shoply.mapper.CartMapper;
 import kr.co.shoply.mapper.ProductMapper;
 import kr.co.shoply.mapper.ReviewMapper;
 import kr.co.shoply.repository.ProductRepository;
@@ -18,6 +20,7 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductMapper productMapper;
+    private final CartMapper cartMapper;
     private final ReviewMapper reviewMapper;
 
     public List<ProductDTO> getProductAll3(int cate2_no, String sort){
@@ -32,5 +35,25 @@ public class ProductService {
 
 
         return productMapper.selectOption3(prod_no);
+    }
+
+    public List<CartDTO> getCartAll3(String mem_id){
+        return cartMapper.selectCartList3(mem_id);
+    }
+
+    public Boolean checkCart3(String mem_id, String prod_no, String cart_option){
+        if (cartMapper.selectCartCount3(mem_id, prod_no, cart_option) > 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public void insertCart3(String mem_id, String prod_no, int cart_item_cnt, String cart_option){
+        cartMapper.insertCart3(mem_id, prod_no, cart_item_cnt, cart_option);
+    }
+
+    public void deleteCart3(int cart_no){
+        cartMapper.deleteCart3(cart_no);
     }
 }

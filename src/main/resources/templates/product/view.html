@@ -92,7 +92,8 @@
 
                                 <div id="selected-options-list"
                                      th:data-price="${productDTO.getRealPrice()}"
-                                     th:data-name="${productDTO.getProd_name()}"></div>
+                                     th:data-name="${productDTO.getProd_name()}">
+                                </div>
                             </th:block>
 
                             <div class="info-purchase">
@@ -102,7 +103,7 @@
                                             th:text="${#numbers.formatInteger(productDTO.getRealPrice(), 3, 'COMMA')} + '원'">0원</strong>
                                 </div>
                                 <div class="action-buttons">
-                                    <a th:href="@{/product/cart}"><button class="btn-cart">장바구니</button></a>
+                                    <button type="button" id="btn-add-to-cart" class="btn-cart" th:data-prod-no="${productDTO.getProd_no()}">장바구니</button>
                                     <a th:href="@{/product/order}"><button class="btn-buy">바로구매</button></a>
                                 </div>
                             </div>

@@ -10,76 +10,33 @@
 
         <div class="cart-group">
             <h3>택배배송 상품: 3개</h3>
-            <div class="cart-item" data-price="58000" data-discount="0">
-                <input type="checkbox" class="item-checkbox">
-                <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" alt="상품 이미지"
-                     class="cart-item-thumb">
-                <div class="cart-item-info">
-                    <p class="brand">주식회사 루스부루</p>
-                    <p class="name">브랑튼</p>
-                    <p class="options">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
-                </div>
-                <div class="quantity-selector">
-                    <button class="quantity-down">-</button>
-                    <input type="text" value="1" readonly class="quantity-input">
-                    <button class="quantity-up">+</button>
-                </div>
-                <div class="cart-item-price">58,000원</div>
-                <div class="cart-item-actions">
-                    <button class="buy-now">바로구매</button>
-                    <div class="action-icons">
-                        <button>&#x2661;</button> <button class="delete-item">&#x1F5D1;</button>
+            <th:block th:each="dto : ${cartDTOList}">
+                <div class="cart-item" th:data-price="${dto.getProductDTO().getRealPrice()}" data-discount="0">
+                    <input type="checkbox" class="item-checkbox">
+                    <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" th:alt="${dto.getFName()}"
+                         class="cart-item-thumb">
+                    <div class="cart-item-info">
+                        <p class="brand" th:text="${dto.getProductDTO().getProd_company()}">주식회사 루스부루</p>
+                        <p class="name" th:text="${dto.getProductDTO().getProd_name()}">브랑튼</p>
+                        <p class="options" th:text="${dto.getCart_option()}">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
+                    </div>
+                    <div class="quantity-selector">
+                        <button class="quantity-down">-</button>
+                        <input type="text" value="1" readonly class="quantity-input">
+                        <button class="quantity-up">+</button>
+                    </div>
+                    <div class="cart-item-price" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice(), 3, 'COMMA')} + '원'">58,000원</div>
+                    <div class="cart-item-actions">
+                        <button class="buy-now">바로구매</button>
+                        <div class="action-icons">
+                            <form th:action="@{/product/delete}" method="post">
+                                <input type="hidden" name="cart_no" th:value="${dto.getCart_no()}">
+                                <button type="submit" class="delete-item">&#x1F5D1;</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="cart-item" data-price="58000" data-discount="0">
-                <input type="checkbox" class="item-checkbox">
-                <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" alt="상품 이미지"
-                     class="cart-item-thumb">
-                <div class="cart-item-info">
-                    <p class="brand">주식회사 루스부루</p>
-                    <p class="name">브랑튼</p>
-                    <p class="options">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
-                </div>
-                <div class="quantity-selector">
-                    <button class="quantity-down">-</button>
-                    <input type="text" value="1" readonly class="quantity-input">
-                    <button class="quantity-up">+</button>
-                </div>
-                <div class="cart-item-price">58,000원</div>
-                <div class="cart-item-actions">
-                    <button class="buy-now">바로구매</button>
-                    <div class="action-icons">
-                        <button>&#x2661;</button> <button class="delete-item">&#x1F5D1;</button>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-item" data-price="58000" data-discount="0">
-                <input type="checkbox" class="item-checkbox">
-                <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" alt="상품 이미지"
-                     class="cart-item-thumb">
-                <div class="cart-item-info">
-                    <p class="brand">주식회사 루스부루</p>
-                    <p class="name">브랑튼</p>
-                    <p class="options">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
-                </div>
-                <div class="quantity-selector">
-                    <button class="quantity-down">-</button>
-                    <input type="text" value="1" readonly class="quantity-input">
-                    <button class="quantity-up">+</button>
-                </div>
-                <div class="cart-item-price">58,000원</div>
-                <div class="cart-item-actions">
-                    <button class="buy-now">바로구매</button>
-                    <div class="action-icons">
-                        <button>&#x2661;</button> <button class="delete-item">&#x1F5D1;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="cart-summary-bar">
-            상품금액 <strong>58,000원</strong> + 배송비 <strong>0원</strong> = <strong>58,000원</strong> (3만원 이상 무료배송)
+            </th:block>
         </div>
 
     </div>

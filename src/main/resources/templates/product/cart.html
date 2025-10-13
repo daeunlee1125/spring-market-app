@@ -9,9 +9,14 @@
         </div>
 
         <div class="cart-group">
-            <h3>택배배송 상품: 3개</h3>
             <th:block th:each="dto : ${cartDTOList}">
-                <div class="cart-item" th:data-price="${dto.getProductDTO().getRealPrice()}" data-discount="0">
+                <div class="cart-item"
+                     th:data-price="${dto.getProductDTO().getProd_price()}"
+                     th:data-sale-rate="${dto.getProductDTO().getProd_sale()}"
+                     th:data-delivery-fee="${dto.getProductDTO().getProd_deliv_price()}"
+                     th:data-real-price="${dto.getProductDTO().getRealPrice()}"
+                     th:data-point="${dto.getProductDTO().getProd_point()}">
+
                     <input type="checkbox" class="item-checkbox">
                     <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" th:alt="${dto.getFName()}"
                          class="cart-item-thumb">
@@ -22,10 +27,10 @@
                     </div>
                     <div class="quantity-selector">
                         <button class="quantity-down">-</button>
-                        <input type="text" value="1" readonly class="quantity-input">
+                        <input type="text" th:value="${dto.getCart_item_cnt()}" readonly class="quantity-input">
                         <button class="quantity-up">+</button>
                     </div>
-                    <div class="cart-item-price" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice(), 3, 'COMMA')} + '원'">58,000원</div>
+                    <div class="cart-item-price" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice() * dto.getCart_item_cnt(), 3, 'COMMA')} + '원'">58,000원</div>
                     <div class="cart-item-actions">
                         <button class="buy-now">바로구매</button>
                         <div class="action-icons">
@@ -42,6 +47,7 @@
     </div>
 </div>
 </div>
+
 <aside class="order-summary">
     <div class="inner">
         <h3>결제예정금액</h3>

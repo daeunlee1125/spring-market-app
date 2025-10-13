@@ -1,9 +1,6 @@
 package kr.co.shoply.service;
 
-import kr.co.shoply.dto.CartDTO;
-import kr.co.shoply.dto.ProdOptionDTO;
-import kr.co.shoply.dto.ProductDTO;
-import kr.co.shoply.dto.ReviewDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.entity.Product;
 import kr.co.shoply.mapper.CartMapper;
 import kr.co.shoply.mapper.ProductMapper;
@@ -53,7 +50,14 @@ public class ProductService {
         cartMapper.insertCart3(mem_id, prod_no, cart_item_cnt, cart_option);
     }
 
+    public void updateCartQuantity(CartUpdateDTO cartUpdateDTO) {
+        cartMapper.updateCartQuantity(cartUpdateDTO);
+    }
+
     public void deleteCart3(int cart_no){
         cartMapper.deleteCart3(cart_no);
+    }
+    public void deleteSelectedCarts3(List<Integer> cart_no_list){
+        cartMapper.deleteSelectedCarts3(cart_no_list);
     }
 }

@@ -1,94 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - qna reply</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/cs.css">
+<div th:replace="~{admin/cs/notice/_head.html}"></div>
 
-</head>
-<body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
 
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
     <div class="main">
         <div class="middle main-content">
             <div class="main-common">
@@ -145,12 +57,9 @@
         </div>
     </div>
 
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
+<div th:replace="~{admin/coupon/_tail.html}"></div>
+
+
+
 </body>
 </html>

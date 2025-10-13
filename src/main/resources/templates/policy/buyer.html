@@ -1,69 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shoply 구매회원 약관</title>
 
-  <link rel="stylesheet" href="../inc/css/index.css">
-  <link rel="stylesheet" href="../inc/css/policy.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- jQuery (bxSlider 필요시 대비) -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-  <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-</head>
-<body>
-
-<header>
-  <div class="top-bar-back">
-    <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
-  </div>
-
-  <!-- 1번째 줄 -->
-  <div class="top-header">
-    <!-- 로고 -->
-    <div class="header-left">
-      <img src="/kmarket/inc/image/logo.jpg" alt="로고" class="logo">
-    </div>
-
-    <!-- 검색창 -->
-    <div class="header-center">
-      <form action="">
-        <input type="text" placeholder="검색">
-        <button type="submit">
-          <img src="/kmarket/inc/image/search.png" alt="검색">
-        </button>
-      </form>
-    </div>
-
-    <!-- 아이콘 + 로그인 메뉴 -->
-    <div class="header-right">
-      <img src="/kmarket/inc/image/user.png" alt="유저" class="icon">
-      <img src="/kmarket/inc/image/cart.png" alt="장바구니" class="icon" style="width: 30px;">
-    </div>
-  </div>
-
-  <!-- 2번째 줄 -->
-  <div class="bottom-header">
-    <div class="header-left">
-      <a href="#" id="categoryBtn"> 전체 카테고리</a>
-      <a href="#">히트상품</a>
-      <a href="#">추천상품</a>
-      <a href="#">최신상품</a>
-      <a href="#">인기상품</a>
-      <a href="#">할인상품</a>
-    </div>
-
-    <div class="header-right login-menu">
-      <a href="#">로그인</a> | 
-      <a href="#">회원가입</a> | 
-      <a href="#">고객센터</a>
-    </div>
-  </div>
-</header>
-
+<div th:replace="~{policy/_head.html}"></div>
 
 <div class="wrapper">
 
@@ -109,37 +45,53 @@
   </div>
 </div>
 
-  <!-- 메인 컨텐츠 (약관 내용) -->
-        <main class="policy-wrapper">
-            <!-- 메인 타이틀 -->
-            <h2 class="policy-main-title">Shoply 서비스 이용 약관</h2>
+    <!-- 메인 컨텐츠 (약관 내용) -->
+    <main class="policy-wrapper">
+        <!-- 메인 타이틀 -->
+        <h2 class="policy-main-title">Shoply 서비스 이용 약관</h2>
 
-            <!-- 약관 메뉴 -->
-            <div class="policy-menu">
-          <div class="menu-center">
-            <a href="buyer.html" class="menu-item active">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span>구매회원 약관</span>
-            </a>
-            <a href="seller.html" class="menu-item">
-            <i class="fa-brands fa-sellsy"></i>
-            <span>판매회원 약관</span>
-            </a>
-            <a href="finance.html" class="menu-item">
-            <i class="fa-solid fa-sack-dollar"></i>
-            <span>전자금융거래 약관</span>
-            </a>
-            <a href="location.html" class="menu-item">
-            <i class="fa-solid fa-location-dot"></i>
-            <span>위치정보 약관</span>
-            </a>
-            <a href="privacy.html" class="menu-item">
-            <i class="fa-solid fa-user-shield"></i>
-            <span>개인정보 처리방침</span>
-            </a>
-        </div>
+        <!-- 약관 메뉴 -->
+        <div class="policy-menu">
+            <div class="menu-center">
+                <a th:href="@{/policy/buyer}"
+                   class="menu-item"
+                   th:classappend="${activePage == 'buyer'} ? ' active'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>구매회원 약관</span>
+                </a>
 
-        <!-- 인쇄 버튼 -->
+                <a th:href="@{/policy/seller}"
+                   class="menu-item"
+                   th:classappend="${activePage == 'seller'} ? ' active'">
+                    <i class="fa-brands fa-sellsy"></i>
+                    <span>판매회원 약관</span>
+                </a>
+
+                <a th:href="@{/policy/finance}"
+                   class="menu-item"
+                   th:classappend="${activePage == 'finance'} ? ' active'">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                    <span>전자금융거래 약관</span>
+                </a>
+
+                <a th:href="@{/policy/location}"
+                   class="menu-item"
+                   th:classappend="${activePage == 'location'} ? ' active'">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>위치정보 약관</span>
+                </a>
+
+                <a th:href="@{/policy/privacy}"
+                   class="menu-item"
+                   th:classappend="${activePage == 'privacy'} ? ' active'">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>개인정보 처리방침</span>
+                </a>
+            </div>
+
+
+
+            <!-- 인쇄 버튼 -->
         <button class="print-btn">
             <i class="fa-solid fa-print"></i>
         </button>
@@ -147,103 +99,8 @@
 
     <!-- 약관 본문 -->
     <div class="policy-content">
-      <h3>제1조 (목적)</h3>
-      <p>
-        이 약관은 주식회사 샵플리(이하 "회사"라 함)가 운영하는 "Shoply" 인터넷 오픈마켓 사이트(www.shoply.co.kr, 이하 "Shoply"라 함)와 스마트폰 등 이동통신기기를 통해 제공되는 "Shoply" 모바일 애플리케이션(이하 "모바일 Shoply"라 함)을 통하여 제공하는 전자상거래 관련 서비스 및 기타 서비스(이하 "서비스"라 함)를 이용하는 자간의 권리, 의무를 확정하고 이를 이행함으로써 상호 발전을 도모하는 것을 그 목적으로 합니다.
-      </p>
 
-      <h3>제2조 (약관의 명시, 효력과 개정)</h3>
-      <p>
-        1. 회사는 이 약관의 내용을 회사의 상호, 영업소 소재지, 대표자의 성명, 사업자등록번호, 연락처(전화, 팩스, 전자우편주소 등)등과 함께 회원이 확인할 수 있도록 “Shoply” 초기 서비스화면 또는 연결화면에 게시합니다.<br><br>
-        2. 회사는 전자상거래등에서의소비자보호에관한법률, 전자문서 및 전자거래기본법, 전자금융거래법, 정보통신망이용촉진 및 정보보호등에관한법률, 전자서명법, 전자상거래에서의소비자보호에관한법률 등 관련법을 위배하지 않는 범위에서 본 약관을 개정할 수 있습니다.<br><br>
-        3. 회사가 약관을 개정할 경우에는 적용일자 및 개정사유를 명시하여 현행약관과 함께 개정약관을 “Shoply”의 초기화면에 그 적용일자 14일 이전부터 적용일자 전일까지 공지합니다. 다만, 변경 내용이 중대하거나 구매회원에게 불리한 경우에는 그 적용일자 30일 이전부터 전자우편, 문자메시지, 로그인 시 동의창 등의 전자적 수단을 통해 별도로 명확히 통지합니다.<br><br>
-        4. 변경된 약관은 이 약관 제2조 제3항에 따라 공지 또는 통지한 날로부터 그 효력이 발생합니다. 회원이 개정약관에 동의하지 않는 경우, 회사는 개정약관의 내용을 적용할 수 없으며, 이 경우 회원은 이용계약을 해지할 수 있습니다. 다만, 기존 약관을 적용할 수 없는 특별한 사정이 있는 경우 회사는 이용계약을 해지할 수 있습니다.
-      </p>
-
-      <h3>제3조 (용어의 정의)</h3>
-      <p>
-        1. 본 약관에서 사용하는 용어의 정의는 다음과 같습니다.<br>
-        ① 회원: 회사에 개인정보를 제공하여 회원등록을 한 개인 또는 법인으로, 구매회원과 판매회원을 포함합니다.<br>
-        ② 구매회원(이하 "구매자"): 회사에서 제공하는 구매서비스를 이용하는 자로서 14세 이상의 개인이나 법인을 말합니다.<br>
-        ③ 판매회원(이하 "판매자"): 회사에서 제공하는 판매서비스를 이용하는 자로서 상품을 판매할 수 있는 자격을 갖춘 자를 말합니다.<br>
-        ④ 아이디(ID): 회원의 식별과 서비스 이용을 위하여 회원이 신청하고 회사가 승인하여 등록한 영문과 숫자의 조합을 말합니다.<br>
-        ⑤ 비밀번호: 회원의 동일성 확인과 회원의 권익 및 비밀보호를 위해 회원이 스스로 설정한 영문과 숫자의 조합을 말합니다.<br>
-        ⑥ 서비스: 회사가 제공하는 서비스의 전반적인 것을 의미하며, 회원의 온라인 이용을 통해 제공되는 서비스를 말합니다.<br>
-        ⑦ 분쟁조정기구: 회사와 이용자 간에 발생한 전자상거래 분쟁을 조정하기 위해 설치된 기구를 말합니다.<br>
-        ⑧ Shoply 포인트: 회사가 재화/용역 구매 시 사용 가능하도록 회원에게 부여하는 포인트를 말합니다.<br>
-        ⑨ 할인쿠폰: 회사가 회원에게 특정 조건에 따라 제공하는 할인 수단으로, 오프라인 또는 온라인에서 사용할 수 있습니다.<br><br>
-        2. 본 조에서 정의되지 않은 이 약관상의 용어의 의미는 일반적인 거래관행에 따릅니다.
-      </p>
-      
-      <h3>제4조 (서비스의 종류)</h3>
-      <p>
-      1. 회사가 제공하는 서비스는 다음과 같습니다.<br>
-        ① e-Commerce Platform 개발 및 운영 서비스<br>
-        ② 판매관련 업무지원 서비스<br>
-        ③ 구매관련 지원 서비스<br>
-        ④ 상품정보검색 관련 서비스<br>
-        ⑤ 전자결제 관련 서비스<br>
-        ⑥ 기타 전자상거래 관련 서비스 및 부가 서비스<br><br>
-      2. 회사가 제공하는 전항의 서비스는 회원의 상품 등록 등을 지원할 수 있도록 사이트의 이용을 허락하거나, 통신판매를 알선하는 것을 목적으로 하며, 개별 판매회원(판매자)이 Shoply 및 모바일 Shoply에 등록한 상품과 관련해서는 일체의 책임을 지지 않습니다.
-      </p>
-
-      <h3>제5조 (대리행위의 부인)</h3>
-      <p>
-      회사는 통신판매중개자로서 온라인에서 이뤄지는 회원 간 거래 시스템을 운영 및 관리할 뿐이며, 재화 또는 용역의 거래에 관하여 구매자 또는 판매자를 대리하지 아니하고, 회원 사이에 성립된 거래 및 회원이 제공한 정보에 대해서는 해당 회원이 그에 대한 직접적인 책임을 부담하여야 합니다.
-      </p>
-
-      <h3>제6조 (보증의 부인)</h3>
-      <p>
-      회사는 회사가 제공하는 시스템을 통하여 이루어지는 구매자와 판매자 간의 거래와 관련하여 구매회사 또는 구매회원의 본질 및 진정성, 등록물품의 품질, 완전성, 안정성, 적법성 및 타인의 권리에 대한 비침해성, 구매 또는 판매자 정보의 진실성 등 일체에 대하여 보증하지 아니하며, 이에 관련된 위험과 책임은 해당 회원이 전적으로 부담합니다. 다만, 관련 법령에 따라 회사가 책임을 부담하는 경우에는 예외로 합니다.
-      </p>
-
-      <h3>제7조 (구매 서비스 이용계약의 성립)</h3>
-      <p>
-      1. 구매 서비스 이용계약은 회사가 제공하는 구매 서비스를 이용하고자 하는 자의 이용신청에 대하여 회사가 이를 승낙함으로써 성립합니다.<br>
-      2. 회사는 다음 각 호의 사유가 발생한 경우 이용신청에 대한 승낙을 거절하거나 유보할 수 있습니다.<br>
-        ① 실명이 아니거나 타인의 명의로 신청한 경우<br>
-        ② 만 14세 미만인 자가 법정대리인의 동의 없이 신청한 경우<br>
-        ③ 허위의 정보를 기재하거나 필수 기재사항을 누락한 경우<br>
-        ④ 사회질서 및 미풍양속을 저해할 우려가 있는 경우<br>
-        ⑤ 기타 회사가 정한 이용 신청 요건을 충족하지 못한 경우
-      </p>
-
-      <h3>제8조 (개인정보의 변경, 보호)</h3>
-      <p>
-      1. 회원은 서비스 이용신청 시 기재한 사항이 변경되었을 경우 즉시 온라인을 통해 수정하여야 하며, 미수정으로 인하여 발생한 불이익에 대한 책임은 회원 본인에게 있습니다.<br>
-      2. 회사는 회원 정보를 관계 법령에 따라 보호하며, 회원의 개인정보를 본인의 동의 없이 타인에게 제공하지 않습니다. 다만, 법률에 특별한 규정이 있는 경우에는 예외로 합니다.<br>
-      3. 회사는 회원의 귀책사유로 인해 노출된 정보에 대해서는 일체의 책임을 지지 않습니다.
-      </p>
-
-      <h3>제9조 (이용계약의 종료)</h3>
-      <p>
-      1. 회원은 언제든지 회사에 해지 의사를 통지함으로써 이용계약을 해지할 수 있습니다.<br>
-      2. 회사는 다음 각 호에 해당하는 경우 사전 통보 후 이용계약을 해지할 수 있습니다.<br>
-        ① 법령이나 본 약관을 위반하여 더 이상 계약의 목적을 달성할 수 없는 경우<br>
-        ② 범죄 행위와 관련되었다고 객관적으로 인정되는 경우<br>
-        ③ 타인의 권리를 침해하거나 지적재산권을 침해한 경우<br>
-        ④ 기타 회사가 합리적으로 판단하여 서비스 제공이 부적절하다고 인정하는 경우
-      </p>
-
-      <h3>제10조 (서비스의 중단)</h3>
-      <p>
-      1. 회사는 다음 각 호의 사유가 발생한 경우 서비스 제공을 일시적으로 중단할 수 있습니다.<br>
-        ① 서비스용 설비의 보수 등 공사로 인한 부득이한 경우<br>
-        ② 정전, 설비 장애 또는 이용 폭주 등으로 정상적인 서비스 이용에 지장이 있는 경우<br>
-        ③ 천재지변, 국가비상사태 등 불가항력적 사유가 발생한 경우<br><br>
-      2. 회사는 서비스 중단 시 회원에게 사전에 공지함을 원칙으로 합니다. 다만, 긴급한 사유로 사전 공지가 불가능한 경우 사후에 통지할 수 있습니다.
-      </p>
-
-      <h3>제11조 (서비스 기간과 중단)</h3>
-      <p>
-      1. 본 약관에 따른 서비스 기간은 회원의 신청일로부터 이용계약의 해지 시까지입니다.<br>
-      2. 회사는 운영상, 기술상 필요에 따라 제공하고 있는 서비스를 변경하거나 중단할 수 있습니다. 이 경우 회원에게 사전 통지합니다.
-      </p>
-
-      <h3>제12조 (서비스 이용료)</h3>
-      <p>
-      회사는 회원의 자유로운 전자상거래 지원을 위해 기본 서비스를 무료로 제공하되, 특정 서비스 또는 기능의 경우 회사의 정책에 따라 수수료(서비스 이용료)를 부과할 수 있습니다. 구체적인 서비스 이용료는 회사가 별도로 정하여 고지합니다.
-      </p>
+        <div class="policy-content" th:utext="${terms.t_terms}"></div>
 
 
 
@@ -252,60 +109,9 @@
   </main>
 </div>
 
+<div th:replace="~{policy/_tail.html}"></div>
 
-<footer>
-  <div class="top-footer">
-    <div class="footer-wrapper">
-      <div class="top-f">
-        <a href="/kmarket/company/index.html" style="margin-left: 0px;">회사소개</a> |
-        <a href="#">서비스이용약관</a> |
-        <a href="#" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
-        <a href="#">전자금융거래약관</a>
-      </div>
-    </div>
-  </div>
 
-  <div class="footer-wrapper">
-    <h3 class="cpname">(주)샵플리닷컴</h3>
-    <div class="call-cont">
-      <img src="/kmarket/inc/image/call3.png" alt="" style="height: 45px; margin-top: 5px;">
-      <span class="tel">1234-5678</span>
-      <span class="time"> (평일 09:00~18:00)</span>
-    </div>
-    <div style="color: gray; margin-top: 15px">
-      <span>대표이사 : 홍길동</span>
-      <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-      <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
 
-      <div style="margin-top: 3px;">
-        <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script>
-  // 인쇄 기능
-  document.querySelector(".print-btn").addEventListener("click", function() {
-    window.print();
-  });
-
-  // 카테고리 박스 toggle
-  document.getElementById("categoryBtn").addEventListener("click", function(e) {
-    e.preventDefault();
-    const box = document.getElementById("categoryBox");
-    box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
-  });
-
-  // 메인메뉴 hover 시 서브메뉴 표시
-  document.querySelectorAll(".main-menu li").forEach(item => {
-    item.addEventListener("mouseenter", function() {
-      document.querySelectorAll(".submenu-content").forEach(sub => sub.style.display = "none");
-      document.getElementById(this.dataset.target).style.display = "block";
-    });
-  });
-</script>
-
-<script src="/kmarket/inc/js/index.js"></script>
 </body>
 </html>

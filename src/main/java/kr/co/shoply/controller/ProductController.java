@@ -8,13 +8,11 @@ import kr.co.shoply.service.ProductService;
 import kr.co.shoply.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -113,11 +111,34 @@ public class ProductController {
     }
 
     @PostMapping("/product/delete")
-    public String delete(@RequestParam("cart_no") int cart_no) {
-        log.info("delete cart_no: " + cart_no);
+    public String deleteCart(@RequestParam("cart_no") int cart_no) {
         productService.deleteCart3(cart_no);
 
         return  "redirect:/product/cart";
+    }
+
+    @DeleteMapping("/product/delete/selected")
+    public ResponseEntity<?> deleteCarts(@RequestBody List<Integer> cart_no_list) {
+        try {
+            // 서비스 메서드를 호출하여 리스트에 담긴 모든 cart_no를 삭제합니다.
+            // 서비스와 매퍼(MyBatis)에서는 이 리스트를 받아 반복 처리해야 합니다.
+            productService.deleteSelectedCarts3(cart_no_list);
+            return ResponseEntity.ok().build(); // 성공 시 200 OK 응답 반환
+        } catch (Exception e) {
+            log.error("선택 삭제 에러", e);
+            return ResponseEntity.internalServerError().build(); // 실패 시 500 에러 응답 반환
+        }
+    }
+
+    @PatchMapping("/product/cart/update")
+    public ResponseEntity<Void> updateCartItemQuantity(@RequestBody CartUpdateDTO cartUpdateDTO) {
+        try {
+            productService.updateCartQuantity(cartUpdateDTO);
+            return ResponseEntity.ok().build(); // 성공 시 200 OK 응답
+        } catch (Exception e) {
+            // 로그 기록 등 예외 처리
+            return ResponseEntity.internalServerError().build(); // 실패 시 500 에러 응답
+        }
     }
 
     @GetMapping("/product/complete")

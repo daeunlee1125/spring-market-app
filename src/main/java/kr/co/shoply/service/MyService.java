@@ -5,7 +5,13 @@ import kr.co.shoply.entity.*;
 import kr.co.shoply.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,88 +20,141 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MyService {
 
-    private final ProductRepository productRepository; // 상품명 조회를 위해 추가
+    private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final SysCouponRepository sysCouponRepository;
     private final UserCouponRepository userCouponRepository;
     private final PointRepository pointRepository;
     private final QnaRepository qnaRepository;
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    // 마이페이지 홈에 필요한 데이터 조회
-    public MyPageHomeDTO getMyPageHomeData(String mem_id) {
-        // 주문, 쿠폰, 포인트, 문의 갯수 조회
-        long orderCount = orderRepository.countByMem_id(mem_id);
-        long couponCount = userCouponRepository.countByMem_id(mem_id);
-        long qnaCount = qnaRepository.countByMem_id(mem_id);
+    @Transactional
+    public MyPageHomeDTO getMyPageHomeData(String memId) {
+        long orderCount = orderRepository.countByMem_id(memId);
+        long couponCount = userCouponRepository.countByMem_id(memId);
+        Integer pointTotal = Optional.ofNullable(pointRepository.getTotalPointsByMem_id(memId)).orElse(0);
+        long qnaCount = qnaRepository.countByMem_id(memId);
 
-        // 포인트 총합 조회 (PointRepository에 추가 메서드 필요)
-        // int pointTotal = pointRepository.getTotalPointsByMemId(memId).orElse(0);
-
-        // 최근 주문 내역 조회
-        List<Order> orders = orderRepository.findTop5ByMem_idOrderByOrd_dateDesc(mem_id);
-        List<OrderItem> recentOrders = orders.stream()
-                .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream())
+        List<Order> recentOrdersEntity = orderRepository.findTop5ByMem_idOrderByOrd_dateDesc(memId);
+        List<OrderItemDTO> recentOrders = recentOrdersEntity.stream()
+                .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
+                        .map(item -> {
+                            OrderItemDTO dto = modelMapper.map(item, OrderItemDTO.class);
+                            // OrderItemDTO에 ord_date 필드가 필요하며, Date 타입으로 변환 후 할당
+                            dto.setOrd_date(order.getOrd_date());
+                            return dto;
+                        }))
                 .limit(5)
                 .collect(Collectors.toList());
 
-        List<Point> recentPoints = pointRepository.findTop5ByMem_idOrderByP_dateDesc(mem_id);
-        List<Review> recentReviews = reviewRepository.findTop5ByMem_idOrderByRev_rdateDesc(mem_id);
-        List<Qna> recentQnas = qnaRepository.findTop5ByMem_idOrderByQ_rdateDesc(mem_id);
+        List<Point> recentPointsEntity = pointRepository.findTop5ByMem_idOrderByP_dateDesc(memId);
+        List<PointDTO> recentPoints = recentPointsEntity.stream()
+                .map(entity -> modelMapper.map(entity, PointDTO.class))
+                .collect(Collectors.toList());
 
-        // DTO로 변환
+        List<Review> recentReviewsEntity = reviewRepository.findTop5ByMem_idOrderByRev_rdateDesc(memId);
+        List<ReviewDTO> recentReviews = recentReviewsEntity.stream()
+                .map(entity -> {
+                    ReviewDTO dto = modelMapper.map(entity, ReviewDTO.class);
+                    Optional<Product> product = productRepository.findByProd_no(entity.getProd_no());
+                    product.ifPresent(p -> dto.setProdName(p.getProd_name()));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        List<Qna> recentQnasEntity = qnaRepository.findTop5ByMem_idOrderByQ_rdateDesc(memId);
+        List<QnaDTO> recentQnas = recentQnasEntity.stream()
+                .map(entity -> modelMapper.map(entity, QnaDTO.class))
+                .collect(Collectors.toList());
+
         return MyPageHomeDTO.builder()
                 .orderCount((int) orderCount)
                 .couponCount((int) couponCount)
-                .pointTotal(1000)
+                .pointTotal(pointTotal)
                 .qnaCount((int) qnaCount)
-                .recentOrders(recentOrders.stream().map(this::convertToOrderItemDTO).collect(Collectors.toList()))
-                .recentPoints(recentPoints.stream().map(point -> modelMapper.map(point, PointDTO.class)).collect(Collectors.toList()))
-                .recentReviews(recentReviews.stream().map(this::convertToReviewDTO).collect(Collectors.toList()))
-                .recentQnas(recentQnas.stream().map(qna -> modelMapper.map(qna, QnaDTO.class)).collect(Collectors.toList()))
+                .recentOrders(recentOrders)
+                .recentPoints(recentPoints)
+                .recentReviews(recentReviews)
+                .recentQnas(recentQnas)
                 .build();
     }
 
-    // 나의설정 페이지 데이터 조회
     public MemberDTO getMemberInfo(String memId) {
-        Member member = memberRepository.findById(memId).orElse(null);
-        return (member != null) ? modelMapper.map(member, MemberDTO.class) : null;
+        Member member = memberRepository.findById(memId).orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+        return modelMapper.map(member, MemberDTO.class);
     }
 
-    // DTO 변환을 위한 헬퍼 메서드
-    private OrderItemDTO convertToOrderItemDTO(OrderItem item) {
-        // 상품명 조회 로직 추가 필요
-        // Product product = productRepository.findByProdNo(item.getProdNo()).orElse(null);
-        return OrderItemDTO.builder()
-                .item_no(item.getItem_no())
-                .ord_no(item.getOrd_no())
-                .prod_no(item.getProd_no())
-                .item_name("상품명") // 임시
-                .item_cnt(item.getItem_cnt())
-                .item_stat(item.getItem_stat())
-                .build();
+    @Transactional
+    public void updateMemberInfo(MemberDTO memberDTO) {
+        Member member = memberRepository.findById(memberDTO.getMem_id())
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+
+        member.updateInfo(memberDTO.getMem_email(), memberDTO.getMem_hp(), memberDTO.getMem_zip(), memberDTO.getMem_addr1(), memberDTO.getMem_addr2());
+        memberRepository.save(member);
     }
 
-    private ReviewDTO convertToReviewDTO(Review review) {
-        // 상품명 조회 로직
-        String prodName = "알 수 없는 상품";
-        Optional<Product> productOptional = productRepository.findByProd_no(review.getProd_no());
-        if (productOptional.isPresent()) {
-            prodName = productOptional.get().getProd_name();
+    @Transactional
+    public void changePassword(String memId, String newPassword) {
+        Member member = memberRepository.findById(memId)
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        member.updatePassword(encodedPassword);
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void withdrawMember(String memId) {
+        Member member = memberRepository.findById(memId)
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+        member.updateStatus("탈퇴");
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void confirmOrder(Long itemNo, String memId) {
+        OrderItem orderItem = orderItemRepository.findById(itemNo)
+                .orElseThrow(() -> new IllegalArgumentException("주문 상품을 찾을 수 없습니다."));
+
+        Order order = orderRepository.findById(orderItem.getOrd_no())
+                .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
+
+        if (!order.getMem_id().equals(memId)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
         }
 
-        return ReviewDTO.builder()
-                .rev_no(review.getRev_no())
-                .prod_no(review.getProd_no())
-                .mem_id(review.getMem_id())
-                .prodName(prodName) // 추가된 필드에 값 할당
-                .rev_content(review.getRev_content())
-                .rev_rating(review.getRev_rating())
-                .rev_rdate(review.getRev_rdate())
-                .rev_img_path(review.getRev_img_path())
+        orderItem.setItem_stat(2);
+        orderItemRepository.save(orderItem);
+
+        Point point = Point.builder()
+                .mem_id(memId)
+                .p_type(1)
+                .p_point(100)
+                .p_info("상품구매확정")
+                .p_date(LocalDateTime.now())
+                .p_exp_date(LocalDateTime.now().plusYears(1))
                 .build();
+        pointRepository.save(point);
+    }
+
+    @Transactional
+    public void writeReview(ReviewDTO reviewDTO) {
+        Review review = modelMapper.map(reviewDTO, Review.class);
+        // LocalDateTime -> Date로 변환 후 할당
+        Date currentDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        review.setRev_rdate(currentDate);
+        reviewRepository.save(review);
+    }
+
+    @Transactional
+    public void writeQna(QnaDTO qnaDTO) {
+        Qna qna = modelMapper.map(qnaDTO, Qna.class);
+        // LocalDateTime -> Date로 변환 후 할당
+        Date currentDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        qna.setQ_rdate(currentDate);
+        qnaRepository.save(qna);
     }
 }

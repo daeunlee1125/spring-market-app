@@ -1,5 +1,7 @@
 package kr.co.shoply.dto;
+
 import lombok.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -14,4 +16,5 @@ public class OrderItemDTO {
     private String item_name;
     private Integer item_cnt;
     private Integer item_stat;
+    private Date ord_date;
 }

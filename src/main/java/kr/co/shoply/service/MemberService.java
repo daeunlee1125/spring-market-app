@@ -7,6 +7,7 @@ import kr.co.shoply.dto.TermsDTO;
 import kr.co.shoply.entity.Member;
 import kr.co.shoply.entity.Terms;
 import kr.co.shoply.mapper.MemSellerMapper;
+import kr.co.shoply.mapper.MemberMapper;
 import kr.co.shoply.repository.MemberRepository;
 import kr.co.shoply.repository.TermsRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class MemberService {
     private final TermsRepository termsRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final MemberMapper memberMapper;
 
     public void insertMember(MemberDTO memberDTO){
         memberDTO.setMem_pass(passwordEncoder.encode(memberDTO.getMem_pass()));
@@ -58,5 +60,8 @@ public class MemberService {
         return null;
     }
 
+    public MemberDTO getMemberAddr(String memId, String prodNo) {
+        return memberMapper.selectADDR3(memId, prodNo);
+    }
 
 }

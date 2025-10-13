@@ -38,8 +38,7 @@ public class ReviewService {
         int offset = (page - 1) * limit; // 건너뛸 개수 (offset)
 
         // 2. 올바른 변수를 Mapper에 전달
-        List<ReviewDTO> reviewDTOS = reviewMapper.selectPageList3(prodNo, offset, limit);
-
+        List<ReviewDTO> reviewDTOS = reviewMapper.selectPageList3(prodNo, offset);
         // 3. 아이디 마스킹 로직 추가
         for(ReviewDTO reviewDTO : reviewDTOS){
             if(reviewDTO.getMem_id()!=null){

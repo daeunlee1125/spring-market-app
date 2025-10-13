@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.CsNoticeMapper">
+
+    <!-- 공지사항 목록 -->
+    <select id="selectNoticeList" parameterType="kr.co.shoply.dto.PageRequestDTO"
+            resultType="kr.co.shoply.dto.CsNoticeDTO">
+        SELECT
+        cs_no,
+        cs_type,
+        cs_title,
+        cs_content,
+        cs_hit,
+        TO_CHAR(cs_rdate, 'YYYY-MM-DD HH24:MI') AS cs_rdate
+        FROM CS_NOTICE
+        <where>
+            <if test="csType != null and csType.trim() != ''">
+                AND cs_type = #{csType}
+            </if>
+        </where>
+        ORDER BY cs_no DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+
+
+    <select id="selectNoticeTotal" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM CS_NOTICE
+        <where>
+            <if test="csType != null and csType.trim() != ''">
+                AND cs_type = #{csType}
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="deleteNotices" parameterType="list">
+        DELETE FROM CS_NOTICE
+        WHERE cs_no IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <insert id="insertNotice" parameterType="kr.co.shoply.dto.CsNoticeDTO">
+        INSERT INTO cs_notice (
+            cs_no,
+            cs_type,
+            cs_title,
+            cs_content,
+            cs_hit,
+            cs_rdate
+        ) VALUES (
+                     cs_notice_seq.NEXTVAL,
+                     #{cs_type},
+                     #{cs_title},
+                     #{cs_content},
+                     0,
+                     SYSDATE
+                 )
+    </insert>
+
+
+    <select id="selectNotice" parameterType="int" resultType="kr.co.shoply.dto.CsNoticeDTO">
+        SELECT cs_no, cs_type, cs_title, cs_content, cs_hit, cs_rdate
+        FROM cs_notice
+        WHERE cs_no = #{csNo}
+    </select>
+
+    <update id="updateNotice" parameterType="kr.co.shoply.dto.CsNoticeDTO">
+        UPDATE cs_notice
+        SET
+            cs_type = #{cs_type},
+            cs_title = #{cs_title},
+            cs_content = #{cs_content}
+        WHERE cs_no = #{cs_no}
+    </update>
+
+
+    <update id="updateHit" parameterType="int">
+        UPDATE cs_notice
+        SET cs_hit = cs_hit + 1
+        WHERE cs_no = #{csNo}
+    </update>
+
+
+</mapper>

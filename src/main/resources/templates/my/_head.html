@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <!-- ✅ 이거 추가 -->
 
 <head>
     <meta charset="UTF-8">
@@ -18,21 +19,23 @@
             </a>
             <span>쇼핑의 플레이리스트</span>
         </div>
-        <div class="header-right">
-            <div th:if="${#strings.isEmpty(session.sessUser)}">
-                <div class="login-menu">
-                    <a th:href="@{/member/login}">로그인</a> |
-                    <a th:href="@{/member/register}">회원가입</a>
-                </div>
-            </div>
-            <div th:unless="${#strings.isEmpty(session.sessUser)}">
-                <div class="user-menu">
-                    <span th:text="${session.sessUser.memName} + '님'">홍길동님</span> |
-                    <a th:href="@{/member/logout}">로그아웃</a> |
-                    <a th:href="@{/my/home}">마이페이지</a> |
-                    <a th:href="@{/cart}">장바구니</a>
-                </div>
-            </div>
+        <div class="header-right login-menu">
+
+            <!-- 로그인 안 한 경우 -->
+            <sec:authorize access="!isAuthenticated()">
+                <a th:href="@{/member/login}">로그인</a> |
+                <a th:href="@{/member/join}">회원가입</a> |
+            </sec:authorize>
+
+            <!-- 로그인 한 경우 -->
+            <sec:authorize access="isAuthenticated()">
+                <span sec:authentication="name">사용자</span>님 |
+                <a th:href="@{/member/logout}">로그아웃</a> |
+                <a th:href="@{/my/home}">마이페이지</a> |
+                <a th:href="@{/cart}">장바구니</a> |
+            </sec:authorize>
+
+            <a th:href="@{/cs}">고객센터</a>
         </div>
     </div>
 </header>

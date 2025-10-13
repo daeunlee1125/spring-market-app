@@ -38,17 +38,3 @@ function loginWithGoogle() {
     console.log('구글 로그인 API 호출');
     alert('구글 로그인 API를 연동해주세요.');
 }
-
-// 로그인 폼 제출
-document.querySelector('.login-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    const userId = document.getElementById('userId').value;
-    const password = document.getElementById('password').value;
-
-    if (!userId || !password) {
-        alert('아이디와 비밀번호를 입력해주세요.');
-        return;
-    }
-
-    alert('로그인 기능은 구현되지 않았습니다.');
-});

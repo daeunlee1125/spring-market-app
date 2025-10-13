@@ -50,3 +50,7 @@ spring:
     multipart:
       location: upload
       max-file-size: 10MB
+
+  web:
+    resources:
+      static-locations: classpath:/static/, classpath:/public/, file:/home/ec2-user/shoply/uploads/

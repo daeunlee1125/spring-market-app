@@ -1,10 +1,12 @@
 package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.Cate2DTO;
+import kr.co.shoply.dto.ProdOptionDTO;
 import kr.co.shoply.dto.ProductDTO;
 import kr.co.shoply.dto.ReviewDTO;
 import kr.co.shoply.service.Cate2Service;
 import kr.co.shoply.service.ProductService;
+import kr.co.shoply.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final Cate2Service cate2Service;
+    private final ReviewService reviewService;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
@@ -29,7 +34,7 @@ public class ProductController {
 
     @GetMapping("/product/list/{cate2No}/{sort}")
     public String sortList(@PathVariable int cate2No, @PathVariable String sort, Model model) {
-        List<ProductDTO> productDTOList = productService.getProductAll(cate2No, sort);
+        List<ProductDTO> productDTOList = productService.getProductAll3(cate2No, sort);
 
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
 
@@ -40,8 +45,35 @@ public class ProductController {
         return "product/list";
     }
 
-    @GetMapping("/product/view/{prodNo}")
-    public String view() {
+    @GetMapping("/product/view/{cate2No}/{prodNo}")
+    public String view(@PathVariable int cate2No, @PathVariable String prodNo, Model model) {
+        Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
+        model.addAttribute("cate2DTO", cate2DTO);
+
+        ProductDTO productDTO = productService.getProduct3(prodNo);
+        model.addAttribute("productDTO", productDTO);
+
+        // ✅ 1. 리뷰 총 개수 가져오기 (이전 코드 리뷰에서 수정한 getCountReviews 사용)
+        int totalReviewCount = reviewService.getCountReviews(prodNo);
+
+        // ✅ 2. 총 페이지 수 계산 ( (총 개수 + 페이지당 개수 - 1) / 페이지당 개수 )
+        int totalPages = (totalReviewCount + 4) / 5;
+
+        // ✅ 3. 계산된 총 페이지 수를 모델에 추가
+        model.addAttribute("totalPages", totalPages);
+
+        // 첫 페이지 리뷰 목록 가져오기
+        List<ReviewDTO> reviewDTOList = reviewService.getPageList(prodNo, 1);
+        model.addAttribute("reviewDTOList", reviewDTOList);
+
+        List<ProdOptionDTO> OpDtoList = productService.getProductOption3(prodNo); // 상품별 옵션들
+        for(ProdOptionDTO opDto : OpDtoList){
+            // 콤마(,)로 구분된 문자열을 List<String>으로 변환
+            List<String> values = Arrays.asList(opDto.getOpt_val().split("\\s*,\\s*"));
+            opDto.setOptValList(values);
+        }
+        model.addAttribute("OpDtoList", OpDtoList);
+
         return "product/view";
     }
 

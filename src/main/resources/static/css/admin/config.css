@@ -183,6 +183,16 @@
     font-weight: bold;
     color: #4a2f73;
 }
+.table-2 td button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+}
+.table-2 td button:hover {
+    font-weight: bold;
+    color: #4a2f73;
+}
 .table-2 td img {
   width: 100%;      /* td 너비에 맞춤 */
   height: 100%;     /* td 높이에 맞춤 */

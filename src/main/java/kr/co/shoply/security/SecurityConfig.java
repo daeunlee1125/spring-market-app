@@ -32,11 +32,11 @@ public class SecurityConfig {
 
         // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/admin/**").hasRole("7")
-                .requestMatchers("/manager/**").hasAnyRole("7", "2")
-
-                .requestMatchers("/guest/**").permitAll()
-                .requestMatchers("/article/**").hasAnyRole("7", "2", "1")
+                .requestMatchers("/api/**").permitAll() // view.html에서 리뷰 확인가능하도록 전체 허가
+                .requestMatchers("/admin/config/**").hasRole("7") // 관리자 - 샵플리 기본 정보 관리
+                .requestMatchers("/admin/cs/**").hasRole("7") // 관리자 - 고객센터
+                .requestMatchers("/admin/**").hasAnyRole("7", "2") // 그 외 관리자 페이지 전체
+                .requestMatchers("/my/**").hasAnyRole("1", "2", "7") // 마이페이지
                 .anyRequest().permitAll()
         );
 

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.CouponMapper">
+
+
+
+    <select id="selectCouponList" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="kr.co.shoply.dto.SysCouponDTO">
+        SELECT *
+        FROM (
+        SELECT
+        ROWNUM AS rn,
+        A.*
+        FROM (
+        SELECT
+        s.cp_code,
+        s.cp_name,
+        s.cp_type,
+        s.cp_value,
+        s.cp_min_price,
+        s.cp_issue_date,
+        s.cp_exp_date,
+        s.cp_stat,
+        s.cp_issuer_id,
+        s.cp_note,
+        m.mem_name AS cp_issuer_name,
+        COUNT(u.cp_no) AS issueCount,
+        SUM(CASE WHEN u.cp_stat = 0 THEN 1 ELSE 0 END) AS usedCount
+        FROM SYS_COUPON s
+        LEFT JOIN USER_COUPON u ON s.cp_code = u.cp_code
+        LEFT JOIN MEMBER m ON s.cp_issuer_id = m.mem_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'name'">
+                        AND s.cp_name LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'code'">
+                        AND s.cp_code LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'type'">
+                        AND s.cp_type LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+        GROUP BY s.cp_code, s.cp_name, s.cp_type, s.cp_value,
+        s.cp_min_price, s.cp_issue_date, s.cp_exp_date,
+        s.cp_stat, s.cp_issuer_id, s.cp_note, m.mem_name
+        ORDER BY s.cp_code ASC
+        ) A
+        WHERE ROWNUM &lt;= (#{pg} * #{size})
+        )
+        WHERE rn &gt; ((#{pg}-1) * #{size})
+    </select>
+
+
+
+
+    <!-- 전체 쿠폰 수 -->
+    <select id="selectCouponTotal"
+            parameterType="kr.co.shoply.dto.PageRequestDTO"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM SYS_COUPON s
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'name'">
+                        AND s.cp_name LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'code'">
+                        AND s.cp_code LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'type'">
+                        AND s.cp_type LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- 쿠폰 종료 -->
+    <update id="updateCouponEnd" parameterType="java.lang.String">
+        UPDATE SYS_COUPON
+        SET CP_STAT = 0
+        WHERE CP_CODE = #{cpCode}
+    </update>
+
+
+    <!-- 쿠폰 등록-->
+    <insert id="insertCoupon" parameterType="kr.co.shoply.dto.SysCouponDTO">
+        INSERT INTO SYS_COUPON (
+        CP_CODE,
+        CP_NAME,
+        CP_TYPE,
+        CP_VALUE,
+        CP_MIN_PRICE,
+        CP_ISSUE_DATE,
+        CP_EXP_DATE,
+        CP_STAT,
+        CP_ISSUER_ID,
+        CP_NOTE
+        ) VALUES (
+        #{cp_code},
+        #{cp_name},
+        #{cp_type},
+        #{cp_value},
+        #{cp_min_price},
+        #{cp_issue_date},
+        #{cp_exp_date},
+        #{cp_stat},
+        #{cp_issuer_id},
+        #{cp_note}
+        )
+    </insert>
+
+
+
+
+    <!-- 유저 쿠폰 총 개수 구하기 !-->
+
+    <select id="countUserCouponList" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM USER_COUPON u
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'code'">
+                        AND u.cp_code LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem'">
+                        AND u.mem_id LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'stat'">
+                        AND TO_CHAR(u.cp_stat) LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+
+
+    <!-- issued 쿠폰번호 눌렀을때 나오는 쿠폰정보 !-->
+    <select id="selectUserCouponList" parameterType="kr.co.shoply.dto.PageRequestDTO"
+            resultType="kr.co.shoply.dto.UserCouponDTO">
+
+        SELECT *
+        FROM (
+        SELECT ROWNUM AS rn, A.*
+        FROM (
+        SELECT
+        u.cp_no,
+        u.cp_code,
+        u.mem_id,
+        m.mem_name AS mem_name,
+        sc.cp_name,
+        sc.cp_type,
+        sc.cp_value,
+        sc.cp_note,
+        sc.cp_exp_date,
+        sc.cp_issuer_id,
+        i.mem_name AS cp_issuer_name,
+        u.cp_issued_date,
+        u.cp_used_date,
+        u.cp_stat
+        FROM USER_COUPON u
+        JOIN MEMBER m ON u.mem_id = m.mem_id
+        JOIN SYS_COUPON sc ON u.cp_code = sc.cp_code
+        LEFT JOIN MEMBER i ON sc.cp_issuer_id = i.mem_id
+        ORDER BY u.cp_no DESC
+        ) A
+        WHERE ROWNUM &lt;= (#{pg} * #{size})
+        )
+        WHERE rn &gt; ((#{pg}-1) * #{size})
+    </select>
+
+
+
+
+    <update id="updateUserCouponStatus">
+        UPDATE USER_COUPON
+        SET CP_STAT = #{cp_stat}
+        WHERE CP_NO = #{cp_no}
+    </update>
+
+
+
+    <update id="updateSysCouponStatus">
+        UPDATE USER_COUPON
+        SET CP_STAT = 3
+        WHERE CP_CODE = #{cp_code}
+    </update>
+
+
+
+
+</mapper>

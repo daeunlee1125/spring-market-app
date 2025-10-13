@@ -53,14 +53,14 @@
                 </thead>
                 <tbody>
                 <tr th:each="coupon : ${userCoupons}">
-                    <td th:text="${coupon.cpName}">1만원 할인 중복쿠폰</td>
-                    <td th:text="${#numbers.formatInteger(coupon.cpValue, 3, 'COMMA')} + '원'">10,000원</td>
+                    <td th:text="${coupon.cp_name}">1만원 할인 중복쿠폰</td>
+                    <td th:text="${#numbers.formatInteger(coupon.cp_value, 3, 'COMMA')} + '원'">10,000원</td>
                     <td>
-                        <span th:text="${#numbers.formatInteger(coupon.cpMinPrice, 3, 'COMMA')} + '원 이상 구매시'">10,000원 이상 구매시</span>
-                        <span th:if="${coupon.cpType == 1}">(중복 가능)</span>
+                        <span th:text="${#numbers.formatInteger(coupon.cp_min_price, 3, 'COMMA')} + '원 이상 구매시'">10,000원 이상 구매시</span>
+                        <span th:if="${coupon.cp_type == 1}">(중복 가능)</span>
                     </td>
-                    <td th:text="${coupon.cpStatName}">사용가능</td>
-                    <td th:text="${#dates.format(coupon.cpExpDate, 'yyyy-MM-dd')}">~12/31</td>
+                    <td th:text="${coupon.cp_stat}">사용가능</td>
+                    <td th:text="${#dates.format(coupon.cp_exp_date, 'yyyy-MM-dd')}">~12/31</td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(userCoupons)}">
                     <td colspan="5" style="text-align: center;">쿠폰 내역이 없습니다.</td>
@@ -80,11 +80,7 @@
             </ul>
         </div>
 
-        <div class="pagination">
-            <button>&lt; 이전</button>
-            <button th:each="page : ${#numbers.sequence(1, totalPages)}" th:text="${page}"></button>
-            <button>다음 &gt;</button>
-        </div>
+
     </div>
 </main>
 

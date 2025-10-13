@@ -19,5 +19,50 @@
         (#{mem_id}, #{corp_name}, #{corp_reg_hp}, #{corp_tel_hp}, #{corp_fax})
     </insert>
 
+    <select id="getSellers2" resultType="kr.co.shoply.dto.MemSellerDTO">
+        SELECT
+            mem_id, corp_name, mem_name, corp_reg_hp, corp_tel_hp, mem_hp, mem_stat
+        from MEMBER m
+        LEFT JOIN mem_seller USING (mem_id)
+        WHERE mem_level=2
+    </select>
+
+
+
+    <select id="getSellerPage2" resultType="kr.co.shoply.dto.MemSellerDTO">
+        SELECT
+        mem_id, corp_name, mem_name, corp_reg_hp, corp_tel_hp, mem_hp, mem_stat
+        FROM MEMBER m
+        LEFT JOIN mem_seller USING (mem_id)
+        <include refid="searchWhere2"/>
+        OFFSET #{pageRequestDTO.offset} ROWS
+        FETCH NEXT #{pageRequestDTO.size} ROWS ONLY
+    </select>
+
+
+    <sql id="searchWhere2">
+        <where>
+            <if test="pageRequestDTO.searchType != null and pageRequestDTO.keyword != ''">
+                <choose>
+                    <when test="pageRequestDTO.searchType == 'title'">
+                        AND corp_name LIKE '%' || #{pageRequestDTO.keyword} || '%'
+                    </when>
+                    <when test="pageRequestDTO.searchType == 'content'">
+                        AND mem_name LIKE '%' || #{pageRequestDTO.keyword} || '%'
+                    </when>
+                    <when test="pageRequestDTO.searchType == 'writer'">
+                        AND mem_hp LIKE '%' || #{pageRequestDTO.keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectCountTotal" resultType="int">
+        SELECT COUNT(*) FROM MEMBER
+        WHERE mem_level=2
+        <include refid="searchWhere2"/>
+    </select>
+
 
 </mapper>

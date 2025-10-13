@@ -21,4 +21,5 @@ public class QnaDTO {
     private String q_reply;
     private String q_comment;
 
+
 }

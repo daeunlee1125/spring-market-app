@@ -14,11 +14,11 @@
                         <div>
                             &nbsp;>&nbsp;
                         </div>
-                        <a href="">환경설정</a>
+                        <a th:href="@{/admin/config/basic}">환경설정</a>
                         <div>
                             &nbsp;>&nbsp;
                         </div>
-                        <a href="" class="nav-last">기본설정</a>
+                        <a th:href="@{/admin/config/basic}" class="nav-last">기본설정</a>
                     </div>
                 </div>
                 <div class="main-content-top"></div>
@@ -31,7 +31,7 @@
                     <table class="table-1">
                         <tr>
                             <th>사이트 버전</th>
-                            <td>1.0.1-RELEASE</td>
+                            <td>[[${version.ver_version}]]</td>
                         </tr>
                     </table>
 
@@ -39,14 +39,15 @@
                     <h2 class="h2-1">사이트</h2>
                     <div class="gray-1">브라우저 탭, 헤더/푸터 노출 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="1">
                         <table class="table-1">
                             <tr>
                                 <th>제목</th>
-                                <td><input type="text" name="#" value="Shoply" class="input-1"></td>
+                                <td><input type="text" name="s_title" th:value="${siteInfo.s_title}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <th>부제</th>
-                                <td><input type="text" name="#" value="더 나은 쇼핑을 위한 선택" class="input-1"></td>
+                                <td><input type="text" name="s_subtitle" th:value="${siteInfo.s_subtitle}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <td colspan="2" class="submit-1"><input type="submit" value="수정하기" class="submit-btn-1"></td>
@@ -56,19 +57,20 @@
 
                     <h2 class="h2-1">로고</h2>
                     <div class="gray-1">브라우저 탭, 헤더/푸터 노출 로고</div>
-                    <form action="" method="post">
+                    <form enctype="multipart/form-data" method="post">
+                        <input type="hidden" name="type" value="2">
                         <table class="table-1">
                             <tr>
                                 <th>헤더 로고</th>
-                                <td><input type="file" name="#" class="input-1"></td>
+                                <td><input type="file" name="img1" th:value="${siteInfo.s_logo1}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <th>푸터 로고</th>
-                                <td><input type="file" name="#" class="input-1"></td>
+                                <td><input type="file" name="img2" th:value="${siteInfo.s_logo2}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <th>파비콘</th>
-                                <td><input type="file" name="#" class="input-1"></td>
+                                <td><input type="file" name="img3" th:value="${siteInfo.s_logo3}" class="input-1"></td>
                             </tr>
                             <tr>
                                 <td colspan="2" class="submit-1"><input type="submit" value="수정하기" class="submit-btn-1"></td>
@@ -79,30 +81,31 @@
                     <h2 class="h2-1">기업 정보</h2>
                     <div class="gray-1">푸터에 노출되는 기업 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="3">
                         <table class="table-1">
                             <tr>
                                 <th>상호명</th>
-                                <td><input type="text" name="#" class="input-1" value="샵플리닷컴"></td>
+                                <td><input type="text" name="s_corp_name" class="input-1" th:value="${siteInfo.s_corp_name}"></td>
                             </tr>
                             <tr>
                                 <th>대표이사</th>
-                                <td><input type="text" name="#" class="input-1" value="홍길동"></td>
+                                <td><input type="text" name="s_ceo" class="input-1" th:value="${siteInfo.s_ceo}"></td>
                             </tr>
                             <tr>
                                 <th>사업자등록번호</th>
-                                <td><input type="text" name="#" class="input-1" value="123-45-12345"></td>
+                                <td><input type="text" name="s_reg_hp" class="input-1" th:value="${siteInfo.s_reg_hp}"></td>
                             </tr>
                             <tr>
                                 <th>통신판매업신고</th>
-                                <td><input type="text" name="#" class="input-1" value="2024-서울강남-1234"></td>
+                                <td><input type="text" name="s_tel_reg" class="input-1" th:value="${siteInfo.s_tel_reg}"></td>
                             </tr>
                             <tr>
                                 <th>기본주소</th>
-                                <td><input type="text" name="#" class="input-1" value="부산광역시 부산진구 중앙동"></td>
+                                <td><input type="text" name="s_addr1" class="input-1" th:value="${siteInfo.s_addr1}"></td>
                             </tr>
                             <tr>
                                 <th>상세주소</th>
-                                <td><input type="text" name="#" class="input-1" value="(삼성동, weWork 빌딩) 7층"></td>
+                                <td><input type="text" name="s_addr2" class="input-1" th:value="${siteInfo.s_addr2}"></td>
                             </tr>
                             <tr>
                                 <td colspan="2" class="submit-1"><input type="submit" value="수정하기" class="submit-btn-1"></td>
@@ -113,22 +116,23 @@
                     <h2 class="h2-1">고객센터 정보</h2>
                     <div class="gray-1">푸터에 노출되는 고객센터 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="4">
                         <table class="table-1">
                             <tr>
                                 <th>전화번호</th>
-                                <td><input type="text" name="#" class="input-1" value="02-1234-5678"></td>
+                                <td><input type="text" name="s_cs_hp" class="input-1" th:value="${siteInfo.s_cs_hp}"></td>
                             </tr>
                             <tr>
                                 <th>업무시간</th>
-                                <td><input type="text" name="#" class="input-1" value="평일 09:00 ~ 18:00"></td>
+                                <td><input type="text" name="s_cs_time" class="input-1" th:value="${siteInfo.s_cs_time}"></td>
                             </tr>
                             <tr>
                                 <th>이메일</th>
-                                <td><input type="text" name="#" class="input-1" value="admin@kmarket.com"></td>
+                                <td><input type="text" name="s_cs_email" class="input-1" th:value="${siteInfo.s_cs_email}"></td>
                             </tr>
                             <tr>
                                 <th>전자금융거래 분쟁담당</th>
-                                <td><input type="text" name="#" class="input-1" value="1234-1234"></td>
+                                <td><input type="text" name="s_cs_hp2" class="input-1" th:value="${siteInfo.s_cs_hp2}"></td>
                             </tr>
 
                             <tr>
@@ -140,10 +144,11 @@
                     <h2 class="h2-1">카피라이트</h2>
                     <div class="gray-1">푸터에 노출되는 카피라이트 정보</div>
                     <form action="" method="post">
+                        <input type="hidden" name="type" value="5">
                         <table class="table-1">
                             <tr>
-                                <th>전화번호</th>
-                                <td><input type="text" name="#" class="input-1" value="Copyright©Kmarket. All rights reserved"></td>
+                                <th>카피라이트</th>
+                                <td><input type="text" name="s_copy" class="input-1" th:value="${siteInfo.s_copy}"></td>
                             </tr>
 
                             <tr>

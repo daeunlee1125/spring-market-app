@@ -29,6 +29,8 @@ public class PageRequestDTO {
     private String searchType;
     private String keyword;
 
+    private String csType;
+
     // 페이지 처리
     private int offset;
 

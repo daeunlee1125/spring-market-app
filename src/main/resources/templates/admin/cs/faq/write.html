@@ -1,161 +1,147 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - faq write</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/cs.css">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/cs/notice/_head.html}"></head>
 
-</head>
 <body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
 
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
-    <div class="main">
-        <div class="middle main-content">
-            <div class="main-common">
-                <div class="main-head">
-                    <div>
-                        <h3>자주묻는질문 작성</h3>
-                    </div>
-                    <div class="main-head-right">
-                        <a href="">HOME</a>
-                        <div>
-                            &nbsp;>&nbsp;
-                        </div>
-                        <a href="">고객센터</a>
-                        <div>
-                            &nbsp;>&nbsp;
-                        </div>
-                        <a href="" class="nav-last">자주묻는질문</a>
-                    </div>
+<div class="main">
+    <div class="middle main-content">
+        <div class="main-common">
+            <div class="main-head">
+                <div>
+                    <h3>자주묻는질문 작성</h3>
                 </div>
-                <div class="main-content-top"></div>
-                <main>
+                <div class="main-head-right">
+                    <a href="/">HOME</a>
+                    <div>&nbsp;>&nbsp;</div>
+                    <a href="/admin/cs/faq/list">고객센터</a>
+                    <div>&nbsp;>&nbsp;</div>
+                    <a href="/admin/cs/faq/list" class="nav-last">자주묻는질문</a>
+                </div>
+            </div>
+
+            <div class="main-content-top"></div>
+
+            <main>
+                <form th:action="@{/admin/cs/faq/write}" method="post" th:object="${faq}">
                     <div class="notice-form_3">
                         <table class="notice-table_3">
                             <tbody>
-                                <tr>
-                                    <th class="notice-th_3">유형</th>
-                                    <td class="notice-td_3">
-                                        <select class="notice-select_3" name="type1">
-                                            <option value="">1차선택</option>
-                                            <option value="member">회원</option>
-                                        </select>
-                                        <select class="notice-select_3" name="type2">
-                                            <option value="">2차선택</option>
-                                            <option value="signup">가입</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="notice-th_3">제목</th>
-                                    <td class="notice-td_3">
-                                        <input type="text" class="notice-input_3" name="title" placeholder="제목을 입력합니다.">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="notice-th_3">내용</th>
-                                    <td class="notice-td_3">
-                                        <textarea class="notice-textarea_3" name="content" placeholder="내용을입력합니다."></textarea>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <th class="notice-th_3">유형</th>
+                                <td class="notice-td_3">
+                                    <!-- 1차 카테고리 -->
+                                    <select class="notice-select_3" th:field="*{cs_faq_cate1}" id="cate1">
+                                        <option value="">1차 선택</option>
+                                        <option value="회원" th:selected="${faq.cs_faq_cate1 == '회원'}">회원</option>
+                                        <option value="쿠폰/혜택/이벤트" th:selected="${faq.cs_faq_cate1 == '쿠폰/혜택/이벤트'}">쿠폰/혜택/이벤트</option>
+                                        <option value="주문/결제" th:selected="${faq.cs_faq_cate1 == '주문/결제'}">주문/결제</option>
+                                        <option value="배송" th:selected="${faq.cs_faq_cate1 == '배송'}">배송</option>
+                                        <option value="취소/반품/교환" th:selected="${faq.cs_faq_cate1 == '취소/반품/교환'}">취소/반품/교환</option>
+                                        <option value="여행/숙박/항공" th:selected="${faq.cs_faq_cate1 == '여행/숙박/항공'}">여행/숙박/항공</option>
+                                        <option value="안전거래" th:selected="${faq.cs_faq_cate1 == '안전거래'}">안전거래</option>
+                                    </select>
+
+                                    <!-- 2차 카테고리 -->
+                                    <select class="notice-select_3" th:field="*{cs_faq_cate2}" id="cate2">
+                                        <option value="">2차 선택</option>
+
+                                        <!-- 회원 -->
+                                        <option data-parent="회원" value="가입" th:selected="${faq.cs_faq_cate2 == '가입'}">가입</option>
+                                        <option data-parent="회원" value="탈퇴" th:selected="${faq.cs_faq_cate2 == '탈퇴'}">탈퇴</option>
+                                        <option data-parent="회원" value="회원정보" th:selected="${faq.cs_faq_cate2 == '회원정보'}">회원정보</option>
+                                        <option data-parent="회원" value="로그인" th:selected="${faq.cs_faq_cate2 == '로그인'}">로그인</option>
+
+                                        <!-- 쿠폰/혜택/이벤트 -->
+                                        <option data-parent="쿠폰/혜택/이벤트" value="쿠폰/할인혜택" th:selected="${faq.cs_faq_cate2 == '쿠폰/할인혜택'}">쿠폰/할인혜택</option>
+                                        <option data-parent="쿠폰/혜택/이벤트" value="포인트" th:selected="${faq.cs_faq_cate2 == '포인트'}">포인트</option>
+                                        <option data-parent="쿠폰/혜택/이벤트" value="제휴" th:selected="${faq.cs_faq_cate2 == '제휴'}">제휴</option>
+                                        <option data-parent="쿠폰/혜택/이벤트" value="이벤트" th:selected="${faq.cs_faq_cate2 == '이벤트'}">이벤트</option>
+
+                                        <!-- 주문/결제 -->
+                                        <option data-parent="주문/결제" value="상품" th:selected="${faq.cs_faq_cate2 == '상품'}">상품</option>
+                                        <option data-parent="주문/결제" value="결제" th:selected="${faq.cs_faq_cate2 == '결제'}">결제</option>
+                                        <option data-parent="주문/결제" value="구매내역" th:selected="${faq.cs_faq_cate2 == '구매내역'}">구매내역</option>
+                                        <option data-parent="주문/결제" value="영수증/증빙" th:selected="${faq.cs_faq_cate2 == '영수증/증빙'}">영수증/증빙</option>
+
+                                        <!-- 배송 -->
+                                        <option data-parent="배송" value="배송상태/기간" th:selected="${faq.cs_faq_cate2 == '배송상태/기간'}">배송상태/기간</option>
+                                        <option data-parent="배송" value="배송정보확인/변경" th:selected="${faq.cs_faq_cate2 == '배송정보확인/변경'}">배송정보확인/변경</option>
+                                        <option data-parent="배송" value="해외배송" th:selected="${faq.cs_faq_cate2 == '해외배송'}">해외배송</option>
+                                        <option data-parent="배송" value="당일배송" th:selected="${faq.cs_faq_cate2 == '당일배송'}">당일배송</option>
+                                        <option data-parent="배송" value="해외직구" th:selected="${faq.cs_faq_cate2 == '해외직구'}">해외직구</option>
+
+                                        <!-- 취소/반품/교환 -->
+                                        <option data-parent="취소/반품/교환" value="반품신청/철회" th:selected="${faq.cs_faq_cate2 == '반품신청/철회'}">반품신청/철회</option>
+                                        <option data-parent="취소/반품/교환" value="반품정보확인/변경" th:selected="${faq.cs_faq_cate2 == '반품정보확인/변경'}">반품정보확인/변경</option>
+                                        <option data-parent="취소/반품/교환" value="교환 AS신청/철회" th:selected="${faq.cs_faq_cate2 == '교환 AS신청/철회'}">교환 AS신청/철회</option>
+                                        <option data-parent="취소/반품/교환" value="교환정보확인/변경" th:selected="${faq.cs_faq_cate2 == '교환정보확인/변경'}">교환정보확인/변경</option>
+                                        <option data-parent="취소/반품/교환" value="취소신청/철회" th:selected="${faq.cs_faq_cate2 == '취소신청/철회'}">취소신청/철회</option>
+                                        <option data-parent="취소/반품/교환" value="취소확인/환불정보" th:selected="${faq.cs_faq_cate2 == '취소확인/환불정보'}">취소확인/환불정보</option>
+
+                                        <!-- 여행/숙박/항공 -->
+                                        <option data-parent="여행/숙박/항공" value="여행/숙박" th:selected="${faq.cs_faq_cate2 == '여행/숙박'}">여행/숙박</option>
+                                        <option data-parent="여행/숙박/항공" value="항공" th:selected="${faq.cs_faq_cate2 == '항공'}">항공</option>
+
+                                        <!-- 안전거래 -->
+                                        <option data-parent="안전거래" value="서비스 이용규칙 위반" th:selected="${faq.cs_faq_cate2 == '서비스 이용규칙 위반'}">서비스 이용규칙 위반</option>
+                                        <option data-parent="안전거래" value="지식재산권침해" th:selected="${faq.cs_faq_cate2 == '지식재산권침해'}">지식재산권침해</option>
+                                        <option data-parent="안전거래" value="법령 및 정책위반 상품" th:selected="${faq.cs_faq_cate2 == '법령 및 정책위반 상품'}">법령 및 정책위반 상품</option>
+                                        <option data-parent="안전거래" value="게시물 정책위반" th:selected="${faq.cs_faq_cate2 == '게시물 정책위반'}">게시물 정책위반</option>
+                                        <option data-parent="안전거래" value="직거래/외부거래유도" th:selected="${faq.cs_faq_cate2 == '직거래/외부거래유도'}">직거래/외부거래유도</option>
+                                        <option data-parent="안전거래" value="표시광고" th:selected="${faq.cs_faq_cate2 == '표시광고'}">표시광고</option>
+                                        <option data-parent="안전거래" value="청소년 위해상품/이미지" th:selected="${faq.cs_faq_cate2 == '청소년 위해상품/이미지'}">청소년 위해상품/이미지</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th class="notice-th_3">제목</th>
+                                <td class="notice-td_3">
+                                    <input type="text" class="notice-input_3" th:field="*{cs_faq_title}" placeholder="제목을 입력합니다.">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th class="notice-th_3">내용</th>
+                                <td class="notice-td_3">
+                                    <textarea class="notice-textarea_3" th:field="*{cs_faq_content}" placeholder="내용을 입력합니다."></textarea>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
+
                         <div class="notice-buttons_3">
-                            <button type="button" class="notice-btn-cancel_3">취소하기</button>
+                            <button type="button" class="notice-btn-cancel_3" onclick="history.back()">취소하기</button>
                             <button type="submit" class="notice-btn-submit_3">등록하기</button>
                         </div>
                     </div>
-                </main>
-            </div>
+                </form>
+            </main>
         </div>
     </div>
+</div>
 
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
+<div th:replace="~{admin/coupon/_tail.html}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cate1 = document.getElementById('cate1');
+        const cate2 = document.getElementById('cate2');
+
+        cate1.addEventListener('change', () => {
+            const parent = cate1.value;
+            cate2.querySelectorAll('option').forEach(opt => {
+                if (opt.value === '') {
+                    opt.style.display = '';
+                } else {
+                    opt.style.display = opt.dataset.parent === parent ? '' : 'none';
+                }
+            });
+            cate2.value = '';
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -12,11 +12,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
+@Setter
 @Table(name = "CS_FAQ")
 public class CsFaq {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "csFaqSeqGenerator")
+    @SequenceGenerator(
+            name = "csFaqSeqGenerator",
+            sequenceName = "CS_FAQ_SEQ",
+            allocationSize = 1
+    )
     private int cs_faq_no;
 
     private String cs_faq_cate1;

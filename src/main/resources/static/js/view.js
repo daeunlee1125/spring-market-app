@@ -330,4 +330,81 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // ==========================================================
+    // 5. 장바구니 추가 기능 (AJAX)
+    // ==========================================================
+    const btnAddToCart = document.getElementById('btn-add-to-cart');
+
+    if (btnAddToCart) {
+        btnAddToCart.addEventListener('click', function() {
+
+            const prod_no = this.dataset.prodNo;
+            const cartItems = []; // 서버로 보낼 상품 정보를 담을 배열
+
+            // CASE 1: 옵션이 있는 상품일 경우
+            const selectedItems = document.querySelectorAll('#selected-options-list .selected-item');
+            if (selectedItems.length > 0) {
+                selectedItems.forEach(item => {
+                    const quantity = item.querySelector('.quantity-input').value;
+                    const optionText = item.querySelector('.item-name').textContent;
+
+                    // "상품이름 / " 부분 제거하고 순수 옵션만 추출
+                    const productName = document.querySelector('#selected-options-list').dataset.name;
+                    const cart_option = optionText.replace(productName + ' / ', '');
+
+                    cartItems.push({
+                        prod_no: prod_no,
+                        cart_item_cnt: parseInt(quantity, 10),
+                        cart_option: cart_option
+                    });
+                });
+            }
+            // CASE 2: 옵션이 없는 단일 상품일 경우
+            else {
+                const noOptionItem = document.querySelector('#no-option-product .quantity-input');
+                if(noOptionItem) {
+                    const quantity = noOptionItem.value;
+                    cartItems.push({
+                        prod_no: prod_no,
+                        cart_item_cnt: parseInt(quantity, 10),
+                        cart_option: '' // 옵션 없으므로 빈 문자열
+                    });
+                }
+            }
+
+            if (cartItems.length === 0) {
+                alert('장바구니에 담을 상품을 선택해주세요.');
+                return;
+            }
+
+            // fetch API를 사용해 서버로 데이터 전송
+            fetch('/shoply/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cartItems) // 배열을 JSON 문자열로 변환
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('서버 응답이 올바르지 않습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        if (confirm('상품을 장바구니에 담았습니다. 장바구니로 이동하시겠습니까?')) {
+                            location.href = '/product/cart'; // 장바구니 페이지로 이동
+                        }
+                    } else {
+                        alert('장바구니 담기에 실패했습니다: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('장바구니 추가 중 오류가 발생했습니다.');
+                });
+        });
+    }
 });

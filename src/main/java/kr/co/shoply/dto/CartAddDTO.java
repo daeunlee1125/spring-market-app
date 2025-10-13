@@ -8,14 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartDTO {
-    private int cart_no;
-    private String mem_id;
+public class CartAddDTO {
     private String prod_no;
     private int cart_item_cnt;
     private String cart_option;
-
-    // 추가 필드
-    private ProductDTO productDTO; // 장바구니 출력 용도
-    private String fName;
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.CartMapper">
+
+    <resultMap id="cartWithProductMap" type="kr.co.shoply.dto.CartDTO">
+        <id property="cart_no" column="CART_NO"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="cart_item_cnt" column="CART_ITEM_CNT"/>
+        <result property="cart_option" column="CART_OPTION"/>
+        <result property="prod_no" column="PROD_NO"/>
+        <result property="fName" column="fName"/>
+
+        <association property="productDTO" javaType="kr.co.shoply.dto.ProductDTO">
+        <id property="prod_no" column="PROD_NO"/>
+        <result property="prod_name" column="PROD_NAME"/>
+        <result property="prod_company" column="PROD_COMPANY"/>
+        <result property="prod_deliv_price" column="PROD_DELIV_PRICE"/>
+        <result property="realPrice" column="realPrice"/>
+        </association>
+    </resultMap>
+
+    <select id="selectCartList3" parameterType="string" resultMap="cartWithProductMap">
+        SELECT
+            c.CART_NO, -- DTO의 cart_no와 매핑하기 위해 추가
+            c.MEM_ID,
+            c.CART_ITEM_CNT,
+            c.CART_OPTION, -- DTO에 cart_option 필드가 없어서 현재는 매핑되지 않음
+            p.PROD_NO,
+            p.PROD_NAME,
+            p.PROD_COMPANY,
+            p.PROD_DELIV_PRICE,
+            p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE / 100)) AS realPrice,
+            pf.F_NAME AS fName
+        FROM
+            CART c
+        JOIN
+            PRODUCT p ON c.PROD_NO = p.PROD_NO
+        JOIN
+            PRO_FILE pf ON c.PROD_NO  = pf.PROD_NO
+        WHERE
+            c.MEM_ID = #{mem_id} AND pf.F_DIST = 1
+    </select>
+
+    <insert id="" parameterType="kr.co.shoply.dto.CartDTO">
+        INSERT INTO CART(MEM_ID, PROD_NO, CART_ITEM_CNT, CART_OPTION)
+        VALUES (
+                #{mem_id},
+                #{prod_no},
+                #{cart_item_cnt},
+                #{cart_option}
+        )
+    </insert>
+
+</mapper>

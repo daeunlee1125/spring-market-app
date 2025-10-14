@@ -13,6 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import kr.co.shoply.dto.ProductDTO;
+import kr.co.shoply.dto.ProdOptionDTO;
+import kr.co.shoply.dto.ProFileDTO;
+
 import java.util.List;
 
 
@@ -56,73 +60,23 @@ public class MyController {
 
 
     @GetMapping("/info")
-
-    public String info(Model model, HttpSession session) {
-
-        log.info("info() GET 요청...");
-
-
-
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-
-
-
-        if (sessUser == null) {
-
-            return "redirect:/member/login";
-
-        }
-
-
-
-        String mem_id = sessUser.getMem_id();
-
+    public String info(Model model, @AuthenticationPrincipal MyUserDetails user) {
+        // 세션 대신 Spring Security 인증 정보 사용
+        String mem_id = user.getMember().getMem_id();
         MemberDTO memberInfo = myService.getMemberInfo(mem_id);
-
-
-
         model.addAttribute("memberInfo", memberInfo);
-
-        model.addAttribute("sessUser", sessUser);
-
-
-
+        // 세션 DTO는 더 이상 필요하지 않습니다.
         return "my/info";
-
     }
-
-
 
     @PostMapping("/info/update")
-
     @ResponseBody
-
-    public ResponseEntity<String> updateInfo(@RequestBody MemberDTO memberDTO, HttpSession session) {
-
-        log.info("updateInfo() POST 요청...");
-
-
-
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-
-        if (sessUser == null) {
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-
-        }
-
-
-
-        memberDTO.setMem_id(sessUser.getMem_id());
-
+    public ResponseEntity<String> updateInfo(@RequestBody MemberDTO memberDTO, @AuthenticationPrincipal MyUserDetails user) {
+        String mem_id = user.getMember().getMem_id();
+        memberDTO.setMem_id(mem_id);
         myService.updateMemberInfo(memberDTO);
-
-
-
         return ResponseEntity.ok("success");
-
     }
-
 
 
     @PostMapping("/info/changePassword")
@@ -299,22 +253,6 @@ public class MyController {
         return "my/coupon"; // templates/my/coupon.html
     }
 
-    @GetMapping("/points")
-    public String points(Model model, @AuthenticationPrincipal MyUserDetails user) {
-        String mem_id = user.getMember().getMem_id();
-
-        List<PointDTO> pointHistory = myService.getPointHistory(mem_id);
-        model.addAttribute("pointHistory", pointHistory);
-
-        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-        model.addAttribute("orderCount", homeData.getOrderCount());
-        model.addAttribute("couponCount", homeData.getCouponCount());
-        model.addAttribute("pointTotal", homeData.getPointTotal());
-        model.addAttribute("qnaCount", homeData.getQnaCount());
-
-        return "my/points"; // templates/my/points.html
-    }
-
     @PostMapping("/order/cancel")
     @ResponseBody
     public ResponseEntity<String> cancelOrder(@RequestParam("item_no") Long itemNo, HttpSession session) {
@@ -355,6 +293,56 @@ public class MyController {
         model.addAttribute("qnaCount", homeData.getQnaCount());
 
         return "my/order"; // templates/my/order.html
+    }
+
+    @GetMapping("/view/{prodNo}")
+    public String viewProduct(@PathVariable String prodNo, Model model) {
+        log.info("viewProduct() GET 요청... prodNo={}", prodNo);
+
+        // 1. 상품 기본 정보
+        ProductDTO product = myService.getProduct3(prodNo);
+
+        if (product != null) {
+            // 2. 옵션 리스트
+            List<ProdOptionDTO> options = product.getOptions();
+            if (options == null) {
+                options = myService.getProductOption3(prodNo);
+                product.setOptions(options);
+            }
+
+            // 3. 파일 리스트
+            List<ProFileDTO> files = product.getFiles();
+            if (files == null) {
+                files = myService.getProductFiles(prodNo);
+                product.setFiles(files);
+            }
+        } else {
+            log.warn("해당 상품(prodNo={})이 존재하지 않습니다.", prodNo);
+        }
+
+        // 4. 모델에 담기
+        model.addAttribute("product", product);
+
+        return "my/product/view"; // templates/my/product/view.html
+    }
+
+    // MyController.java
+    @GetMapping("/point")
+    public String point(Model model, @AuthenticationPrincipal MyUserDetails user,
+                         @RequestParam(defaultValue = "1") int pg) {
+        String mem_id = user.getMember().getMem_id();
+
+        // DTO를 수정하지 않는 경우, 서비스에서 String으로 변환
+        List<PointDTO> pointHistory = myService.getPointHistory(mem_id);
+        model.addAttribute("pointHistory", pointHistory);
+
+        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
+        model.addAttribute("orderCount", homeData.getOrderCount());
+        model.addAttribute("couponCount", homeData.getCouponCount());
+        model.addAttribute("pointTotal", homeData.getPointTotal());
+        model.addAttribute("qnaCount", homeData.getQnaCount());
+
+        return "my/point";
     }
 
 }

@@ -20,7 +20,7 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, String> 
             "TO_DATE(uc.cp_issued_date,'YYYY-MM-DD') as cp_issued_date, " +
             "TO_DATE(uc.cp_used_date,'YYYY-MM-DD') as cp_used_date, " +
             "uc.cp_stat, " +
-            "sc.cp_type, sc.cp_value, sc.cp_name, sc.cp_exp_date " +  // cp_issuer_name 제거
+            "sc.cp_type, sc.cp_value, sc.cp_name, sc.cp_min_price, sc.cp_exp_date " +  // cp_min_price 추가!
             "FROM USER_COUPON uc JOIN SYS_COUPON sc ON uc.cp_code = sc.cp_code " +
             "WHERE uc.mem_id = :mem_id", nativeQuery = true)
     List<Object[]> findUserCouponsNative(@Param("mem_id") String mem_id);

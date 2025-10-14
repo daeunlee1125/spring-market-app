@@ -2,6 +2,9 @@ package kr.co.shoply.service;
 
 import kr.co.shoply.dto.*;
 import kr.co.shoply.entity.*;
+import kr.co.shoply.mapper.MyProductMapper;
+import kr.co.shoply.mapper.ProductMapper;
+import kr.co.shoply.mapper.ReviewMapper;
 import kr.co.shoply.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -11,10 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +35,33 @@ public class MyService {
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ReviewMapper reviewMapper;
+    private final ProdOptionRepository prodOptionRepository; // 옵션
+    private final ProFileRepository proFileRepository;       // 파일
+    private final MyProductMapper myproductMapper;
+
+
+    @Transactional(readOnly = true)
+    public ProductDTO getProduct3(String prodNo) {
+        ProductDTO product = myproductMapper.selectProduct(prodNo); // MyProductMapper 사용
+        product.setOptions(getProductOption3(prodNo));
+        product.setFiles(getProductFiles(prodNo));
+        return product;
+    }
+
+    // 상품 파일
+    @Transactional(readOnly = true)
+    public List<ProdOptionDTO> getProductOption3(String prodNo) {
+        List<ProdOptionDTO> options = myproductMapper.selectOption(prodNo);
+        options.forEach(opt -> opt.setOptValList(Arrays.asList(opt.getOpt_val().split("\\s*,\\s*"))));
+        return options;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProFileDTO> getProductFiles(String prodNo) {
+        return myproductMapper.selectFiles(prodNo);
+    }
+
 
     @Transactional
     public MyPageHomeDTO getMyPageHomeData(String memId) {
@@ -184,9 +216,22 @@ public class MyService {
             dto.setCp_code((String) row[1]);
             dto.setMem_id((String) row[2]);
 
-            // java.sql.Date → java.util.Date 변환
-            dto.setCp_issued_date(row[3] != null ? new Date(((java.sql.Date) row[3]).getTime()) : null);
-            dto.setCp_used_date(row[4] != null ? new Date(((java.sql.Date) row[4]).getTime()) : null);
+            // java.sql.Timestamp 또는 java.sql.Date 모두 처리 가능하도록 수정
+            if (row[3] != null) {
+                if (row[3] instanceof java.sql.Timestamp) {
+                    dto.setCp_issued_date(new Date(((java.sql.Timestamp) row[3]).getTime()));
+                } else if (row[3] instanceof java.sql.Date) {
+                    dto.setCp_issued_date(new Date(((java.sql.Date) row[3]).getTime()));
+                }
+            }
+
+            if (row[4] != null) {
+                if (row[4] instanceof java.sql.Timestamp) {
+                    dto.setCp_used_date(new Date(((java.sql.Timestamp) row[4]).getTime()));
+                } else if (row[4] instanceof java.sql.Date) {
+                    dto.setCp_used_date(new Date(((java.sql.Date) row[4]).getTime()));
+                }
+            }
 
             dto.setCp_stat(row[5] != null ? ((Number) row[5]).intValue() : null);
 
@@ -194,20 +239,37 @@ public class MyService {
             dto.setCp_value(row[7] != null ? ((Number) row[7]).intValue() : 0);
             dto.setCp_name((String) row[8]);
 
-            dto.setCp_issuer_name((String) row[9]);
+            // cp_issuer_name은 쿼리에서 제거되었으므로 주석 처리
+            // dto.setCp_issuer_name((String) row[9]);
 
-            // sc.cp_exp_date → java.sql.Date → java.util.Date
-            dto.setCp_exp_date(row[10] != null ? new Date(((java.sql.Date) row[10]).getTime()) : null);
+            // cp_exp_date 처리
+            if (row[9] != null) {
+                if (row[9] instanceof java.sql.Timestamp) {
+                    dto.setCp_exp_date(new Date(((java.sql.Timestamp) row[9]).getTime()));
+                } else if (row[9] instanceof java.sql.Date) {
+                    dto.setCp_exp_date(new Date(((java.sql.Date) row[9]).getTime()));
+                }
+            }
 
             return dto;
         }).collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
     public List<PointDTO> getPointHistory(String memId) {
         List<Point> points = pointRepository.findByMem_idOrderByP_dateDesc(memId);
+
+        // 날짜를 "yyyy-MM-dd" 형식으로 포맷하는 포맷터 정의
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         return points.stream()
-                .map(point -> modelMapper.map(point, PointDTO.class))
+                .map(point -> {
+                    PointDTO dto = modelMapper.map(point, PointDTO.class);
+
+                    // LocalDateTime을 String으로 변환하여 DTO에 설정
+                    dto.setP_date(point.getP_date().format(formatter));
+                    dto.setP_exp_date(point.getP_exp_date().format(formatter));
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 

@@ -248,4 +248,34 @@ document.addEventListener('DOMContentLoaded', function () {
         selectAllCheckbox.checked = true;
     }
     updateSummary();
+
+   // 주문하기
+   document.getElementById('orderBtn').addEventListener('click', function(e) {
+       e.preventDefault(); // 버튼 기본 동작 막기
+
+       const form = document.getElementById('orderForm');
+       const checkedItems = document.querySelectorAll('.item-checkbox:checked');
+       if(checkedItems.length === 0) {
+           alert('주문할 상품을 선택해주세요.');
+           return;
+       }
+
+       if(confirm('선택한 상품을 주문하시겠습니까?')) {
+           // 폼 안의 모든 체크박스 비활성화
+           form.querySelectorAll('.item-checkbox').forEach(cd => {
+               cd.disabled = true;
+           })
+
+           // 체크된 체크박스만 다시 활성화
+           // => 이렇게 하면 폼이 전송될 때 체크된 상품의 cart_no 값만 서버로 넘어감
+           checkedItems.forEach(checkbox => {
+               checkbox.disabled = false;
+           })
+
+           // 폼 전송
+           form.submit();
+       }
+   })
+
+
 });

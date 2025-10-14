@@ -9,10 +9,21 @@
                         <tr>
                             <th>배송지 정보</th>
                             <td>
-                                <p><strong>이민준 010-1234-1234</strong> <input type="checkbox" id="saveAddr"> 안심번호 사용
+                                <p>
+                                    <strong th:text="${memberDTO.getMem_name() + ' ' + memberDTO.getMem_hp()}">이민준 010-1234-1234</strong>
+                                    <input type="checkbox" id="saveAddr"> 안심번호 사용
                                 </p>
-                                <p>[01234] 부산광역시 부산진구 동의대학교</p>
-                                <button>배송지 변경</button>
+
+                                <p id="address-display" th:text="${'[' + memberDTO.getMem_zip() + '] ' + memberDTO.getMem_addr1()}">
+                                    [01234] 부산광역시 부산진구 동의대학교
+                                </p>
+                                <input type="text" th:value="${memberDTO.getMem_addr2()}">
+                                <br>
+                                <button type="button" id="change-address-btn">배송지 변경</button>
+
+                                <input type="hidden" id="mem_zip" name="mem_zip" th:value="${memberDTO.getMem_zip()}">
+                                <input type="hidden" id="mem_addr1" name="mem_addr1" th:value="${memberDTO.getMem_addr1()}">
+                                <input type="hidden" id="mem_addr2" name="mem_addr2" th:value="${memberDTO.getMem_addr2()}">
                             </td>
                         </tr>
                         <tr>
@@ -23,23 +34,9 @@
                                     <option>부재 시 경비실에 맡겨주세요.</option>
                                     <option>부재 시 문 앞에 놓아주세요.</option>
                                     <option>배송 전 연락주세요.</option>
+
                                 </select>
                                 <p><input type="checkbox" id="saveMsg" checked> 다음 배송에도 계속 사용</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>주문자명/이메일</th>
-                            <td>
-                                <p>이민준 / alswnst123@gmail.com</p>
-                                <button>주문자 정보 변경</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>품절 시 환불방법</th>
-                            <td>
-                                <label><input type="radio" name="refund" checked> 주문 시 결제수단으로 환불받기</label>
-                                <label style="margin-left: 15px;"><input type="radio" name="refund"> SSG MONEY로 자동환불
-                                    받기</label>
                             </td>
                         </tr>
                     </tbody>
@@ -47,67 +44,43 @@
             </section>
 
             <section class="checkout-section">
-                <h2>주문상품: 3개</h2>
+                <h2 th:text="${'주문상품: ' + cartDTOList.size() + '개'}">주문상품: 3개</h2>
                 <div class="order-item-list">
-                    <article class="order-item">
+                    <article class="order-item" th:each="cartDTO : ${cartDTOList}">
                         <img th:src="@{https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg}" alt="마스마룰즈">
                         <div class="order-item-info">
-                            <p class="brand">마스마룰즈</p>
-                            <p class="name">마스마룰즈 스트랩파우치 모음전 VER.3</p>
-                            <p class="option">옵션: SP_체커보드</p>
+                            <p class="brand" th:text="${cartDTO.getProductDTO().getProd_company()}">마스마룰즈</p>
+                            <p class="name" th:text="${cartDTO.getProductDTO().getProd_name()}">마스마룰즈 스트랩파우치 모음전 VER.3</p>
+                            <p class="option" th:text="${cartDTO.getCart_option()}">옵션: SP_체커보드</p>
                         </div>
                         <div class="order-item-price">
-                            <p class="sale-price">13,260원</p>
-                            <p class="original-price">15,600원</p>
-                            <p class="quantity">수량 1개</p>
-                        </div>
-                    </article>
-                    <article class="order-item">
-                        <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" alt="브랑튼">
-                        <div class="order-item-info">
-                            <p class="brand">브랑튼</p>
-                            <p class="name">세이브 크로스 바디백 S 도난방지 가방 소매치기 가방</p>
-                            <p class="option">옵션: 비건레더_소프트카키</p>
-                        </div>
-                        <div class="order-item-price">
-                            <p class="sale-price">52,200원</p>
-                            <p class="original-price">58,000원</p>
-                            <p class="quantity">수량 1개</p>
-                        </div>
-                    </article>
-                    <article class="order-item">
-                        <img th:src="@{https://sitem.ssgcdn.com/49/09/86/item/1000059860949_i1_110.jpg}" alt="애경">
-                        <div class="order-item-info">
-                            <p class="brand">애경</p>
-                            <p class="name">[선물세트]애경 선물세트 현아플 3호 x 1개</p>
-                            <p class="option">9/30(월)부터 순차발송</p>
-                        </div>
-                        <div class="order-item-price">
-                            <p class="sale-price">11,970원</p>
-                            <p class="original-price">17,100원</p>
-                            <p class="quantity">수량 1개</p>
+                            <p class="sale-price" th:text="${#numbers.formatDecimal(cartDTO.getProductDTO().getRealPrice(), 0, 'COMMA', 0, 'POINT')}">13,260원</p>
+                            <p class="original-price" th:text="'배송비: ' + ${#numbers.formatDecimal(cartDTO.getProductDTO().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')}">15,600원</p>
+                            <p class="original-price" th:text="'포인트적립금: ' + ${#numbers.formatDecimal(cartDTO.getProductDTO().getProd_point(), 0, 'COMMA', 0, 'POINT')}">15,600원</p>
+                            <p class="quantity" th:text="'수량 '${cartDTO.getCart_item_cnt()} + '개'">수량 1개</p>
                         </div>
                     </article>
                 </div>
             </section>
 
             <section class="checkout-section">
-                <h2>할인혜택</h2>
+                <h2>할인정보</h2>
                 <table class="info-table">
                     <tbody>
                         <tr>
                             <th>상품할인</th>
-                            <td>-13,270원</td>
+                            <td th:text="'-' + ${saleprice}">-13,270원</td>
+                        </tr>
+                        <tr>
+                            <th>포인트할인</th>
+                            <td>
+                                <input type="text">
+                            </td>
                         </tr>
                         <tr>
                             <th>쿠폰할인</th>
-                            <td>0원</td>
-                        </tr>
-                        <tr>
-                            <th>카드 첫결제 혜택</th>
                             <td>
-                                <label><input type="checkbox"> SSG.COM카드 - 43,000원</label><br>
-                                <label><input type="checkbox"> SSG.COM 삼성카드 - 40,000원</label>
+                                <input type="text">
                             </td>
                         </tr>
                     </tbody>

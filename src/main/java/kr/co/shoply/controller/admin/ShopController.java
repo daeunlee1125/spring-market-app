@@ -75,9 +75,11 @@ public class ShopController {
 
     @GetMapping("/admin/shop/range")
     public String sales2(Model model, PageRequestDTO pageRequestDTO, String range){
+        System.out.println("range=" + range);
 
         PageResponseDTO<MemSellerDTO> pageResponseDTO = memSellerService.getSellerRange(pageRequestDTO, range);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+        model.addAttribute("range", range);
 
         return "admin/shop/sales";
     }

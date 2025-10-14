@@ -26,9 +26,9 @@
                 <main>
                     <form id="filterForm" th:action="@{/admin/shop/range}" method="get">
                         <select name="range" id="rangeBtn" class="select-2">
-                            <option value="day">일별</option>
-                            <option value="week">주간</option>
-                            <option value="month">한달</option>
+                            <option value="day" th:selected="${range == 'day'}">일별</option>
+                            <option value="week" th:selected="${range == 'week'}">주간</option>
+                            <option value="month" th:selected="${range == 'month'}">한달</option>
                         </select>
                     </form>
                     <table class="table">

@@ -18,7 +18,7 @@ public class PolicyController {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "buyer");
-        return "/policy/buyer";
+        return "policy/buyer";
     }
 
     @GetMapping("/policy/seller")
@@ -26,7 +26,7 @@ public class PolicyController {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "seller");
-        return "/policy/seller";
+        return "policy/seller";
     }
 
     @GetMapping("/policy/finance")
@@ -34,7 +34,7 @@ public class PolicyController {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "finance");
-        return "/policy/finance";
+        return "policy/finance";
     }
 
     @GetMapping("/policy/privacy")
@@ -42,7 +42,7 @@ public class PolicyController {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "privacy");
-        return "/policy/privacy";
+        return "policy/privacy";
     }
 
     @GetMapping("/policy/location")
@@ -50,6 +50,6 @@ public class PolicyController {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "location");
-        return "/policy/location";
+        return "policy/location";
     }
 }

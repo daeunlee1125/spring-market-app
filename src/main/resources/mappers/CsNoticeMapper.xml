@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.shoply.mapper.CsNoticeMapper">
+
+    <select id="noticeList2">
+        SELECT cs_no, cs_title, cs_type, cs_rdate
+        FROM cs_notice
+        ORDER BY cs_rdate desc
+        OFFSET 0 row FETCH NEXT 4 ROWS ONLY
+    </select>
+
 
     <!-- 공지사항 목록 -->
     <select id="selectNoticeList" parameterType="kr.co.shoply.dto.PageRequestDTO"
@@ -86,6 +94,8 @@
         SET cs_hit = cs_hit + 1
         WHERE cs_no = #{csNo}
     </update>
+
+
 
 
 </mapper>

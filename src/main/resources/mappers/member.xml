@@ -49,9 +49,19 @@
           AND MEM_EMAIL = #{mem_email}
     </select>
 
+
     <update id="updatePassword">
         UPDATE MEMBER
            SET MEM_PASS = #{mem_pass}
          WHERE MEM_ID = #{mem_id}
     </update>
+
+    <select id="regCnt2" resultType="kr.co.shoply.dto.AdInfoDTO">
+        SELECT
+        count(*) as regTotal,
+        count(CASE WHEN TRUNC(mem_rdate) = TRUNC(SYSDATE) THEN 1 END) as todRegTotal,
+        count(CASE WHEN TRUNC(mem_rdate) = TRUNC(SYSDATE - 1) THEN 1 END) as yesRegTotal
+        FROM member
+    </select>
+
 </mapper>

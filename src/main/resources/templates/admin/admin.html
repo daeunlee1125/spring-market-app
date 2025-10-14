@@ -143,11 +143,11 @@
                             </thead>
                             <tbody>
                                 <tr class="main-row">
-                                    <td>101</td>
-                                    <td>124</td>
-                                    <td>14</td>
-                                    <td>7</td>
-                                    <td>24</td>
+                                    <td>[[${info.st1}]]</td>
+                                    <td>[[${info.st1Total}]]</td>
+                                    <td>[[${info.st3}]]</td>
+                                    <td>[[${info.st5Total}]]</td>
+                                    <td>[[${info.st6Total}]]</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -164,41 +164,41 @@
                             </thead>
                             <tbody>
                                 <tr class="main-row">
-                                    <td>131</td>
-                                    <td>3,700,000</td>
-                                    <td>232</td>
-                                    <td>2,500</td>
-                                    <td>25</td>
+                                    <td>[[${info.ordNum}]]</td>
+                                    <td>[[${#numbers.formatInteger(info.ordTotal, 3, 'COMMA')}]]</td>
+                                    <td>[[${info.regTotal}]]</td>
+                                    <td>[[${info.visit}]]</td>
+                                    <td>[[${info.qnaTotal}]]</td>
                                 </tr>
                                 <tr class="sub-row">
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>60</td></tr>
-                                            <tr><td>어제</td><td>71</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todOrdNum}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesOrdNum}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>1,200,000</td></tr>
-                                            <tr><td>어제</td><td>2,500,000</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todOrdTotal == 0 ? 0 : #numbers.formatInteger(info.todOrdTotal, 3, 'COMMA')}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesOrdTotal == 0 ? 0 : #numbers.formatInteger(info.yesOrdTotal, 3, 'COMMA')}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>102</td></tr>
-                                            <tr><td>어제</td><td>130</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todRegTotal}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesRegTotal}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>1,300</td></tr>
-                                            <tr><td>어제</td><td>1,200</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todVisit}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesVisit}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>13</td></tr>
-                                            <tr><td>어제</td><td>12</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todQnaTotal}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesQnaTotal}]]</td></tr>
                                         </table>
                                     </td>
                                 </tr>
@@ -215,10 +215,8 @@
                         <div class="board-box">
                             <h4>공지사항</h4>
                             <ul>
-                                <li>[안내] 해외직구세금면제주의 <span>22.10.31</span></li>
-                                <li>[안내] 로젠택배 파업 / 교환수거지연 <span>22.10.31</span></li>
-                                <li>[안내] 구매회원등급제약관개정 <span>22.10.31</span></li>
-                                <li>[안내] 개인정보취급방침약관개정 <span>22.10.31</span></li>
+                                <li th:each="notice : ${notList}"><a th:href="@{'/admin/cs/notice/view/' + ${notice.cs_no}}">[ [[${notice.cs_type}]] ] [[${notice.cs_title}]] <span>[[${notice.cs_rdate}]]</span></a></li>
+
                             </ul>
                         </div>
 

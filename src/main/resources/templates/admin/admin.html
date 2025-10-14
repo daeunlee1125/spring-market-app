@@ -215,7 +215,7 @@
                         <div class="board-box">
                             <h4>공지사항</h4>
                             <ul>
-                                <li th:each="notice : ${notList}">[ [[${notice.cs_type}]] ] [[${notice.cs_title}]] <span>[[${notice.cs_rdate}]]</span></li>
+                                <li th:each="notice : ${notList}"><a th:href="@{'/admin/cs/notice/view/' + ${notice.cs_no}}">[ [[${notice.cs_type}]] ] [[${notice.cs_title}]] <span>[[${notice.cs_rdate}]]</span></a></li>
 
                             </ul>
                         </div>

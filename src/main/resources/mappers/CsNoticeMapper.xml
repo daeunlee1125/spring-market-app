@@ -6,7 +6,7 @@
 <mapper namespace="kr.co.shoply.mapper.CsNoticeMapper">
 
     <select id="noticeList2">
-        SELECT cs_title, cs_type, cs_rdate
+        SELECT cs_no, cs_title, cs_type, cs_rdate
         FROM cs_notice
         ORDER BY cs_rdate desc
         OFFSET 0 row FETCH NEXT 4 ROWS ONLY

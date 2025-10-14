@@ -11,4 +11,5 @@ import java.util.List;
 public interface MemberMapper {
     // 사용
     public MemberDTO selectADDR3(@Param("mem_id") String mem_id, @Param("prod_no") String prod_no); // view.html에 판매자 주소 출력 용도
+    public MemberDTO selectMember3(String mem_id);
 }

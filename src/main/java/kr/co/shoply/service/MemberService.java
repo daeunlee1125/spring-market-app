@@ -63,5 +63,6 @@ public class MemberService {
     public MemberDTO getMemberAddr(String memId, String prodNo) {
         return memberMapper.selectADDR3(memId, prodNo);
     }
+    public MemberDTO getMember(String memId) { return memberMapper.selectMember3(memId); }
 
 }

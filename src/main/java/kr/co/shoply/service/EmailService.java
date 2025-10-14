@@ -30,10 +30,22 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
+    // 이메일 확인 (회원가입용)
+    public int countEmail(String mem_email) {
+        return memberMapper.checkRegEmail(mem_email);
+    }
+
+    // 이름 + 이메일 확인 (아이디 찾기용)
     public int countUser(String mem_name, String mem_email) {
         return memberMapper.checkEmail(mem_name, mem_email);
     }
 
+    // 아이디 + 이메일 확인 (비밀번호 찾기용)
+    public int countUserByIdAndEmail(String mem_id, String mem_email) {
+        return memberMapper.checkEmailById(mem_id, mem_email);
+    }
+
+    //이메일 인증코드 발송
     public void sendCode(String receiver){
         MimeMessage message = mailSender.createMimeMessage();
 

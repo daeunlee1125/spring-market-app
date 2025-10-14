@@ -18,10 +18,23 @@
         WHERE p.MEM_ID = #{mem_id} AND p.PROD_NO = #{prod_no}
     </select>
 
+    <select id="countById" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEM_ID = #{mem_id}
+    </select>
+
     <select id="checkEmail" resultType="int">
         SELECT COUNT(*)
         FROM MEMBER
         WHERE MEM_NAME  = #{mem_name}
+          AND MEM_EMAIL = #{mem_email}
+    </select>
+
+    <select id="checkEmailById" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEM_ID = #{mem_id}
           AND MEM_EMAIL = #{mem_email}
     </select>
 
@@ -35,4 +48,10 @@
         WHERE MEM_NAME = #{mem_name}
           AND MEM_EMAIL = #{mem_email}
     </select>
+
+    <update id="updatePassword">
+        UPDATE MEMBER
+           SET MEM_PASS = #{mem_pass}
+         WHERE MEM_ID = #{mem_id}
+    </update>
 </mapper>

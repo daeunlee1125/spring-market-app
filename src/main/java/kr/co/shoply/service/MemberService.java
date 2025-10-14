@@ -65,10 +65,25 @@ public class MemberService {
     }
     public MemberDTO getMember(String memId) { return memberMapper.selectMember3(memId); }
 
+    //아이디 중복 체크
+    public boolean checkIdExists(String mem_id) {
+        int count = memberMapper.countById(mem_id);
+        return count > 0;
+    }
+
     //이름과 이메일로 회원 정보 조회 (아이디 찾기용)
     public MemberDTO findMemberByNameAndEmail(String mem_name, String mem_email) {
         log.info("회원 정보 조회 - 이름: {}, 이메일: {}", mem_name, mem_email);
         return memberMapper.findMemberByNameAndEmail(mem_name, mem_email);
+    }
+
+    //비밀번호 변경
+    public boolean modifyPassword(MemberDTO memberDTO) {
+
+        memberDTO.setMem_pass(passwordEncoder.encode(memberDTO.getMem_pass()));
+        int result =  memberMapper.updatePassword(memberDTO);
+
+        return result > 0;
     }
 
 }

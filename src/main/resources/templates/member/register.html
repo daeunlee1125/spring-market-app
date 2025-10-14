@@ -1,4 +1,5 @@
 <div th:replace="~{member/_head.html}"></div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <div class="container">
     <div class="wrapper">
       <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
@@ -43,16 +44,15 @@
                 <div class="form-row">
                     <div class="form-label">아이디</div>
                     <div class="form-input">
-                        <input type="text" name="mem_id" placeholder="">
-                        <span class="input-help">영문, 숫자 4~12자 설정</span>
+                        <input type="text" name="mem_id" placeholder="영문, 숫자 4~12자 설정">
+                        <button type="button" class="btn-check" onclick="checkIdDuplicate()">중복 확인</button>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-label">비밀번호</div>
                     <div class="form-input">
-                      <input type="password" name="mem_pass" placeholder="">
-                      <span class="input-help">영문, 숫자, 특수문자 8~12자 설정</span>
+                      <input type="password" name="mem_pass" placeholder="영문, 숫자, 특수문자 8~12자 설정">
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                 <div class="form-row">
                     <div class="form-label">생년월일</div>
                     <div class="form-input">
-                        <input type="date" style="width: 150px;">
+                        <input type="date" name="mem_birth" id="mem_birth" style="width: 150px;">
                     </div>
                 </div>
 
@@ -81,20 +81,21 @@
                     <div class="form-label">성별</div>
                     <div class="form-input">
                         <div class="radio-group">
-                            <label><input type="radio" name="mem_gen" value="M" checked> 남</label>
+                            <label><input type="radio" name="mem_gen" value="M"> 남</label>
                             <label><input type="radio" name="mem_gen" value="F"> 여</label>
                         </div>
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div class="form-label">EMAIL</div>
                     <div class="form-input">
                         <input type="email" name="mem_email" placeholder="이메일입력">
                         <button type="button"  class="btn-check">이메일 인증</button>
+                        <!--<button type="button"  class="btn-verify">이메일 인증</button>-->
+                        <!--<input type="text" name="auth" placeholder="인증번호 입력" style="width: 100px; margin-left: 5px;" disabled>
+                        <button type="button" class="btn-check" style="margin-left: 0" disabled>확인</button>-->
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div class="form-label">휴대폰</div>
                     <div class="form-input">
@@ -106,9 +107,9 @@
                 <div class="address-section">
                     <div class="address-label">주소</div>
                     <div class="address-inputs">
-                        <input type="text" name="mem_zip" placeholder="우편번호검색클릭">
-                        <input type="text" name="mem_addr1" placeholder="기본주소검색">
-                        <input type="text" name="mem_addr2" placeholder="상세주소입력">
+                        <input type="text" name="mem_zip" id="mem_zip" placeholder="우편번호검색" readonly onclick="postCode()">
+                        <input type="text" name="mem_addr1" id="mem_addr1" placeholder="기본주소" readonly>
+                        <input type="text" name="mem_addr2" id="mem_addr2" placeholder="상세주소입력">
                     </div>
                 </div>
 

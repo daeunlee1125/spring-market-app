@@ -74,7 +74,11 @@
         <div class="header-right login-menu">
             <a th:if="${#authorization.expr('!isAuthenticated()')}" th:href="@{/member/login}">로그인</a><a th:if="${#authorization.expr('isAuthenticated()')}" th:href="@{/member/logout}">로그아웃</a>
             |
-            <a th:href="@{/member/join}">회원가입</a> |
+            <a th:if="${#authorization.expr('isAuthenticated()') && (#authentication.principal.member.mem_level == 7 || #authentication.principal.member.mem_level == 2)}" th:href="@{/admin/}">관리자 페이지</a>
+            <a th:if="${#authorization.expr('isAuthenticated()') && #authentication.principal.member.mem_level == 1}">[[${#authentication.principal.member.mem_name}]]님</a>
+            <a th:if="${#authorization.expr('!isAuthenticated()')}" th:href="@{/member/join}">회원가입</a>
+
+            |
             <a href="#">고객센터</a>
         </div>
     </div>
@@ -581,6 +585,11 @@
             </div>
         </div>
 
+    </div>
+    <div class="middle">
+        <p id="footer-p">
+            Copyright ©[[${appInfo.appName}]].co.kr All rights reserved. [[${appInfo.appName}]] ADMINISTRATOR Version [[${appInfo.appVersion}]]
+        </p>
     </div>
 
 </footer>

@@ -110,41 +110,73 @@
 
     <select id="sellerWithRange" resultType="kr.co.shoply.dto.MemSellerDTO">
         SELECT
-            s.corp_name,
-            s.corp_reg_hp,
-            COUNT(DISTINCT i.ord_no) AS ord_cnt,
-            COUNT(DISTINCT CASE WHEN o.ord_stat = 2 THEN i.ord_no END) AS ord_st_cnt,
-            COUNT(CASE WHEN i.item_stat = 2 THEN 1 END) AS stat2_cnt,
-            COUNT(CASE WHEN i.item_stat IN (3, 4) THEN 1 END) AS stat3_cnt,
-            COUNT(CASE WHEN i.item_stat = 4 THEN 1 END) AS stat4_cnt,
-            COALESCE(SUM((p.prod_price - p.prod_sale) * i.item_cnt ), 0) AS tot_ord_price,
-            COALESCE(SUM(
-            CASE
-            WHEN i.item_stat = 4 THEN (p.prod_price - p.prod_sale) * i.item_cnt
-            END
-            ), 0) AS tot_sell_price
+        s.corp_name,
+        s.corp_reg_hp,
+        COUNT(DISTINCT i.ord_no) AS ord_cnt,
+        COUNT(DISTINCT CASE WHEN o.ord_stat = 2 THEN i.ord_no END) AS ord_st_cnt,
+        COUNT(CASE WHEN i.item_stat = 2 THEN 1 END) AS stat2_cnt,
+        COUNT(CASE WHEN i.item_stat IN (3, 4) THEN 1 END) AS stat3_cnt,
+        COUNT(CASE WHEN i.item_stat = 4 THEN 1 END) AS stat4_cnt,
+
+        <!-- range가 적용된 기간 내 금액만 계산 -->
+        COALESCE(SUM(
+        CASE
+        WHEN
+        <choose>
+            <when test="range == 'day'">
+                TRUNC(o.ord_date) = TRUNC(SYSDATE)
+            </when>
+            <when test="range == 'week'">
+                o.ord_date >= TRUNC(SYSDATE) - 6
+                AND o.ord_date &lt;= TRUNC(SYSDATE)
+            </when>
+            <when test="range == 'month'">
+                o.ord_date >= TRUNC(SYSDATE) - 29
+                AND o.ord_date &lt;= TRUNC(SYSDATE)
+            </when>
+            <otherwise>
+                1=1
+            </otherwise>
+        </choose>
+        THEN (p.prod_price - p.prod_sale) * i.item_cnt
+        END
+        ), 0) AS tot_ord_price,
+
+        <!-- range가 적용된 구매확정 금액 -->
+        COALESCE(SUM(
+        CASE
+        WHEN
+        i.item_stat = 4 AND
+        <choose>
+            <when test="range == 'day'">
+                TRUNC(o.ord_date) = TRUNC(SYSDATE)
+            </when>
+            <when test="range == 'week'">
+                o.ord_date >= TRUNC(SYSDATE) - 6
+                AND o.ord_date &lt;= TRUNC(SYSDATE)
+            </when>
+            <when test="range == 'month'">
+                o.ord_date >= TRUNC(SYSDATE) - 29
+                AND o.ord_date &lt;= TRUNC(SYSDATE)
+            </when>
+            <otherwise>
+                1=1
+            </otherwise>
+        </choose>
+        THEN (p.prod_price - p.prod_sale) * i.item_cnt
+        END
+        ), 0) AS tot_sell_price
+
         FROM member m
         JOIN mem_seller s ON m.mem_id = s.mem_id
         LEFT JOIN product p ON p.mem_id = m.mem_id
         LEFT JOIN order_item i ON i.prod_no = p.prod_no
         LEFT JOIN "order" o ON o.ord_no = i.ord_no
-        <where>
-            <choose>
-                <when test="range == 'day'">
-                    TRUNC(o.ord_date) = TRUNC(SYSDATE)
-                </when>
-                <when test="range == 'week'">
-                    o.ord_date >= TRUNC(SYSDATE) - 6 AND o.ord_date &lt;= TRUNC(SYSDATE)
-                </when>
-                <when test="range == 'month'">
-                    o.ord_date >= TRUNC(SYSDATE) - 29 AND o.ord_date &lt;= TRUNC(SYSDATE)
-                </when>
-            </choose>
-        </where>
         GROUP BY s.corp_name, s.corp_reg_hp
-        OFFSET #{offset} ROWS
-        FETCH NEXT #{size} ROWS ONLY
+        OFFSET #{pageRequestDTO.offset} ROWS
+        FETCH NEXT #{pageRequestDTO.size} ROWS ONLY
     </select>
+
 
     <sql id="rangeWhere">
         <where>

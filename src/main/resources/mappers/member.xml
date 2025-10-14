@@ -12,5 +12,21 @@
         WHERE p.MEM_ID = #{mem_id} AND p.PROD_NO = #{prod_no}
     </select>
 
+    <select id="checkEmail" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEM_NAME  = #{mem_name}
+          AND MEM_EMAIL = #{mem_email}
+    </select>
 
+    <select id="findMemberByNameAndEmail" resultType="kr.co.shoply.dto.MemberDTO">
+        SELECT
+            MEM_ID,
+            MEM_NAME,
+            MEM_EMAIL,
+            MEM_RDATE
+        FROM MEMBER
+        WHERE MEM_NAME = #{mem_name}
+          AND MEM_EMAIL = #{mem_email}
+    </select>
 </mapper>

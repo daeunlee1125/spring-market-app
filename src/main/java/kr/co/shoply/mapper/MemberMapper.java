@@ -1,5 +1,6 @@
 package kr.co.shoply.mapper;
 
+import kr.co.shoply.dto.AdInfoDTO;
 import kr.co.shoply.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,5 +20,7 @@ public interface MemberMapper {
     public MemberDTO findMemberByNameAndEmail(@Param("mem_name") String mem_name, @Param("mem_email") String mem_email);
 
     public MemberDTO selectMember3(String mem_id);
+
+    public AdInfoDTO regCnt2();
 
 }

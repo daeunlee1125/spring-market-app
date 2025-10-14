@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.VisitsMapper">
+
+
+    <insert id="insertVisit">
+        INSERT INTO visits (v_date) VALUES (SYSDATE)
+    </insert>
+
+    <select id="visitCount" resultType="int">
+        SELECT COUNT(*) FROM visits
+        WHERE TRUNC(v_date) = #{v_date}
+    </select>
+
+    <select id="visitCount2" resultType="int">
+        SELECT COUNT(*) FROM visits
+    </select>
+
+</mapper>

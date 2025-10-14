@@ -34,5 +34,7 @@ public interface CsNoticeMapper {
     CsNoticeDTO selectNotice(int csNo);
     void updateNotice(CsNoticeDTO dto);
 
+    public List<CsNoticeDTO> noticeList2();
+
 
 }

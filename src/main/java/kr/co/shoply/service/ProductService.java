@@ -29,8 +29,6 @@ public class ProductService {
     }
 
     public List<ProdOptionDTO> getProductOption3(String prod_no){
-
-
         return productMapper.selectOption3(prod_no);
     }
 
@@ -44,6 +42,10 @@ public class ProductService {
         }else {
             return false;
         }
+    }
+
+    public List<CartDTO> getSelectedCartList3(List<Integer> cart_no_list){
+        return cartMapper.selectCartsByNos(cart_no_list);
     }
 
     public void insertCart3(String mem_id, String prod_no, int cart_item_cnt, String cart_option){

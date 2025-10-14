@@ -5,6 +5,12 @@
 
 <mapper namespace="kr.co.shoply.mapper.MemberMapper">
 
+    <select id="selectMember3" resultType="kr.co.shoply.dto.MemberDTO">
+        SELECT *
+        FROM "MEMBER"
+        WHERE MEM_ID = #{mem_id}
+    </select>
+
     <select id="selectADDR3" resultType="kr.co.shoply.dto.MemberDTO">
         SELECT m.MEM_ZIP, m.MEM_ADDR1, m.MEM_ADDR2
         FROM PRODUCT p

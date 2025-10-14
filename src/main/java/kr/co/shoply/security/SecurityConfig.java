@@ -27,7 +27,7 @@ public class SecurityConfig {
         http.logout(logout -> logout
                 .logoutUrl("/member/logout")
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/member/login?logout=true")
+                .logoutSuccessUrl("/?logout=true")
         );
 
         // 인가 설정

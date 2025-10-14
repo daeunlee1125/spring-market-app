@@ -5,6 +5,12 @@
 
 <mapper namespace="kr.co.shoply.mapper.CouponMapper">
 
+    <select id="selectUserCoupon3" resultType="kr.co.shoply.dto.SysCouponDTO">
+        SELECT sc.*
+        FROM USER_COUPON uc
+        JOIN SYS_COUPON sc ON uc.CP_CODE = sc.CP_CODE
+        WHERE uc.MEM_ID = #{mem_id}
+    </select>
 
 
     <select id="selectCouponList" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="kr.co.shoply.dto.SysCouponDTO">

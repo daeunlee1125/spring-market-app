@@ -65,4 +65,10 @@ public class MemberService {
     }
     public MemberDTO getMember(String memId) { return memberMapper.selectMember3(memId); }
 
+    //이름과 이메일로 회원 정보 조회 (아이디 찾기용)
+    public MemberDTO findMemberByNameAndEmail(String mem_name, String mem_email) {
+        log.info("회원 정보 조회 - 이름: {}, 이메일: {}", mem_name, mem_email);
+        return memberMapper.findMemberByNameAndEmail(mem_name, mem_email);
+    }
+
 }

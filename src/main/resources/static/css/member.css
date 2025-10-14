@@ -440,6 +440,11 @@ background-color: #777;
 }
 
 /* 주소 전용 스타일 */
+ #mem_zip{
+     cursor: pointer;
+     background-color: #f9f9f9;
+ }
+
 .address-section {
     display: flex;
     align-items: flex-start;

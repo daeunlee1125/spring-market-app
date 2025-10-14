@@ -54,7 +54,7 @@
                             <p class="option" th:text="${cartDTO.getCart_option()}">옵션: SP_체커보드</p>
                         </div>
                         <div class="order-item-price">
-                            <p class="sale-price" th:text="${#numbers.formatDecimal(cartDTO.getProductDTO().getRealPrice(), 0, 'COMMA', 0, 'POINT')} + '원'">13,260원</p>
+                            <p class="sale-price" th:text="${#numbers.formatDecimal(cartDTO.getProductDTO().getRealPrice() * cartDTO.getCart_item_cnt(), 0, 'COMMA', 0, 'POINT')} + '원'">13,260원</p>
                             <p class="original-price" th:text="'배송비: ' + ${#numbers.formatDecimal(cartDTO.getProductDTO().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')} + '원'">15,600원</p>
                             <p class="original-price" th:text="'포인트적립금: ' + ${#numbers.formatDecimal(cartDTO.getProductDTO().getProd_point(), 0, 'COMMA', 0, 'POINT')} + 'P'">15,600원</p>
                             <p class="quantity" th:text="'수량 ' + ${cartDTO.getCart_item_cnt()} + '개'">수량 1개</p>
@@ -131,14 +131,13 @@
                 </div>
             </section>
 
-            <div class="final-agreement">
-                <ul>
-                    <li>주문 내용을 확인하였으며, 아래 약관에 동의합니다.</li>
-                    <li><input type="checkbox"> 전자금융거래 이용약관 동의</li>
-                    <li><input type="checkbox"> 개인정보 제3자 제공 동의</li>
-                </ul>
-                <a th:href="@{/product/complete}"><button class="final-payment-btn" id="mainOrderBtn">동의하고 83,430원 결제하기</button></a>
-            </div>
+            <form th:action="@{/product/complete}" method="post" id="orderForm">
+                <input type="hidden" name="car">
+                <div class="final-agreement">
+                    <button type="submit" class="final-payment-btn" id="mainOrderBtn">동의하고 83,430원 결제하기</button>
+                </div>
+
+            </form>
         </div>
     </div>
 

@@ -5,11 +5,13 @@
 
 <mapper namespace="kr.co.shoply.mapper.CartMapper">
     <select id="selectCartsByNos" parameterType="java.util.List" resultType="kr.co.shoply.dto.CartDTO">
-        SELECT * FROM cart
+        SELECT * FROM CART c
+        JOIN PRO_FILE pf ON c.PROD_NO = pf.PROD_NO
         WHERE cart_no IN
         <foreach item="cart_no" collection="list" open="(" separator="," close=")">
             #{cart_no}
         </foreach>
+        AND pf.F_DIST = 1
     </select>
 
     <resultMap id="cartWithProductMap" type="kr.co.shoply.dto.CartDTO">

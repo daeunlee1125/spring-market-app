@@ -159,15 +159,23 @@ public class ProductController {
 
         int totalprice = 0;
         int saleprice = 0;
+        int totalPoint = productService.getPoint3(username);
+        int totaldeliv = 0;
         List<CartDTO> cartDTOList = productService.getSelectedCartList3(cart_no_list); // 선택된 장바구니 리스트 가져오기
         for(CartDTO cartDTO : cartDTOList){                                            // 장바구니에 있는 상품 정보 가져오기
             cartDTO.setProductDTO(productService.getProduct3(cartDTO.getProd_no()));
-            totalprice += cartDTO.getProductDTO().getRealPrice();
+            totalprice += cartDTO.getProductDTO().getProd_price();
             saleprice += cartDTO.getProductDTO().getProd_price() - cartDTO.getProductDTO().getRealPrice();
+            totaldeliv += cartDTO.getProductDTO().getProd_deliv_price();
         }
 
+        List<SysCouponDTO> sysCouponDTOList = productService.getUserCoupon3(username); // 쿠폰 내역 확인
+
+        model.addAttribute("sysCouponDTOList", sysCouponDTOList); // 주문자 쿠폰 내역
+        model.addAttribute("totalPoint", totalPoint); // 주문자 포인트
         model.addAttribute("saleprice", saleprice);   // 총 할인가격
         model.addAttribute("totalprice", totalprice); // 총 주문가격
+        model.addAttribute("totaldeliv", totaldeliv); // 총 택배비
         model.addAttribute("cartDTOList", cartDTOList); // 상품 리스트
         model.addAttribute("memberDTO", memberDTO);   // 주문자 정보
 

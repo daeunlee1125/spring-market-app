@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.OrderMapper">
+
+    <select id="ordStatCnt2" resultType="kr.co.shoply.dto.AdInfoDTO">
+        SELECT
+        count(CASE WHEN ORD_STAT=1 THEN 1 end) as st1,
+        count(CASE WHEN ORD_STAT=3 THEN 1 end) as st3,
+        count(*) as ordNum,
+        count(CASE WHEN TRUNC(ord_date) = TRUNC(SYSDATE) THEN 1 END) as todOrdNum,
+        count(CASE WHEN TRUNC(ord_date) = TRUNC(SYSDATE - 1) THEN 1 END) as yesOrdNum,
+        sum(ORD_TOTAL) as ordTotal,
+        COALESCE(sum(CASE WHEN (TRUNC(ord_date) = TRUNC(SYSDATE)) THEN ord_total END), 0) as todOrdTotal,
+        COALESCE(sum(CASE WHEN (TRUNC(ord_date) = TRUNC(SYSDATE - 1)) THEN ord_total END), 0) as yesOrdTotal
+        FROM "order"
+    </select>
+
+</mapper>

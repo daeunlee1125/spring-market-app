@@ -35,4 +35,12 @@
         WHERE MEM_NAME = #{mem_name}
           AND MEM_EMAIL = #{mem_email}
     </select>
+
+    <select id="regCnt2" resultType="kr.co.shoply.dto.AdInfoDTO">
+        SELECT
+        count(*) as regTotal,
+        count(CASE WHEN TRUNC(mem_rdate) = TRUNC(SYSDATE) THEN 1 END) as todRegTotal,
+        count(CASE WHEN TRUNC(mem_rdate) = TRUNC(SYSDATE - 1) THEN 1 END) as yesRegTotal
+        FROM member
+    </select>
 </mapper>

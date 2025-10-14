@@ -33,6 +33,27 @@
     function closeModal(modalId) {
         console.log("모달 닫기: " + modalId);
     }
+
+        // 모달 열기
+        function openModal(id) {
+        document.getElementById(id).style.display = 'block';
+    }
+
+        // 모달 닫기
+        function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+        // 모달 바깥 클릭 시 닫기
+        window.onclick = function(event) {
+        const modals = document.getElementsByClassName('modal');
+        for (let modal of modals) {
+        if (event.target === modal) {
+        modal.style.display = 'none';
+        }
+     }
+    }
+
 </script>
 </body>
 </html>

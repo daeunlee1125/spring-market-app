@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.MyProductMapper">
+    <select id="selectProduct" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT * FROM product WHERE prod_no = #{prod_no}
+    </select>
+
+    <select id="selectOption" resultType="kr.co.shoply.dto.ProdOptionDTO">
+        SELECT * FROM prod_option WHERE prod_no = #{prod_no}
+    </select>
+
+    <select id="selectFiles" resultType="kr.co.shoply.dto.ProFileDTO">
+        SELECT * FROM pro_file WHERE prod_no = #{prod_no}
+    </select>
+</mapper>

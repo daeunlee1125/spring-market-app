@@ -25,7 +25,8 @@
                     <div>쿠폰</div>
                 </div>
                 <div class="info-item">
-                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 3, 'COMMA')}">1,000</div>
+
+                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 0, 'COMMA')}">1,000</div>
                     <div>포인트</div>
                 </div>
                 <div class="info-item">
@@ -93,12 +94,15 @@
                 </thead>
                 <tbody>
                 <tr th:each="point : ${recentPoints}">
-                    <td th:text="${#dates.format(point.p_date, 'yyyy-MM-dd')}">2022-12-13</td>
-                    <td th:text="${point.p_type}">적립</td>
-                    <td th:text="${point.ord_no}">2022121001</td>
-                    <td th:text="${#numbers.formatInteger(point.p_point, 3, 'COMMA')}">340</td>
+                    <td th:text="${point.p_date}">2022-12-13</td>
+                    <td>
+                        <span th:if="${point.p_type == 1}">적립</span>
+                        <span th:if="${point.p_type == 2}">사용</span>
+                        <span th:unless="${point.p_type == 1 or point.p_type == 2}">기타</span>
+                    </td>
+                    <td></td> <td th:text="${#numbers.formatInteger(point.p_point, 0, 'COMMA')}">340</td>
                     <td th:text="${point.p_info}">상품구매확정</td>
-                    <td th:text="${#dates.format(point.p_exp_date, 'yyyy-MM-dd')}">2024-12-10</td>
+                    <td th:text="${point.p_exp_date}">2024-12-10</td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(recentPoints)}">
                     <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>

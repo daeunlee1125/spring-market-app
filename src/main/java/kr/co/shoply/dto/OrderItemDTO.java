@@ -17,6 +17,7 @@ public class OrderItemDTO {
     private Integer item_cnt;
     private Integer item_stat;
     private String item_delv;
+    private String item_trk_num;
 
     private Date ord_date;
 

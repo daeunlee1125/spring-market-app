@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.AdminMemberMapper">
+
+    <!-- 회원 목록 -->
+    <select id="selectMemberList" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="kr.co.shoply.dto.MemberDTO">
+        SELECT *
+        FROM (
+        SELECT ROWNUM AS rnum, a.*
+        FROM (
+        SELECT
+        m.mem_id,
+        m.mem_name,
+        m.mem_email,
+        m.mem_hp,
+        m.mem_gen,
+        m.mem_rank,
+        m.mem_stat,
+        m.mem_rdate,
+        NVL(p.p_point, 0) AS p_point,
+        m.mem_note
+        FROM MEMBER m
+        LEFT JOIN POINT p ON m.mem_id = p.mem_id
+        <where>
+            m.mem_level = '1'
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'mem_id'">
+                        AND m.mem_id LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_name'">
+                        AND m.mem_name LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_email'">
+                        AND m.mem_email LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_hp'">
+                        AND m.mem_hp LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY m.mem_rdate DESC
+        ) a
+        WHERE ROWNUM &lt;= #{offset} + #{size}
+        )
+        WHERE rnum &gt; #{offset}
+    </select>
+
+    <!-- 전체 회원 수 카운트 -->
+    <select id="selectMemberTotal" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER m
+        <where>
+            m.mem_level = '1'
+            <!-- 검색 조건 -->
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'mem_id'">
+                        AND m.mem_id LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_name'">
+                        AND m.mem_name LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_email'">
+                        AND m.mem_email LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_hp'">
+                        AND m.mem_hp LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <!-- 특정 회원 상세 조회 -->
+    <select id="selectMemberById" parameterType="string" resultType="kr.co.shoply.dto.MemberDTO">
+        SELECT
+        m.mem_id,
+        m.mem_name,
+        m.mem_email,
+        m.mem_hp,
+        m.mem_gen,
+        m.mem_rank,
+        m.mem_zip,
+        m.mem_addr1,
+        m.mem_addr2,
+        m.mem_rdate,
+        m.mem_lastLogin,
+        m.mem_stat,
+        m.mem_note
+        FROM MEMBER m
+        WHERE m.mem_id = #{memId}
+    </select>
+
+    <!-- 회원정보 수정 !-->
+    <update id="AdminupdateMember" parameterType="kr.co.shoply.dto.MemberDTO">
+        UPDATE MEMBER
+        SET
+        MEM_NAME = #{mem_name},
+        MEM_EMAIL = #{mem_email},
+        MEM_HP = #{mem_hp},
+        MEM_GEN = #{mem_gen},
+        MEM_ZIP = #{mem_zip},
+        MEM_ADDR1 = #{mem_addr1},
+        MEM_ADDR2 = #{mem_addr2},
+        MEM_STAT = CAST(#{mem_stat} AS VARCHAR2(20)),
+        MEM_NOTE = #{mem_note}
+        WHERE MEM_ID = #{mem_id}
+    </update>
+
+
+    <update id="updateAdminMemberStatus">
+        UPDATE MEMBER
+        SET mem_stat = #{mem_stat}
+        WHERE mem_id = #{mem_id}
+    </update>
+
+
+    <update id="AdminupdateRank">
+        UPDATE MEMBER
+        SET MEM_RANK = #{mem_rank}
+        WHERE MEM_ID = #{mem_id}
+    </update>
+
+
+
+
+
+
+
+
+</mapper>

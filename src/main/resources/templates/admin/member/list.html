@@ -1,431 +1,352 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - Final Version</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- Daum 우편번호 서비스를 위한 스크립트 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/member.css">
 
-</head>
-<body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
+<!-- head -->
+<div th:replace="~{admin/member/_head.html}"></div>
 
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+
+<body th:data-open-modal="${openModal}">
+
+<div class="main">
+    <div class="middle main-content">
+        <div class="main-common">
+            <div class="main-head">
+                <div>
+                    <h3>회원목록</h3>
+                </div>
+                <div class="main-head-right">
+                    <a th:href="@{/admin}">HOME</a>
+                    <div>&nbsp;>&nbsp;</div>
+                    <a th:href="@{/admin/member/list}">회원관리</a>
+                    <div>&nbsp;>&nbsp;</div>
+                    <a href="#" class="nav-last">회원목록</a>
+                </div>
             </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
 
-    
+            <main>
 
-    <div class="main">
-        <div class="middle main-content">
-            <div class="main-common">
-                <div class="main-head">
-                    <div>
-                        <h3>회원목록</h3>
-                    </div>
-                    <div class="main-head-right">
-                        <a href="">HOME</a>
-                        <div>
-                            &nbsp;>&nbsp;
-                        </div>
-                        <a href="">회원관리</a>
-                        <div>
-                            &nbsp;>&nbsp;
-                        </div>
-                        <a href="" class="nav-last">회원목록</a>
+                <!--  검색 영역 -->
+                <div class="main-content-top" style="border:none; margin:15px 0;">
+                    <div class="search-bar">
+                        <form th:action="@{/admin/member/list}" method="get">
+                            <select name="searchType">
+                                <option value="mem_id" th:selected="${pageRequestDTO.searchType == 'mem_id'}">아이디</option>
+                                <option value="mem_name" th:selected="${pageRequestDTO.searchType == 'mem_name'}">이름</option>
+                                <option value="mem_email" th:selected="${pageRequestDTO.searchType == 'mem_email'}">이메일</option>
+                                <option value="mem_hp" th:selected="${pageRequestDTO.searchType == 'mem_hp'}">휴대폰</option>
+                            </select>
+
+                            <div class="search-place">
+                                <input type="text" name="keyword" placeholder="검색어 입력"
+                                       th:value="${pageRequestDTO.keyword}">
+                            </div>
+
+                            <button type="submit">검색</button>
+                        </form>
                     </div>
                 </div>
-                <div class="main-content-top"></div>
 
 
-                <main>
+                <!-- 등급 일괄 수정용 form -->
+                <form th:action="@{/admin/member/updateRank}" method="post" id="rankUpdateForm" onsubmit="return packSelectedRows()">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="checkAll"></th>
+                            <th>번호</th>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>성별</th>
+                            <th>등급</th>
+                            <th>포인트</th>
+                            <th>이메일</th>
+                            <th>휴대폰</th>
+                            <th>가입일</th>
+                            <th>상태</th>
+                            <th>관리</th>
+                        </tr>
+                        </thead>
 
-                    <!-- search bar 있으신 분들은 위쪽 select-2를 삭제 -->
-                    <div class="sub-top">
-                        
-                        
-                        <div class="search-bar">
-                            
-                            <form action="">
-                                <select name="" id="">
-                                    <option value="">아이디</option>
-                                    <option value="">이름</option>
-                                    <option value="">이메일</option>
-                                    <option value="">휴대폰</option>
+                        <tbody>
+                        <tr th:each="member, stat : ${pageResponseDTO.dtoList}">
+                            <td>
+                                <input type="checkbox" class="chkMember" name="mem_id" th:value="${member.mem_id}">
+                                <input type="hidden" class="rankHidden" th:value="${member.mem_rank}">
+                            </td>
+                            <td th:text="${stat.count}"></td>
+                            <td th:text="${member.mem_id}"></td>
+                            <td th:text="${member.mem_name}"></td>
+                            <td th:text="${member.mem_gen}"></td>
+                            <td>
+                                <select name="mem_rank" class="rankbtn">
+                                    <option value="VVIP" th:selected="${member.mem_rank == 'VVIP'}">VVIP</option>
+                                    <option value="VIP" th:selected="${member.mem_rank == 'VIP'}">VIP</option>
+                                    <option value="GOLD" th:selected="${member.mem_rank == 'GOLD'}">GOLD</option>
+                                    <option value="SILVER" th:selected="${member.mem_rank == 'SILVER'}">SILVER</option>
+                                    <option value="FAMILY" th:selected="${member.mem_rank == null or member.mem_rank == 'FAMILY'}">FAMILY</option>
                                 </select>
-                                <div class="search-place">
-                                    <input type="text" placeholder="검색어 입력">
-                                    <button type="submit">
-                                    <img src="/kmarket/inc/image/search.png" alt="검색">
-                                    </button>
-                                </div>
-                            </form> 
-                        </div>
+                            </td>
+                            <td th:text="${#numbers.formatInteger(member.p_point, 3, 'COMMA')}"></td>
+                            <td th:text="${member.mem_email}"></td>
+                            <td th:text="${member.mem_hp}"></td>
+                            <td th:text="${member.mem_rdate}"></td>
+
+                            <td th:classappend="${member.mem_stat == '정상' ? 'running' :
+                                (member.mem_stat == '중지' ? 'paused' :
+                                (member.mem_stat == '휴면' ? 'sleep' : 'gone'))}"
+                                th:text="${member.mem_stat}">
+                            </td>
+
+                            <td>
+                                <a th:href="@{/admin/member/detail(mem_id=${member.mem_id})}" class="mod-btn">[ 수정 ]</a>
+
+                                <!--  외부 form을 지정해서 submit -->
+                                <button type="submit"
+                                        th:if="${member.mem_stat == '정상'}"
+                                        th:form="'statusForm_' + ${member.mem_id}"
+                                        class="stop-btn">[ 중지 ]</button>
+
+                                <button type="submit"
+                                        th:if="${member.mem_stat == '중지' or member.mem_stat == '휴면'}"
+                                        th:form="'statusForm_' + ${member.mem_id}"
+                                        class="restart-btn">[ 재개 ]</button>
+
+                                <button th:if="${member.mem_stat == '탈퇴'}" class="quit-btn" disabled>[ 비활성 ]</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" id="jsonPayload" name="jsonPayload">
+
+                    <div class="bottom-btn-area" style="margin-top: 20px; text-align: center;">
+                        <button type="submit" class="member-edit-btn">선택수정</button>
                     </div>
-                    <!-- 여기까지 sub-top -->
+                </form>
 
-
-                    <form action="">
-                        <table class="table">
-                            <tr>
-                                <th><input type="checkbox"></th>
-                                <th>번호</th>
-                                <th>아이디</th>
-                                <th>이름</th>
-                                <th>성별</th>
-                                <th>등급</th>
-                                <th>포인트</th>
-                                <th>이메일</th>
-                                <th>휴대폰</th>
-                                <th>가입일</th>
-                                <th>상태</th>
-                                <th>관리</th>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" name="userid" value="xxx..." ></td>
-                                <td>1</td>
-                                <td>xxx...</td>
-                                <td>정우성</td>
-                                <td>M</td>
-                                <td>
-                                    <select name="" class="rankbtn" id="">
-                                        <option value="VVIP">VVIP</option>
-                                        <option value="VIP">VIP</option>
-                                        <option value="GOLD">GOLD</option>
-                                        <option value="SILVER">SILVER</option>
-                                        <option value="FAMILY">FAMILY</option>
-                                    </select>
-                                </td>
-                                <td>15,000</td>
-                                <td>daeunlee@gmail.com</td>
-                                <td>010-2222-3333</td>
-                                <td>2023-01-32 12:22:22</td>
-                                <td class="running">
-                                    정상
-                                </td>
-                                <td>
-                                    
-                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
-                                    <button class="stop-btn"><a href="#">[ 중지 ]</a></button>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" name="userid" value="xxx..."></td>
-                                <td>1</td>
-                                <td>xxx...</td>
-                                <td>정우성</td>
-                                <td>M</td>
-                                <td>
-                                    <select name="" class="rankbtn" id="">
-                                        <option value="VVIP">VVIP</option>
-                                        <option value="VIP">VIP</option>
-                                        <option value="GOLD">GOLD</option>
-                                        <option value="SILVER">SILVER</option>
-                                        <option value="FAMILY">FAMILY</option>
-                                    </select>
-                                </td>
-                                <td>15,000</td>
-                                <td>daeunlee@gmail.com</td>
-                                <td>010-2222-3333</td>
-                                <td>2023-01-32 12:22:22</td>
-                                <td class="paused">
-                                    중지
-                                </td>
-                                <td>
-                                    
-                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
-                                    <button class="restart-btn"><a href="#">[ 재개 ]</a></button>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" name="userid" value="xxx..."></td>
-                                <td>1</td>
-                                <td>xxx...</td>
-                                <td>정우성</td>
-                                <td>M</td>
-                                <td>
-                                    <select name="" class="rankbtn" id="">
-                                        <option value="VVIP">VVIP</option>
-                                        <option value="VIP">VIP</option>
-                                        <option value="GOLD">GOLD</option>
-                                        <option value="SILVER">SILVER</option>
-                                        <option value="FAMILY">FAMILY</option>
-                                    </select>
-                                </td>
-                                <td>15,000</td>
-                                <td>daeunlee@gmail.com</td>
-                                <td>010-2222-3333</td>
-                                <td>2023-01-32 12:22:22</td>
-                                <td class="sleep">
-                                    휴면
-                                </td>
-                                <td>
-                                    
-                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
-                                    <button class="restart-btn"><a href="#">[ 재개 ]</a></button>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" name="userid" value="xxx..."></td>
-                                <td>1</td>
-                                <td>xxx...</td>
-                                <td>정우성</td>
-                                <td>M</td>
-                                <td>
-                                    <select name="" class="rankbtn" id="">
-                                        <option value="VVIP">VVIP</option>
-                                        <option value="VIP">VIP</option>
-                                        <option value="GOLD">GOLD</option>
-                                        <option value="SILVER">SILVER</option>
-                                        <option value="FAMILY">FAMILY</option>
-                                    </select>
-                                </td>
-                                <td>15,000</td>
-                                <td>daeunlee@gmail.com</td>
-                                <td>010-2222-3333</td>
-                                <td>2023-01-32 12:22:22</td>
-                                <td class="gone">
-                                    탈퇴
-                                </td>
-                                <td>
-                                    
-                                    <button class="mod-btn openModalBtn" data-target="modal">[ 수정 ]</button><br>
-                                    <button class="quit-btn"><a href="#">[ 비활성 ]</a></button>
-                                    
-                                </td>
-                            </tr>
-
-                        </table>
+                <!-- 상태 변경용 form (테이블 밖, 완전 분리) -->
+                <th:block th:each="member : ${pageResponseDTO.dtoList}">
+                    <form th:id="'statusForm_' + ${member.mem_id}"
+                          th:action="@{/admin/member/updateStatus}"
+                          method="post">
+                        <input type="hidden" name="mem_id" th:value="${member.mem_id}">
+                        <input type="hidden" name="mem_stat"
+                               th:value="${member.mem_stat == '정상' ? '중지' : '정상'}">
                     </form>
+                </th:block>
 
 
-                    <!-- banner-actions div 안에서 가지고 있는 버튼 따라 삭제하시면 됩니당 -->
-                    <!-- 페이지 넘기는 버튼 삭제하고 싶으면 그냥 page 삭제하면 되고 -->
-                    <!-- 버튼을 삭제하고 싶으면 버튼 클래스를 transpar로 바꿔주세요! -->
-                    <div class="banner-actions">
-                        <button class="delete-btn">선택수정</button>
+                <!-- js에서 pack -->
 
-                        <div class="page">
-                            <a href="#" class="prev">이전</a>
-                            <a href="#" class="num current">1</a>
-                            <a href="#" class="num">2</a>
-                            <a href="#" class="num">3</a>
-                            <a href="#" class="next">다음</a>
-                        </div>
 
-                        <button class="transpar" id="openModalBtn">상점등록</button>
-                    </div>
-                    
+                <script>
+                    // 전체선택 체크박스 제어
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const checkAll = document.getElementById("checkAll");
+                        const checkboxes = document.querySelectorAll(".chkMember");
 
-                </main>
+                        // 전체 선택/해제
+                        checkAll.addEventListener("change", function () {
+                            checkboxes.forEach(chk => chk.checked = checkAll.checked);
+                        });
+
+                        // 개별 체크 시 전체 선택 여부 갱신
+                        checkboxes.forEach(chk => {
+                            chk.addEventListener("change", function () {
+                                const allChecked = Array.from(checkboxes).every(c => c.checked);
+                                checkAll.checked = allChecked;
+                            });
+                        });
+                    });
+                </script>
+
+
+                <script>
+                    function packSelectedRows() {
+                        // 1. 체크된 회원들만 가져오기
+                        const checked = document.querySelectorAll(".chkMember:checked");
+                        const data = [];
+
+                        // 2. 각 행의 아이디(mem_id)와 선택된 등급(mem_rank) 추출
+                        checked.forEach(chk => {
+                            const tr = chk.closest("tr");
+                            const rankSelect = tr.querySelector(".rankbtn");
+                            const memRank = rankSelect ? rankSelect.value : "";
+
+                            const hiddenInput = tr.querySelector(".rankHidden");
+                            if (hiddenInput) hiddenInput.value = memRank;
+
+                            data.push({
+                                mem_id: chk.value,
+                                mem_rank: memRank
+                            });
+                        });
+
+                        // 3. 아무것도 선택 안 했을 경우 전송 중단
+                        if (data.length === 0) {
+                            alert("수정할 회원을 선택하세요.");
+                            return false;
+                        }
+
+                        // 4. JSON 문자열로 숨은 input에 저장
+                        document.getElementById("jsonPayload").value = JSON.stringify(data);
+                        return true;
+                    }
+                </script>
+
+
+                <div class="page">
+                    <a th:if="${pageResponseDTO.prev}"
+                       th:href="@{/admin/member/list(pg=${pageResponseDTO.start - 1})}"
+                       class="prev">이전</a>
+
+                    <a th:each="i : ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}"
+                       th:href="@{/admin/member/list(pg=${i})}"
+                       th:text="${i}"
+                       th:classappend="${i == pageResponseDTO.pg} ? ' current' : ''"
+                       class="num">1</a>
+
+                    <a th:if="${pageResponseDTO.next}"
+                       th:href="@{/admin/member/list(pg=${pageResponseDTO.end + 1})}"
+                       class="next">다음</a>
+                </div>
+
+
+
+            </main>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="~{admin/member/_tail.html}"></div>
+
+<!-- 회원수정 모달 -->
+<div class="modal-overlay hidden modal" id="modal">
+    <div class="modal-popup large">
+        <form id="memberEditForm" th:action="@{/admin/member/update}" method="post">
+            <div class="modal-header">
+                <h2>회원수정</h2>
+                <button type="button" class="close-btn closeModalBtn">&times;</button>
             </div>
-        </div>
+
+            <div class="modal-content">
+                <hr>
+
+                <!-- 아이디 (수정 불가, 전송됨) -->
+                <div class="form-group">
+                    <label>아이디</label>
+                    <input type="text" id="id" name="mem_id" th:value="${selectedMember?.mem_id}" readonly>
+                </div>
+
+                <!-- 이름 (수정 가능) -->
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" id="name" name="mem_name" th:value="${selectedMember?.mem_name}">
+                </div>
+
+                <!-- 성별 (수정 가능) -->
+                <div class="form-group">
+                    <label>성별</label>
+                    <div>
+                        <label><input type="radio" name="mem_gen" value="M" th:checked="${selectedMember?.mem_gen == 'M'}"> 남</label>
+                        <label><input type="radio" name="mem_gen" value="F" th:checked="${selectedMember?.mem_gen == 'F'}"> 여</label>
+                    </div>
+                </div>
+
+                <!-- 등급 (수정 불가, 전송됨) -->
+                <div class="form-group">
+                    <label>등급</label>
+                    <select id="rank" name="mem_rank" readonly disabled>
+                        <option value="VVIP" th:selected="${selectedMember?.mem_rank == 'VVIP'}">VVIP</option>
+                        <option value="VIP" th:selected="${selectedMember?.mem_rank == 'VIP'}">VIP</option>
+                        <option value="GOLD" th:selected="${selectedMember?.mem_rank == 'GOLD'}">GOLD</option>
+                        <option value="SILVER" th:selected="${selectedMember?.mem_rank == 'SILVER'}">SILVER</option>
+                        <option value="FAMILY"
+                                th:selected="${selectedMember?.mem_rank == null
+                  or #strings.isEmpty(selectedMember?.mem_rank)
+                  or selectedMember?.mem_rank == 'FAMILY'}">
+                            FAMILY
+                        </option>
+                    </select>
+                </div>
+
+                <!-- 이메일 (수정 가능) -->
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="text" id="email" name="mem_email" th:value="${selectedMember?.mem_email}">
+                </div>
+
+                <!-- 휴대폰 (수정 가능) -->
+                <div class="form-group">
+                    <label>휴대폰</label>
+                    <input type="text" id="hp" name="mem_hp" th:value="${selectedMember?.mem_hp}">
+                </div>
+
+                <!-- 주소 (수정 가능) -->
+                <div class="form-group">
+                    <label for="zip">우편번호</label>
+                    <div style="display:flex; align-items:center;">
+                        <input type="text" id="zip" name="mem_zip" th:value="${selectedMember?.mem_zip}" readonly style="width:100px; margin-right:8px;">
+                        <button type="button" id="searchAddressBtn" class="small-btn">검색</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="addr1">기본주소</label>
+                    <input type="text" id="addr1" name="mem_addr1" th:value="${selectedMember?.mem_addr1}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="addr2">상세주소</label>
+                    <input type="text" id="addr2" name="mem_addr2" th:value="${selectedMember?.mem_addr2}">
+                </div>
+
+                <!-- 상태 (수정 불가, 색상 적용) -->
+                <div class="form-group">
+                    <label>상태</label>
+                    <span th:text="${selectedMember?.mem_stat}"
+                          th:classappend="${selectedMember?.mem_stat == '정상' ? 'running' :
+                          (selectedMember?.mem_stat == '중지' ? 'paused' :
+                          (selectedMember?.mem_stat == '휴면' ? 'sleep' : 'gone'))}"
+                                          style="display:inline-block; font-weight:500; margin-left:5px;">
+                    </span>
+                    <!-- 폼 전송 시 상태값 전달 -->
+                    <input type="hidden" name="mem_stat" th:value="${selectedMember?.mem_stat}">
+                </div>
+
+
+                <!-- 가입일 (수정 불가, 단순 표시) -->
+                <div class="form-group">
+                    <label>가입일</label>
+                    <input type="text" id="rdate" name="mem_rdate" th:value="${selectedMember?.mem_rdate}" disabled>
+                </div>
+
+                <!-- 최근로그인 (수정 불가, 단순 표시) -->
+                <div class="form-group">
+                    <label>최근로그인날짜</label>
+                    <input type="text" id="lastLogin" name="mem_lastLogin" th:value="${selectedMember?.mem_lastLogin}" disabled>
+                </div>
+
+                <!-- 기타 (수정 가능) -->
+                <div class="form-group">
+                    <label>기타</label>
+                    <textarea id="note" name="mem_note" th:text="${selectedMember?.mem_note}" rows="3" placeholder="회원에 대한 기타정보입력"></textarea>
+                </div>
+
+                <hr>
+            </div>
+
+
+            <div class="modal-footer" style="text-align:center;">
+                <button type="button" class="delete-btn closeModalBtn">취소</button>
+                <button type="submit" class="register-btn">수정하기</button>
+            </div>
+        </form>
     </div>
-
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
+</div>
 
 
-
-
-    <!-- 모달(팝업) HTML -->
-    <div class="modal-overlay hidden modal" id="modal">
-        <div class="modal-popup">
-            <form action="">
-                <div class="modal-header">
-                    <h2>회원수정</h2>
-                    <button class="close-btn closeModalBtn" id="closeModalBtn">&times;</button>
-                </div>
-                <div class="modal-content">
-                    <!-- 테이블 같은 건 다 modal-content 안에서 만드시면 됩니당 -->
-                     <hr>
-                    <div class="form-group">
-                        <label for="id">아이디</label>
-                        <input type="text" id="id" placeholder="abc1234">
-                        
-                    </div>
-
-                    <div class="form-group">
-                        <label for="name">이름</label>
-                        <input type="text" id="name" value="홍길동">
-                    </div>
-                    <div class="form-group">
-                        <label for="gen">성별</label>
-                        <div>
-                            <input type="radio" id="gen" name="gen" value="M">남&nbsp;&nbsp;&nbsp;
-                            <input type="radio" id="gen" name="gen" value="F">여
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="rank">등급</label>
-                        <input type="text" id="rank" placeholder="VVIP" readonly>
-                        <span class="description">회원 등급은 목록에서 선택수정 가능</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="">상태</label>
-                        <div class="running">정상</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">EMAIL</label>
-                        <input type="text" id="email" value="abc1234@gmail.com">
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="hp">휴대폰</label>
-                        <input type="text" id="hp" value="010-2222-2222">
-                    </div>
-                    <div class="form-group">
-                        <label for="zipcode">주소</label>
-                        <input type="text" id="zipcode" placeholder="우편번호" readonly>
-                        <button type="button" id="searchAddressBtn" class="search-btn">우편번호 검색</button>
-                    </div>
-                    <div class="form-group">
-                        <label for="address"></label>
-                        <input type="text" id="address" placeholder="기본주소" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="address-detail"></label>
-                        <input type="text" id="address-detail" placeholder="상세주소입력">
-                    </div>
-                    <div class="form-group">
-                        <label for="">가입일</label>
-                        <div>0000-00-00 00:00:00</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="">최근 로그인 날짜</label>
-                        <div>0000-00-00 00:00:00</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="">기타</label>
-                        <textarea name="" id=""></textarea>
-                    </div>
-
-                    <hr>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit">수정하기</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-
-
-    <script>
-        // --- 모달 로직 ---
-        document.addEventListener("DOMContentLoaded", () => {
-        // 열기 버튼
-        document.querySelectorAll(".openModalBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetId = btn.dataset.target;
-            document.getElementById(targetId).classList.remove("hidden");
-            });
-        });
-
-        // 닫기 버튼 + 배경 클릭
-        document.querySelectorAll(".modal").forEach(modal => {
-            modal.addEventListener("click", (e) => {
-            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                modal.classList.add("hidden");
-            }
-            });
-        });
-        });
-
-
-    </script>
-    <script src="/kmarket/inc/js/admin/member.js"></script>
-
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/shoply/js/admin/member.js"></script>
 
 </body>
 </html>

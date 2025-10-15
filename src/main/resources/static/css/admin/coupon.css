@@ -194,19 +194,22 @@
 
 
 
+/* ✅ member 선택수정 버튼 크기에 맞춘 쿠폰등록 버튼 */
 .stop-btn {
-    background: linear-gradient(135deg, #a77ece, #6c3fc9); /* register-btn이랑 동일 */
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
     border: none;
     color: white;
-    padding: 6px 14px;
-    font-size: 13px;
+    padding: 8px 18px;   /* member-edit-btn 기준으로 확대 */
+    font-size: 14px;     /* member-edit-btn 기준으로 통일 */
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.3s;
+    height: 38px;        /* member-edit-btn과 동일한 높이 */
+    line-height: 1;
 }
 
 .stop-btn:hover {
-    background: linear-gradient(135deg, #8d6dbd, #5936a9); /* hover 시 조금 어둡게 */
+    background: linear-gradient(135deg, #8d6dbd, #5936a9);
 }
 
 
@@ -217,3 +220,20 @@
 }
 
 
+
+.register-btn {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    border: none;
+    color: white;
+    padding: 8px 18px !important;   /* member-edit-btn 기준 */
+    font-size: 14px !important;     /* member-edit-btn 기준 */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    height: 38px !important;        /* 강제로 동일 높이 */
+    line-height: 1;
+}
+
+.register-btn:hover {
+    background: linear-gradient(135deg, #8d6dbd, #5936a9);
+}

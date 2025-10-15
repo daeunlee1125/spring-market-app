@@ -111,12 +111,14 @@
                    class="next">다음</a>
             </div>
 
-            <div style="text-align:right; margin-top:15px;">
+            <div style="text-align:right; margin:15px 0 60px 0;">
                 <button class="openModalBtn register-btn" data-target="couponRegisterModal">쿠폰등록</button>
             </div>
 
     </div>
 </div>
+
+<div th:replace="~{admin/coupon/_tail.html}"></div>
 
 <!-- ================== 모달 ================== -->
 <div th:each="coupon : ${pageResponse.dtoList}">
@@ -366,4 +368,4 @@
 </script>
 
 
-<div th:replace="~{admin/coupon/_tail.html}"></div>
+

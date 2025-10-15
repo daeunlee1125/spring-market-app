@@ -55,12 +55,29 @@
                 <tbody>
                 <tr th:each="orderItem : ${recentOrders}">
                     <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
+
                     <td>
-                        <span th:text="${orderItem.item_name}">상품명</span> / 주문번호: <span th:text="${orderItem.ord_no}">1012211341</span><br>
-                        수량: <span th:text="${orderItem.item_cnt}">1</span>개<br>
-                        <strong><span th:text="${#numbers.formatInteger(0, 3, 'COMMA')}">0</span>원</strong>
+                        <div class="product-info">
+                            <img src="/images/placeholder.png" alt="상품 이미지">
+                            <div class="product-details">
+                                <p>주문번호 : <a href="#" th:text="${orderItem.ord_no}" onclick="openModal('orderDetailPopup')">1012211341</a></p>
+                                <p>(주) <a href="#" onclick="openModal('sellerInfoPopup')">상호명</a></p>
+                                <p>상품명 : <span th:text="${orderItem.item_name}">상품명</span></p>
+                                <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
+                                <strong th:if="${productMap[orderItem.prod_no] != null}"
+                                        th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">34,000원</strong>
+                                <strong th:if="${productMap[orderItem.prod_no] == null}">가격 정보 없음</strong>
+                            </div>
+                        </div>
                     </td>
-                    <td th:text="${orderItem.item_stat}">배송완료</td>
+                    <td th:switch="${orderItem.item_stat}">
+                        <span th:case="1">배송전</span>
+                        <span th:case="2">배송중</span>
+                        <span th:case="3">배송완료</span>
+                        <span th:case="4">구매확정</span>
+                        <span th:case="*">상태없음</span>
+                    </td>
+
                     <td>
                         <button onclick="openModal('confirmModal')">구매확정</button>
                         <button onclick="openModal('reviewModal')">상품평쓰기</button>
@@ -165,7 +182,7 @@
                     <td th:text="${status.count}">1</td>
                     <td th:text="${qna.q_cate1}">고객센터</td>
                     <td th:text="${qna.q_title}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                    <td th:text="${#dates.format(qna.q_rdate, 'yyyy-MM-dd')}">2022-12-12</td>
+                    <td th:text="${qna.q_rdate}">2022-12-12</td>
                     <td th:text="${#strings.isEmpty(qna.q_reply)} ? '답변 대기' : '답변 완료'">답변 완료</td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(recentQnas)}">
@@ -178,4 +195,5 @@
         <a th:href="@{/my/qna}" class="more-link">더보기 &gt;</a>
     </div>
 </main>
+<div th:replace="~{my/modal.html}"></div>
 <div th:replace="~{my/_tail.html}"></div>

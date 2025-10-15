@@ -17,4 +17,9 @@ public class PointDTO {
     private String p_date;
     private String p_exp_date;
 
+    // 잔여포인트
+    private int remain_point;
+
+    private String mem_name;
+
 }

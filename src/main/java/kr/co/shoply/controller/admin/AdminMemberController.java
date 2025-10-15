@@ -6,15 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.dto.PointDTO;
+import kr.co.shoply.mapper.AdminMemberMapper;
 import kr.co.shoply.service.AdminMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 public class AdminMemberController {
 
     private final AdminMemberService adminMemberService;
+    private final AdminMemberMapper adminMemberMapper;
 
 
     @GetMapping("/admin/member/list")
@@ -84,6 +86,49 @@ public class AdminMemberController {
         redirectAttributes.addFlashAttribute("msg", "선택된 회원 등급이 수정되었습니다.");
         return "redirect:/admin/member/list";
     }
+
+
+
+
+
+
+    @GetMapping("/admin/member/point")
+    public String pointList(PageRequestDTO pageRequestDTO, Model model) {
+
+        // 1. 포인트 리스트 조회 (페이징 포함)
+        List<PointDTO> pointList = adminMemberMapper.selectAdminPointList(pageRequestDTO);
+
+        // 2. 전체 개수 조회 (페이징용)
+        int total = adminMemberMapper.selectAdminTotalCount(pageRequestDTO);
+
+        // 3. 모델에 데이터 세팅
+        model.addAttribute("pointList", pointList);
+        model.addAttribute("pageResponseDTO",
+                PageResponseDTO.<PointDTO>builder()
+                        .pageRequestDTO(pageRequestDTO)
+                        .total(total)
+                        .build());
+
+        return "admin/member/point";
+    }
+
+
+
+
+    @PostMapping("/admin/member/point/delete")
+    @ResponseBody
+    public ResponseEntity<?> deleteSelectedPoints(@RequestBody List<Integer> p_no) {
+        try {
+            adminMemberMapper.deleteSelectedPoints(p_no);
+            return ResponseEntity.ok("삭제 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
+        }
+    }
+
+
+
 
 
 }

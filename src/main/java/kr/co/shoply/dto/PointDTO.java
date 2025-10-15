@@ -16,6 +16,7 @@ public class PointDTO {
     private String p_info;
     private String p_date;
     private String p_exp_date;
+    private Integer  ord_no;
 
     // 잔여포인트
     private int remain_point;

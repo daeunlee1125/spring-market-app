@@ -7,41 +7,47 @@
             <label><input type="checkbox" id="selectAllCheckbox"> 전체선택</label>
             <button id="deleteSelectedBtn">선택삭제</button>
         </div>
+        <form th:action="@{/product/order}" method="post" id="orderForm">
+            <div class="cart-group">
+                <th:block th:each="dto : ${cartDTOList}">
+                    <div class="cart-item"
+                         th:data-price="${dto.getProductDTO().getProd_price()}"
+                         th:data-sale-rate="${dto.getProductDTO().getProd_sale()}"
+                         th:data-delivery-fee="${dto.getProductDTO().getProd_deliv_price()}"
+                         th:data-real-price="${dto.getProductDTO().getRealPrice()}"
+                         th:data-point="${dto.getProductDTO().getProd_point()}">
 
-        <div class="cart-group">
-            <h3>택배배송 상품: 3개</h3>
-            <th:block th:each="dto : ${cartDTOList}">
-                <div class="cart-item" th:data-price="${dto.getProductDTO().getRealPrice()}" data-discount="0">
-                    <input type="checkbox" class="item-checkbox">
-                    <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" th:alt="${dto.getFName()}"
-                         class="cart-item-thumb">
-                    <div class="cart-item-info">
-                        <p class="brand" th:text="${dto.getProductDTO().getProd_company()}">주식회사 루스부루</p>
-                        <p class="name" th:text="${dto.getProductDTO().getProd_name()}">브랑튼</p>
-                        <p class="options" th:text="${dto.getCart_option()}">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
-                    </div>
-                    <div class="quantity-selector">
-                        <button class="quantity-down">-</button>
-                        <input type="text" value="1" readonly class="quantity-input">
-                        <button class="quantity-up">+</button>
-                    </div>
-                    <div class="cart-item-price" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice(), 3, 'COMMA')} + '원'">58,000원</div>
-                    <div class="cart-item-actions">
-                        <button class="buy-now">바로구매</button>
-                        <div class="action-icons">
-                            <form th:action="@{/product/delete}" method="post">
-                                <input type="hidden" name="cart_no" th:value="${dto.getCart_no()}">
-                                <button type="submit" class="delete-item">&#x1F5D1;</button>
-                            </form>
+                        <input type="checkbox" class="item-checkbox" name="cart_no" th:value="${dto.getCart_no()}">
+                        <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" th:alt="${dto.getFName()}"
+                             class="cart-item-thumb">
+                        <div class="cart-item-info">
+                            <p class="brand" th:text="${dto.getProductDTO().getProd_company()}">주식회사 루스부루</p>
+                            <p class="name" th:text="${dto.getProductDTO().getProd_name()}">브랑튼</p>
+                            <p class="options" th:text="${dto.getCart_option()}">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
+                        </div>
+                        <div class="quantity-selector">
+                            <button class="quantity-down">-</button>
+                            <input type="text" th:value="${dto.getCart_item_cnt()}" readonly class="quantity-input">
+                            <button class="quantity-up">+</button>
+                        </div>
+                        <div class="cart-item-price" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice() * dto.getCart_item_cnt(), 3, 'COMMA')} + '원'">58,000원</div>
+                        <div class="cart-item-actions">
+                            <button class="buy-now">바로구매</button>
+                            <div class="action-icons">
+                                <form th:action="@{/product/delete}" method="post">
+                                    <input type="hidden" name="cart_no" th:value="${dto.getCart_no()}">
+                                    <button type="submit" class="delete-item">&#x1F5D1;</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </th:block>
-        </div>
-
+                </th:block>
+            </div>
+        </form>
     </div>
 </div>
 </div>
+
 <aside class="order-summary">
     <div class="inner">
         <h3>결제예정금액</h3>
@@ -69,7 +75,8 @@
             <span class="value" id="points">0 P</span>
         </div>
 
-        <a th:href="@{/product/order}"><button class="order-btn" id="orderBtn">주문하기</button></a>
+
+        <button class="order-btn" id="orderBtn">주문하기</button>
 
     </div>
 </aside>

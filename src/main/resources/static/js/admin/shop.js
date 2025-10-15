@@ -83,4 +83,12 @@ document.addEventListener("DOMContentLoaded", function (){
             }
         });
     }
+
+    const rangeBtn = document.getElementById('rangeBtn');
+    if (rangeBtn) {
+        rangeBtn.addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+    }
+
 })

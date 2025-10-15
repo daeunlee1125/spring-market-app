@@ -17,5 +17,6 @@ public class CartDTO {
 
     // 추가 필드
     private ProductDTO productDTO; // 장바구니 출력 용도
-    private String fName;
+    private String fName;          // 파일 경로
+    private int totalPoint;     // 포인트 총합
 }

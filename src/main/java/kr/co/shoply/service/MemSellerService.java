@@ -70,4 +70,29 @@ public class MemSellerService {
 
     }
 
+    public PageResponseDTO<MemSellerDTO> getSellerSales(PageRequestDTO pageRequestDTO){
+        List<MemSellerDTO> sellersDTO = memSellerMapper.sellerWithSales(pageRequestDTO);
+        int total = memSellerMapper.selectCountTotal2(pageRequestDTO);
+
+        return PageResponseDTO.<MemSellerDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(sellersDTO)
+                .total(total)
+                .build();
+    }
+
+    public PageResponseDTO<MemSellerDTO> getSellerRange(PageRequestDTO pageRequestDTO, String range){
+        List<MemSellerDTO> sellersDTO = memSellerMapper.sellerWithRange(pageRequestDTO, range);
+        int total = memSellerMapper.selectCountTotal2(pageRequestDTO);
+        System.out.println(">>> range = " + range);
+        PageResponseDTO<MemSellerDTO> pageResponseDTO = PageResponseDTO.<MemSellerDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(sellersDTO)
+                .total(total)
+                .build();
+        System.out.println(">>> result size = " + pageResponseDTO.getDtoList().size());
+
+        return pageResponseDTO;
+    }
+
 }

@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- Daum 우편번호 서비스를 위한 스크립트 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/admin.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/main.css"
-
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/main.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <aside class="sidebar">
@@ -20,50 +19,57 @@
         </div>
         <nav>
             <ul class="mainSideBar">
-                <li>
+                <li th:if="${#authentication.principal.member.mem_level==7}">
                     <div><i class="fas fa-cog"></i> 환경설정</div>
                     <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
+                        <li><a th:href="@{/admin/config/basic}">기본설정</a></li>
+                        <li><a th:href="@{/admin/config/banner}">배너관리</a></li>
+                        <li><a th:href="@{/admin/config/policy}">약관관리</a></li>
+                        <li><a th:href="@{/admin/config/category}">카테고리</a></li>
+                        <li><a th:href="@{/admin/config/version}">버전관리</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-store"></i> 상점관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">상점목록</a></li>
-                        <li><a href="#">매출현황</a></li>
+                        <li><a th:href="@{/admin/shop/list}">상점목록</a></li>
+                        <li><a th:href="@{/admin/shop/sales}">매출현황</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-users"></i> 회원관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">회원목록</a></li>
-                        <li><a href="#">포인트관리</a></li>
+                        <li><a th:href="@{/admin/member/list}">회원목록</a></li>
+                        <li><a th:href="@{/admin/member/point}">포인트관리</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-box-open"></i> 상품관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">상품목록</a></li>
-                        <li><a href="#">상품등록</a></li>
+                        <li><a th:href="@{/admin/product/list}">상품목록</a></li>
+                        <li><a th:href="@{/admin/product/register}">상품등록</a></li>
                     </ul>
                 </li>
                 <li>
                     <div><i class="fas fa-truck"></i> 주문관리</div>
                     <ul class="subSideBar">
-                        <li><a href="#">주문현황</a></li>
-                        <li><a href="#">배송현황</a></li>
+                        <li><a th:href="@{/admin/order/list}">주문현황</a></li>
+                        <li><a th:href="@{/admin/order/delivery}">배송현황</a></li>
                     </ul>
                 </li>
                 <li>
+                    <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
+                    <ul class="subSideBar">
+                        <li><a th:href="@{/admin/coupon/list}">쿠폰목록</a></li>
+                        <li><a th:href="@{/admin/coupon/issued}">쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+                <li th:if="${#authentication.principal.member.mem_level==7}">
                     <div><i class="fas fa-headset"></i> 고객센터</div>
                     <ul class="subSideBar">
-                        <li><a href="#">공지사항</a></li>
-                        <li><a href="#">자주묻는질문</a></li>
-                        <li><a href="#">문의하기</a></li>
+                        <li><a th:href="@{/admin/cs/notice/list}">공지사항</a></li>
+                        <li><a th:href="@{/admin/cs/faq/list}">자주묻는질문</a></li>
+                        <li><a th:href="@{/admin/cs/qna/list}">문의하기</a></li>
                     </ul>
                 </li>
             </ul>
@@ -73,14 +79,14 @@
     <header>
         <div class="middle">
             <div id="logo">
-                <img src="/kmarket/inc/image/logo.jpg" alt="logo">
+                <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
             </div>
-            
+
             <div class="header-nav">
                 <ul class="header-menu">
-                    <li><a href="#">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="#">고객센터</a></li>
+                    <li><a th:href="@{/admin/}">홈</a></li>
+                    <li><a th:href="@{/member/logout}">로그아웃</a></li>
+                    <li><a th:href="@{/admin/cs/notice/list}">고객센터</a></li>
                 </ul>
             </div>
         </div>
@@ -114,12 +120,70 @@
                             <div class="dashboard-charts">
                                 <div class="chart-box">
                                     <h5>결제현황</h5>
-                                    <img src="/kmarket/inc/image/chart1.png" alt="결제현황 차트">
+                                    <canvas id="orderChart" width="200" height="150"></canvas>
                                 </div>
+                                <script th:inline="javascript">
+                                    const stats = /*[[${chart}]]*/ [];
+
+
+                                    const labels = stats.map(s => s.ch_date);
+                                    const orderCnt = stats.map(s => s.order_cnt);
+                                    const payCnt = stats.map(s => s.pay_cnt);
+                                    const cancelCnt = stats.map(s => s.cancel_cnt);
+
+                                    new Chart(document.getElementById('orderChart'), {
+                                        type: 'bar',
+                                        data: {
+                                            labels,
+                                            datasets: [
+                                                { label: '주문', data: orderCnt, backgroundColor: '#4f7ecc' },
+                                                { label: '결제', data: payCnt, backgroundColor: '#52b878' },
+                                                { label: '취소', data: cancelCnt, backgroundColor: '#c54242' }
+                                            ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            plugins: {
+                                                legend: { position: 'top' },
+
+                                            },
+                                            scales: {
+                                                y: { beginAtZero: true,
+                                                    ticks: {
+                                                        stepSize: 1       // 눈금 간격을 1로 설정
+                                                    }}
+                                            }
+                                        }
+                                    });
+                                </script>
                                 <div class="chart-box">
                                     <h5>주요매출</h5>
-                                    <img src="/kmarket/inc/image/chart2.png" alt="매출 차트">
+                                    <canvas id="salesChart" width="200" height="200"></canvas>
                                 </div>
+                                <script th:inline="javascript">
+                                    const RAW = /*[[${chart2}]]*/ [];
+
+                                    const labels2 = RAW.map(r => r.cate1_name);
+                                    const data = RAW.map(r => r.cate1_sell);
+
+                                    new Chart(document.getElementById('salesChart'), {
+                                        type: 'pie',
+                                        data: {
+                                            labels: labels2,
+                                            datasets: [{
+                                                data,
+                                                backgroundColor: ['#5d89d3', '#c63a3a', '#8ebf41', '#7439b5', '#f97316'],
+                                                borderWidth: 0
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            plugins: {
+                                                legend: { position: 'bottom' }
+                                            }
+                                        }
+                                    });
+                                </script>
                             </div>
                     </section>
 
@@ -137,11 +201,11 @@
                             </thead>
                             <tbody>
                                 <tr class="main-row">
-                                    <td>101</td>
-                                    <td>124</td>
-                                    <td>14</td>
-                                    <td>7</td>
-                                    <td>24</td>
+                                    <td>[[${info.st1}]]</td>
+                                    <td>[[${info.st1Total}]]</td>
+                                    <td>[[${info.st3}]]</td>
+                                    <td>[[${info.st5Total}]]</td>
+                                    <td>[[${info.st6Total}]]</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -158,41 +222,41 @@
                             </thead>
                             <tbody>
                                 <tr class="main-row">
-                                    <td>131</td>
-                                    <td>3,700,000</td>
-                                    <td>232</td>
-                                    <td>2,500</td>
-                                    <td>25</td>
+                                    <td>[[${info.ordNum}]]</td>
+                                    <td>[[${#numbers.formatInteger(info.ordTotal, 3, 'COMMA')}]]</td>
+                                    <td>[[${info.regTotal}]]</td>
+                                    <td>[[${info.visit}]]</td>
+                                    <td>[[${info.qnaTotal}]]</td>
                                 </tr>
                                 <tr class="sub-row">
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>60</td></tr>
-                                            <tr><td>어제</td><td>71</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todOrdNum}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesOrdNum}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>1,200,000</td></tr>
-                                            <tr><td>어제</td><td>2,500,000</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todOrdTotal == 0 ? 0 : #numbers.formatInteger(info.todOrdTotal, 3, 'COMMA')}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesOrdTotal == 0 ? 0 : #numbers.formatInteger(info.yesOrdTotal, 3, 'COMMA')}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>102</td></tr>
-                                            <tr><td>어제</td><td>130</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todRegTotal}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesRegTotal}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>1,300</td></tr>
-                                            <tr><td>어제</td><td>1,200</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todVisit}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesVisit}]]</td></tr>
                                         </table>
                                     </td>
                                     <td>
                                         <table class="mini-table">
-                                            <tr><td>오늘</td><td>13</td></tr>
-                                            <tr><td>어제</td><td>12</td></tr>
+                                            <tr><td>오늘</td><td>[[${info.todQnaTotal}]]</td></tr>
+                                            <tr><td>어제</td><td>[[${info.yesQnaTotal}]]</td></tr>
                                         </table>
                                     </td>
                                 </tr>
@@ -209,20 +273,26 @@
                         <div class="board-box">
                             <h4>공지사항</h4>
                             <ul>
-                                <li>[안내] 해외직구세금면제주의 <span>22.10.31</span></li>
-                                <li>[안내] 로젠택배 파업 / 교환수거지연 <span>22.10.31</span></li>
-                                <li>[안내] 구매회원등급제약관개정 <span>22.10.31</span></li>
-                                <li>[안내] 개인정보취급방침약관개정 <span>22.10.31</span></li>
+                                <li th:each="notice : ${notList}">
+                                    <div class="title">
+                                        <a th:href="@{'/admin/cs/notice/view/' + ${notice.cs_no}}">
+                                            [ [[${notice.cs_type}]] ] [[${notice.cs_title}]]
+                                        </a>
+                                    </div>
+                                    <div class="writer"></div> <!-- 공지사항은 작성자 X -->
+                                    <div class="date">[[${notice.cs_rdate}]]</div>
+                                </li>
                             </ul>
                         </div>
 
                         <div class="board-box">
                             <h4>고객문의</h4>
                             <ul>
-                                <li>[가입] 가입문의내용 <span>chh**</span> <span>22.10.31</span></li>
-                                <li>[탈퇴] 탈퇴문의내용 <span>chh**</span> <span>22.10.31</span></li>
-                                <li>[회원정보] 회원정보문의내용 <span>chh**</span> <span>22.10.31</span></li>
-                                <li>[회원정보] 회원정보문의내용 <span>chh**</span> <span>22.10.31</span></li>
+                                <li th:each="qna : ${qnaList}">
+                                    <div class="title">[ [[${qna.q_cate2}]] ] [[${qna.q_title}]]</div>
+                                    <div class="writer">[[${qna.masked_id}]]</div>
+                                    <div class="date">[[${qna.q_rdate}]]</div>
+                                </li>
                             </ul>
                         </div>
                     </section>
@@ -235,7 +305,7 @@
     <footer>
         <div class="middle">
             <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+                Copyright ©[[${appInfo.appName}]].co.kr All rights reserved. [[${appInfo.appName}]] ADMINISTRATOR Version [[${appInfo.appVersion}]]
             </p>
         </div>
     </footer>
@@ -312,58 +382,7 @@
     </div>
 
     
-    <script>
-        // --- 모달 로직 ---
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modal = document.getElementById('modal');
 
-        // '등록하기' 버튼을 클릭하면 모달을 보여줍니다.
-        openModalBtn.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-
-        // 'x' 버튼을 클릭하면 모달을 숨깁니다.
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-
-        // 모달의 배경(오버레이) 부분을 클릭하면 모달을 숨깁니다.
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-
-        // --- Daum 우편번호 서비스 로직 ---
-        const searchAddressBtn = document.getElementById('searchAddressBtn');
-
-        function execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-                    let addr = ''; // 주소 변수
-
-                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져옵니다.
-                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                        addr = data.roadAddress;
-                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                        addr = data.jibunAddress;
-                    }
-
-                    // 우편번호와 주소 정보를 해당 필드에 넣습니다.
-                    document.getElementById('zipcode').value = data.zonecode;
-                    document.getElementById("address").value = addr;
-                    // 커서를 상세주소 필드로 이동시킵니다.
-                    document.getElementById("address-detail").focus();
-                }
-            }).open();
-        }
-
-        // '우편번호 검색' 버튼 클릭 시 함수를 실행합니다.
-        searchAddressBtn.addEventListener('click', execDaumPostcode);
-
-    </script>
 
 </body>
 </html>

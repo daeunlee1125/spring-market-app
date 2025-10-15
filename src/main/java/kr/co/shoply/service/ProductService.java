@@ -1,13 +1,8 @@
 package kr.co.shoply.service;
 
-import kr.co.shoply.dto.CartDTO;
-import kr.co.shoply.dto.ProdOptionDTO;
-import kr.co.shoply.dto.ProductDTO;
-import kr.co.shoply.dto.ReviewDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.entity.Product;
-import kr.co.shoply.mapper.CartMapper;
-import kr.co.shoply.mapper.ProductMapper;
-import kr.co.shoply.mapper.ReviewMapper;
+import kr.co.shoply.mapper.*;
 import kr.co.shoply.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +16,8 @@ import java.util.List;
 public class ProductService {
     private final ProductMapper productMapper;
     private final CartMapper cartMapper;
+    private final PointMapper pointMapper;
+    private final CouponMapper couponMapper;
     private final ReviewMapper reviewMapper;
 
     public List<ProductDTO> getProductAll3(int cate2_no, String sort){
@@ -32,8 +29,6 @@ public class ProductService {
     }
 
     public List<ProdOptionDTO> getProductOption3(String prod_no){
-
-
         return productMapper.selectOption3(prod_no);
     }
 
@@ -49,11 +44,30 @@ public class ProductService {
         }
     }
 
+    public List<CartDTO> getSelectedCartList3(List<Integer> cart_no_list){
+        return cartMapper.selectCartsByNos(cart_no_list);
+    }
+
+    public int getPoint3(String mem_id){
+        return pointMapper.selectPoint3(mem_id);
+    }
+
+    public List<SysCouponDTO> getUserCoupon3(String mem_id){
+        return couponMapper.selectUserCoupon3(mem_id);
+    }
+
     public void insertCart3(String mem_id, String prod_no, int cart_item_cnt, String cart_option){
         cartMapper.insertCart3(mem_id, prod_no, cart_item_cnt, cart_option);
     }
 
+    public void updateCartQuantity(CartUpdateDTO cartUpdateDTO) {
+        cartMapper.updateCartQuantity(cartUpdateDTO);
+    }
+
     public void deleteCart3(int cart_no){
         cartMapper.deleteCart3(cart_no);
+    }
+    public void deleteSelectedCarts3(List<Integer> cart_no_list){
+        cartMapper.deleteSelectedCarts3(cart_no_list);
     }
 }

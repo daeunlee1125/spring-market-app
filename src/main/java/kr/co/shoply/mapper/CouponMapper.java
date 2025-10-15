@@ -22,7 +22,7 @@ public interface CouponMapper {
 
     int insertCoupon(SysCouponDTO couponDTO);
 
-
+    public List<SysCouponDTO> selectUserCoupon3(String mem_id);
 
     @Select("SELECT COUNT(*) FROM SYS_COUPON WHERE CP_CODE = #{code}")
     boolean existsByCode(String code);

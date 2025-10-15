@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.Cate1Mapper">
+
+
+    <select id="chartCate1" resultType="kr.co.shoply.dto.Cate1DTO">
+        SELECT
+        cate1_name,
+        sum((prod_price * (100 - prod_sale) / 100) * item_cnt) AS cate1_sell
+        FROM product p
+        JOIN order_item i USING (prod_no)
+        JOIN cate2 c USING (CATE2_NO)
+        JOIN cate1 t USING (cate1_no)
+        GROUP BY cate1_name
+    </select>
+
+
+</mapper>

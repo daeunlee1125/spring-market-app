@@ -39,6 +39,10 @@ public class SiteInfoService {
         return csNoticeMapper.noticeList2();
     }
 
+    public List<QnaDTO> getQnaList(){
+        return qnaMapper.selectQna2();
+    }
+
     public AdInfoDTO getAdminInfos(){
 
         AdInfoDTO dto1 = orderItemMapper.itemStatCnt2();

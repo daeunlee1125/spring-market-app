@@ -16,5 +16,6 @@ public class PointDTO {
     private String p_info;
     private String p_date;
     private String p_exp_date;
+    private Integer  ord_no;
 
 }

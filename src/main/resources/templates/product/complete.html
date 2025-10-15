@@ -4,39 +4,40 @@
                 <h1>주문완료</h1>
 
                 <div class="complete-message-box">
-                    <p><strong>이민준</strong> 고객님 주문이 완료되었습니다.</p>
+                    <p><strong th:text="${orderInfo.getOrd_name()}">이민준</strong> 고객님 주문이 완료되었습니다.</p>
                 </div>
 
                 <div class="order-info-bar">
-                    <span>2025년 9월 28일(일)에 주문하신 주문건의 주문번호는 <strong>202509280952869</strong>입니다.</span>
+                    <span th:text="${orderInfo.getOrd_date()} + '에 주문하신 주문건의 주문번호는'">2025년 9월 28일(일)에 주문하신 주문건의 주문번호는 <strong th:text="${orderInfo.getOrd_no()}">202509280952869</strong>입니다.</span>
                 </div>
 
                 <div class="recipient-info">
-                    <strong>받는 분 정보</strong>: 이민준 010-1234-1234 [집] 부산광역시 부산진구 동의대학교
+                    <strong th:text="'받는 분 정보: ' + ${orderInfo.getOrd_name()} + ' ' + ${orderInfo.getOrd_hp()} + ' [' + ${orderInfo.getOrd_zip()} + '] ' + ${orderInfo.getOrd_addr1()} + ' ' + ${orderInfo.getOrd_addr2()}">받는 분 정보</strong>: 이민준 010-1234-1234 [집] 부산광역시 부산진구 동의대학교
                 </div>
 
                 <div class="price-summary-box">
-                    <span>주문금액 <strong>23,580</strong>원</span>
+                    <span>주문금액 <strong th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')}">23,580</strong>원</span>
                     <span class="op">-</span>
-                    <span>상품할인 <strong>2,358</strong>원</span>
+                    <span>상품할인 <strong th:text="${#numbers.formatDecimal(totalSalePrice, 0, 'COMMA', 0, 'POINT')}">2,358</strong>원</span>
                     <span class="op">+</span>
-                    <span>배송비 <strong>0</strong>원</span>
+                    <span>배송비 <strong th:text="${#numbers.formatDecimal(totalDeliv, 0, 'COMMA', 0, 'POINT')}">0</strong>원</span>
                     <span class="op">=</span>
-                    <span class="final-price">최종결제금액 <strong>21,222</strong>원</span>
+                    <span class="final-price">최종결제금액 <strong th:text="${#numbers.formatDecimal(orderInfo.getOrd_total(), 0, 'COMMA', 0, 'POINT')}">21,222</strong>원</span>
                 </div>
 
                 <section class="order-section">
                     <h2>주문 상품 정보</h2>
-                    <div class="order-item">
+                    <div class="order-item" th:each="completeDTO : ${orderItems}">
                         <img th:src="@{https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg}" alt="주문상품1">
                         <div class="order-item-info">
-                            <p class="name">마스마룰즈 스트랩파우치 모음전 VER.3</p>
-                            <p class="desc">옵션: SP_체커보드</p>
-                            <p class="quantity">수량: 1개</p>
+                            <p class="name" th:text="${completeDTO.getOrderItems().getProduct().getProd_name()}">마스마룰즈 스트랩파우치 모음전 VER.3</p>
+                            <p class="desc" th:text="${completeDTO.getOrderItems().getProduct().getProductOption()}">옵션: SP_체커보드</p>
+                            <p class="quantity" th:text="${completeDTO.getOrderItems().getItem_cnt()}">수량: 1개</p>
                         </div>
                         <div class="order-item-price">
-                            <p class="price">23,580원</p>
-                            <p class="discount">할인 -2,358원</p>
+                            <p class="price" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_price(), 0, 'COMMA', 0, 'POINT')} + '원'">23,580원</p>
+                            <p class="discount" th:text="'상품 할인 -' + ${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getSaleprice(), 0, 'COMMA', 0, 'POINT')}">할인 -2,358원</p>
+                            <p class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')}">배송비 +2,358원</p>
                         </div>
                     </div>
                 </section>
@@ -48,11 +49,11 @@
                             <div class="info-table">
                                 <div class="info-row">
                                     <span class="label">결제 방법</span>
-                                    <span class="value">신용카드 (KB국민카드 9490-****-****-2084 / 일시불)</span>
+                                    <span class="value" th:text="${orderInfo.getOrd_payment()}">신용카드 (일시불)</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">총 결제금액</span>
-                                    <span class="value final-value">21,222원</span>
+                                    <span class="value final-value" th:text="${#numbers.formatDecimal(orderInfo.getOrd_total(), 0, 'COMMA', 0, 'POINT')}">21,222원</span>
                                 </div>
                             </div>
                         </section>
@@ -61,15 +62,15 @@
                             <div class="info-table">
                                 <div class="info-row">
                                     <span class="label">주문번호</span>
-                                    <span class="value">202509280952869</span>
+                                    <span class="value" th:text="${orderInfo.getOrd_no()}">202509280952869</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">주문자</span>
-                                    <span class="value">이민준</span>
+                                    <span class="value" th:text="${orderInfo.getOrd_name()}">이민준</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">연락처</span>
-                                    <span class="value">010-2109-8237</span>
+                                    <span class="value" th:text="${orderInfo.getOrd_hp()}">010-2109-8237</span>
                                 </div>
                             </div>
                         </section>
@@ -78,15 +79,15 @@
                             <div class="info-table">
                                 <div class="info-row">
                                     <span class="label">수취인</span>
-                                    <span class="value">이민준</span>
+                                    <span class="value" th:text="${orderInfo.getOrd_name()}">이민준</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">연락처</span>
-                                    <span class="value">010-1234-1234</span>
+                                    <span class="value" th:text="${orderInfo.getOrd_hp()}">010-2109-8237>010-1234-1234</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">배송지 주소</span>
-                                    <span class="value">[집] 부산광역시 부산진구 동의대학교</span>
+                                    <span class="value" th:text="'[' + ${orderInfo.getOrd_zip()} + '] ' + ${orderInfo.getOrd_addr1()} + ' ' + ${orderInfo.getOrd_addr2()}">[집] 부산광역시 부산진구 동의대학교</span>
                                 </div>
                             </div>
                         </section>
@@ -98,7 +99,7 @@
                             <div class="benefits-box">
                                 <p class="benefit-title"><strong>21원</strong> 혜택을 받으셨어요!</p>
                                 <div class="benefit-item">
-                                    <span>신세계포인트</span>
+                                    <span>SHOPLY 포인트</span>
                                     <span>21원</span>
                                 </div>
                             </div>

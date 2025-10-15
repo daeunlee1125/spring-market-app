@@ -61,7 +61,7 @@
             p.PROD_PRICE-(p.PROD_PRICE * (p.PROD_SALE/100)) AS realPrice
         FROM
             PRODUCT p
-        JOIN
+        LEFT JOIN
             REVIEW r ON p.PROD_NO = r.PROD_NO
         WHERE
             p.CATE2_NO = #{cate2_no}

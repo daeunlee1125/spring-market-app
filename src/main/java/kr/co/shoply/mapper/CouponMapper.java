@@ -23,6 +23,8 @@ public interface CouponMapper {
     int insertCoupon(SysCouponDTO couponDTO);
 
     public List<SysCouponDTO> selectUserCoupon3(String mem_id);
+    SysCouponDTO selectSysCoupon3(String cp_code);
+    public void updateUsedCoupon3(@Param("cp_code") String cpCode, @Param("mem_id") String memId);
 
     @Select("SELECT COUNT(*) FROM SYS_COUPON WHERE CP_CODE = #{code}")
     boolean existsByCode(String code);

@@ -18,4 +18,76 @@
         FROM "order"
     </select>
 
+    <select id="selectOrderNo3" resultType="kr.co.shoply.dto.OrderDTO">
+        SELECT *
+        FROM "order"
+        WHERE MEM_ID = #{mem_id}
+        ORDER BY ORD_DATE DESC
+        FETCH FIRST 1 ROW ONLY
+    </select>
+
+    <select id="selectOrderById" resultType="kr.co.shoply.dto.OrderDTO">
+        SELECT *
+        FROM "order"
+        WHERE ORD_NO = #{ord_no}
+    </select>
+
+    <insert id="insertOrder3">
+        INSERT INTO "order"(MEM_ID, ORD_NAME, ORD_HP, ORD_ZIP, ORD_ADDR1, ORD_ADDR2, ORD_TOTAL, ORD_DATE, ORD_STAT)
+        VALUES (#{mem_id}, #{ord_name}, #{ord_hp}, #{ord_zip}, #{ord_addr1}, #{ord_addr2}, #{ord_total}, SYSDATE, 2)
+    </insert>
+
+    <resultMap id="orderItemWithProductMap" type="kr.co.shoply.dto.OrderItemDTO">
+        <result property="ord_item_no" column="ORD_ITEM_NO"/>
+        <association property="product" javaType="kr.co.shoply.dto.ProductDTO">
+            <id property="prod_no" column="PROD_NO"/>
+            <result property="prod_name" column="PROD_NAME"/>
+            <result property="productOption" column="productOption"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="completeOrderResultMap" type="kr.co.shoply.dto.CompleteDTO">
+        <id property="order.ord_no" column="ORD_NO"/>
+
+        <association property="order" javaType="kr.co.shoply.dto.OrderDTO">
+            <id property="ord_no" column="ORD_NO"/>
+            <result property="mem_id" column="MEM_ID"/>
+        </association>
+
+        <collection property="orderItems" ofType="kr.co.shoply.dto.OrderItemDTO" resultMap="orderItemWithProductMap"/>
+    </resultMap>
+
+    <select id="selectCompleteOrder3" resultMap="completeOrderResultMap">
+        SELECT
+        o.*,
+        oi.*,
+        p.*,
+        c.CART_OPTION AS productOption
+        FROM "order" o
+        JOIN ORDER_ITEM oi ON o.ORD_NO = oi.ORD_NO
+        JOIN PRODUCT p ON oi.PROD_NO = p.PROD_NO
+        JOIN CART c ON o.MEM_ID = c.MEM_ID AND c.PROD_NO = p.PROD_NO
+        WHERE o.ORD_NO = #{ord_no}
+        AND c.CART_NO IN
+        <foreach item="cart_no" collection="cart_no_list" open="(" separator="," close=")">
+            #{cart_no}
+        </foreach>
+    </select>
+
+    <insert id="insertOrderItemList3" parameterType="java.util.List">
+        INSERT ALL
+        <foreach item="item" collection="list">
+            INTO ORDER_ITEM (ORD_NO, PROD_NO, ITEM_NAME, ITEM_CNT, ITEM_STAT)
+            VALUES
+            (
+            #{item.ord_no},
+            #{item.prod_no},
+            #{item.item_name},
+            #{item.item_cnt},
+            0
+            )
+        </foreach>
+        SELECT 1 FROM DUAL
+    </insert>
+
 </mapper>

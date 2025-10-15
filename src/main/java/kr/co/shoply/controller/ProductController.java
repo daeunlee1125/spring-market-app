@@ -19,10 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -141,11 +138,6 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/complete")
-    public String complete() {
-        return "product/complete";
-    }
-
     @PostMapping("/product/order")
     public String order(@RequestParam("cart_no") List<Integer> cart_no_list,
                         @AuthenticationPrincipal MyUserDetails myUserDetails,
@@ -170,15 +162,151 @@ public class ProductController {
         }
         List<SysCouponDTO> sysCouponDTOList = productService.getUserCoupon3(username); // 쿠폰 내역 확인
 
-        model.addAttribute("sysCouponDTOList", sysCouponDTOList); // 주문자 쿠폰 내역
-        model.addAttribute("totalPoint", totalPoint); // 주문자 포인트
+        model.addAttribute("totalPoint", totalPoint); // 주문자 보유 포인트
         model.addAttribute("saleprice", saleprice);   // 총 할인가격
         model.addAttribute("totalprice", totalprice); // 총 주문가격
         model.addAttribute("totaldeliv", totaldeliv); // 총 택배비
         model.addAttribute("cartDTOList", cartDTOList); // 상품 리스트
         model.addAttribute("memberDTO", memberDTO);   // 주문자 정보
+        model.addAttribute("sysCouponDTOList", sysCouponDTOList); // 주문자 쿠폰 내역
 
         return "product/order";
+    }
+
+    @PostMapping("/api/product/order")
+    @ResponseBody // JSON 응답을 위해 필수!
+    public Map<String, Object> processOrderAPI(@RequestBody OrderRequestDTO orderRequestDTO, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+
+        String memId = myUserDetails.getUsername();
+
+        // --- 기존 주문 처리 로직 수행 ---
+        // 1. 사용한 쿠폰 상태 업데이트
+        String cpCode = orderRequestDTO.getUsedCouponId();
+        if (cpCode != null && !cpCode.isEmpty()) {
+            productService.modifyUsedCoupon3(cpCode, memId);
+        }
+
+        // 2. 사용한 포인트 삭감
+        if(orderRequestDTO.getUsedPoints() > 0) {
+            int usedPoint = -orderRequestDTO.getUsedPoints(); // 음수로 변환
+            productService.saveUsedCoupon3(memId, 2, usedPoint, "포인트 사용");
+        }
+
+        // 3. insert order table.
+        productService.saveOrder3(
+                memId,
+                orderRequestDTO.getMemberDTO().getMem_name(),
+                orderRequestDTO.getMemberDTO().getMem_hp(),
+                orderRequestDTO.getMemberDTO().getMem_zip(),
+                orderRequestDTO.getMemberDTO().getMem_addr1(),
+                orderRequestDTO.getMemberDTO().getMem_addr2(),
+                orderRequestDTO.getFinalAmount()
+        );
+        OrderDTO orderDTO = productService.getOrderNo(memId);
+
+        // 4. insert orderItem table
+        List<Integer> cartNoList = new ArrayList<>();
+        for(int i = 0; i < orderRequestDTO.getOrderItems().size(); i++){
+            cartNoList.add(orderRequestDTO.getOrderItems().get(i).getCart_id());
+        }
+        List<CartDTO> cartDTOList = productService.getSelectedCartList3(cartNoList);
+        List<OrderItemDTO> orderItemDTOList =  new ArrayList<>();
+
+        for(CartDTO cartDTO : cartDTOList){
+            ProductDTO product = productService.getProduct3(cartDTO.getProd_no());
+            cartDTO.setProductDTO(product);
+
+            OrderItemDTO orderItemDTO = new OrderItemDTO();
+            orderItemDTO.setOrd_no(orderDTO.getOrd_no());
+            orderItemDTO.setProd_no(cartDTO.getProd_no());
+
+            orderItemDTO.setItem_name(cartDTO.getProductDTO().getProd_name());
+            orderItemDTO.setItem_cnt(cartDTO.getCart_item_cnt());
+            orderItemDTOList.add(orderItemDTO);
+        }
+        productService.saveOrderItem3(orderItemDTOList);
+
+
+        // --- JavaScript에 반환할 데이터 생성 ---
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("orderId", orderDTO.getMem_id()); // JS에서 페이지 이동 시 사용할 주문 번호
+        response.put("cartNoList", cartNoList);
+        if (cpCode != null && !cpCode.isEmpty()) {
+            response.put("cpCode", cpCode);
+        }
+        response.put("usedPoint", orderRequestDTO.getUsedPoints());
+
+        return response;
+    }
+
+
+    // ✅ 2. 주문 '완료 페이지'를 보여주는 View 메서드
+    // 페이지 요청을 받아, 필요한 데이터를 조회하여 HTML 페이지를 렌더링합니다.
+    @GetMapping("/product/complete") // GET 방식으로 변경
+    public String showCompletePage(@RequestParam String orderId, @RequestParam List<Integer> cartNoList, @RequestParam String cpCode, @RequestParam int usedPoint, Model model) {
+
+        // 서비스에 주문 정보와 주문 아이템 리스트를 함께 가져오는 메서드를 만듭니다.
+        OrderDTO orderInfo = productService.getOrderById(orderId); // 주문 기본 정보 조회
+        List<CompleteDTO> orderItems = productService.getCompleteOrder3(orderId, cartNoList); // 주문 상품 목록 조회
+        log.info("orderInfo: " +  orderInfo.toString());
+        log.info("orderItems: " +  orderItems.toString());
+
+        int totalPrice = 0;
+        int totalSalePrice = 0;
+        int totalRealPrice = 0;
+        int totalDeliv = 0;
+        int totalPoint = 0;
+        for(CompleteDTO completeDTO : orderItems){
+            // 총 주문 금액
+            totalPrice += completeDTO.getOrderItems().getProduct().getProd_price();
+
+            // 상품별 실제 결제 금액
+            completeDTO.getOrderItems().getProduct().setRealPrice(completeDTO.getOrderItems().getProduct().getProd_price() - completeDTO.getOrderItems().getProduct().getProd_price() * (completeDTO.getOrderItems().getProduct().getProd_sale() / 100));
+
+            // 총 적립 포인트
+            totalPoint += completeDTO.getOrderItems().getProduct().getProd_point();
+
+            // 총 배송비
+            totalDeliv += completeDTO.getOrderItems().getProduct().getProd_deliv_price();
+
+            // 할인 금액
+            completeDTO.getOrderItems().getProduct().setSaleprice(completeDTO.getOrderItems().getProduct().getProd_price() * (completeDTO.getOrderItems().getProduct().getProd_sale() / 100));
+
+            // 총 할인 금액
+            totalSalePrice += completeDTO.getOrderItems().getProduct().getSaleprice();
+        }
+
+        // 실제 결제 금액
+        SysCouponDTO sysCouponDTO =  new SysCouponDTO();
+        if (cpCode != null && !cpCode.isEmpty()) {
+            sysCouponDTO = productService.getSysCoupon3(cpCode);
+            model.addAttribute("sysCouponDTO", sysCouponDTO);
+        }
+        if (sysCouponDTO != null) {
+            if (sysCouponDTO.getCp_type().equals(1)) {
+                totalRealPrice = totalPrice - totalSalePrice - usedPoint - sysCouponDTO.getCp_value() + totalDeliv;
+            }else if (sysCouponDTO.getCp_type().equals(2)) {
+                totalRealPrice = totalPrice - totalSalePrice - usedPoint + totalDeliv;
+                totalRealPrice *= (int) (sysCouponDTO.getCp_value() / 100.0);
+            }else if (sysCouponDTO.getCp_type().equals(3)) {
+                totalRealPrice = totalPrice - totalSalePrice - usedPoint;
+            }else{
+                totalRealPrice = totalPrice - totalSalePrice - usedPoint + totalDeliv;
+            }
+        }
+
+
+        // 조회한 정보를 Model에 담아 View로 전달
+        model.addAttribute("orderInfo", orderInfo);
+        model.addAttribute("orderItems", orderItems);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("totalSalePrice", totalSalePrice);
+        model.addAttribute("totalRealPrice", totalRealPrice);
+        model.addAttribute("totalDeliv", totalDeliv);
+        model.addAttribute("totalPoint", totalPoint);
+
+        return "product/complete";
     }
 
     @GetMapping("/product/search")

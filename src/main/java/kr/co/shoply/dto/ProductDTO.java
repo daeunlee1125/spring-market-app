@@ -30,6 +30,7 @@ public class ProductDTO {
     private int saleprice; // 총 할인 가격
     private int totalprice; // 총 주문 가격
     private int totaldeliv; // 총 주문 배송비
+    private int productOption; // 주문시 각 상품별 옵션
 
     //my페이지 by jinwon
     private List<ProdOptionDTO> options;

@@ -10,7 +10,7 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" th:href="@{/css/admin/common.css}">
     <link rel="stylesheet" th:href="@{/css/admin/main.css}">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <aside class="sidebar">
@@ -120,8 +120,42 @@
                             <div class="dashboard-charts">
                                 <div class="chart-box">
                                     <h5>결제현황</h5>
-                                    <img th:src="@{/image/chart1.png}" alt="결제현황 차트">
+                                    <canvas id="orderChart" width="200" height="150"></canvas>
                                 </div>
+                                <script th:inline="javascript">
+                                    const stats = /*[[${chart}]]*/ [];
+
+
+                                    const labels = stats.map(s => s.ch_date);
+                                    const orderCnt = stats.map(s => s.order_cnt);
+                                    const payCnt = stats.map(s => s.pay_cnt);
+                                    const cancelCnt = stats.map(s => s.cancel_cnt);
+
+                                    new Chart(document.getElementById('orderChart'), {
+                                        type: 'bar',
+                                        data: {
+                                            labels,
+                                            datasets: [
+                                                { label: '주문', data: orderCnt, backgroundColor: '#3b82f6' },
+                                                { label: '결제', data: payCnt, backgroundColor: '#22c55e' },
+                                                { label: '취소', data: cancelCnt, backgroundColor: '#ef4444' }
+                                            ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            plugins: {
+                                                legend: { position: 'top' },
+
+                                            },
+                                            scales: {
+                                                y: { beginAtZero: true,
+                                                    ticks: {
+                                                        stepSize: 1       // 눈금 간격을 1로 설정
+                                                    }}
+                                            }
+                                        }
+                                    });
+                                </script>
                                 <div class="chart-box">
                                     <h5>주요매출</h5>
                                     <img th:src="@{/image/chart2.png}" alt="매출 차트">
@@ -316,58 +350,7 @@
     </div>
 
     
-    <script>
-        // --- 모달 로직 ---
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modal = document.getElementById('modal');
 
-        // '등록하기' 버튼을 클릭하면 모달을 보여줍니다.
-        openModalBtn.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-
-        // 'x' 버튼을 클릭하면 모달을 숨깁니다.
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-
-        // 모달의 배경(오버레이) 부분을 클릭하면 모달을 숨깁니다.
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-
-        // --- Daum 우편번호 서비스 로직 ---
-        const searchAddressBtn = document.getElementById('searchAddressBtn');
-
-        function execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-                    let addr = ''; // 주소 변수
-
-                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져옵니다.
-                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                        addr = data.roadAddress;
-                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                        addr = data.jibunAddress;
-                    }
-
-                    // 우편번호와 주소 정보를 해당 필드에 넣습니다.
-                    document.getElementById('zipcode').value = data.zonecode;
-                    document.getElementById("address").value = addr;
-                    // 커서를 상세주소 필드로 이동시킵니다.
-                    document.getElementById("address-detail").focus();
-                }
-            }).open();
-        }
-
-        // '우편번호 검색' 버튼 클릭 시 함수를 실행합니다.
-        searchAddressBtn.addEventListener('click', execDaumPostcode);
-
-    </script>
 
 </body>
 </html>

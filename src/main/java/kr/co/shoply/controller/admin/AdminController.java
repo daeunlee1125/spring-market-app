@@ -1,6 +1,7 @@
 package kr.co.shoply.controller.admin;
 
 import kr.co.shoply.dto.AdInfoDTO;
+import kr.co.shoply.dto.Chart1DTO;
 import kr.co.shoply.dto.CsNoticeDTO;
 import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.io.Console;
 import java.util.List;
 
 @Controller
@@ -25,7 +27,13 @@ public class AdminController {
         info.setVisit(siteInfoService.getVisitCnt());
         info.setTodVisit(siteInfoService.getTodayCnt());
         info.setYesVisit(siteInfoService.getYesterdayCnt());
+
+        List<Chart1DTO> chart = siteInfoService.getChartInfo();
+        log.info("chart : " + chart.toString());
+
+
         model.addAttribute("info", info);
+        model.addAttribute("chart", chart);
 
         List<CsNoticeDTO> notList = siteInfoService.getCsNotList();
         model.addAttribute("notList", notList);

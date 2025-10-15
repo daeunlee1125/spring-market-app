@@ -23,12 +23,18 @@ main {
     flex: 1;
     border: 1px solid #ddd;
     padding: 15px;
+    padding-bottom: 35px;
     background: #fff;
     text-align: center;
 }
 .chart-box canvas {
     width: 100% !important;
     height: auto !important;
+}
+.chart-box #salesChart {
+    width: 75% !important;
+    height: auto !important;
+    margin: 0 auto;
 }
 .chart-box img {
     width: 100%;

@@ -4,6 +4,12 @@ import jakarta.transaction.Transactional;
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
+
+import kr.co.shoply.dto.PointDTO;
+import kr.co.shoply.mapper.AdminMemberMapper;
+import kr.co.shoply.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import kr.co.shoply.mapper.AdminMemberMapper;
 import kr.co.shoply.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +56,21 @@ public class AdminMemberService {
         }
     }
 
+    // 회원 포인트
+
+    public PageResponseDTO<PointDTO> selectAdminPointList(PageRequestDTO pageRequestDTO) {
+        List<PointDTO> list = adminMemberMapper.selectAdminPointList(pageRequestDTO);
+        int total = adminMemberMapper.selectAdminTotalCount(pageRequestDTO);
+        return PageResponseDTO.<PointDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(list)
+                .total(total)
+                .build();
+    }
 
 
 }
+
+
+}
+

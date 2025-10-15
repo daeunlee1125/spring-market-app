@@ -3,6 +3,7 @@ package kr.co.shoply.mapper;
 
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.PageRequestDTO;
+import kr.co.shoply.dto.PointDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,6 +34,14 @@ public interface AdminMemberMapper {
     // 회원등급 수정
     void AdminupdateRank(@Param("mem_id") String memId,
                          @Param("mem_rank") String memRank);
+
+
+    //  포인트 관리 추가
+    List<PointDTO> selectAdminPointList(PageRequestDTO pageRequestDTO);
+    int selectAdminTotalCount(PageRequestDTO pageRequestDTO);
+
+
+    void deleteSelectedPoints(@Param("p_no") List<Integer> p_no);
 
 
 }

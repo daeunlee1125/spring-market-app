@@ -128,6 +128,107 @@
 
 
 
+    <!-- 포인트 관련 sql -->
+
+    <select id="selectAdminPointList" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="kr.co.shoply.dto.PointDTO">
+        SELECT *
+        FROM (
+        SELECT ROWNUM AS rnum, a.*
+        FROM (
+        SELECT
+        mem_id,
+        mem_name,
+        p_point,
+        p_no,
+        p_info,
+        p_date,
+        remain_point
+        FROM (
+        SELECT
+        p.p_no,
+        m.mem_id,
+        m.mem_name,
+        p.p_point,
+        p.p_info,
+        p.p_date,
+        SUM(p.p_point) OVER (
+        PARTITION BY m.mem_id
+        ORDER BY p.p_date ASC
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS remain_point
+        FROM MEMBER m
+        INNER JOIN POINT p ON m.mem_id = p.mem_id
+        <where>
+            m.mem_level = '1'
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'mem_id'">
+                        AND m.mem_id LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_name'">
+                        AND m.mem_name LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_email'">
+                        AND m.mem_email LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_hp'">
+                        AND m.mem_hp LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+        )
+        ORDER BY p_date DESC   <!--  최신 날짜순 정렬 -->
+        ) a
+        WHERE ROWNUM &lt;= #{offset} + #{size}
+        )
+        WHERE rnum &gt; #{offset}
+    </select>
+
+
+
+
+
+    <select id="selectAdminTotalCount" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+        SELECT m.mem_id
+        FROM MEMBER m
+        LEFT JOIN POINT p ON m.mem_id = p.mem_id
+        <where>
+            m.mem_level = '1'
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'mem_id'">
+                        AND m.mem_id LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_name'">
+                        AND m.mem_name LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_email'">
+                        AND m.mem_email LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'mem_hp'">
+                        AND m.mem_hp LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+        GROUP BY m.mem_id
+        )
+    </select>
+
+
+
+
+    <delete id="deleteSelectedPoints" parameterType="list">
+        DELETE FROM POINT
+        WHERE P_NO IN
+        <foreach collection="p_no" item="p_no" open="(" separator="," close=")">
+            #{p_no}
+        </foreach>
+    </delete>
+
 
 
 

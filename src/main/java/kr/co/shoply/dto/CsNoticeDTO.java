@@ -10,14 +10,14 @@ import lombok.*;
 @Builder
 public class CsNoticeDTO {
 
-    private int cs_no;
-    private String cs_type;
-    private String cs_title;
-    private String cs_content;
-    private int cs_hit;
-    private String cs_rdate;
+    private int csNo;
+    private String csType;
+    private String csTitle;
+    private String csContent;
+    private int csHit;
+    private String csRdate;
 
     public String getCs_rdate() {
-        return cs_rdate.substring(2, 10).replace("T", " ");
+        return csRdate.substring(2, 10).replace("T", " ");
     }
 }

@@ -16,18 +16,35 @@ import java.time.LocalDateTime;
 public class Qna {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int q_no;
+    @Column(name = "q_no")
+    private int qNo;
 
-    private String mem_id;
-    private String q_cate1;
-    private String q_cate2;
-    private String q_channel;
-    private String q_title;
-    private String q_content;
+    @Column(name = "mem_id")
+    private String memId;
+
+    @Column(name = "q_cate1")
+    private String qCate1;
+
+    @Column(name = "q_cate2")
+    private String qCate2;
+
+    @Column(name = "q_channel")
+    private String qChannel;
+
+    @Column(name = "q_title")
+    private String qTitle;
+
+    @Column(name = "q_content")
+    private String qContent;
 
     @CreationTimestamp
-    private LocalDateTime q_rdate;
-    
-    private String q_reply;
-    private String q_comment;
+    @Column(name = "q_rdate")
+    private LocalDateTime qrDate;
+    public LocalDateTime getQrDate() { return qrDate; }
+
+    @Column(name = "q_reply")
+    private String qReply;
+
+    @Column(name = "q_comment")
+    private String qComment;
 }

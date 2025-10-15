@@ -1,21 +1,31 @@
 <div class="container">
-    <!-- 브레드크럼 -->
-    <div class="breadcrumb">
-        <a href="#">홈</a> &gt; 자주묻는질문
-    </div>
+<!-- 브레드크럼 -->
+<div class="breadcrumb">
+    <a href="#">홈</a> &gt; 자주묻는질문
+</div>
 
-    <!-- 메인 영역 -->
-    <div class="main-area">
-        <!-- 사이드바 -->
-        <div class="sidebar">
-            <ul class="sidebar-menu">
-                <li class="category-title">자주묻는 질문</li>
-                <li><a href="#" class="active">회원</a></li>
-                <li><a href="#">쿠폰/이벤트</a></li>
-                <li><a href="#">주문/결제</a></li>
-                <li><a href="#">배송</a></li>
-                <li><a href="#">취소/반품/교환</a></li>
-                <li><a href="#">여행/숙박/항공</a></li>
-                <li><a href="#">안전거래</a></li>
-            </ul>
-        </div>
+<!-- 메인 영역 -->
+<div class="main-area">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="category-title">자주묻는 질문</li>
+            <!-- 1차 카테고리 -->
+            <li th:each="c1 : ${cat1List}" th:if="${c1 != '전체'}">
+                <!-- 1차 링크 -->
+                <a th:href="${selCat1 == c1} ? @{/cs/faq/list} : @{/cs/faq/list(cat1=${c1})}"
+                   th:classappend="${selCat1 == c1} ? ' active' : ''"
+                   th:text="${c1}">카테고리</a>
+
+                <!-- 선택된 1차만 2차 출력 -->
+                <ul class="sub-menu" th:if="${selCat1 == c1}">
+                    <li th:each="c2 : ${cat2List}" th:if="${c2 != '전체'}">
+                        <a th:href="@{/cs/faq/list(cat1=${c1}, cat2=${c2})}"
+                           th:classappend="${selCat2 == c2} ? ' active' : ''">
+                            <span class="sub-label" th:text="${c2}">2차 카테고리</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>

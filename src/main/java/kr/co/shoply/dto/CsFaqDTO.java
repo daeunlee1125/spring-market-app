@@ -10,12 +10,17 @@ import lombok.*;
 @Builder
 public class CsFaqDTO {
 
-    private int cs_faq_no;
-    private String cs_faq_cate1;
-    private String cs_faq_cate2;
-    private String cs_faq_title;
-    private String cs_faq_content;
-    private int cs_faq_hit;
-    private String cs_faq_rdate;
+    private int csFaqNo;
+    private String csFaqCate1;
+    private String csFaqCate2;
+    private String csFaqTitle;
+    private String csFaqContent;
+    private int csFaqHit;
+    private String csFaqRdate;
+
+    public String getCsFaqRdateShort() {
+        if (csFaqRdate == null || csFaqRdate.length() < 10) return csFaqRdate;
+        return csFaqRdate.substring(2, 10).replace("T", " ");
+    }
 
 }

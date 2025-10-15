@@ -10,16 +10,17 @@ import lombok.*;
 @Builder
 public class QnaDTO {
 
-    private int q_no;
-    private String mem_id;
-    private String q_cate1;
-    private String q_cate2;
-    private String q_channel;
-    private String q_title;
-    private String q_content;
-    private String q_rdate;
-    private String q_reply;
-    private String q_comment;
+    private int qNo;
+    private String memId;
+    private String qCate1;
+    private String qCate2;
+    private String qChannel;
+    private String qTitle;
+    private String qContent;
 
+    private String qrDate;
+    public String getQrDate() { return qrDate; }
+    private String qReply;
+    private String qComment;
 
 }

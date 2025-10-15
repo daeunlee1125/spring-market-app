@@ -1,19 +1,28 @@
-<div class="container">
-    <!-- 브레드크럼 -->
-    <div class="breadcrumb">
-        <a href="#">홈</a> &gt; 공지사항
-    </div>
+<!-- templates/cs/_sidebar.html -->
+<div th:fragment="catSidebar(mode, title, selCat1, selCat2, cat1List, cat2List)" class="sidebar">
+    <ul class="sidebar-menu">
+        <li class="category-title" th:text="${title}">카테고리</li>
 
-    <!-- 메인 영역 -->
-    <div class="main-area">
-        <!-- 사이드바 -->
-        <div class="sidebar">
-            <ul class="sidebar-menu">
-                <li class="category-title">공지사항</li>
-                <li><a href="#" class="active">전체</a></li>
-                <li><a href="#">고객서비스</a></li>
-                <li><a href="#">안전거래</a></li>
-                <li><a href="#">위해상품</a></li>
-                <li><a href="#">이벤트당첨</a></li>
+        <li th:each="c1 : ${cat1List}" th:if="${c1 != '전체'}">
+            <a th:href="@{${
+              mode == 'notice' ? '/cs/notice/list' :
+              mode == 'qna'    ? '/cs/qna/list'    :
+                                  '/cs/faq/list'
+            }(cat1=${c1})}"
+               th:classappend="${selCat1 == c1} ? ' active' : ''"
+               th:text="${c1}">카테고리</a>
+
+            <ul class="sub-menu"
+                th:if="${mode != 'notice' and selCat1 == c1 and cat2List != null and #lists.size(cat2List) > 0}"
+                th:classappend="${selCat1 == c1} ? ' open' : ''">
+            <li th:each="c2 : ${cat2List}" th:if="${c2 != '전체'}">
+                    <a th:href="@{${
+                  mode == 'qna' ? '/cs/qna/list' : '/cs/faq/list'
+                }(cat1=${c1}, cat2=${c2})}"
+                       th:classappend="${selCat2 == c2} ? ' active' : ''"
+                       th:text="${c2}">2차</a>
+                </li>
             </ul>
-        </div>
+        </li>
+    </ul>
+</div>

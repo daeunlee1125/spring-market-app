@@ -1,7 +1,14 @@
-<div th:replace ="~{cs/_head.html}"></div>
-<div th:replace ="~{cs/_sidebar.html}"></div>
+<div th:replace="~{cs/_head.html}"></div>
 
-<!-- 메인 콘텐츠 -->
+<div class="container">
+<div class="breadcrumb">
+    <a href="#">홈</a> &gt; 공지사항
+</div>
+
+<div class="main-area">
+    <!-- 뷰에서도 사이드바 노출 -->
+    <div th:replace="~{cs/_sidebar :: catSidebar('notice','공지사항', ${selCat1}, ${null}, ${cat1List}, ${null})}"></div>
+        <!-- 메인 콘텐츠 -->
     <div class="main-content">
 
         <!-- 공지사항 헤더 -->
@@ -12,15 +19,15 @@
 
         <!-- 상세 페이지 헤더 -->
         <div class="detail-header">
-          <h4 id="noticeTitle" th:text="'[' + ${csNoticeDTO.cs_type} + '] ' + ${csNoticeDTO.cs_title}"></h4>
+          <h4 id="noticeTitle" th:text="'[' + ${csNoticeDTO.csType} + '] ' + ${csNoticeDTO.csTitle}"></h4>
             <div class="detail-meta">
-                <span>작성일: <span id="noticeDate" th:text="${csNoticeDTO.cs_rdate}"></span></span>
-                <span>조회수: <span th:text="${csNoticeDTO.cs_hit}"></span></span>
+                <span>작성일: <span id="noticeDate" th:text="${csNoticeDTO.csRdate}"></span></span>
+                <span>조회수: <span th:text="${csNoticeDTO.csHit}"></span></span>
             </div>
         </div>
 
         <!-- 상세 내용 -->
-        <div class="detail-content" id="noticeContent" th:utext="${csNoticeDTO.cs_content}">
+        <div class="detail-content" id="noticeContent" th:utext="${csNoticeDTO.csContent}">
         </div>
 
         <!-- 버튼 영역 -->

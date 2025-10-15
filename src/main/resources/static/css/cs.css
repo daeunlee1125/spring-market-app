@@ -253,3 +253,39 @@ section header-sec a:hover {
     font-size: 14px;
     color: #666;
 }
+
+/* 불릿 제거 */
+.sidebar-menu, .sub-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 1차 카테고리 */
+.sidebar-menu > li > a {
+    display: block;
+    padding: 10px 12px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+}
+.sidebar-menu > li > a.active {
+    font-weight: 600;
+}
+
+/* 2차 카테고리 */
+.sub-menu {
+    margin: 6px 0 8px 16px; /* 살짝 들여쓰기 */
+}
+.sub-menu > li > a {
+    display: block;
+    padding: 3px 6px;
+    font-size: 12px;
+    text-decoration: none;
+}
+.sub-menu > li > a .sub-label::before {
+    content: "- ";  /* 동그라미 대신 dash */
+}
+.sub-menu > li > a.active {
+    font-weight: 600;
+}

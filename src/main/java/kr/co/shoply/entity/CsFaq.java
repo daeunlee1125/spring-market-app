@@ -17,15 +17,26 @@ public class CsFaq {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cs_faq_no;
+    @Column(name = "cs_faq_no")
+    private int csFaqNo;
 
-    private String cs_faq_cate1;
-    private String cs_faq_cate2;
-    private String cs_faq_title;
-    private String cs_faq_content;
-    private int cs_faq_hit;
+    @Column(name = "cs_faq_cate1")
+    private String csFaqCate1;
+
+    @Column(name = "cs_faq_cate2")
+    private String csFaqCate2;
+
+    @Column(name = "cs_faq_title")
+    private String csFaqTitle;
+
+    @Column(name = "cs_faq_content")
+    private String csFaqContent;
+
+    @Column(name = "cs_faq_hit")
+    private int csFaqHit;
 
     @CreationTimestamp
-    private LocalDateTime cs_faq_rdate;
+    @Column(name = "cs_faq_rdate")
+    private LocalDateTime csFaqRdate;
 
 }

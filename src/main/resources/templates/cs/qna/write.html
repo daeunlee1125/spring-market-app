@@ -1,89 +1,150 @@
-<div th:replace ="~{cs/_head.html}"></div>
-<div th:replace ="~{cs/_sidebar3.html}"></div>
+<div th:replace="~{cs/_head.html}"></div>
 
-<!-- 메인 콘텐츠 -->
+<div class="container">
+    <div class="breadcrumb">
+        <a href="#">홈</a> &gt; 문의게시판
+    </div>
+
+    <div class="main-area">
+        <!-- 사이드바 -->
+        <div th:replace="~{cs/_sidebar :: catSidebar(
+            'qna',
+            '문의게시판',
+            ${selCat1},
+            ${selCat2},
+            ${cat1List},
+            ${cat2List}
+    )}"></div>
+
+
 <div class="main-content">
-        
-<!-- 공지사항 헤더 -->
-<div class="notice-header">
-    <h2>전체</h2>
-    <p>공지사항 전체 내용입니다.</p>
-</div>
-<!-- 문의등록 폼 컨테이너 -->
-<div class="inquiry-register-container">
-<!-- 문의등록 폼 -->
-<form class="inquiry-register-form">
-<!-- 문의유형 -->
-<div class="inquiry-form-row">
-<div class="inquiry-form-label">문의유형</div>
-<div class="inquiry-form-field">
-    <div class="inquiry-select-group">
-        <select name="category" class="inquiry-select">
-            <option value="">1차 선택</option>
-            <option value="register">회원가입</option>
-            <option value="login">로그인</option>
-            <option value="info">정보수정</option>
-            <option value="withdraw">탈퇴</option>
-        </select>
-        <select name="subcategory" class="inquiry-select">
-            <option value="">2차 선택</option>
-            <option value="general">일반문의</option>
-            <option value="error">오류신고</option>
-            <option value="suggestion">개선제안</option>
-        </select>
+    <div class="notice-header">
+        <h2>문의등록</h2>
+        <p>궁금한 점을 남겨주세요.</p>
+    </div>
+
+    <div class="inquiry-register-container">
+        <form class="inquiry-register-form" th:action="@{/cs/qna/write}" method="post">
+            <!-- 문의유형 -->
+            <div class="inquiry-form-row">
+                <div class="inquiry-form-label">문의유형</div>
+                <div class="inquiry-form-field">
+                    <div class="inquiry-select-group">
+                        <!-- 1차 -->
+                        <select name="qCate1" class="inquiry-select" id="qCate1">
+                            <option value="">1차 선택</option>
+                            <option th:each="c1 : ${cat1Master}"
+                                    th:value="${c1}"
+                                    th:text="${c1}"
+                                    th:selected="${selCat1 == c1}">회원</option>
+                        </select>
+
+                        <!-- 2차 : 폼에서는 cat2Master를 사용 -->
+                        <select name="qCate2" class="inquiry-select" id="qCate2">
+                            <option value="">2차 선택</option>
+                            <option th:each="c2 : ${cat2Master}"
+                                    th:value="${c2}"
+                                    th:text="${c2}"
+                                    th:selected="${selCat2 == c2}">가입</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 제목 -->
+            <div class="inquiry-form-row">
+                <div class="inquiry-form-label">제목</div>
+                <div class="inquiry-form-field">
+                    <input type="text" class="inquiry-text-input" name="qTitle" placeholder="제목을 입력해주세요.">
+                </div>
+            </div>
+
+            <!-- 내용 -->
+            <div class="inquiry-form-row content-row">
+                <div class="inquiry-form-label">내용</div>
+                <div class="inquiry-form-field">
+                    <textarea class="inquiry-textarea" name="qContent" placeholder="내용을 입력해주세요."></textarea>
+                </div>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="inquiry-register-buttons">
+                <button type="button" class="inquiry-btn inquiry-btn-cancel" onclick="showCancelConfirm()">취소하기</button>
+                <button type="button" class="inquiry-btn inquiry-btn-submit" onclick="showRegisterConfirm()">등록하기</button>
+            </div>
+        </form>
     </div>
 </div>
-</div>
 
-<!-- 제목 -->
-<div class="inquiry-form-row">
-  <div class="inquiry-form-label">제목</div>
-    <div class="inquiry-form-field">
-        <input type="text" class="inquiry-text-input" name="title" placeholder="제목을 입력해주세요.">
-    </div>
-</div>
-
-<!-- 내용 -->
-<div class="inquiry-form-row content-row">
-  <div class="inquiry-form-label">내용</div>
-    <div class="inquiry-form-field">
-        <textarea class="inquiry-textarea" name="content" placeholder="내용을 입력해주세요."></textarea>
-      </div>
-</div>
-
-<!-- 버튼 영역 -->
-<div class="inquiry-register-buttons">
-  <button type="button" class="inquiry-btn inquiry-btn-cancel" onclick="showCancelConfirm()">취소하기</button>
-  <button type="button" class="inquiry-btn inquiry-btn-submit" onclick="showRegisterConfirm()">등록하기</button>
-  </div>
-
-  <div class="modal-overlay hidden" id="cancelConfirmModal">
+<!-- 취소 모달 -->
+<div class="modal-overlay hidden" id="cancelConfirmModal">
     <div class="confirm-modal">
         <div class="modal-content">
             <p>작성중인 내용이 사라집니다. 취소하시겠습니까?</p>
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-confirm" onclick="confirmCancel()">확인</button>
-                <button class="modal-btn" onclick="hideCancelConfirm()">취소</button>
+                <button type="button" class="modal-btn modal-btn-confirm" onclick="confirmCancel()">확인</button>
+                <button type="button" class="modal-btn" onclick="hideCancelConfirm()">취소</button>
             </div>
         </div>
     </div>
 </div>
-  <!-- 등록 확인 모달 -->
-  <div class="modal-overlay hidden" id="registerConfirmModal">
-      <div class="confirm-modal">
-          <div class="modal-content">
-              <p>문의를 등록하시겠습니까?</p>
-              <div class="modal-buttons">
-                  <button class="modal-btn modal-btn-confirm" onclick="confirmRegister()">등록</button>
-                  <button class="modal-btn" onclick="hideRegisterConfirm()">취소</button>
-              </div>
-          </div>
-      </div>
-  </div>
 
-  </form>
-  </div>
+<!-- 등록 모달 -->
+<div class="modal-overlay hidden" id="registerConfirmModal">
+    <div class="confirm-modal">
+        <div class="modal-content">
+            <p>문의를 등록하시겠습니까?</p>
+            <div class="modal-buttons">
+                <button type="button" class="modal-btn modal-btn-confirm" onclick="confirmRegister()">등록</button>
+                <button type="button" class="modal-btn" onclick="hideRegisterConfirm()">취소</button>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 </div>
-<div th:replace ="~{cs/_tail.html}"></div>
+<div th:replace="~{cs/_tail.html}"></div>
+<script th:inline="javascript">
+    // 컨텍스트 포함한 절대경로 주입 (예: /shoply/cs/qna/cat2)
+    const CAT2_URL = /*[[@{/cs/qna/cat2}]]*/ '/cs/qna/cat2';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const c1 = document.getElementById('qCate1');
+        const c2 = document.getElementById('qCate2');
+
+        const resetC2 = () => c2.innerHTML = '<option value="">2차 선택</option>';
+
+        async function loadC2(val, preselect){
+            resetC2();
+            if(!val) return;
+            try {
+                const res = await fetch(`${CAT2_URL}?cat1=${encodeURIComponent(val)}`, { method:'GET' });
+                if(!res.ok) throw new Error('HTTP ' + res.status);
+
+                // 로그인 페이지가 오는 등 JSON이 아닐 때 방지
+                const ct = res.headers.get('content-type') || '';
+                if (!ct.includes('application/json')) throw new Error('Not JSON response');
+
+                const list = await res.json();
+                (list || []).forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item; opt.textContent = item;
+                    if (preselect && preselect === item) opt.selected = true;
+                    c2.appendChild(opt);
+                });
+            } catch (e) {
+                console.error('cat2 load failed:', e);
+                const opt = document.createElement('option');
+                opt.value = ''; opt.textContent = '2차 불러오기 실패';
+                c2.appendChild(opt);
+            }
+        }
+
+        c1.addEventListener('change', () => loadC2(c1.value, null));
+
+        // 초기 진입 시 1차가 선택돼 있으면 선반영
+        if (c1.value && c2.options.length <= 1) {
+            loadC2(c1.value, c2.value || null);
+        }
+    });
+</script>

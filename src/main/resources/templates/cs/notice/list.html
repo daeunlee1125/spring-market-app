@@ -1,9 +1,16 @@
-<div th:replace ="~{cs/_head.html}"></div>
-<div th:replace ="~{cs/_sidebar.html}"></div>
+<div th:replace="~{cs/_head.html}"></div>
 
+<div class="container">
+<div class="breadcrumb">
+    <a href="#">홈</a> &gt; 공지사항
+</div>
+
+<div class="main-area">
+    <!-- 사이드바: notice 는 2차 없음 -->
+    <div th:replace="~{cs/_sidebar :: catSidebar('notice','공지사항', ${selCat1}, ${selCat2}, ${cat1List}, ${null})}"></div>
     <!-- 메인 콘텐츠 -->
-    <div class="main-content">
-        
+<div class="main-content">
+
 <!-- 공지사항 헤더 -->
 <div class="notice-header">
     <h2>전체</h2>
@@ -11,14 +18,15 @@
 </div>
 
 <!-- 공지사항 리스트 -->
-<ul class="notice-list">
-    <li class="notice-item" th:each="notice : ${noticeList}">
-        <a th:href="@{/cs/notice/view(cs_no=${notice.cs_no})}">
-        <div class="notice-content">
-                <span class="notice-category" th:text="'[' + ${notice.cs_type} + ']'"></span>
-                <span class="notice-title" th:text="${notice.cs_title}"></span>
-            </div>
-            <div class="notice-date" th:text="${notice.cs_rdate}"></div>
+    <ul class="notice-list">
+        <li class="notice-item" th:each="notice : ${noticeList}">
+            <!-- 파라미터 이름도 csNo 로 -->
+            <a th:href="@{/cs/notice/view(csNo=${notice.csNo})}">
+                <div class="notice-content">
+                    <span class="notice-category" th:text="'[' + ${notice.csType} + ']'"></span>
+                    <span class="notice-title" th:text="${notice.csTitle}"></span>
+                </div>
+            <div class="notice-date" th:text="${notice.csRdate}"></div>
         </a>
     </li>
 </ul>

@@ -114,6 +114,9 @@ margin-bottom: 15px;
 margin-right: 5px;
 }
 
+/* sidebar 접고/펼치기 */
+.sidebar .sub-menu { display: none; }
+.sidebar .sub-menu.open { display: block; }
 
 /* 메인 콘텐츠 */
 .main-content {
@@ -421,6 +424,10 @@ background: #555;
     border-bottom: 1px solid #e9ecef;
 }
 
+.faq-item a{
+    text-decoration: none;
+}
+
 .faq-item:last-child {
     border-bottom: none;
 }
@@ -704,3 +711,29 @@ background: #555;
     border-color: #0056b3;
 }
 
+.hidden {
+    display: none;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    z-index: 9999;
+}
+.modal-overlay.hidden {
+    display: none !important;
+}
+/* 모달 박스 */
+.confirm-modal {
+    max-width: 400px;
+    width: calc(100% - 40px);
+    background: #fff;          /* 흰색 박스만 보이게 */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px;
+}

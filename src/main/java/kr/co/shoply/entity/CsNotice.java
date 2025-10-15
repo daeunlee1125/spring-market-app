@@ -16,13 +16,22 @@ import java.time.LocalDateTime;
 public class CsNotice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cs_no;
+    @Column(name="cs_no")
+    private Integer csNo;
 
-    private String cs_type;
-    private String cs_title;
-    private String cs_content;
-    private int cs_hit;
+    @Column(name = "cs_type")
+    private String csType;
+
+    @Column(name = "cs_title")
+    private String csTitle;
+
+    @Column(name = "cs_content")
+    private String csContent;
+
+    @Column(name = "cs_hit")
+    private int csHit;
 
     @CreationTimestamp
-    private LocalDateTime cs_rdate;
+    @Column(name = "cs_rdate")
+    private LocalDateTime csRdate;
 }

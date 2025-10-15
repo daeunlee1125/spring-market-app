@@ -1,6 +1,7 @@
 package kr.co.shoply.service;
 
 import kr.co.shoply.dto.*;
+import kr.co.shoply.entity.Order;
 import kr.co.shoply.entity.Product;
 import kr.co.shoply.mapper.*;
 import kr.co.shoply.repository.ProductRepository;
@@ -18,6 +19,7 @@ public class ProductService {
     private final CartMapper cartMapper;
     private final PointMapper pointMapper;
     private final CouponMapper couponMapper;
+    private final OrderMapper orderMapper;
     private final ReviewMapper reviewMapper;
 
     public List<ProductDTO> getProductAll3(int cate2_no, String sort){
@@ -48,12 +50,40 @@ public class ProductService {
         return cartMapper.selectCartsByNos(cart_no_list);
     }
 
+    public OrderDTO getOrderNo(String mem_id){
+        return orderMapper.selectOrderNo3(mem_id);
+    }
+
+    public OrderDTO getOrderById(String orderNo){
+        return orderMapper.selectOrderById(orderNo);
+    }
+
     public int getPoint3(String mem_id){
         return pointMapper.selectPoint3(mem_id);
     }
 
     public List<SysCouponDTO> getUserCoupon3(String mem_id){
         return couponMapper.selectUserCoupon3(mem_id);
+    }
+
+    public SysCouponDTO getSysCoupon3(String cpCode){
+        return couponMapper.selectSysCoupon3(cpCode);
+    }
+
+    public void saveOrderItem3(List<OrderItemDTO> list){
+        orderMapper.insertOrderItemList3(list);
+    }
+
+    public void modifyUsedCoupon3(String cpCode, String memId){
+        couponMapper.updateUsedCoupon3(cpCode, memId);
+    }
+
+    public void saveUsedCoupon3(String memId, int pType, int pPoint, String pInfo){
+        pointMapper.insertUsedPoint3(memId, pType, pPoint, pInfo);
+    }
+
+    public void saveOrder3(String memId, String ordName, String ordHp, String ordZip, String ordAddr1, String ordAddr2, int ordTotal){
+        orderMapper.insertOrder3(memId, ordName, ordHp, ordZip, ordAddr1, ordAddr2,ordTotal);
     }
 
     public void insertCart3(String mem_id, String prod_no, int cart_item_cnt, String cart_option){
@@ -70,4 +100,10 @@ public class ProductService {
     public void deleteSelectedCarts3(List<Integer> cart_no_list){
         cartMapper.deleteSelectedCarts3(cart_no_list);
     }
+
+    public List<CompleteDTO> getCompleteOrder3(String ord_no, List<Integer> cart_no_list){
+        return orderMapper.selectCompleteOrder3(ord_no, cart_no_list);
+    }
+
+
 }

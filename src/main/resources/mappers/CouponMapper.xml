@@ -10,8 +10,14 @@
         FROM USER_COUPON uc
         JOIN SYS_COUPON sc ON uc.CP_CODE = sc.CP_CODE
         WHERE uc.MEM_ID = #{mem_id}
+        AND uc.CP_STAT = 1
     </select>
 
+    <select id="selectSysCoupon3" resultType="kr.co.shoply.dto.SysCouponDTO">
+        SELECT *
+        FROM SYS_COUPON sc
+        WHERE sc.CP_CODE = #{cp_code}
+    </select>
 
     <select id="selectCouponList" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="kr.co.shoply.dto.SysCouponDTO">
         SELECT *
@@ -186,7 +192,13 @@
     </select>
 
 
-
+    <update id="updateUsedCoupon3">
+        UPDATE USER_COUPON uc
+        SET CP_STAT = 0,
+        CP_USED_DATE = SYSDATE
+        WHERE uc.CP_CODE = #{cp_code}
+        AND uc.MEM_ID = #{mem_id}
+    </update>
 
     <update id="updateUserCouponStatus">
         UPDATE USER_COUPON

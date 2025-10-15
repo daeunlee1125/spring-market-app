@@ -16,8 +16,13 @@ public class OrderItemDTO {
     private String item_name;
     private Integer item_cnt;
     private Integer item_stat;
+
+    // 추가필드
+    private ProductDTO product;
+
     private String item_delv;
     private String item_trk_num;
+
 
     private Date ord_date;
 

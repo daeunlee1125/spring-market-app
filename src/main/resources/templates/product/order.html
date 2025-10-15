@@ -17,7 +17,7 @@
                                 <p id="address-display" th:text="${'[' + memberDTO.getMem_zip() + '] ' + memberDTO.getMem_addr1()}">
                                     [01234] 부산광역시 부산진구 동의대학교
                                 </p>
-                                <input type="text" th:value="${memberDTO.getMem_addr2()}">
+                                <input type="text" id="mem_addr2_input" th:value="${memberDTO.getMem_addr2()}">
                                 <br>
                                 <button type="button" id="change-address-btn">배송지 변경</button>
 
@@ -46,12 +46,12 @@
             <section class="checkout-section">
                 <h2 th:text="${'주문상품: ' + cartDTOList.size() + '개'}">주문상품: 3개</h2>
                 <div class="order-item-list">
-                    <article class="order-item" th:each="cartDTO : ${cartDTOList}">
+                    <article class="order-item" th:each="cartDTO : ${cartDTOList}" th:data-cart-id="${cartDTO.getCart_no()}">
                         <img th:src="@{https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg}" alt="마스마룰즈">
                         <div class="order-item-info">
                             <p class="brand" th:text="${cartDTO.getProductDTO().getProd_company()}">마스마룰즈</p>
                             <p class="name" th:text="${cartDTO.getProductDTO().getProd_name()}">마스마룰즈 스트랩파우치 모음전 VER.3</p>
-                            <p class="option" th:text="${cartDTO.getCart_option()}">옵션: SP_체커보드</p>
+                            <p class="option" id="productOption" th:text="${cartDTO.getCart_option()}">옵션: SP_체커보드</p>
                         </div>
                         <div class="order-item-price">
                             <p class="sale-price" th:text="${#numbers.formatDecimal(cartDTO.getProductDTO().getRealPrice() * cartDTO.getCart_item_cnt(), 0, 'COMMA', 0, 'POINT')} + '원'">13,260원</p>
@@ -132,9 +132,12 @@
             </section>
 
             <form th:action="@{/product/complete}" method="post" id="orderForm">
-                <input type="hidden" name="car">
+                <input type="hidden" name="totalPoint" th:value="${totalPoint}">
+                <input type="hidden" name="saleprice" th:value="${saleprice}">
+                <input type="hidden" name="totalprice" th:value="${totalprice}">
+                <input type="hidden" name="totaldeliv" th:value="${totaldeliv}">
                 <div class="final-agreement">
-                    <button type="submit" class="final-payment-btn" id="mainOrderBtn">동의하고 83,430원 결제하기</button>
+                    <button type="submit" class="final-payment-btn" id="mainOrderBtn">결제하기</button>
                 </div>
 
             </form>

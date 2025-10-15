@@ -11,5 +11,9 @@
         WHERE MEM_ID = #{mem_id}
     </select>
 
-
+    <insert id="insertUsedPoint3">
+        INSERT
+        INTO POINT(MEM_ID, P_TYPE, P_POINT, P_INFO, P_DATE)
+        VALUES(#{mem_id}, #{p_type}, #{p_point}, #{p_info}, SYSDATE)
+    </insert>
 </mapper>

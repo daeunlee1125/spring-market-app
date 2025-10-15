@@ -26,9 +26,9 @@
                             <p class="options" th:text="${dto.getCart_option()}">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
                         </div>
                         <div class="quantity-selector">
-                            <button class="quantity-down">-</button>
+                            <button class="quantity-down" type="button">-</button>
                             <input type="text" th:value="${dto.getCart_item_cnt()}" readonly class="quantity-input">
-                            <button class="quantity-up">+</button>
+                            <button class="quantity-up" type="button">+</button>
                         </div>
                         <div class="cart-item-price" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice() * dto.getCart_item_cnt(), 3, 'COMMA')} + '원'">58,000원</div>
                         <div class="cart-item-actions">

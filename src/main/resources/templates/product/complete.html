@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="recipient-info">
-                    <strong th:text="'받는 분 정보: ' + ${orderInfo.getOrd_name()} + ' ' + ${orderInfo.getOrd_hp()} + ' [' + ${orderInfo.getOrd_zip()} + '] ' + ${orderInfo.getOrd_addr1()} + ' ' + ${orderInfo.getOrd_addr2()}">받는 분 정보</strong>: 이민준 010-1234-1234 [집] 부산광역시 부산진구 동의대학교
+                    <strong th:text="'받는 분 정보: ' + ${orderInfo.getOrd_name()} + ' ' + ${orderInfo.getOrd_hp()} + ' [' + ${orderInfo.getOrd_zip()} + '] ' + ${orderInfo.getOrd_addr1()} + ' ' + ${orderInfo.getOrd_addr2()}">받는 분 정보</strong>
                 </div>
 
                 <div class="price-summary-box">
@@ -30,14 +30,21 @@
                     <div class="order-item" th:each="completeDTO : ${orderItems}">
                         <img th:src="@{https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg}" alt="주문상품1">
                         <div class="order-item-info">
-                            <p class="name" th:text="${completeDTO.getOrderItems().getProduct().getProd_name()}">마스마룰즈 스트랩파우치 모음전 VER.3</p>
-                            <p class="desc" th:text="${completeDTO.getOrderItems().getProduct().getProductOption()}">옵션: SP_체커보드</p>
-                            <p class="quantity" th:text="${completeDTO.getOrderItems().getItem_cnt()}">수량: 1개</p>
+                            <span class="name" th:text="${completeDTO.getOrderItems().getProduct().getProd_name()}">마스마룰즈 스트랩파우치 모음전 VER.3</span>
+                            <th:block th:if="${completeDTO.getOrderItems().getProd_option()} != null">
+                                <p class="desc" th:text="'  옵션: ' + ${completeDTO.getOrderItems().getProd_option()}">옵션: SP_체커보드</p>
+                            </th:block>
+                            <p class="quantity" th:text="'수량: ' + ${completeDTO.getOrderItems().getItem_cnt()} + '개'">수량: 1개</p>
                         </div>
                         <div class="order-item-price">
                             <p class="price" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_price(), 0, 'COMMA', 0, 'POINT')} + '원'">23,580원</p>
-                            <p class="discount" th:text="'상품 할인 -' + ${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getSaleprice(), 0, 'COMMA', 0, 'POINT')}">할인 -2,358원</p>
-                            <p class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')}">배송비 +2,358원</p>
+                            <p class="discount" th:text="'상품 할인 -' + ${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getSaleprice(), 0, 'COMMA', 0, 'POINT')} + '원'">할인 -2,358원</p>
+                            <th:block th:if="${sysCouponDTO.getCp_type() == 3}">
+                                <p style="text-decoration: line-through;" class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')} + '원'">배송비 +2,358원</p>
+                            </th:block>
+                            <th:block th:unless="${sysCouponDTO.getCp_type() == 3}">
+                                <p class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')} + '원'">배송비 +2,358원</p>
+                            </th:block>
                         </div>
                     </div>
                 </section>
@@ -49,7 +56,7 @@
                             <div class="info-table">
                                 <div class="info-row">
                                     <span class="label">결제 방법</span>
-                                    <span class="value" th:text="${orderInfo.getOrd_payment()}">신용카드 (일시불)</span>
+                                    <span class="value" th:text="${payment} + '(일시불)'">신용카드 (일시불)</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">총 결제금액</span>

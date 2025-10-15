@@ -38,53 +38,68 @@
     </insert>
 
     <resultMap id="orderItemWithProductMap" type="kr.co.shoply.dto.OrderItemDTO">
-        <result property="ord_item_no" column="ORD_ITEM_NO"/>
+        <id property="item_no" column="ITEM_NO"/>
+        <result property="ord_no" column="ORD_NO"/>
+        <result property="prod_no" column="PROD_NO"/>
+        <result property="item_name" column="ITEM_NAME"/>
+        <result property="item_cnt" column="ITEM_CNT"/>
+        <result property="item_stat" column="ITEM_STAT"/>
+        <result property="prod_option" column="PROD_OPTION"/>
+
         <association property="product" javaType="kr.co.shoply.dto.ProductDTO">
             <id property="prod_no" column="PROD_NO"/>
+            <result property="cate2_no" column="CATE2_NO"/>
             <result property="prod_name" column="PROD_NAME"/>
-            <result property="productOption" column="productOption"/>
+            <result property="prod_info" column="PROD_INFO"/>
+            <result property="prod_company" column="PROD_COMPANY"/>
+            <result property="mem_id" column="MEM_ID"/>
+            <result property="prod_price" column="PROD_PRICE"/>
+            <result property="prod_sale" column="PROD_SALE"/>
+            <result property="prod_deliv_price" column="PROD_DELIV_PRICE"/>
+            <result property="prod_point" column="PROD_POINT"/>
+            <result property="prod_stock" column="PROD_STOCK"/>
+            <result property="prod_sold" column="PROD_SOLD"/>
+            <result property="prod_hit" column="PROD_HIT"/>
         </association>
     </resultMap>
 
     <resultMap id="completeOrderResultMap" type="kr.co.shoply.dto.CompleteDTO">
-        <id property="order.ord_no" column="ORD_NO"/>
-
         <association property="order" javaType="kr.co.shoply.dto.OrderDTO">
-            <id property="ord_no" column="ORD_NO"/>
+            <result property="ord_no" column="ORD_NO"/>
             <result property="mem_id" column="MEM_ID"/>
+            <result property="ord_name" column="ORD_NAME"/>
+            <result property="ord_hp" column="ORD_HP"/>
+            <result property="ord_zip" column="ORD_ZIP"/>
+            <result property="ord_addr1" column="ORD_ADDR1"/>
+            <result property="ord_addr2" column="ORD_ADDR2"/>
+            <result property="ord_total" column="ORD_TOTAL"/>
+            <result property="ord_date" column="ORD_DATE"/>
+            <result property="ord_payment" column="ORD_PAYMENT"/>
         </association>
 
         <collection property="orderItems" ofType="kr.co.shoply.dto.OrderItemDTO" resultMap="orderItemWithProductMap"/>
     </resultMap>
 
     <select id="selectCompleteOrder3" resultMap="completeOrderResultMap">
-        SELECT
-        o.*,
-        oi.*,
-        p.*,
-        c.CART_OPTION AS productOption
+        SELECT *
         FROM "order" o
         JOIN ORDER_ITEM oi ON o.ORD_NO = oi.ORD_NO
         JOIN PRODUCT p ON oi.PROD_NO = p.PROD_NO
-        JOIN CART c ON o.MEM_ID = c.MEM_ID AND c.PROD_NO = p.PROD_NO
         WHERE o.ORD_NO = #{ord_no}
-        AND c.CART_NO IN
-        <foreach item="cart_no" collection="cart_no_list" open="(" separator="," close=")">
-            #{cart_no}
-        </foreach>
     </select>
 
     <insert id="insertOrderItemList3" parameterType="java.util.List">
         INSERT ALL
         <foreach item="item" collection="list">
-            INTO ORDER_ITEM (ORD_NO, PROD_NO, ITEM_NAME, ITEM_CNT, ITEM_STAT)
+            INTO ORDER_ITEM (ORD_NO, PROD_NO, ITEM_NAME, ITEM_CNT, ITEM_STAT, PROD_OPTION)
             VALUES
             (
-            #{item.ord_no},
-            #{item.prod_no},
-            #{item.item_name},
-            #{item.item_cnt},
-            0
+                #{item.ord_no},
+                #{item.prod_no},
+                #{item.item_name},
+                #{item.item_cnt},
+                0,
+                #{item.prod_option, jdbcType=VARCHAR}
             )
         </foreach>
         SELECT 1 FROM DUAL

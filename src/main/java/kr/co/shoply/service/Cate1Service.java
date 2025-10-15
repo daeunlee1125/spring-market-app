@@ -3,6 +3,7 @@ package kr.co.shoply.service;
 import jakarta.transaction.Transactional;
 import kr.co.shoply.dto.Cate1DTO;
 import kr.co.shoply.entity.Cate1;
+import kr.co.shoply.mapper.Cate1Mapper;
 import kr.co.shoply.repository.Cate1Repository;
 import kr.co.shoply.repository.Cate2Repository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,35 @@ import java.util.List;
 public class Cate1Service {
     private final Cate1Repository cate1Repository;
     private final ModelMapper modelMapper;
+    private final Cate1Mapper cate1Mapper;
+
+    public List<Cate1DTO> getCate1Chart(){
+
+        List<Cate1DTO> rawList = cate1Mapper.chartCate1();
+
+        // 매출 기준으로 내림차순 정렬
+        rawList.sort((a, b) -> Double.compare(b.getCate1_sell(), a.getCate1_sell()));
+
+        if (rawList.size() <= 3) {
+            return rawList; // 3개 이하면 그대로 반환
+        }
+
+        // 상위 3개만 남기고, 나머지는 기타로 합산
+        List<Cate1DTO> top3 = new ArrayList<>(rawList.subList(0, 3));
+        int etcSum = rawList.subList(3, rawList.size())
+                .stream()
+                .mapToInt(Cate1DTO::getCate1_sell)
+                .sum();
+
+        Cate1DTO etc = new Cate1DTO();
+        etc.setCate1_name("기타");
+        etc.setCate1_sell(etcSum);
+
+        top3.add(etc);
+        return top3;
+
+
+    }
 
 
     public void updateCate1(Cate1DTO dto) {

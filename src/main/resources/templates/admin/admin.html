@@ -136,9 +136,9 @@
                                         data: {
                                             labels,
                                             datasets: [
-                                                { label: '주문', data: orderCnt, backgroundColor: '#3b82f6' },
-                                                { label: '결제', data: payCnt, backgroundColor: '#22c55e' },
-                                                { label: '취소', data: cancelCnt, backgroundColor: '#ef4444' }
+                                                { label: '주문', data: orderCnt, backgroundColor: '#4f7ecc' },
+                                                { label: '결제', data: payCnt, backgroundColor: '#52b878' },
+                                                { label: '취소', data: cancelCnt, backgroundColor: '#c54242' }
                                             ]
                                         },
                                         options: {
@@ -158,8 +158,32 @@
                                 </script>
                                 <div class="chart-box">
                                     <h5>주요매출</h5>
-                                    <img th:src="@{/image/chart2.png}" alt="매출 차트">
+                                    <canvas id="salesChart" width="200" height="200"></canvas>
                                 </div>
+                                <script th:inline="javascript">
+                                    const RAW = /*[[${chart2}]]*/ [];
+
+                                    const labels2 = RAW.map(r => r.cate1_name);
+                                    const data = RAW.map(r => r.cate1_sell);
+
+                                    new Chart(document.getElementById('salesChart'), {
+                                        type: 'pie',
+                                        data: {
+                                            labels: labels2,
+                                            datasets: [{
+                                                data,
+                                                backgroundColor: ['#5d89d3', '#c63a3a', '#8ebf41', '#7439b5', '#f97316'],
+                                                borderWidth: 0
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            plugins: {
+                                                legend: { position: 'bottom' }
+                                            }
+                                        }
+                                    });
+                                </script>
                             </div>
                     </section>
 

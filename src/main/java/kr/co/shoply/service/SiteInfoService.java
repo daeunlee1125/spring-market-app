@@ -1,9 +1,6 @@
 package kr.co.shoply.service;
 
-import kr.co.shoply.dto.AdInfoDTO;
-import kr.co.shoply.dto.CsNoticeDTO;
-import kr.co.shoply.dto.SiteInfoDTO;
-import kr.co.shoply.dto.VersionDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.entity.CsNotice;
 import kr.co.shoply.mapper.*;
 import kr.co.shoply.repository.CsNoticeRepository;
@@ -70,6 +67,10 @@ public class SiteInfoService {
                 .todQnaTotal(dto4.getTodQnaTotal())
                 .yesQnaTotal(dto4.getYesQnaTotal())
                 .build();
+    }
+
+    public List<Chart1DTO> getChartInfo(){
+        return siteInfoMapper.chartSelect();
     }
 
 

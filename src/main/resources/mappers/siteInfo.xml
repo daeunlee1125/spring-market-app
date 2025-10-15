@@ -46,6 +46,20 @@
         WHERE s_no=#{s_no}
     </update>
 
+    <select id="chartSelect" resultType="kr.co.shoply.dto.Chart1DTO">
+        SELECT TO_CHAR(d.dt, 'MM-DD') AS "ch_date",
+        NVL(COUNT(o.ord_date), 0) AS "order_cnt",
+        NVL(SUM(CASE WHEN o.ord_stat = '2' THEN 1 ELSE 0 END), 0) AS "pay_cnt",
+        NVL(SUM(CASE WHEN o.ord_stat = '3' THEN 1 ELSE 0 END), 0) AS "cancel_cnt"
+        FROM (
+        SELECT TRUNC(SYSDATE) - LEVEL + 1 AS dt
+        FROM dual CONNECT BY LEVEL &lt;= 5
+        ) d
+        LEFT JOIN "order" o ON TRUNC(o.ord_date) = d.dt
+        GROUP BY d.dt
+        ORDER BY d.dt
+    </select>
+
 
 
 </mapper>

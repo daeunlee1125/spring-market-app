@@ -26,6 +26,10 @@ main {
     background: #fff;
     text-align: center;
 }
+.chart-box canvas {
+    width: 100% !important;
+    height: auto !important;
+}
 .chart-box img {
     width: 100%;
     height: auto;

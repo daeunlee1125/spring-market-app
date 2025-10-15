@@ -3,6 +3,7 @@ package kr.co.shoply.controller.admin;
 import kr.co.shoply.dto.AdInfoDTO;
 import kr.co.shoply.dto.Chart1DTO;
 import kr.co.shoply.dto.CsNoticeDTO;
+import kr.co.shoply.dto.QnaDTO;
 import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class AdminController {
 
         List<CsNoticeDTO> notList = siteInfoService.getCsNotList();
         model.addAttribute("notList", notList);
+
+        List<QnaDTO> qnaList = siteInfoService.getQnaList();
+        model.addAttribute("qnaList", qnaList);
 
         return "admin/admin";
     }

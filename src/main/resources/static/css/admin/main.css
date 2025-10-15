@@ -125,18 +125,41 @@ main {
     background: #fff;
     padding: 15px;
 }
+
 .board-box h4 {
     margin-bottom: 10px;
 }
+
 .board-box ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
+
 .board-box li {
-    padding: 5px 0;
+    display: flex;
+    align-items: center;
     border-bottom: 1px solid #eee;
     font-size: 14px;
-    display: flex;
-    justify-content: space-between;
+    padding: 6px 0;
+}
+
+/* 각각의 열 비율 지정 */
+.board-box li .title {
+    flex: 2;              /* 제목 영역 넓게 */
+    white-space: nowrap;  /* 줄바꿈 방지 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.board-box li .writer {
+    flex: 0.8;            /* 작성자 영역 */
+    text-align: center;
+    color: #666;
+}
+
+.board-box li .date {
+    flex: 0.8;            /* 날짜 영역 */
+    text-align: right;
+    color: #999;
 }

@@ -45,16 +45,15 @@
                   <div class="form-row">
                     <div class="form-label">아이디</div>
                     <div class="form-input">
-                      <input type="text" name="mem_id" placeholder="">
-                      <span class="input-help">영문, 숫자 4~12자 설정</span>
+                        <input type="text" name="mem_id" placeholder="영문, 숫자 4~12자 설정">
+                        <button type="button" class="btn-check" onclick="checkIdDuplicate()">중복 확인</button>
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-label">비밀번호</div>
                     <div class="form-input">
-                      <input type="password" name="mem_pass" placeholder="">
-                      <span class="input-help">영문, 숫자, 특수문자 8~12자 설정</span>
+                      <input type="password" name="mem_pass" placeholder="영문, 숫자, 특수문자 8~12자">
                     </div>
                   </div>
 
@@ -83,7 +82,7 @@
                     <div class="form-label">사업자등록번호</div>
                     <div class="form-input">
                       <input type="text" name="corp_reg_hp" placeholder="사업자입력" style="margin-right: 10px;">
-                      <span style="color: #666; font-size: 12px;">- 포함 12 자리 입력</span>
+                      <span style="color: #666; font-size: 12px;"> - 제외 12 자리 입력</span>
                     </div>
                   </div>
 
@@ -97,14 +96,16 @@
                   <div class="form-row">
                     <div class="form-label">전화번호</div>
                     <div class="form-input">
-                      <input type="text" name="mem_hp" placeholder="전화번호입력">
+                        <input type="text" name="mem_hp" placeholder="전화번호입력" style="margin-right: 10px;">
+                        <span style="color: #666; font-size: 12px;"> - 제외 입력</span>
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-label">팩스</div>
                     <div class="form-input">
-                      <input type="text" name="corp_fax" placeholder="팩스번호입력">
+                        <input type="text" name="corp_fax" placeholder="팩스번호입력" style="margin-right: 10px;">
+                        <span style="color: #666; font-size: 12px;"> 선택 입력</span>
                     </div>
                   </div>
 
@@ -112,7 +113,7 @@
                     <div class="address-label">주소</div>
                     <div class="address-inputs">
                       <input type="text" name="mem_zip" id="mem_zip" placeholder="우편번호검색" readonly onclick="postCode()">
-                      <input type="text" name="mem_addr1" id="mem_addr1" placeholder="기본주소 입력">
+                      <input type="text" name="mem_addr1" id="mem_addr1" placeholder="기본주소 입력" readonly>
                       <input type="text" name="mem_addr2" id="mem_addr2" placeholder="상세주소 입력">
                     </div>
                   </div>

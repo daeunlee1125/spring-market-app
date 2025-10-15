@@ -25,4 +25,9 @@ public class MemberDTO {
     private String mem_addr2;
     private String mem_rank;
 
+    // POINT 테이블에 P_POINT 들고와야함!!
+    private int p_point;
+
+    private String mem_note;
+
 }

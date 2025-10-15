@@ -45,6 +45,9 @@ public class Member {
         this.mem_addr2 = memAddr2;
     }
 
+    // 회원수정에 필요한 거
+    private String mem_note;
+
     public void updatePassword(String newPassword) {
         this.mem_pass = newPassword;
     }

@@ -17,7 +17,12 @@ import kr.co.shoply.dto.ProductDTO;
 import kr.co.shoply.dto.ProdOptionDTO;
 import kr.co.shoply.dto.ProFileDTO;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -38,10 +43,7 @@ public class MyController {
 
     @GetMapping("/home")
     public String home(Model model, @AuthenticationPrincipal MyUserDetails user) {
-        log.info("home() GET 요청...");
-
         String mem_id = user.getMember().getMem_id();
-        log.info("로그인한 사용자 ID: {}", mem_id);
 
         // MyService에서 한 번에 DTO 가져오기
         MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
@@ -55,6 +57,17 @@ public class MyController {
         model.addAttribute("recentReviews", homeData.getRecentReviews());
         model.addAttribute("recentQnas", homeData.getRecentQnas());
 
+        // productMap 추가
+        Map<String, ProductDTO> productMap = homeData.getRecentOrders().stream()
+                .map(OrderItemDTO::getProd_no)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toMap(
+                        prodNo -> prodNo,
+                        prodNo -> myService.getProduct3(prodNo)
+                ));
+        model.addAttribute("productMap", productMap);
+
         return "my/home";
     }
 
@@ -66,6 +79,29 @@ public class MyController {
         MemberDTO memberInfo = myService.getMemberInfo(mem_id);
         model.addAttribute("memberInfo", memberInfo);
         // 세션 DTO는 더 이상 필요하지 않습니다.
+        // MyService에서 한 번에 DTO 가져오기
+        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
+
+        model.addAttribute("orderCount", homeData.getOrderCount());
+        model.addAttribute("couponCount", homeData.getCouponCount());
+        model.addAttribute("pointTotal", homeData.getPointTotal());
+        model.addAttribute("qnaCount", homeData.getQnaCount());
+        model.addAttribute("recentOrders", homeData.getRecentOrders());
+        model.addAttribute("recentPoints", homeData.getRecentPoints());
+        model.addAttribute("recentReviews", homeData.getRecentReviews());
+        model.addAttribute("recentQnas", homeData.getRecentQnas());
+
+        // productMap 추가
+        Map<String, ProductDTO> productMap = homeData.getRecentOrders().stream()
+                .map(OrderItemDTO::getProd_no)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toMap(
+                        prodNo -> prodNo,
+                        prodNo -> myService.getProduct3(prodNo)
+                ));
+        model.addAttribute("productMap", productMap);
+
         return "my/info";
     }
 
@@ -134,25 +170,14 @@ public class MyController {
 
 
     @PostMapping("/order/confirm")
-
     @ResponseBody
-
-    public ResponseEntity<String> confirmOrder(@RequestParam("item_no") Long itemNo, HttpSession session) {
-
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-
-        if (sessUser == null) {
-
+    public ResponseEntity<String> confirmOrder(@RequestParam("item_no") Long itemNo,
+                                               @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-
         }
-
-
-
-        myService.confirmOrder(itemNo, sessUser.getMem_id());
-
+        myService.confirmOrder(itemNo, user.getMember().getMem_id());
         return ResponseEntity.ok("success");
-
     }
 
 
@@ -229,15 +254,11 @@ public class MyController {
     }
 
     @GetMapping("/coupon")
-    public String coupon(Model model, HttpSession session) {
+    public String coupon(Model model,
+                         @AuthenticationPrincipal MyUserDetails user) {
         log.info("coupon() GET 요청...");
 
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-        if (sessUser == null) {
-            return "redirect:/member/login";
-        }
-
-        String mem_id = sessUser.getMem_id();
+        String mem_id = user.getMember().getMem_id(); // MyUserDetails에서 mem_id 가져오기
 
         // 사용자 쿠폰 리스트 가져오기
         List<UserCouponDTO> userCoupons = myService.getUserCouponsByMemId(mem_id);
@@ -252,6 +273,7 @@ public class MyController {
 
         return "my/coupon"; // templates/my/coupon.html
     }
+
 
     @PostMapping("/order/cancel")
     @ResponseBody
@@ -283,7 +305,18 @@ public class MyController {
 
         // 주문 내역
         List<OrderItemDTO> orderList = myService.getOrdersByMemId(mem_id);
+
+        // 상품 정보 Map 추가
+        Map<String, ProductDTO> productMap = new HashMap<>();
+        for (OrderItemDTO item : orderList) {
+            ProductDTO product = myService.getProduct3(item.getProd_no());
+            if (product != null) {
+                productMap.put(item.getProd_no(), product);
+            }
+        }
+
         model.addAttribute("orderList", orderList);
+        model.addAttribute("productMap", productMap);
 
         // 상단 요약 정보
         MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
@@ -292,7 +325,7 @@ public class MyController {
         model.addAttribute("pointTotal", homeData.getPointTotal());
         model.addAttribute("qnaCount", homeData.getQnaCount());
 
-        return "my/order"; // templates/my/order.html
+        return "my/order";
     }
 
     @GetMapping("/view/{prodNo}")
@@ -344,6 +377,43 @@ public class MyController {
 
         return "my/point";
     }
+
+    @Controller
+    @RequestMapping("/my")
+    public class MyPageController {
+
+        private final MyService myService;
+
+        public MyPageController(MyService myService) {
+            this.myService = myService;
+        }
+
+        @GetMapping("/qna")
+        public String qnaPage(Model model, @AuthenticationPrincipal MyUserDetails user) {
+            String mem_id = user.getMember().getMem_id();
+
+            // 최근 문의 내역
+            List<QnaDTO> recentQnas = myService.getRecentQnas(mem_id);
+            model.addAttribute("recentQnas", recentQnas);
+
+            // MyService에서 한 번에 DTO 가져오기
+            MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
+
+            model.addAttribute("orderCount", homeData.getOrderCount());
+            model.addAttribute("couponCount", homeData.getCouponCount());
+            model.addAttribute("pointTotal", homeData.getPointTotal());
+            model.addAttribute("qnaCount", homeData.getQnaCount());
+            model.addAttribute("recentOrders", homeData.getRecentOrders());
+            model.addAttribute("recentPoints", homeData.getRecentPoints());
+            model.addAttribute("recentReviews", homeData.getRecentReviews());
+            model.addAttribute("recentQnas", homeData.getRecentQnas());
+
+            return "my/qna";
+        }
+
+    }
+
+
 
 }
 

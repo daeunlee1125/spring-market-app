@@ -74,57 +74,67 @@
 
 }
 
-.search-bar {
-    width: 300px;
-    position: relative;
-    bottom: 8px;
-}
+
+/* 검색영역 */
+
+/* 검색바 전체 라인 — 왼쪽 정렬, 간격 일정 */
 .search-bar form {
-  display: flex;
-  align-items: center; /* 세로 정렬 */
-  gap: 8px;            /* 간격 */
+    display: flex;
+    align-items: center;
+    gap: 6px;              /* 요소 간 간격 (coupon 기준 6px 정도) */
+    justify-content: flex-start; /* 왼쪽 정렬 */
 }
 
+/* 드롭박스 */
 .search-bar select {
-  width: 150px;
-  height: 35px; /* search-place 높이와 맞춰주면 깔끔 */
-  font-size: 14px;
-  border: 1px solid rgb(201, 201, 201);
-  background-color: white;
-  
+    height: 35px;
+    width: 110px;          /* ✅ coupon과 동일 폭 */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0 6px;
+    background-color: #fff;
+    font-size: 14px;
 }
 
-
+/* 입력영역 wrapper */
 .search-bar .search-place {
-  flex: 1; /* 남은 공간 차지 */
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  padding: 5px 10px;
-  background-color: white;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
+/* 검색어 입력창 */
 .search-bar input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 14px;
-  background-color: transparent;
+    width: 240px;          /* ✅ coupon input과 동일 길이 */
+    height: 35px;
+    border: 1px solid #ccc;
+    outline: none;
+    background-color: #fff;
+    padding: 0 8px;
 }
 
-
+/* 검색 버튼 */
 .search-bar button {
-  background-color: transparent;
-  border: 0;
-  height: 25px;
-  padding-top: 2px;
-  cursor: pointer;
-}
-.search-bar button img {
-  width: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    min-width: 60px;
+    font-size: 14px;
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    border: none;
+    color: #fff;
+    padding: 0 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
-
+.search-bar button:hover {
+    background: linear-gradient(135deg, #8d6dbd, #5936a9);
+}
 
 .select-2 {
   width: 111px;
@@ -137,6 +147,36 @@
   
 }
 
+/*  선택수정 버튼 하단 왼쪽 정렬 */
+.bottom-btn-area {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.bottom-btn-area {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+/* ✅ 쿠폰등록 버튼과 동일한 크기/색상/모양 */
+.member-edit-btn {
+    background: linear-gradient(135deg, #a77ece, #6c3fc9);
+    border: none;
+    color: white;
+    padding: 8px 18px;     /* 쿠폰등록 버튼과 동일 여백 */
+    font-size: 14px;       /* 글씨 크기도 동일 */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    height: 38px;          /* 쿠폰등록 버튼 높이 맞춤 */
+    line-height: 1;
+}
+
+.member-edit-btn:hover {
+    background: linear-gradient(135deg, #8d6dbd, #5936a9);
+}
 
 
 .transpar {

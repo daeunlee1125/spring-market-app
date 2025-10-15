@@ -1,229 +1,166 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - Final Version</title>
-    <!-- Font Awesome 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/common.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/admin/admin_temp.css">
 
-</head>
-<body>
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
-            <li>
-                <div><i class="fas fa-store"></i> 상점관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-users"></i> 회원관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-box-open"></i> 상품관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-truck"></i> 주문관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
-                </ul>
-            </li>
-            <li>
-                <div><i class="fas fa-headset"></i> 고객센터</div>
-                <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
-                </ul>
-            </li>
-        </ul>
-        </nav>
-    </aside>
+<div th:replace="~{admin/member/_head.html}"></div>
 
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/kmarket/inc/image/logo.jpg" alt="logo"></a>
+<div class="main">
+    <div class="middle main-content">
+        <div class="main-common">
+            <div class="main-head">
+                <div>
+                    <h3>포인트관리</h3>
+                </div>
+                <div class="main-head-right">
+                    <a th:href="@{/admin}">HOME</a>
+                    <div>&nbsp;>&nbsp;</div>
+                    <a th:href="@{/admin/member/list}">회원관리</a>
+                    <div>&nbsp;>&nbsp;</div>
+                    <a class="nav-last">포인트관리</a>
+                </div>
             </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
 
-    
+<div th:replace="~{admin/coupon/_head.html}"></div>
 
-    <div class="main">
-        <div class="middle main-content">
-            <div class="main-common">
-                <div class="main-head">
-                    <div>
-                        <h3>포인트관리</h3>
-                    </div>
-                    <div class="main-head-right">
-                        <a href="">HOME</a>
-                        <div>
-                            &nbsp;>&nbsp;
-                        </div>
-                        <a href="">회원관리</a>
-                        <div>
-                            &nbsp;>&nbsp;
-                        </div>
-                        <a href="" class="nav-last">포인트관리</a>
+
+            <main>
+                <!--  검색 영역 -->
+                <div class="main-content-top" style="border:none; margin:15px 0;">
+                    <div class="search-bar">
+                        <form th:action="@{/admin/member/point}" method="get">
+                            <select name="searchType">
+                                <option value="mem_id" th:selected="${pageRequestDTO.searchType == 'mem_id'}">아이디</option>
+                                <option value="mem_name" th:selected="${pageRequestDTO.searchType == 'mem_name'}">이름</option>
+                                <option value="mem_email" th:selected="${pageRequestDTO.searchType == 'mem_email'}">이메일</option>
+                                <option value="mem_hp" th:selected="${pageRequestDTO.searchType == 'mem_hp'}">휴대폰</option>
+                            </select>
+                            <div class="search-place">
+                                <input type="text" name="keyword" placeholder="검색어 입력"
+                                       th:value="${pageRequestDTO.keyword}">
+                            </div>
+
+                            <button type="submit">검색</button>
+                        </form>
                     </div>
                 </div>
-                <div class="main-content-top"></div>
+
+                <!-- 포인트 테이블 -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="chkAll"></th>
+                        <th>번호</th>
+                        <th>아이디</th>
+                        <th>이름</th>
+                        <th>지급 포인트</th>
+                        <th>잔여 포인트</th>
+                        <th>지급 내용</th>
+                        <th>지급 날짜</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="point, stat : ${pointList}">
+                        <td><input type="checkbox" class="chkPoint" th:value="${point.p_no}"></td>
+                        <td th:text="${point.p_no}"></td>
+                        <td th:text="${point.mem_id}"></td>
+                        <td th:text="${point.mem_name}"></td>
+                        <td th:text="${#numbers.formatInteger(point.p_point, 0, 'COMMA')}"></td>
+                        <td th:text="${#numbers.formatInteger(point.remain_point, 0, 'COMMA')}"></td>
+                        <td th:text="${point.p_info}"></td>
+                        <td th:text="${point.p_date}"></td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(pointList)}">
+                        <td colspan="8" style="text-align:center;">포인트 내역이 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="bottom-btn-area" style="margin-top: 20px; text-align: center;">
+                    <button type="button" class="member-edit-btn" id="btnDeleteSelected">선택삭제</button>
+                </div>
 
 
-                <main>
-                    <!-- search bar 있으신 분들은 위쪽 select-2를 삭제 -->
-                    <div class="sub-top">
-                        
-                        <div class="search-bar">
-                            
-                            <form action="">
-                                <select name="" id="">
-                                    <option value="">아이디</option>
-                                    <option value="">이름</option>
-                                    <option value="">이메일</option>
-                                    <option value="">휴대폰</option>
-                                </select>
-                                <div class="search-place">
-                                    <input type="text" placeholder="검색어 입력">
-                                    <button type="submit">
-                                    <img src="/kmarket/inc/image/search.png" alt="검색">
-                                    </button>
-                                </div>
-                            </form> 
-                        </div>
-                    </div>
-                    <!-- 여기까지 sub-top -->
+<div th:replace="~{admin/coupon/_tail.html}"></div>
 
 
-                    <table class="table">
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>번호</th>
-                            <th>아이디</th>
-                            <th>이름</th>
-                            <th>지급 포인트</th>
-                            <th>잔여 포인트</th>
-                            <th>지급 내용</th>
-                            <th>지급 날짜</th>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>1</td>
-                            
-                            <td>abc1234</td>
-                            <td>정우성</td>
-                            <td>1,000</td>
-                            <td>15,000</td>
-                            <td>구매확정 포인트 지급</td>
-                            <td>0000-00-00 00:00:00</td>
+                <!-- 페이지네이션 버튼 -->
+                <div class="page">
+                    <a th:if="${pageResponseDTO.prev}"
+                       th:href="@{/admin/member/point(pg=${pageResponseDTO.start - 1})}"
+                       class="prev">이전</a>
 
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>1</td>
-                            
-                            <td>abc1234</td>
-                            <td>정우성</td>
-                            <td>1,000</td>
-                            <td>15,000</td>
-                            <td>구매확정 포인트 지급</td>
-                            <td>0000-00-00 00:00:00</td>
+                    <a th:each="i : ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}"
+                       th:href="@{/admin/member/point(pg=${i})}"
+                       th:text="${i}"
+                       th:classappend="${i == pageResponseDTO.pg} ? ' current' : ''"
+                       class="num">1</a>
 
-                        </tr>
+                    <a th:if="${pageResponseDTO.next}"
+                       th:href="@{/admin/member/point(pg=${pageResponseDTO.end + 1})}"
+                       class="next">다음</a>
+                </div>
 
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>1</td>
-                            
-                            <td>abc1234</td>
-                            <td>정우성</td>
-                            <td>1,000</td>
-                            <td>15,000</td>
-                            <td>구매확정 포인트 지급</td>
-                            <td>0000-00-00 00:00:00</td>
-
-                        </tr>
-                        
-                    </table>
-
-
-                    <!-- banner-actions div 안에서 가지고 있는 버튼 따라 삭제하시면 됩니당 -->
-                    <!-- 페이지 넘기는 버튼 삭제하고 싶으면 그냥 page 삭제하면 되고 -->
-                    <!-- 버튼을 삭제하고 싶으면 버튼 클래스를 transpar로 바꿔주세요! -->
-                    <div class="banner-actions">
-                        <button class="delete-btn">선택삭제</button>
-
-                        <div class="page">
-                            <a href="#" class="prev">이전</a>
-                            <a href="#" class="num current">1</a>
-                            <a href="#" class="num">2</a>
-                            <a href="#" class="num">3</a>
-                            <a href="#" class="next">다음</a>
-                        </div>
-
-                        <button class="transpar" id="openModalBtn">상점등록</button>
-                    </div>
-                    
-
-                </main>
-            </div>
+            </main>
         </div>
     </div>
+</div>
 
-    <footer>
-        <div class="middle">
-            <p id="footer-p">
-                Copyright ©Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-            </p>
-        </div>
-    </footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const chkAll = document.getElementById("chkAll");
+        const chkBoxes = document.querySelectorAll(".chkPoint");
+        const btnDelete = document.getElementById("btnDeleteSelected");
+
+        //  전체선택 체크박스 제어
+        chkAll.addEventListener("change", function() {
+            chkBoxes.forEach(chk => chk.checked = chkAll.checked);
+        });
+
+        // 개별 체크 시 전체선택 여부 갱신
+        chkBoxes.forEach(chk => {
+            chk.addEventListener("change", function() {
+                chkAll.checked = Array.from(chkBoxes).every(c => c.checked);
+            });
+        });
+
+        //  선택 삭제 기능
+        btnDelete.addEventListener("click", function() {
+            const selected = Array.from(chkBoxes)
+                .filter(chk => chk.checked)
+                .map(chk => chk.value);
+
+            if (selected.length === 0) {
+                alert("삭제할 포인트를 선택하세요.");
+                return;
+            }
+
+            if (!confirm(`${selected.length}개의 포인트 내역을 삭제하시겠습니까?`)) {
+                return;
+            }
+
+            fetch("/shoply/admin/member/point/delete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(selected)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("선택한 포인트가 삭제되었습니다.");
+                        location.reload();
+                    } else {
+                        alert("삭제 중 오류가 발생했습니다.");
+                    }
+                })
+                .catch(err => {
+                    console.error("서버 요청 실패:", err);
+                    alert("서버 요청 실패");
+                });
+        });
+    });
+</script>
 
 
 
 
+<div th:replace="~{admin/member/_tail.html}"></div>
 </body>
 </html>

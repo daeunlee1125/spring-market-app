@@ -27,4 +27,6 @@ public class Point {
     @CreationTimestamp
     private LocalDateTime p_date;
     private LocalDateTime p_exp_date;
+
+    private Integer  ord_no;
 }

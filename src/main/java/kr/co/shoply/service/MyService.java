@@ -99,7 +99,22 @@ public class MyService {
 
         List<Qna> recentQnasEntity = qnaRepository.findTop5ByMem_idOrderByQ_rdateDesc(memId);
         List<QnaDTO> recentQnas = recentQnasEntity.stream()
-                .map(entity -> modelMapper.map(entity, QnaDTO.class))
+                .map(entity -> {
+                    QnaDTO dto = modelMapper.map(entity, QnaDTO.class);
+
+                    // Date → String 변환
+                    if (entity.getQ_rdate() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setQ_rdate(
+                                entity.getQ_rdate().toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate()
+                                        .format(formatter)
+                        );
+                    }
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
         return MyPageHomeDTO.builder()
@@ -304,6 +319,29 @@ public class MyService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<QnaDTO> getRecentQnas(String memId) {
+        List<Qna> recentQnasEntity = qnaRepository.findTop5ByMem_idOrderByQ_rdateDesc(memId);
+
+        return recentQnasEntity.stream()
+                .map(entity -> {
+                    QnaDTO dto = modelMapper.map(entity, QnaDTO.class);
+
+                    // Date → String 변환 (만약 DTO의 q_rdate가 String 타입이라면)
+                    if (entity.getQ_rdate() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setQ_rdate(
+                                entity.getQ_rdate().toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate()
+                                        .format(formatter)
+                        );
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
 
 
 }

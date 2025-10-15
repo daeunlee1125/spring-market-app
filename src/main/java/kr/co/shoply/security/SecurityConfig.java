@@ -1,5 +1,6 @@
 package kr.co.shoply.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -21,6 +24,11 @@ public class SecurityConfig {
                 .failureUrl("/member/login?error=true")
                 .usernameParameter("mem_id")
                 .passwordParameter("mem_pass")
+        ).rememberMe(remember -> remember
+                .key("uniqueAndSecretKey") // 서버 고유 키
+                .tokenValiditySeconds(86400) // 1일
+                .rememberMeParameter("autoLogin")
+                .userDetailsService(myUserDetailsService)
         );
 
         // 로그아웃 설정
@@ -50,5 +58,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 }

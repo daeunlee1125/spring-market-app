@@ -12,6 +12,7 @@
             <li><a th:href="@{/my/info}">나의설정</a></li>
         </ul>
     </div>
+
     <div class="content">
         <div class="main-content-header">
             <h2>나의 쇼핑 정보</h2>
@@ -25,7 +26,7 @@
                     <div>쿠폰</div>
                 </div>
                 <div class="info-item">
-                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 3, 'COMMA')}">1,000</div>
+                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 0, 'COMMA')}">1,000</div>
                     <div>포인트</div>
                 </div>
                 <div class="info-item">
@@ -35,9 +36,7 @@
             </div>
         </div>
 
-        <div class="banner">
-            810 x 86 배너 광고
-        </div>
+        <div class="banner">810 x 86 배너 광고</div>
 
         <table class="qna-table">
             <thead>
@@ -56,10 +55,15 @@
                 <td th:text="${qna.q_cate1}">고객센터</td>
                 <td th:text="${qna.q_cate2}">주문 / 결제</td>
                 <td th:text="${qna.q_title}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                <td th:text="${#dates.format(qna.q_rdate, 'yyyy-MM-dd')}">2022-12-12</td>
+                <td th:text="${qna.q_rdate}">2022-12-12</td>
                 <td>
                     <span th:if="${#strings.isEmpty(qna.q_reply)}" class="status pending">검토 중</span>
-                    <span th:unless="${#strings.isEmpty(qna.q_reply)}" class="status completed">답변 완료</span>
+                    <span th:unless="${#strings.isEmpty(qna.q_reply)}" class="status completed">
+            답변 완료
+            <button type="button"
+                    th:attr="data-reply=${qna.q_reply}"
+                    onclick="openQnaReply(this)">보기</button>
+        </span>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(recentQnas)}">
@@ -79,4 +83,97 @@
         </div>
     </div>
 </main>
+
+<!-- 문의 답변 완료 모달 -->
+<div id="qnaReplyModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-body"></div>
+        <button class="modal-confirm-btn" onclick="closeModal('qnaReplyModal')">확인</button>
+    </div>
+</div>
+
+
 <div th:replace="~{my/_tail.html}"></div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-top">
+            <h2>(주)샵플리닷컴</h2>
+            <a href="#">사업자정보확인</a>
+            <a href="#">소비자보호 서비스 가입사실확인</a>
+        </div>
+        <div class="footer-info">
+            <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
+            <p>부산광역시 부산진구 중앙대로 103</p>
+            <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
+            <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-links">
+                <a href="#">개인정보처리방침</a> |
+                <a href="#">영상정보처리기기 운영·관리방침</a> |
+                <a th:href="@{/cs/index}">고객센터</a> |
+                <a th:href="@{/cs/faq}">FAQ</a>
+            </div>
+            <div class="footer-sns">
+                <a href="#"><img th:src="@{/image/facebook.png}" alt="Facebook"></a>
+                <a href="#"><img th:src="@{/image/instagram.png}" alt="Instagram"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'none';
+    }
+
+    window.addEventListener('click', function(e) {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+    });
+
+    // Q&A 문의 등록
+    document.addEventListener('DOMContentLoaded', function() {
+        const qnaForm = document.querySelector('#qnaPopup form');
+        if (qnaForm) {
+            qnaForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const qnaType = document.querySelector('input[name="qna_type"]:checked');
+                const title = document.querySelector('#qnaPopup input[type="text"]').value;
+                const content = document.querySelector('#qnaPopup textarea').value;
+
+                if (!qnaType) { alert('문의유형을 선택해주세요.'); return; }
+                if (!title.trim()) { alert('제목을 입력해주세요.'); return; }
+                if (!content.trim()) { alert('내용을 입력해주세요.'); return; }
+
+                fetch('/my/qna/write', { method:'POST', body:new FormData(this) })
+                    .then(res => res.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('문의가 등록되었습니다.');
+                            closeModal('qnaPopup');
+                            this.reset();
+                        } else { alert('문의 등록에 실패했습니다.'); }
+                    })
+                    .catch(err => { console.error(err); alert('오류가 발생했습니다.'); });
+            });
+        }
+    });
+    function openQnaReply(button) {
+        const replyText = button.dataset.reply; // data-reply 가져오기
+        const modal = document.getElementById('qnaReplyModal');
+        modal.querySelector('.modal-body').textContent = replyText;
+        openModal('qnaReplyModal');
+    }
+
+
+</script>

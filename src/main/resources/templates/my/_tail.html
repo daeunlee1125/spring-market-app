@@ -25,35 +25,256 @@
         </div>
     </div>
 </footer>
+
 <script>
-    // 이 스크립트는 서버에서 데이터를 받으므로, HTML에서 제거하거나 필요한 로직으로 대체
-    function openModal(modalId) {
-        console.log("모달 열기: " + modalId);
-    }
-    function closeModal(modalId) {
-        console.log("모달 닫기: " + modalId);
+    // 모달 열기
+    function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
     }
 
-        // 모달 열기
-        function openModal(id) {
-        document.getElementById(id).style.display = 'block';
-    }
-
-        // 모달 닫기
-        function closeModal(id) {
+    // 모달 닫기
+    function closeModal(id) {
         document.getElementById(id).style.display = 'none';
     }
 
-        // 모달 바깥 클릭 시 닫기
-        window.onclick = function(event) {
+    // 모달 바깥 클릭 시 닫기
+    window.onclick = function(event) {
         const modals = document.getElementsByClassName('modal');
         for (let modal of modals) {
-        if (event.target === modal) {
-        modal.style.display = 'none';
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
         }
-     }
     }
 
+    // ✅ 구매확정 함수
+    function confirmOrder(itemNo) {
+        if (!confirm('구매를 확정하시겠습니까?')) {
+            return;
+        }
+
+        fetch('/my/order/confirm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'item_no=' + itemNo
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === 'success') {
+                    alert('구매확정이 완료되었습니다. 포인트가 적립되었습니다.');
+                    location.reload();
+                } else {
+                    alert('구매확정에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('오류가 발생했습니다.');
+            });
+    }
+
+    // ✅ 상품평 작성 모달 열기
+    function openReviewModal(itemNo, prodNo, itemName) {
+        // 상품명 표시
+        document.querySelector('#reviewModal .info-table tbody tr:first-child td:last-child p').textContent = itemName;
+
+        // 폼에 hidden input으로 정보 저장
+        let form = document.querySelector('#reviewModal form');
+
+        // 기존 hidden input 제거
+        let existingInputs = form.querySelectorAll('input[type="hidden"]');
+        existingInputs.forEach(input => input.remove());
+
+        // 새로운 hidden input 추가
+        let itemNoInput = document.createElement('input');
+        itemNoInput.type = 'hidden';
+        itemNoInput.name = 'item_no';
+        itemNoInput.value = itemNo;
+        form.appendChild(itemNoInput);
+
+        let prodNoInput = document.createElement('input');
+        prodNoInput.type = 'hidden';
+        prodNoInput.name = 'prod_no';
+        prodNoInput.value = prodNo;
+        form.appendChild(prodNoInput);
+
+        openModal('reviewModal');
+    }
+
+    // ✅ 리뷰 작성 제출
+    document.addEventListener('DOMContentLoaded', function() {
+        const reviewForm = document.querySelector('#reviewModal form');
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const rating = document.querySelector('input[name="rating"]:checked');
+                const content = document.querySelector('#reviewModal textarea').value;
+
+                if (!rating) {
+                    alert('만족도를 선택해주세요.');
+                    return;
+                }
+
+                if (content.length < 10) {
+                    alert('최소 10자 이상 입력해주세요.');
+                    return;
+                }
+
+                if (content.length > 200) {
+                    alert('200자 이내로 입력해주세요.');
+                    return;
+                }
+
+                const formData = new FormData(this);
+
+                fetch('/my/review/write', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('상품평이 등록되었습니다.');
+                            closeModal('reviewModal');
+                            location.reload();
+                        } else {
+                            alert('상품평 등록에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        }
+
+        // ✅ 구매확정 모달의 확인 버튼
+        const confirmBtn = document.querySelector('#confirmModal button:first-of-type');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function() {
+                // 여기서 실제 구매확정 처리
+                // 현재는 모달만 닫기
+                alert('구매확정 기능은 각 주문의 구매확정 버튼을 클릭해주세요.');
+                closeModal('confirmModal');
+            });
+        }
+
+        // ✅ 문의하기 제출
+        const qnaForm = document.querySelector('#qnaPopup form');
+        if (qnaForm) {
+            qnaForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const qnaType = document.querySelector('input[name="qna_type"]:checked');
+                const title = document.querySelector('#qnaPopup input[type="text"]').value;
+                const content = document.querySelector('#qnaPopup textarea').value;
+
+                if (!qnaType) {
+                    alert('문의유형을 선택해주세요.');
+                    return;
+                }
+
+                if (!title.trim()) {
+                    alert('제목을 입력해주세요.');
+                    return;
+                }
+
+                if (!content.trim()) {
+                    alert('내용을 입력해주세요.');
+                    return;
+                }
+
+                const formData = new FormData(this);
+
+                fetch('/my/qna/write', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('문의가 등록되었습니다.');
+                            closeModal('qnaPopup');
+                            this.reset();
+                        } else {
+                            alert('문의 등록에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        }
+
+        // ✅ 교환신청 제출
+        const exchangeForm = document.querySelector('#exchangeModal button:first-of-type');
+        if (exchangeForm) {
+            exchangeForm.addEventListener('click', function() {
+                const exchangeType = document.querySelector('input[name="exchange_type"]:checked');
+                const reason = document.querySelector('#exchangeModal textarea').value;
+
+                if (!exchangeType) {
+                    alert('교환유형을 선택해주세요.');
+                    return;
+                }
+
+                if (!reason.trim()) {
+                    alert('사유를 입력해주세요.');
+                    return;
+                }
+
+                // TODO: 실제 교환신청 API 연동
+                alert('교환신청이 접수되었습니다.');
+                closeModal('exchangeModal');
+            });
+        }
+
+        // ✅ 반품신청 제출
+        const returnForm = document.querySelector('#returnModal button:first-of-type');
+        if (returnForm) {
+            returnForm.addEventListener('click', function() {
+                const returnType = document.querySelector('input[name="return_type"]:checked');
+                const reason = document.querySelector('#returnModal textarea').value;
+
+                if (!returnType) {
+                    alert('반품유형을 선택해주세요.');
+                    return;
+                }
+
+                if (!reason.trim()) {
+                    alert('사유를 입력해주세요.');
+                    return;
+                }
+
+                // TODO: 실제 반품신청 API 연동
+                alert('반품신청이 접수되었습니다.');
+                closeModal('returnModal');
+            });
+        }
+    });
+
+    // 모달 열기
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'flex';
+    }
+
+    // 모달 닫기
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'none';
+    }
+
+    // 모달 외부 클릭 시 닫기
+    window.addEventListener('click', function(e) {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+    });
 </script>
 </body>
 </html>

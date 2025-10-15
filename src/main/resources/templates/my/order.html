@@ -67,7 +67,7 @@
             <button>조회</button>
         </div>
 
-        <table class="order-table">
+        <table class="table-container">
             <thead>
             <tr>
                 <th>날짜</th>
@@ -87,24 +87,29 @@
                             <p>(주) <a href="#" onclick="openModal('sellerInfoPopup')">상호명</a></p>
                             <p>상품명 : <span th:text="${orderItem.item_name}">상품명</span></p>
                             <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
-                            <strong th:text="${#numbers.formatInteger(orderItem.item_price, 0, 'COMMA')} + '원'">34,000원</strong>
+                            <strong th:if="${productMap[orderItem.prod_no] != null}"
+                                    th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">34,000원</strong>
+                            <strong th:if="${productMap[orderItem.prod_no] == null}">가격 정보 없음</strong>
                         </div>
                     </div>
                 </td>
-                <td>
-                    <span th:if="${orderItem.item_stat == 0}">주문취소</span>
-                    <span th:if="${orderItem.item_stat == 1}">배송중</span>
-                    <span th:if="${orderItem.item_stat == 2}">배송완료</span>
-                    <span th:if="${orderItem.item_stat == 3}">구매확정</span>
+                <td th:switch="${orderItem.item_stat}">
+                    <span th:case="1">배송전</span>
+                    <span th:case="2">배송중</span>
+                    <span th:case="3">배송완료</span>
+                    <span th:case="4">구매확정</span>
+                    <span th:case="*">상태없음</span>
                 </td>
+
                 <td>
-                    <div class="action-btns">
-                        <button class="action-btn" th:if="${orderItem.item_stat == 2}" th:onclick="|confirmOrder('${orderItem.item_no}')|">구매확정</button>
-                        <button class="action-btn" th:if="${orderItem.item_stat == 2}" th:onclick="|openReviewModal('${orderItem.item_no}', '${orderItem.prod_no}', '${orderItem.item_name}')|">상품평쓰기</button>
-                        <button class="action-btn" th:if="${orderItem.item_stat == 2}" onclick="openModal('exchangeModal')">교환신청</button>
-                        <button class="action-btn" th:if="${orderItem.item_stat == 2}" onclick="openModal('returnModal')">반품신청</button>
-                    </div>
+                    <button onclick="openModal('confirmModal')">구매확정</button>
+                    <button onclick="openModal('reviewModal')">상품평쓰기</button>
+                    <button onclick="openModal('returnModal')">반품신청</button>
+                    <button onclick="openModal('exchangeModal')">교환신청</button>
                 </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(recentOrders)}">
+                <td colspan="4" style="text-align: center;">최근 주문 내역이 없습니다.</td>
             </tr>
             </tbody>
         </table>
@@ -121,4 +126,5 @@
     </div>
 </main>
 
+<div th:replace="~{my/modal.html}"></div>
 <div th:replace="~{my/_tail.html}"></div>

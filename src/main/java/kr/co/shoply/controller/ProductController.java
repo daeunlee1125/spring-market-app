@@ -222,6 +222,7 @@ public class ProductController {
 
             orderItemDTO.setItem_name(cartDTO.getProductDTO().getProd_name());
             orderItemDTO.setItem_cnt(cartDTO.getCart_item_cnt());
+            orderItemDTO.setProd_option(cartDTO.getCart_option());
             orderItemDTOList.add(orderItemDTO);
         }
         productService.saveOrderItem3(orderItemDTOList);
@@ -230,12 +231,13 @@ public class ProductController {
         // --- JavaScript에 반환할 데이터 생성 ---
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
-        response.put("orderId", orderDTO.getMem_id()); // JS에서 페이지 이동 시 사용할 주문 번호
+        response.put("orderId", orderDTO.getOrd_no()); // JS에서 페이지 이동 시 사용할 주문 번호
         response.put("cartNoList", cartNoList);
         if (cpCode != null && !cpCode.isEmpty()) {
             response.put("cpCode", cpCode);
         }
         response.put("usedPoint", orderRequestDTO.getUsedPoints());
+        response.put("payment", orderRequestDTO.getPaymentMethod());
 
         return response;
     }
@@ -244,11 +246,15 @@ public class ProductController {
     // ✅ 2. 주문 '완료 페이지'를 보여주는 View 메서드
     // 페이지 요청을 받아, 필요한 데이터를 조회하여 HTML 페이지를 렌더링합니다.
     @GetMapping("/product/complete") // GET 방식으로 변경
-    public String showCompletePage(@RequestParam String orderId, @RequestParam List<Integer> cartNoList, @RequestParam String cpCode, @RequestParam int usedPoint, Model model) {
+    public String showCompletePage(@RequestParam String orderId,
+                                   @RequestParam String cpCode,
+                                   @RequestParam int usedPoint,
+                                   @RequestParam String payment,
+                                   Model model) {
 
         // 서비스에 주문 정보와 주문 아이템 리스트를 함께 가져오는 메서드를 만듭니다.
         OrderDTO orderInfo = productService.getOrderById(orderId); // 주문 기본 정보 조회
-        List<CompleteDTO> orderItems = productService.getCompleteOrder3(orderId, cartNoList); // 주문 상품 목록 조회
+        List<CompleteDTO> orderItems = productService.getCompleteOrder3(orderId); // 주문 상품 목록 조회
         log.info("orderInfo: " +  orderInfo.toString());
         log.info("orderItems: " +  orderItems.toString());
 
@@ -259,38 +265,53 @@ public class ProductController {
         int totalPoint = 0;
         for(CompleteDTO completeDTO : orderItems){
             // 총 주문 금액
-            totalPrice += completeDTO.getOrderItems().getProduct().getProd_price();
+            totalPrice += completeDTO.getOrderItems().getProduct().getProd_price() * completeDTO.getOrderItems().getItem_cnt();
 
             // 상품별 실제 결제 금액
-            completeDTO.getOrderItems().getProduct().setRealPrice(completeDTO.getOrderItems().getProduct().getProd_price() - completeDTO.getOrderItems().getProduct().getProd_price() * (completeDTO.getOrderItems().getProduct().getProd_sale() / 100));
+            completeDTO.getOrderItems().getProduct().setRealPrice(
+                    completeDTO.getOrderItems().getProduct().getProd_price()
+                    - (int) (
+                    completeDTO.getOrderItems().getProduct().getProd_price()
+                            *
+                            (completeDTO.getOrderItems().getProduct().getProd_sale() / 100.0)
+                    ) * completeDTO.getOrderItems().getItem_cnt()
+            );
 
             // 총 적립 포인트
-            totalPoint += completeDTO.getOrderItems().getProduct().getProd_point();
+            totalPoint += completeDTO.getOrderItems().getProduct().getProd_point() * completeDTO.getOrderItems().getItem_cnt();
 
             // 총 배송비
             totalDeliv += completeDTO.getOrderItems().getProduct().getProd_deliv_price();
 
             // 할인 금액
-            completeDTO.getOrderItems().getProduct().setSaleprice(completeDTO.getOrderItems().getProduct().getProd_price() * (completeDTO.getOrderItems().getProduct().getProd_sale() / 100));
+            completeDTO.getOrderItems().getProduct().setSaleprice((int) (completeDTO.getOrderItems().getProduct().getProd_price()
+                        *
+                        (completeDTO.getOrderItems().getProduct().getProd_sale() / 100.0))
+                    *
+                    completeDTO.getOrderItems().getItem_cnt()
+            );
+            log.info("상품 할인 가격: " +  completeDTO.getOrderItems().getProduct().getSaleprice());
 
             // 총 할인 금액
             totalSalePrice += completeDTO.getOrderItems().getProduct().getSaleprice();
         }
 
         // 실제 결제 금액
-        SysCouponDTO sysCouponDTO =  new SysCouponDTO();
-        if (cpCode != null && !cpCode.isEmpty()) {
-            sysCouponDTO = productService.getSysCoupon3(cpCode);
-            model.addAttribute("sysCouponDTO", sysCouponDTO);
+        SysCouponDTO sysCouponDTO =  new SysCouponDTO(); // 사용한 쿠폰 받아롤 객체
+        if (cpCode != null && !cpCode.isEmpty()) { // 전달받아온 쿠폰 기본키 있는지 확인
+            sysCouponDTO = productService.getSysCoupon3(cpCode); // 있으면 select
+            model.addAttribute("sysCouponDTO", sysCouponDTO); // complete.html에 보내기
         }
-        if (sysCouponDTO != null) {
-            if (sysCouponDTO.getCp_type().equals(1)) {
+
+        if (sysCouponDTO != null) { // 쿠폰 있는지 확인
+            if (sysCouponDTO.getCp_type().equals(1)) { // 쿠폰 타입 1이면
                 totalRealPrice = totalPrice - totalSalePrice - usedPoint - sysCouponDTO.getCp_value() + totalDeliv;
             }else if (sysCouponDTO.getCp_type().equals(2)) {
                 totalRealPrice = totalPrice - totalSalePrice - usedPoint + totalDeliv;
                 totalRealPrice *= (int) (sysCouponDTO.getCp_value() / 100.0);
             }else if (sysCouponDTO.getCp_type().equals(3)) {
                 totalRealPrice = totalPrice - totalSalePrice - usedPoint;
+                totalDeliv =0;
             }else{
                 totalRealPrice = totalPrice - totalSalePrice - usedPoint + totalDeliv;
             }
@@ -305,6 +326,7 @@ public class ProductController {
         model.addAttribute("totalRealPrice", totalRealPrice);
         model.addAttribute("totalDeliv", totalDeliv);
         model.addAttribute("totalPoint", totalPoint);
+        model.addAttribute("payment", payment);
 
         return "product/complete";
     }

@@ -101,8 +101,8 @@ public class ProductService {
         cartMapper.deleteSelectedCarts3(cart_no_list);
     }
 
-    public List<CompleteDTO> getCompleteOrder3(String ord_no, List<Integer> cart_no_list){
-        return orderMapper.selectCompleteOrder3(ord_no, cart_no_list);
+    public List<CompleteDTO> getCompleteOrder3(String ord_no){
+        return orderMapper.selectCompleteOrder3(ord_no);
     }
 
 

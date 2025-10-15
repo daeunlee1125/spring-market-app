@@ -18,5 +18,5 @@ public interface OrderMapper {
 
     void insertOrderItemList3(List<OrderItemDTO> list);
 
-    List<CompleteDTO> selectCompleteOrder3(@Param("ord_no") String ord_no, @Param("cart_no_list") List<Integer> cart_no_list);
+    List<CompleteDTO> selectCompleteOrder3(@Param("ord_no") String ord_no);
 }

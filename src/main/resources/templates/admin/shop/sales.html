@@ -24,13 +24,13 @@
                 </div>
                 <div class="main-content-top"></div>
                 <main>
-                    <form action="">
-                        <select name="" id="" class="select-2">
-                            <option value="">일별</option>
-                            <option value="">주간</option>
-                            <option value="">한달</option>
+                    <form id="filterForm" th:action="@{/admin/shop/range}" method="get">
+                        <select name="range" id="rangeBtn" class="select-2">
+                            <option value="day" th:selected="${range == 'day'}">일별</option>
+                            <option value="week" th:selected="${range == 'week'}">주간</option>
+                            <option value="month" th:selected="${range == 'month'}">한달</option>
                         </select>
-                    </form> 
+                    </form>
                     <table class="table">
                         <tr>
 
@@ -45,70 +45,18 @@
                             <th>주문합계</th>
                             <th>매출합계</th>
                         </tr>
-                        <tr>
-                            <td>1</td>
+                        <tr th:each="seller, stat : ${pageResponseDTO.dtoList}">
+                            <td>[[${pageResponseDTO.startNo - stat.index}]]</td>
                             
-                            <td>(주)다나와</td>
-                            <td>112-12-12345</td>
-                            <td>103</td>
-                            <td>90</td>
-                            <td>31</td>
-                            <td>41</td>
-                            <td>40</td>
-                            <td>12,323,444</td>
-                            <td>11,432,222</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            
-                            <td>(주)다나와</td>
-                            <td>112-12-12345</td>
-                            <td>103</td>
-                            <td>90</td>
-                            <td>31</td>
-                            <td>41</td>
-                            <td>40</td>
-                            <td>12,323,444</td>
-                            <td>11,432,222</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            
-                            <td>(주)다나와</td>
-                            <td>112-12-12345</td>
-                            <td>103</td>
-                            <td>90</td>
-                            <td>31</td>
-                            <td>41</td>
-                            <td>40</td>
-                            <td>12,323,444</td>
-                            <td>11,432,222</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            
-                            <td>(주)다나와</td>
-                            <td>112-12-12345</td>
-                            <td>103</td>
-                            <td>90</td>
-                            <td>31</td>
-                            <td>41</td>
-                            <td>40</td>
-                            <td>12,323,444</td>
-                            <td>11,432,222</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            
-                            <td>(주)다나와</td>
-                            <td>112-12-12345</td>
-                            <td>103</td>
-                            <td>90</td>
-                            <td>31</td>
-                            <td>41</td>
-                            <td>40</td>
-                            <td>12,323,444</td>
-                            <td>11,432,222</td>
+                            <td>[[${seller.corp_name}]]</td>
+                            <td>[[${seller.corp_reg_hp}]]</td>
+                            <td>[[${seller.ord_cnt}]]</td>
+                            <td>[[${seller.ord_st_cnt}]]</td>
+                            <td>[[${seller.stat2_cnt}]]</td>
+                            <td>[[${seller.stat3_cnt}]]</td>
+                            <td>[[${seller.stat4_cnt}]]</td>
+                            <td>[[${seller.tot_ord_price}]]</td>
+                            <td>[[${seller.tot_sell_price}]]</td>
                         </tr>
 
 
@@ -116,15 +64,15 @@
                     <br>
 
                     <div class="page">
-                        <a href="#" class="prev">이전</a>
-                        <a href="#" class="num current">1</a>
-                        <a href="#" class="num">2</a>
-                        <a href="#" class="num">3</a>
-                        <a href="#" class="next">다음</a>
+                        <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/shop/sales(pg=${pageResponseDTO.start - 1})}" class="prev">이전</a>
+                        <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                            <a th:href="@{/admin/shop/sales(pg=${num})}" th:class="${num == pageResponseDTO.pg ? 'current' : 'num'}">[[${num}]]</a>
+                        </th:block>
+                        <a th:if="${pageResponseDTO.next}" th:href="@{/admin/shop/sales(pg=${pageResponseDTO.end + 1})}" class="next">다음</a>
                     </div>
 
-                    
 
+                    <br>
                 </main>
             </div>
         </div>

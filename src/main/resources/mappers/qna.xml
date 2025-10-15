@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.QnaMapper">
+
+    <select id="qnaCnt2" resultType="kr.co.shoply.dto.AdInfoDTO">
+        SELECT
+        count(*) as qnaTotal,
+        count(CASE WHEN TRUNC(q_rdate) = TRUNC(SYSDATE) THEN 1 END) as todQnaTotal,
+        count(CASE WHEN TRUNC(q_rdate) = TRUNC(SYSDATE - 1) THEN 1 END) as yesQnaTotal
+        FROM qna
+    </select>
+
+    <select id="selectQna2" resultType="kr.co.shoply.dto.QnaDTO">
+        SELECT
+        SUBSTR(mem_id, 1, 3) || RPAD('*', LENGTH(mem_id) - 3, '*') AS masked_id,
+        q_cate2,
+        q_title,
+        q_rdate
+        FROM qna
+        order by q_rdate desc
+        OFFSET 0 row FETCH NEXT 4 ROWS ONLY
+    </select>
+
+</mapper>

@@ -34,33 +34,37 @@
         <div class="id-result-container">
           <h2 class="result-title">아이디 찾기 결과</h2>
 
-          <div class="result-box">
+          <div th:if="${member != null}" class="result-box">
               <table class="result-table">
                   <tr>
                       <th>이름</th>
-                      <td>홍길동</td>
+                      <td th:text="${member.mem_name}"></td>
                   </tr>
                   <tr>
                       <th>아이디</th>
-                      <td>honggildong</td>
+                      <td th:text="${member.mem_id}"></td>
                   </tr>
                   <tr>
                       <th>이메일</th>
-                      <td>honggildong@gmail.com</td>
+                      <td th:text="${member.mem_email}"></td>
                   </tr>
                   <tr>
                       <th>가입일</th>
-                      <td>2022-11-16 10:20:22</td>
+                      <td th:text="${member.mem_rdate}"></td>
                   </tr>
               </table>
 
               <p class="result-notice">고객님의 정보와 일치하는 아이디 입니다.</p>
 
               <div class="result-buttons">
-                  <button type="button" class="btn-result-cancel">로그인</button>
-                  <button type="button" class="btn-result-submit">비밀번호 찾기</button>
+                  <button type="button" class="btn-result-cancel" th:onclick="|location.href='@{/member/login}'|">로그인</button>
+                  <button type="button" class="btn-result-submit" th:onclick="|location.href='@{/member/find/password}'|">비밀번호 찾기</button>
               </div>
           </div>
+            <div th:if="${member == null}" class="error-box">
+                <p>회원 정보를 찾을 수 없습니다.</p>
+                <a th:href="@{/member/find/userId}" class="btn-back">다시 시도</a>
+            </div>
       </div>
       </main>
     </div>

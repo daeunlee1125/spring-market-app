@@ -755,6 +755,12 @@ a {
     border-bottom: 1px solid #eee;
 }
 
+.salePointInput {
+    padding: 0;
+    margin: 0 10px;
+    width: 30px;
+}
+
 .order-item img {
     width: 90px;
     height: 90px;
@@ -779,7 +785,6 @@ a {
 }
 
 .order-item-price .original-price {
-    text-decoration: line-through;
     color: #aaa;
     font-size: 13px;
 }
@@ -860,7 +865,10 @@ a {
   box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
 }
 
-
+#kakao{
+    height: 20px;
+    width: 40px;
+}
 /* .final-order {
     width: 300px;
     border: 1px solid #e0e0e0;

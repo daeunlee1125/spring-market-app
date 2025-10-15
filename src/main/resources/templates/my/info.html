@@ -2,7 +2,6 @@
 
 <main class="container">
     <div class="sidebar">
-        <h2>나의 쇼핑 정보</h2>
         <ul>
             <li><a th:href="@{/my/home}">마이페이지 홈</a></li>
             <li><a th:href="@{/my/order}">전체주문내역</a></li>
@@ -10,11 +9,12 @@
             <li><a th:href="@{/my/coupon}">쿠폰</a></li>
             <li><a th:href="@{/my/review}">나의리뷰</a></li>
             <li><a th:href="@{/my/qna}">문의하기</a></li>
-            <li><a th:href="@{/my/info}" class="active">나의설정</a></li>
+            <li><a th:href="@{/my/info} " class="active">나의설정</a></li>
         </ul>
     </div>
     <div class="content">
         <div class="main-content-header">
+            <h2>나의 쇼핑 정보</h2>
             <div class="info-summary">
                 <div class="info-item">
                     <div class="count" th:text="${orderCount}">2</div>
@@ -25,7 +25,8 @@
                     <div>쿠폰</div>
                 </div>
                 <div class="info-item">
-                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 3, 'COMMA')}">1,000</div>
+
+                    <div class="count" th:text="${#numbers.formatInteger(pointTotal, 0, 'COMMA')}">1,000</div>
                     <div>포인트</div>
                 </div>
                 <div class="info-item">
@@ -34,11 +35,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="banner">
+        <div style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
             810 x 86 배너 광고
         </div>
-
         <div class="info-section">
             <h3>나의 설정</h3>
             <form>
@@ -57,10 +56,6 @@
                     <tr>
                         <th>이름</th>
                         <td th:text="${memberInfo.mem_name}"></td>
-                    </tr>
-                    <tr>
-                        <th>생년월일</th>
-                        <td th:text="${memberInfo.mem_birth}"></td>
                     </tr>
                     <tr>
                         <th>Email</th>

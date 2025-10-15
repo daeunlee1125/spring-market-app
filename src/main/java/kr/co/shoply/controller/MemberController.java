@@ -3,21 +3,25 @@ package kr.co.shoply.controller;
 import kr.co.shoply.dto.MemSellerDTO;
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.TermsDTO;
+import kr.co.shoply.service.EmailService;
 import kr.co.shoply.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-    @Slf4j
+import java.util.HashMap;
+import java.util.Map;
+
+@Slf4j
     @RequiredArgsConstructor
     @Controller
     public class MemberController {
 
         private final MemberService memberService;
+        private final EmailService emailService;
 
         @GetMapping("/member/join")
         public String join(){
@@ -67,6 +71,40 @@ import org.springframework.web.bind.annotation.RequestParam;
             model.addAttribute("termsDTO", termsDTO);
 
             return "member/signup";
+        }
+
+        @GetMapping("/member/checkId")
+        @ResponseBody
+        public Map<String, String> checkId(@RequestParam String mem_id) {
+            Map<String, String> result = new HashMap<>();
+
+            boolean exists = memberService.checkIdExists(mem_id);
+
+            if (exists) {
+                result.put("result", "fail");
+            } else {
+                result.put("result", "success");
+            }
+
+            return result;
+        }
+
+        // 이메일 인증번호 발송
+        @ResponseBody
+        @PostMapping("/member/email")
+        public ResponseEntity<Map<String, Integer>> verifyEmail(@RequestBody Map<String, Object> jsonData){
+
+            String mem_email = (String) jsonData.get("email");
+            log.info("mem_email = {}", mem_email);
+
+            int count = emailService.countEmail(mem_email);
+
+            if(count == 0){
+                emailService.sendCode(mem_email);
+            }
+
+            return ResponseEntity.ok(Map.of("count", count));
+
         }
 
     }

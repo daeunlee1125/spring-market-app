@@ -80,13 +80,14 @@
 <header>
     <div class="middle">
         <div id="logo">
-            <a th:href="@{/admin/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
+            <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
         </div>
+
         <div class="header-nav">
             <ul class="header-menu">
-                <li><a href="#">홈</a></li>
-                <li><a href="#">로그아웃</a></li>
-                <li><a href="#">고객센터</a></li>
+                <li><a th:href="@{/admin/}">홈</a></li>
+                <li><a th:href="@{/member/logout}">로그아웃</a></li>
+                <li><a th:href="@{/admin/cs/notice/list}">고객센터</a></li>
             </ul>
         </div>
     </div>

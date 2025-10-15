@@ -2,6 +2,8 @@ package kr.co.shoply.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,5 +27,18 @@ public class ProductDTO {
     private double avgRating; // 평균 리뷰 점수
     private int cntRating; // 리뷰 개수
     private int realPrice; // 실 판매 가격
+    private int saleprice; // 총 할인 가격
+    private int totalprice; // 총 주문 가격
+    private int totaldeliv; // 총 주문 배송비
 
+    //my페이지 by jinwon
+    private List<ProdOptionDTO> options;
+    private List<ProFileDTO> files;
+    public void setOptions(List<ProdOptionDTO> options) {
+        this.options = options;
+    }
+
+    public void setFiles(List<ProFileDTO> files) {
+        this.files = files;
+    }
 }

@@ -4,6 +4,15 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.shoply.mapper.CartMapper">
+    <select id="selectCartsByNos" parameterType="java.util.List" resultType="kr.co.shoply.dto.CartDTO">
+        SELECT * FROM CART c
+        JOIN PRO_FILE pf ON c.PROD_NO = pf.PROD_NO
+        WHERE cart_no IN
+        <foreach item="cart_no" collection="list" open="(" separator="," close=")">
+            #{cart_no}
+        </foreach>
+        AND pf.F_DIST = 1
+    </select>
 
     <resultMap id="cartWithProductMap" type="kr.co.shoply.dto.CartDTO">
         <id property="cart_no" column="CART_NO"/>
@@ -17,7 +26,10 @@
         <id property="prod_no" column="PROD_NO"/>
         <result property="prod_name" column="PROD_NAME"/>
         <result property="prod_company" column="PROD_COMPANY"/>
+        <result property="prod_price" column="PROD_PRICE"/>
+        <result property="prod_sale" column="PROD_SALE"/>
         <result property="prod_deliv_price" column="PROD_DELIV_PRICE"/>
+        <result property="prod_point" column="PROD_POINT"/>
         <result property="realPrice" column="realPrice"/>
         </association>
     </resultMap>
@@ -31,7 +43,10 @@
             p.PROD_NO,
             p.PROD_NAME,
             p.PROD_COMPANY,
+            p.PROD_PRICE,
+            p.PROD_SALE,
             p.PROD_DELIV_PRICE,
+            p.PROD_POINT,
             p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE / 100)) AS realPrice,
             pf.F_NAME AS fName
         FROM
@@ -63,5 +78,19 @@
     <delete id="deleteCart3" parameterType="kr.co.shoply.dto.CartDTO">
         DELETE FROM CART WHERE CART_NO=#{cart_no}
     </delete>
+
+    <delete id="deleteSelectedCarts3" parameterType="java.util.List">
+        DELETE FROM cart
+        WHERE cart_no IN
+        <foreach item="cart_no" collection="list" open="(" separator="," close=")">
+            #{cart_no}
+        </foreach>
+    </delete>
+
+    <update id="updateCartQuantity" parameterType="kr.co.shoply.dto.CartUpdateDTO">
+        UPDATE cart
+        SET cart_item_cnt = #{cart_item_cnt}
+        WHERE cart_no = #{cart_no}
+    </update>
 
 </mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.OrderItemMapper">
+
+    <select id="itemStatCnt2" resultType="kr.co.shoply.dto.AdInfoDTO">
+        SELECT
+        count(CASE WHEN item_stat = 1 THEN 1 END) as st1Total,
+        count(CASE WHEN item_stat = 5 THEN 1 END) as st5Total,
+        count(CASE WHEN item_stat = 6 THEN 1 END) as st6Total
+        FROM order_item
+    </select>
+
+</mapper>

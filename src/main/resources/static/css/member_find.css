@@ -107,6 +107,21 @@
     background-color: #5a6268;
 }
 
+.btn-check{
+    padding: 12px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.btn-check:hover {
+    background-color: #5a6268;
+}
+
 .verification-info {
     font-size: 13px;
     color: #666;

@@ -26,4 +26,17 @@ public class MemSellerDTO {
     private String mem_addr1;
     private String mem_addr2;
 
+
+    // admin/shop/sales 추가 필드
+    private int ord_cnt;
+    private int ord_st_cnt;
+    private int stat2_cnt;
+    private int stat3_cnt;
+    private int stat4_cnt;
+    private int tot_ord_price;
+    private int tot_sell_price;
+
+    private String range;
+
+
 }

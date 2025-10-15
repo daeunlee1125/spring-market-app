@@ -5,6 +5,12 @@
 
 <mapper namespace="kr.co.shoply.mapper.MemberMapper">
 
+    <select id="selectMember3" resultType="kr.co.shoply.dto.MemberDTO">
+        SELECT *
+        FROM "MEMBER"
+        WHERE MEM_ID = #{mem_id}
+    </select>
+
     <select id="selectADDR3" resultType="kr.co.shoply.dto.MemberDTO">
         SELECT m.MEM_ZIP, m.MEM_ADDR1, m.MEM_ADDR2
         FROM PRODUCT p
@@ -12,5 +18,56 @@
         WHERE p.MEM_ID = #{mem_id} AND p.PROD_NO = #{prod_no}
     </select>
 
+    <select id="countById" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEM_ID = #{mem_id}
+    </select>
+
+    <select id="checkRegEmail" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEM_EMAIL = #{mem_email}
+    </select>
+
+    <select id="checkEmail" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEM_NAME  = #{mem_name}
+          AND MEM_EMAIL = #{mem_email}
+    </select>
+
+    <select id="checkEmailById" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEM_ID = #{mem_id}
+          AND MEM_EMAIL = #{mem_email}
+    </select>
+
+    <select id="findMemberByNameAndEmail" resultType="kr.co.shoply.dto.MemberDTO">
+        SELECT
+            MEM_ID,
+            MEM_NAME,
+            MEM_EMAIL,
+            MEM_RDATE
+        FROM MEMBER
+        WHERE MEM_NAME = #{mem_name}
+          AND MEM_EMAIL = #{mem_email}
+    </select>
+
+
+    <update id="updatePassword">
+        UPDATE MEMBER
+           SET MEM_PASS = #{mem_pass}
+         WHERE MEM_ID = #{mem_id}
+    </update>
+
+    <select id="regCnt2" resultType="kr.co.shoply.dto.AdInfoDTO">
+        SELECT
+        count(*) as regTotal,
+        count(CASE WHEN TRUNC(mem_rdate) = TRUNC(SYSDATE) THEN 1 END) as todRegTotal,
+        count(CASE WHEN TRUNC(mem_rdate) = TRUNC(SYSDATE - 1) THEN 1 END) as yesRegTotal
+        FROM member
+    </select>
 
 </mapper>

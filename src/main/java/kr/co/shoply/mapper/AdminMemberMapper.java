@@ -36,7 +36,6 @@ public interface AdminMemberMapper {
                          @Param("mem_rank") String memRank);
 
 
-
     //  포인트 관리 추가
     List<PointDTO> selectAdminPointList(PageRequestDTO pageRequestDTO);
     int selectAdminTotalCount(PageRequestDTO pageRequestDTO);

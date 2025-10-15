@@ -25,8 +25,11 @@ import java.util.List;
 @Controller
 public class AdminMemberController {
 
-    private final AdminMemberService adminMemberService;
-    private final AdminMemberMapper adminMemberMapper;
+  private final AdminMemberService adminMemberService;
+
+    
+  private final AdminMemberMapper adminMemberMapper;
+
 
 
     @GetMapping("/admin/member/list")
@@ -126,9 +129,6 @@ public class AdminMemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
         }
     }
-
-
-
 
 
 }

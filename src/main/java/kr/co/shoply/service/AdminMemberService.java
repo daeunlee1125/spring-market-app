@@ -4,11 +4,15 @@ import jakarta.transaction.Transactional;
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
+
 import kr.co.shoply.dto.PointDTO;
 import kr.co.shoply.mapper.AdminMemberMapper;
 import kr.co.shoply.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Param;
+import kr.co.shoply.mapper.AdminMemberMapper;
+import kr.co.shoply.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,7 +56,6 @@ public class AdminMemberService {
         }
     }
 
-
     // 회원 포인트
 
     public PageResponseDTO<PointDTO> selectAdminPointList(PageRequestDTO pageRequestDTO) {
@@ -66,12 +69,8 @@ public class AdminMemberService {
     }
 
 
-
-
-
 }
 
 
-
-
+}
 

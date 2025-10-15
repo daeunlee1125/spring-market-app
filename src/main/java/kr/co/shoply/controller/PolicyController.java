@@ -27,6 +27,7 @@ public class PolicyController {
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "seller");
         return "policy/seller";
+
     }
 
     @GetMapping("/policy/finance")

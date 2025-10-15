@@ -22,6 +22,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // 각 입력 필드에 실시간 검증 이벤트 추가
+    const memId = document.querySelector('input[name="mem_id"]');
+    const memEmail = document.querySelector('input[name="mem_email"]');
+
+    // 아이디 실시간 검증
+    if (memId) {
+        memId.addEventListener('blur', function() {
+            validateId(this.value);
+        });
+        memId.addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearError('mem_id');
+            }
+        });
+    }
+
+    // 이메일 실시간 검증
+    if (memEmail) {
+        memEmail.addEventListener('blur', function() {
+            validateEmail(this.value);
+        });
+        memEmail.addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearError('mem_email');
+            }
+        });
+    }
+
     //인증기능 시작
     const btnVerify = document.querySelector('.btn-verify');
     const btnOk = document.querySelector('.btn-check');
@@ -44,13 +72,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const memId = emailForm.mem_id.value.trim();
         const email = emailForm.mem_email.value.trim();
 
-        if(!memId) {
-            alert('아이디를 입력해주세요.');
-            return;
-        }
+        const isIdValid = validateId(memId);
+        const isEmailValid = validateEmail(email);
 
-        if(!email) {
-            alert('이메일을 입력해주세요.');
+        if (!isIdValid || !isEmailValid) {
             return;
         }
 
@@ -138,6 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('인증이 완료되었습니다.');
                 isEmailVerified = true;
 
+                //인증번호받기 비활성화
+                btnVerify.disabled = true;
+                btnVerify.textContent = '인증완료';
+
                 // 확인 버튼 비활성화
                 btnOk.disabled = true;
                 btnOk.textContent = '인증완료';
@@ -154,15 +183,20 @@ document.addEventListener('DOMContentLoaded', function() {
     btnSubmit.addEventListener('click', function(e) {
         e.preventDefault();
 
+        const memId = emailForm.mem_id.value.trim();
+        const email = emailForm.mem_email.value.trim();
+
+        const isIdValid = validateId(memId);
+        const isEmailValid = validateEmail(email);
+
+        if (!isIdValid || !isEmailValid) {
+            return;
+        }
+
         if(!isEmailVerified) {
             alert('이메일 인증을 완료해주세요.');
             return;
         }
-
-        const memId = document.getElementById('mem_id').value;
-
-        /*emailForm.action = `/shoply/member/find/changePassword?mem_id=${memId}`;
-        emailForm.submit();*/
 
         location.href = `/shoply/member/find/changePassword?mem_id=${memId}`;
     });
@@ -173,3 +207,270 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+/**
+ * 아이디 유효성 검사
+ */
+function validateId(id) {
+    const idPattern = /^[a-zA-Z0-9]{4,20}$/;
+
+    if (!id) {
+        showError('mem_id', '아이디를 입력해주세요.');
+        return false;
+    }
+
+    if (!idPattern.test(id)) {
+        showError('mem_id', '아이디는 영문, 숫자 4~20자로 입력해주세요.');
+        return false;
+    }
+
+    clearError('mem_id');
+    return true;
+}
+
+
+/**
+ * 이메일 유효성 검사
+ */
+function validateEmail(email) {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!email) {
+        showError('mem_email', '이메일을 입력해주세요.');
+        return false;
+    }
+
+    if (!emailPattern.test(email)) {
+        showError('mem_email', '올바른 이메일 형식이 아닙니다.');
+        return false;
+    }
+
+    clearError('mem_email');
+    return true;
+}
+
+/**
+ * 에러 메시지 표시
+ */
+function showError(fieldName, message) {
+    const field = document.querySelector(`input[name="${fieldName}"]`);
+    if (!field) return;
+
+    // 기존 에러 메시지 제거
+    clearError(fieldName);
+
+    // 에러 메시지 생성
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.style.color = '#ff0000';
+    errorDiv.style.fontSize = '12px';
+    errorDiv.style.marginTop = '5px';
+    errorDiv.textContent = message;
+    errorDiv.setAttribute('data-error-for', fieldName);
+
+    // 필드에 에러 스타일 추가
+    field.style.borderColor = '#ff0000';
+
+    // 에러 메시지 삽입
+    const formGroup = field.closest('.form-group');
+    if (formGroup) {
+        formGroup.appendChild(errorDiv);
+    } else {
+        const inputGroup = field.closest('.input-group');
+        if (inputGroup) {
+            inputGroup.parentNode.insertBefore(errorDiv, inputGroup.nextSibling);
+        }
+    }
+}
+
+/**
+ * 에러 메시지 제거
+ */
+function clearError(fieldName) {
+    const field = document.querySelector(`input[name="${fieldName}"]`);
+    if (!field) return;
+
+    // 필드 스타일 복구
+    field.style.borderColor = '';
+
+    // 에러 메시지 제거
+    const errorMsg = document.querySelector(`[data-error-for="${fieldName}"]`);
+    if (errorMsg) {
+        errorMsg.remove();
+    }
+}
+
+
+// 비밀번호 변경 페이지 유효성 검사
+const passwordChangeForm = document.querySelector('.password-change-form');
+
+if (passwordChangeForm) {
+    const memPass = passwordChangeForm.querySelector('input[name="mem_pass"]');
+    const memPass2 = passwordChangeForm.querySelector('input[name="mem_pass2"]');
+    const btnPasswordSubmit = document.querySelector('.btn-password-submit');
+    const btnPasswordCancel = document.querySelector('.btn-password-cancel');
+    const passwordHint = document.querySelector('.password-hint-inline');
+
+    // 새 비밀번호 실시간 검증
+    if (memPass) {
+        memPass.addEventListener('blur', function() {
+            validatePassword(this.value);
+        });
+        memPass.addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearError('mem_pass');
+                // 비밀번호 확인란도 다시 검증
+                if (memPass2.value) {
+                    validatePasswordConfirm(memPass2.value, this.value);
+                }
+            }
+        });
+    }
+
+    // 새 비밀번호 확인 실시간 검증
+    if (memPass2) {
+        memPass2.addEventListener('blur', function() {
+            validatePasswordConfirm(this.value, memPass.value);
+        });
+        memPass2.addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearError('mem_pass2');
+            }
+        });
+    }
+
+    // 폼 제출 시 유효성 검사
+    if (btnPasswordSubmit) {
+        btnPasswordSubmit.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const password = memPass.value.trim();
+            const passwordConfirm = memPass2.value.trim();
+
+            const isPasswordValid = validatePassword(password);
+            const isPasswordConfirmValid = validatePasswordConfirm(passwordConfirm, password);
+
+            if (!isPasswordValid || !isPasswordConfirmValid) {
+                return;
+            }
+
+            // 유효성 검사 통과 시 폼 제출
+            passwordChangeForm.submit();
+        });
+    }
+
+    // 취소 버튼
+    if (btnPasswordCancel) {
+        btnPasswordCancel.addEventListener('click', function() {
+            if (confirm('비밀번호 변경을 취소하시겠습니까?')) {
+                location.href = '/shoply/member/login';
+            }
+        });
+    }
+}
+
+/**
+ * 비밀번호 유효성 검사
+ */
+function validatePassword(password) {
+    // 영문, 숫자, 특수문자 포함 8자 이상
+    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+    const passwordHint = document.querySelector('.password-hint-inline');
+
+    if (!password) {
+        showError('mem_pass', '비밀번호를 입력해주세요.');
+        if (passwordHint) passwordHint.style.display = 'none';
+        return false;
+    }
+
+    if (password.length < 8) {
+        showError('mem_pass', '비밀번호는 8자 이상이어야 합니다.');
+        if (passwordHint) passwordHint.style.display = 'none';
+        return false;
+    }
+
+    if (!passwordPattern.test(password)) {
+        showError('mem_pass', '영문, 숫자, 특수문자를 모두 포함해야 합니다.');
+        if (passwordHint) passwordHint.style.display = 'none';
+        return false;
+    }
+
+    clearError('mem_pass');
+    if (passwordHint) {
+        passwordHint.style.display = 'inline';
+        passwordHint.style.color = '#00aa00';
+        passwordHint.textContent = '사용 가능한 비밀번호입니다.';
+    }
+    return true;
+}
+
+/**
+ * 비밀번호 확인 검사
+ */
+function validatePasswordConfirm(confirmPassword, originalPassword) {
+    if (!confirmPassword) {
+        showError('mem_pass2', '비밀번호 확인을 입력해주세요.');
+        return false;
+    }
+
+    if (confirmPassword !== originalPassword) {
+        showError('mem_pass2', '비밀번호가 일치하지 않습니다.');
+        return false;
+    }
+
+    clearError('mem_pass2');
+    return true;
+}
+
+/**
+ * 에러 메시지 표시 (비밀번호 페이지용)
+ */
+function showError(fieldName, message) {
+    const field = document.querySelector(`input[name="${fieldName}"]`);
+    if (!field) return;
+
+    // 기존 에러 메시지 제거
+    clearError(fieldName);
+
+    // 에러 메시지 생성
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.style.color = '#ff0000';
+    errorDiv.style.fontSize = '12px';
+    errorDiv.style.marginTop = '5px';
+    errorDiv.textContent = message;
+    errorDiv.setAttribute('data-error-for', fieldName);
+
+    // 필드에 에러 스타일 추가
+    field.style.borderColor = '#ff0000';
+
+    // 에러 메시지 삽입
+    const wrapper = field.closest('.password-input-wrapper');
+    const td = field.closest('td');
+
+    if (wrapper) {
+        // 힌트 메시지 숨기기
+        const hint = wrapper.querySelector('.password-hint-inline');
+        if (hint) hint.style.display = 'none';
+        wrapper.appendChild(errorDiv);
+    } else if (td) {
+        td.appendChild(errorDiv);
+    }
+}
+
+/**
+ * 에러 메시지 제거 (비밀번호 페이지용)
+ */
+function clearError(fieldName) {
+    const field = document.querySelector(`input[name="${fieldName}"]`);
+    if (!field) return;
+
+    // 필드 스타일 복구
+    field.style.borderColor = '';
+
+    // 에러 메시지 제거
+    const errorMsg = document.querySelector(`[data-error-for="${fieldName}"]`);
+    if (errorMsg) {
+        errorMsg.remove();
+    }
+}

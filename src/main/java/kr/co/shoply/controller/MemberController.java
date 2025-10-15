@@ -93,7 +93,9 @@ import java.util.Map;
         @ResponseBody
         @PostMapping("/member/email")
         public ResponseEntity<Map<String, Integer>> verifyEmail(@RequestBody Map<String, Object> jsonData){
+
             String mem_email = (String) jsonData.get("email");
+            log.info("mem_email = {}", mem_email);
 
             int count = emailService.countEmail(mem_email);
 

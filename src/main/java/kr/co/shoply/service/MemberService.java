@@ -50,7 +50,7 @@ public class MemberService {
 
     public TermsDTO getTerms(){
         //t_no = count(*) == findById(count(*)) 최신약관 나오도록 수정 예정
-        Optional<Terms> optTerms = termsRepository.findById(1);
+        Optional<Terms> optTerms = termsRepository.findById(4);
         if(optTerms.isPresent()){
 
             Terms terms = optTerms.get();

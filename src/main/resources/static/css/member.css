@@ -419,6 +419,60 @@ background-color: #777;
     background: #0056b3;
 }
 
+ .btn-verify {
+     background: #007bff;
+     color: white;
+     border: none;
+     padding: 8px 15px;
+     margin-left: 10px;
+     border-radius: 3px;
+     cursor: pointer;
+     font-size: 12px;
+ }
+
+ .btn-verify:hover {
+     background: #0056b3;
+ }
+
+ .btn-ok {
+     background: #007bff;
+     color: white;
+     border: none;
+     padding: 8px 15px;
+     margin-left: 10px;
+     border-radius: 3px;
+     cursor: pointer;
+     font-size: 12px;
+ }
+
+ .btn-ok:hover {
+     background: #0056b3;
+ }
+
+ /* 비활성화된 버튼 및 입력 필드 스타일 */
+ .btn-ok:disabled,
+ .btn-verify:disabled,
+ .btn-check:disabled {
+     background: #cccccc !important;
+     color: #666 !important;
+     cursor: not-allowed !important;
+     opacity: 0.6;
+ }
+
+ .btn-ok:disabled:hover,
+ .btn-verify:disabled:hover,
+ .btn-check:disabled:hover {
+     background: #cccccc !important;
+ }
+
+ /* 인증번호 입력 필드 비활성화 스타일 */
+ input[name="auth"]:disabled {
+     background-color: #f5f5f5;
+     color: #999;
+     cursor: not-allowed;
+     border-color: #ddd;
+ }
+
 .radio-group {
     display: flex;
     gap: 20px;

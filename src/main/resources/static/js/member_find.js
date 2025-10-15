@@ -20,6 +20,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // 각 입력 필드에 실시간 검증 이벤트 추가
+    const memName = document.querySelector('input[name="mem_name"]');
+    const memEmail = document.querySelector('input[name="mem_email"]');
+
+    // 이름 실시간 검증
+    if (memName) {
+        memName.addEventListener('blur', function() {
+            validateName(this.value);
+        });
+
+        memName.addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearError('mem_name');
+            }
+        });
+    }
+
+    // 이메일 실시간 검증
+    if (memEmail) {
+        memEmail.addEventListener('blur', function () {
+            validateEmail(this.value);
+        });
+
+        memEmail.addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearError('mem_email');
+            }
+        });
+    }
+
     const btnVerify = document.querySelector('.btn-verify');
     const btnCheck = document.querySelector('.btn-check');
     const btnSubmit = document.querySelector('.btn-submit');
@@ -40,6 +70,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const name = emailForm.mem_name.value.trim();
         const email = emailForm.mem_email.value.trim();
+
+        const isNameValid = validateName(name);
+        const isEmailValid = validateEmail(email);
+
+        if (!isNameValid || !isEmailValid) {
+            return;
+        }
+
 
         if(!name) {
             alert('이름을 입력해주세요.');
@@ -151,6 +189,16 @@ document.addEventListener('DOMContentLoaded', function() {
     btnSubmit.addEventListener('click', function(e) {
         e.preventDefault();
 
+        const name = emailForm.mem_name.value.trim();
+        const email = emailForm.mem_email.value.trim();
+
+        const isNameValid = validateName(name);
+        const isEmailValid = validateEmail(email);
+
+        if (!isNameValid || !isEmailValid) {
+            return;
+        }
+
         if(!isEmailVerified) {
             alert('이메일 인증을 완료해주세요.');
             return;
@@ -165,3 +213,96 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+/**
+ * 이름 유효성 검사
+ */
+function validateName(name) {
+    const namePattern = /^[가-힣a-zA-Z]{2,20}$/;
+
+    if (!name) {
+        showError('mem_name', '이름을 입력해주세요.');
+        return false;
+    }
+
+    if (!namePattern.test(name)) {
+        showError('mem_name', '이름은 한글 또는 영문 2~20자로 입력해주세요.');
+        return false;
+    }
+
+    clearError('mem_name');
+    return true;
+}
+
+/**
+ * 이메일 유효성 검사
+ */
+function validateEmail(email) {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!email) {
+        showError('mem_email', '이메일을 입력해주세요.');
+        return false;
+    }
+
+    if (!emailPattern.test(email)) {
+        showError('mem_email', '올바른 이메일 형식이 아닙니다.');
+        return false;
+    }
+
+    clearError('mem_email');
+    return true;
+}
+
+
+/**
+ * 에러 메시지 표시
+ */
+function showError(fieldName, message) {
+    const field = document.querySelector(`input[name="${fieldName}"]`);
+    if (!field) return;
+
+    // 기존 에러 메시지 제거
+    clearError(fieldName);
+
+    // 에러 메시지 생성
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.style.color = '#ff0000';
+    errorDiv.style.fontSize = '12px';
+    errorDiv.style.marginTop = '5px';
+    errorDiv.textContent = message;
+    errorDiv.setAttribute('data-error-for', fieldName);
+
+    // 필드에 에러 스타일 추가
+    field.style.borderColor = '#ff0000';
+
+    // 에러 메시지 삽입
+    const formGroup = field.closest('.form-group');
+    if (formGroup) {
+        formGroup.appendChild(errorDiv);
+    } else {
+        // form-group이 없으면 input-group 다음에 삽입
+        const inputGroup = field.closest('.input-group');
+        if (inputGroup) {
+            inputGroup.parentNode.insertBefore(errorDiv, inputGroup.nextSibling);
+        }
+    }
+}
+
+/**
+ * 에러 메시지 제거
+ */
+function clearError(fieldName) {
+    const field = document.querySelector(`input[name="${fieldName}"]`);
+    if (!field) return;
+
+    // 필드 스타일 복구
+    field.style.borderColor = '';
+
+    // 에러 메시지 제거
+    const errorMsg = document.querySelector(`[data-error-for="${fieldName}"]`);
+    if (errorMsg) {
+        errorMsg.remove();
+    }
+}

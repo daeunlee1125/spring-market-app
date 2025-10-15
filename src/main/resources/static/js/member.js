@@ -1,197 +1,318 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form[action*="/member/register"]');
-    if (!form) return;
-
-    // 각 입력 필드에 실시간 검증 이벤트 추가
-    const memId = document.querySelector('input[name="mem_id"]');
-    const memPass = document.querySelector('input[name="mem_pass"]');
-    const memPass2 = document.querySelector('input[name="mem_pass2"]');
-    const memName = document.querySelector('input[name="mem_name"]');
-    const memEmail = document.querySelector('input[name="mem_email"]');
-    const memHp = document.querySelector('input[name="mem_hp"]');
-
-    // 아이디 실시간 검증
-    if (memId) {
-        memId.addEventListener('blur', function() {
-            validateId(this.value);
-        });
-    }
-
-    // 아이디 입력 필드가 변경되면 중복 확인 초기화
-    const memIdField = document.querySelector('input[name="mem_id"]');
-    if (memIdField) {
-        memIdField.addEventListener('input', function() {
-            if (this.value !== checkedId) {
-                isIdChecked = false;
-            }
-        });
-    }
-
-    // 비밀번호 실시간 검증
-    if (memPass) {
-        memPass.addEventListener('blur', function() {
-            validatePassword(this.value);
-        });
-    }
-
-    // 비밀번호 확인 실시간 검증
-    if (memPass2) {
-        memPass2.addEventListener('blur', function() {
-            validatePasswordConfirm(memPass.value, this.value);
-        });
-    }
-
-    // 생년월일 실시간 검증
-    const memBirth = document.querySelector('input[name="mem_birth"]');
-    if (memBirth) {
-        memBirth.addEventListener('change', function() {
-            validateBirth(this.value);
-        });
-    }
-
-    // 이메일 실시간 검증
-    if (memEmail) {
-        memEmail.addEventListener('blur', function() {
-            validateEmail(this.value);
-        });
-    }
-
-    // 휴대폰 번호 자동 하이픈 추가
-    if (memHp) {
-        memHp.addEventListener('input', function() {
-            this.value = formatPhoneNumber(this.value);
-        });
-        memHp.addEventListener('blur', function() {
-            validatePhone(this.value);
-        });
-    }
-
-    // 폼 제출 시 전체 검증
-    form.addEventListener('submit', function(e) {
-        if (!validateForm()) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-   /* const btnVerify = document.querySelector('.btn-verify');
-    const btnCheck = document.querySelector('.btn-check');
-
-    let isEmailVerified = false; // 인증 완료 여부
-    let canResend = true;
-
-    btnVerify.addEventListener('click', async function(e) {
-        e.preventDefault();
-
-        if(!canResend) {
-            alert('잠시 후 다시 시도해주세요.');
-            return;
-        }
-
-        if(!memEmail) {
-            alert('이메일을 입력해주세요.');
-            return;
-        }
-
-        const jsonData = {
-            "email": memEmail
-        };
-
-        // 버튼 비활성화 및 텍스트 변경
-        btnVerify.disabled = true;
-        btnVerify.textContent = '전송중...';
-
-        try {
-            const response = await fetch('/shoply/member/email', {
-                method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(jsonData)
-            });
-
-            if (!response.ok) {
-                throw new Error('서버 응답 오류');
-            }
-
-            const data = await response.json();
-
-            if(data.count === 0) {
-                alert('인증번호가 이메일로 발송되었습니다.');
-                form.auth.disabled = false;
-                btnCheck.disabled = false;
-
-                // 60초 타이머 시작
-                canResend = false;
-                let countdown = 60;
-
-                const timer = setInterval(() => {
-                    btnVerify.textContent = `재전송 (${countdown}초)`;
-                    countdown--;
-
-                    if(countdown < 0) {
-                        clearInterval(timer);
-                        btnVerify.disabled = false;
-                        btnVerify.textContent = '재전송';
-                        canResend = true;
-                    }
-                }, 1000);
-
-            } else {
-                btnVerify.disabled = false;
-                btnVerify.textContent = '인증번호 받기';
-                alert('이미 사용중인 이메일 입니다.');
-            }
-        } catch(error) {
-            console.error('Error:', error);
-            btnVerify.disabled = false;
-            btnVerify.textContent = '인증번호 받기';
-            alert('인증번호 발송 중 오류가 발생했습니다.');
-        }
-    });
-
-    // 인증번호 확인 버튼 클릭
-    btnCheck.addEventListener('click', async function(e) {
-        e.preventDefault();
-
-        const code = form.auth.value.trim();
-
-        if(!code) {
-            alert('인증번호를 입력해주세요.');
-            return;
-        }
-
-        const jsonData = {
-            "code": code
-        };
-
-        try {
-            const response = await fetch('/shoply/member/find/verifyCode', {
-                method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(jsonData)
-            });
-
-            const data = await response.json();
-
-            if(data.valid) {
-                alert('인증이 완료되었습니다.');
-                isEmailVerified = true;
-
-                // 확인 버튼 비활성화
-                btnCheck.disabled = true;
-                btnCheck.textContent = '인증완료';
-            } else {
-                alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
-            }
-        } catch(error) {
-            console.error('Error:', error);
-            alert('인증번호 확인 중 오류가 발생했습니다.');
-        }
-    });*/
-});
-
-// 아이디 중복 확인 여부를 저장하는 변수
 let isIdChecked = false;
 let checkedId = '';
+let isEmailVerified = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[action*="/member/register"]:not([action*="Seller"])');
+    const sellerForm = document.querySelector('form[action*="/member/registerSeller"]');
+
+    console.log('Form found:', form);
+    console.log('SellerForm found:', sellerForm);
+
+    if (!form && !sellerForm) return;
+
+    if (form) {
+        // 각 입력 필드에 실시간 검증 이벤트 추가
+        const memId = document.querySelector('input[name="mem_id"]');
+        const memPass = document.querySelector('input[name="mem_pass"]');
+        const memPass2 = document.querySelector('input[name="mem_pass2"]');
+        const memName = document.querySelector('input[name="mem_name"]');
+        const memEmail = document.querySelector('input[name="mem_email"]');
+        const memHp = document.querySelector('input[name="mem_hp"]');
+
+        // 아이디 실시간 검증
+        if (memId) {
+            memId.addEventListener('blur', function () {
+                validateId(this.value);
+            });
+        }
+
+        // 아이디 입력 필드가 변경되면 중복 확인 초기화
+        const memIdField = document.querySelector('input[name="mem_id"]');
+        if (memIdField) {
+            memIdField.addEventListener('input', function () {
+                if (this.value !== checkedId) {
+                    isIdChecked = false;
+                }
+            });
+        }
+
+        // 비밀번호 실시간 검증
+        if (memPass) {
+            memPass.addEventListener('blur', function () {
+                validatePassword(this.value);
+            });
+        }
+
+        // 비밀번호 확인 실시간 검증
+        if (memPass2) {
+            memPass2.addEventListener('blur', function () {
+                validatePasswordConfirm(memPass.value, this.value);
+            });
+        }
+
+        // 이름 실시간 검증
+        if (memName) {
+            memName.addEventListener('blur', function() {
+                validateName(this.value);
+            });
+        }
+
+        // 생년월일 실시간 검증
+        const memBirth = document.querySelector('input[name="mem_birth"]');
+        if (memBirth) {
+            memBirth.addEventListener('change', function () {
+                validateBirth(this.value);
+            });
+        }
+
+        // 이메일 실시간 검증
+        if (memEmail) {
+            memEmail.addEventListener('blur', function () {
+                validateEmail(this.value);
+            });
+        }
+
+        // 휴대폰 번호 자동 하이픈 추가
+        if (memHp) {
+            memHp.addEventListener('input', function () {
+                this.value = formatPhoneNumber(this.value);
+            });
+            memHp.addEventListener('blur', function () {
+                validatePhone(this.value);
+            });
+        }
+
+        // 폼 제출 시 전체 검증
+        form.addEventListener('submit', function (e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        const btnVerify = document.querySelector('.btn-verify');
+        const btnOk = document.querySelector('.btn-ok');
+
+        if (btnVerify && btnOk) {
+
+            let canResend = true;
+
+            btnVerify.addEventListener('click', async function (e) {
+                e.preventDefault();
+
+                if (!canResend) {
+                    alert('잠시 후 다시 시도해주세요.');
+                    return;
+                }
+
+                if (!memEmail.value) {
+                    alert('이메일을 입력해주세요.');
+                    return;
+                }
+                const jsonData = {
+                    "email": memEmail.value
+                };
+
+                // 버튼 비활성화 및 텍스트 변경
+                btnVerify.disabled = true;
+                btnVerify.textContent = '전송중...';
+
+                try {
+                    const response = await fetch('/shoply/member/email', {
+                        method: 'POST',
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify(jsonData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('서버 응답 오류');
+                    }
+
+                    const data = await response.json();
+
+                    if (data.count === 0) {
+                        alert('인증번호가 이메일로 발송되었습니다.');
+                        form.auth.style.display = 'inline-block';
+                        form.auth.disabled = false;
+                        btnOk.style.display = 'inline-block';
+                        btnOk.disabled = false;
+
+                        // 60초 타이머 시작
+                        canResend = false;
+                        let countdown = 60;
+
+                        const timer = setInterval(() => {
+                            btnVerify.textContent = `재전송 (${countdown}초)`;
+                            countdown--;
+
+                            if (countdown < 0) {
+                                clearInterval(timer);
+                                btnVerify.disabled = false;
+                                btnVerify.textContent = '재전송';
+                                canResend = true;
+                            }
+                        }, 1000);
+
+                    } else {
+                        btnVerify.disabled = false;
+                        btnVerify.textContent = '인증번호 받기';
+                        alert('이미 사용중인 이메일 입니다.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    btnVerify.disabled = false;
+                    btnVerify.textContent = '인증번호 받기';
+                    alert('인증번호 발송 중 오류가 발생했습니다.');
+                }
+            });
+
+            // 인증번호 확인 버튼 클릭
+            btnOk.addEventListener('click', async function (e) {
+                e.preventDefault();
+
+                const code = form.auth.value.trim();
+                console.log(code);
+
+                if (!code) {
+                    alert('인증번호를 입력해주세요.');
+                    return;
+                }
+
+                const jsonData = {
+                    "code": code
+                };
+
+                try {
+                    const response = await fetch('/shoply/member/find/verifyCode', {
+                        method: 'POST',
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify(jsonData)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.valid) {
+                        alert('인증이 완료되었습니다.');
+                        isEmailVerified = true;
+
+                        // 이메일과 인증번호 입력란을 읽기 전용으로 변경
+                        memEmail.readOnly = true;
+                        form.auth.readOnly = true;
+
+                        // 확인 버튼 비활성화
+                        btnOk.disabled = true;
+                        btnOk.textContent = '인증완료';
+                    } else {
+                        alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('인증번호 확인 중 오류가 발생했습니다.');
+                }
+            });
+        }
+    }
+
+    // ====== 판매자 회원가입 전용 ======
+    if (sellerForm) {
+        const memId = document.querySelector('input[name="mem_id"]');
+        const memPass = document.querySelector('input[name="mem_pass"]');
+        const memPass2 = document.querySelector('input[name="mem_pass2"]');
+        const corpName = document.querySelector('input[name="corp_name"]');
+        const memName = document.querySelector('input[name="mem_name"]');
+        const corpRegHp = document.querySelector('input[name="corp_reg_hp"]');
+        const corpTelHp = document.querySelector('input[name="corp_tel_hp"]');
+        const memHp = document.querySelector('input[name="mem_hp"]');
+        const corpFax = document.querySelector('input[name="corp_fax"]');
+
+        // 아이디 실시간 검증
+        if (memId) {
+            memId.addEventListener('blur', function() {
+                validateId(this.value);
+            });
+            memId.addEventListener('input', function() {
+                if (this.value !== checkedId) {
+                    isIdChecked = false;
+                }
+            });
+        }
+
+        // 비밀번호 실시간 검증
+        if (memPass) {
+            memPass.addEventListener('blur', function() {
+                validatePassword(this.value);
+            });
+        }
+
+        // 비밀번호 확인 실시간 검증
+        if (memPass2) {
+            memPass2.addEventListener('blur', function() {
+                validatePasswordConfirm(memPass.value, this.value);
+            });
+        }
+
+        // 회사명 실시간 검증
+        if (corpName) {
+            corpName.addEventListener('blur', function() {
+                validateCorpName(this.value);
+            });
+        }
+
+        // 대표 이름 실시간 검증
+        if (memName) {
+            memName.addEventListener('blur', function() {
+                validateName(this.value);
+            });
+        }
+
+        // 사업자등록번호 자동 하이픈 추가 및 검증
+        if (corpRegHp) {
+            corpRegHp.addEventListener('input', function() {
+                this.value = formatBusinessNumber(this.value);
+            });
+            corpRegHp.addEventListener('blur', function() {
+                validateBusinessNumber(this.value);
+            });
+        }
+
+        // 통신판매업번호 검증
+        if (corpTelHp) {
+            corpTelHp.addEventListener('blur', function() {
+                validateTelecomNumber(this.value);
+            });
+        }
+
+        // 전화번호 자동 하이픈 추가 및 검증 (휴대폰 + 일반전화)
+        if (memHp) {
+            memHp.addEventListener('input', function() {
+                this.value = formatPhoneOrTel(this.value);  // 변경
+            });
+            memHp.addEventListener('blur', function() {
+                validatePhoneOrTel(this.value);  // 변경
+            });
+        }
+
+        // 팩스 자동 하이픈 추가 및 검증
+        if (corpFax) {
+            corpFax.addEventListener('input', function() {
+                this.value = formatPhoneOrTel(this.value);
+            });
+
+            corpFax.addEventListener('blur', function() {
+                validateFax(this.value);
+            });
+        }
+
+        // 폼 제출 시 전체 검증
+        sellerForm.addEventListener('submit', function(e) {
+            if (!validateSellerForm()) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+});
 
 /**
  * 아이디 중복 확인
@@ -445,6 +566,166 @@ function validateAddress(zip, addr1) {
 }
 
 /**
+ * 회사명 유효성 검사
+ */
+function validateCorpName(corpName) {
+    if (!corpName || corpName.trim().length < 2) {
+        showError('corp_name', '회사명을 2자 이상 입력해주세요.');
+        return false;
+    }
+
+    if (corpName.length > 50) {
+        showError('corp_name', '회사명은 50자 이하로 입력해주세요.');
+        return false;
+    }
+
+    clearError('corp_name');
+    return true;
+}
+
+/**
+ * 사업자등록번호 유효성 검사
+ * 형식: 000-00-00000 (총 10자리 숫자)
+ */
+function validateBusinessNumber(businessNumber) {
+    const businessPattern = /^\d{3}-\d{2}-\d{5}$/;
+
+    if (!businessNumber) {
+        showError('corp_reg_hp', '사업자등록번호를 입력해주세요.');
+        return false;
+    }
+
+    if (!businessPattern.test(businessNumber)) {
+        showError('corp_reg_hp', '올바른 사업자등록번호 형식이 아닙니다. (예: 123-45-67890)');
+        return false;
+    }
+
+    clearError('corp_reg_hp');
+    return true;
+}
+
+/**
+ * 사업자등록번호 자동 하이픈 추가
+ * 형식: 000-00-00000
+ */
+function formatBusinessNumber(value) {
+    const numbers = value.replace(/[^0-9]/g, '');
+
+    if (numbers.length <= 3) {
+        return numbers;
+    } else if (numbers.length <= 5) {
+        return numbers.slice(0, 3) + '-' + numbers.slice(3);
+    } else {
+        return numbers.slice(0, 3) + '-' + numbers.slice(3, 5) + '-' + numbers.slice(5, 10);
+    }
+}
+
+/**
+ * 통신판매업번호 유효성 검사
+ */
+function validateTelecomNumber(telecomNumber) {
+    if (!telecomNumber || telecomNumber.trim().length === 0) {
+        showError('corp_tel_hp', '통신판매업번호를 입력해주세요.');
+        return false;
+    }
+
+    clearError('corp_tel_hp');
+    return true;
+}
+
+/**
+ * 전화번호 유효성 검사 (휴대폰 + 일반전화 모두 허용)
+ * 휴대폰: 010-1234-5678
+ * 일반전화: 02-123-4567, 031-1234-5678 등
+ */
+function validatePhoneOrTel(phone) {
+    // 휴대폰 번호 패턴: 010, 011, 016, 017, 018, 019
+    const mobilePattern = /^01[0-9]-\d{3,4}-\d{4}$/;
+
+    // 일반 전화번호 패턴: 02, 031~064 등
+    const telPattern = /^0(2|[3-6]\d)-\d{3,4}-\d{4}$/;
+
+    if (!phone) {
+        showError('mem_hp', '전화번호를 입력해주세요.');
+        return false;
+    }
+
+    if (!mobilePattern.test(phone) && !telPattern.test(phone)) {
+        showError('mem_hp', '올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678 또는 02-123-4567)');
+        return false;
+    }
+
+    clearError('mem_hp');
+    return true;
+}
+
+/**
+ * 전화번호 자동 하이픈 추가 (휴대폰 + 일반전화 통합)
+ */
+function formatPhoneOrTel(value) {
+    const numbers = value.replace(/[^0-9]/g, '');
+
+    // 길이가 너무 짧으면 그대로 반환
+    if (numbers.length <= 2) {
+        return numbers;
+    }
+
+    // 02로 시작하는 서울 지역번호
+    if (numbers.startsWith('02')) {
+        if (numbers.length <= 2) {
+            return numbers;
+        } else if (numbers.length <= 5) {
+            return numbers.slice(0, 2) + '-' + numbers.slice(2);
+        } else if (numbers.length <= 9) {
+            return numbers.slice(0, 2) + '-' + numbers.slice(2, 5) + '-' + numbers.slice(5, 9);
+        } else {
+            return numbers.slice(0, 2) + '-' + numbers.slice(2, 6) + '-' + numbers.slice(6, 10);
+        }
+    }
+    // 010, 011 등 휴대폰이거나 031, 051 등 지역번호
+    else if (numbers.startsWith('0')) {
+        if (numbers.length <= 3) {
+            return numbers;
+        } else if (numbers.length <= 6) {
+            return numbers.slice(0, 3) + '-' + numbers.slice(3);
+        } else if (numbers.length <= 10) {
+            return numbers.slice(0, 3) + '-' + numbers.slice(3, 6) + '-' + numbers.slice(6, 10);
+        } else {
+            return numbers.slice(0, 3) + '-' + numbers.slice(3, 7) + '-' + numbers.slice(7, 11);
+        }
+    }
+
+    return value;
+}
+
+/**
+ * 팩스 번호 유효성 검사 (선택 입력)
+ * 입력하지 않으면 통과, 입력한 경우 전화번호 형식 확인
+ */
+function validateFax(fax) {
+    // 입력하지 않은 경우 통과
+    if (!fax || fax.trim().length === 0) {
+        clearError('corp_fax');
+        return true;
+    }
+
+    // 휴대폰 번호 패턴: 010, 011, 016, 017, 018, 019
+    const mobilePattern = /^01[0-9]-\d{3,4}-\d{4}$/;
+
+    // 일반 전화번호 패턴: 02, 031~064 등
+    const telPattern = /^0(2|[3-6]\d)-\d{3,4}-\d{4}$/;
+
+    if (!mobilePattern.test(fax) && !telPattern.test(fax)) {
+        showError('corp_fax', '올바른 팩스번호 형식이 아닙니다. (예: 02-123-4567)');
+        return false;
+    }
+
+    clearError('corp_fax');
+    return true;
+}
+
+
+/**
  * 전체 폼 유효성 검사
  */
 function validateForm() {
@@ -467,6 +748,47 @@ function validateForm() {
     if (!validateGender()) return false;
     if (!validateEmail(memEmail)) return false;
     if (!validatePhone(memHp)) return false;
+    if (!validateAddress(memZip, memAddr1)) return false;
+
+    // 아이디 중복 확인 체크
+    if (!isIdChecked || memId !== checkedId) {
+        alert('아이디 중복 확인을 해주세요.');
+        return false;
+    }
+
+    // 이메일 인증 여부
+    if (!isEmailVerified) {
+        alert('이메일 인증을 완료해주세요.');
+        document.querySelector('input[name="mem_email"]').focus();
+        return false;
+    }
+
+    return true;
+}
+
+function validateSellerForm() {
+    const memId = document.querySelector('input[name="mem_id"]').value;
+    const memPass = document.querySelector('input[name="mem_pass"]').value;
+    const memPass2 = document.querySelector('input[name="mem_pass2"]').value;
+    const corpName = document.querySelector('input[name="corp_name"]').value;
+    const memName = document.querySelector('input[name="mem_name"]').value;
+    const corpRegHp = document.querySelector('input[name="corp_reg_hp"]').value;
+    const corpTelHp = document.querySelector('input[name="corp_tel_hp"]').value;
+    const memHp = document.querySelector('input[name="mem_hp"]').value;
+    const corpFax = document.querySelector('input[name="corp_fax"]').value;
+    const memZip = document.querySelector('input[name="mem_zip"]').value;
+    const memAddr1 = document.querySelector('input[name="mem_addr1"]').value;
+
+    // 각 항목 검증
+    if (!validateId(memId)) return false;
+    if (!validatePassword(memPass)) return false;
+    if (!validatePasswordConfirm(memPass, memPass2)) return false;
+    if (!validateCorpName(corpName)) return false;
+    if (!validateName(memName)) return false;
+    if (!validateBusinessNumber(corpRegHp)) return false;
+    if (!validateTelecomNumber(corpTelHp)) return false;
+    if (!validatePhoneOrTel(memHp)) return false;
+    if (!validateFax(corpFax)) return false;
     if (!validateAddress(memZip, memAddr1)) return false;
 
     // 아이디 중복 확인 체크

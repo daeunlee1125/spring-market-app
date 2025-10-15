@@ -30,6 +30,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberMapper memberMapper;
 
+    // 일반회원가입
     public void insertMember(MemberDTO memberDTO){
         memberDTO.setMem_pass(passwordEncoder.encode(memberDTO.getMem_pass()));
 
@@ -40,6 +41,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    // 판매자회원가입
     @Transactional
     public void insertSeller(MemSellerDTO memSellerDTO) {
         memSellerDTO.setMem_pass(passwordEncoder.encode(memSellerDTO.getMem_pass()));
@@ -48,6 +50,7 @@ public class MemberService {
         memSellerMapper.insertMemSeller(memSellerDTO);
     }
 
+    // 약관 조회
     public TermsDTO getTerms(){
         //t_no = count(*) == findById(count(*)) 최신약관 나오도록 수정 예정
         Optional<Terms> optTerms = termsRepository.findById(4);

@@ -4,6 +4,7 @@ import kr.co.shoply.dto.MemSellerDTO;
 import kr.co.shoply.dto.OrderDTO;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.mapper.OrderItemMapper;
 import kr.co.shoply.mapper.OrderMapper;
 import kr.co.shoply.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
+
+    public void setDelvs(OrderDTO orderDTO) {
+        orderMapper.setOrdDelvInfo2(orderDTO);
+        orderItemMapper.setItemDelvInfo2(orderDTO);
+    }
 
     public PageResponseDTO getOrders2(PageRequestDTO pageRequestDTO) {
 

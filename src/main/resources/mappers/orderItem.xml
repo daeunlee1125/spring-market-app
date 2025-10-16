@@ -13,4 +13,9 @@
         FROM order_item
     </select>
 
+    <update id="setItemDelvInfo2">
+        update order_item set item_delv=#{item_delv}, item_trk_num=#{item_trk_num}, item_stat=1
+        where item_no=#{item_no}
+    </update>
+
 </mapper>

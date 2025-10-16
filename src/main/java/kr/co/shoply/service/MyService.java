@@ -6,6 +6,7 @@ import kr.co.shoply.mapper.MyProductMapper;
 import kr.co.shoply.mapper.ReviewMapper;
 import kr.co.shoply.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,12 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Arrays;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyService {
@@ -260,38 +259,78 @@ public class MyService {
         List<Object[]> results = userCouponRepository.findUserCouponsNative(memId);
         return results.stream().map(row -> {
             UserCouponDTO dto = new UserCouponDTO();
+
+            // 기본 정보
             dto.setCp_no((String) row[0]);
             dto.setCp_code((String) row[1]);
             dto.setMem_id((String) row[2]);
 
+            // 발급일 (row[3])
             if (row[3] != null) {
-                if (row[3] instanceof java.sql.Timestamp) {
-                    dto.setCp_issued_date(new Date(((java.sql.Timestamp) row[3]).getTime()));
-                } else if (row[3] instanceof java.sql.Date) {
-                    dto.setCp_issued_date(new Date(((java.sql.Date) row[3]).getTime()));
+                try {
+                    if (row[3] instanceof java.sql.Timestamp) {
+                        dto.setCp_issued_date(new Date(((java.sql.Timestamp) row[3]).getTime()));
+                    } else if (row[3] instanceof java.sql.Date) {
+                        dto.setCp_issued_date(new Date(((java.sql.Date) row[3]).getTime()));
+                    } else if (row[3] instanceof String) {
+                        // TO_DATE 함수가 String을 반환할 수 있음
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                        dto.setCp_issued_date(sdf.parse((String) row[3]));
+                    }
+                } catch (Exception e) {
+                    log.error("발급일 파싱 실패", e);
                 }
             }
 
+            // 사용일 (row[4])
             if (row[4] != null) {
-                if (row[4] instanceof java.sql.Timestamp) {
-                    dto.setCp_used_date(new Date(((java.sql.Timestamp) row[4]).getTime()));
-                } else if (row[4] instanceof java.sql.Date) {
-                    dto.setCp_used_date(new Date(((java.sql.Date) row[4]).getTime()));
+                try {
+                    if (row[4] instanceof java.sql.Timestamp) {
+                        dto.setCp_used_date(new Date(((java.sql.Timestamp) row[4]).getTime()));
+                    } else if (row[4] instanceof java.sql.Date) {
+                        dto.setCp_used_date(new Date(((java.sql.Date) row[4]).getTime()));
+                    } else if (row[4] instanceof String) {
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                        dto.setCp_used_date(sdf.parse((String) row[4]));
+                    }
+                } catch (Exception e) {
+                    log.error("사용일 파싱 실패", e);
                 }
             }
 
+            // 쿠폰 상태 (row[5])
             dto.setCp_stat(row[5] != null ? ((Number) row[5]).intValue() : null);
+
+            // 쿠폰 타입 (row[6])
             dto.setCp_type(row[6] != null ? ((Number) row[6]).intValue() : 0);
+
+            // 쿠폰 가치 (row[7])
             dto.setCp_value(row[7] != null ? ((Number) row[7]).intValue() : 0);
+
+            // 쿠폰명 (row[8])
             dto.setCp_name((String) row[8]);
 
-            if (row[9] != null) {
-                if (row[9] instanceof java.sql.Timestamp) {
-                    dto.setCp_exp_date(new Date(((java.sql.Timestamp) row[9]).getTime()));
-                } else if (row[9] instanceof java.sql.Date) {
-                    dto.setCp_exp_date(new Date(((java.sql.Date) row[9]).getTime()));
+            // 최소 구매금액 (row[9])
+            dto.setCp_min_price(row[9] != null ? ((Number) row[9]).intValue() : 0);
+
+            // ✅ 유효기간 (row[10]) - 수정됨!
+            if (row[10] != null) {
+                try {
+                    if (row[10] instanceof java.sql.Timestamp) {
+                        dto.setCp_exp_date(new Date(((java.sql.Timestamp) row[10]).getTime()));
+                    } else if (row[10] instanceof java.sql.Date) {
+                        dto.setCp_exp_date(new Date(((java.sql.Date) row[10]).getTime()));
+                    } else if (row[10] instanceof java.time.LocalDate) {
+                        dto.setCp_exp_date(java.sql.Date.valueOf((java.time.LocalDate) row[10]));
+                    } else if (row[10] instanceof String) {
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                        dto.setCp_exp_date(sdf.parse((String) row[10]));
+                    }
+                } catch (Exception e) {
+                    log.error("유효기간 파싱 실패", e);
                 }
             }
+
             return dto;
         }).collect(Collectors.toList());
     }
@@ -371,5 +410,73 @@ public class MyService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> getOrderDetail(Long ordNo, Long itemNo, String memId) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // 주문 정보 조회 (ordNo를 String으로 변환)
+            Order order = orderRepository.findById(String.valueOf(ordNo))
+                    .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+
+            // 권한 확인 (자신의 주문만 볼 수 있도록)
+            if (!order.getMem_id().equals(memId)) {
+                throw new IllegalArgumentException("권한이 없습니다.");
+            }
+
+            // 주문 상품 정보 조회
+            OrderItem orderItem = orderItemRepository.findById(itemNo)
+                    .orElseThrow(() -> new IllegalArgumentException("주문상품을 찾을 수 없습니다."));
+
+            // 상품 정보 조회
+            ProductDTO product = getProduct3(orderItem.getProd_no());
+
+            // 회원 정보 조회
+            Member member = memberRepository.findById(order.getMem_id())
+                    .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+
+            // 결과 맵 구성
+            result.put("ordNo", ordNo);
+            result.put("itemNo", itemNo);
+            result.put("prodName", product.getProd_name());
+            result.put("prodPrice", product.getProd_price());
+            result.put("itemCnt", orderItem.getItem_cnt());
+            result.put("itemStat", orderItem.getItem_stat());
+            result.put("totalPrice", product.getProd_price() * orderItem.getItem_cnt());
+            result.put("discount", 0);
+
+            // 날짜 포맷팅 (java.util.Date 사용)
+            if (order.getOrd_date() != null) {
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                String ordDate = sdf.format(order.getOrd_date());
+                result.put("ordDate", ordDate);
+            } else {
+                result.put("ordDate", "");
+            }
+
+            // 상품 이미지
+            if (product.getFiles() != null && !product.getFiles().isEmpty()) {
+                result.put("prodImage", product.getFiles().get(0).getF_name());
+            }
+
+            // 배송 정보 (회원 정보)
+            result.put("memName", member.getMem_name());
+            result.put("memHp", member.getMem_hp());
+            result.put("memZip", member.getMem_zip());
+            result.put("memAddr1", member.getMem_addr1());
+            result.put("memAddr2", member.getMem_addr2());
+            result.put("deliveryMemo", "");
+
+            return result;
+
+        } catch (IllegalArgumentException e) {
+            log.error("주문상세 조회 실패: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("주문상세 조회 중 예기치 않은 오류", e);
+            throw new RuntimeException("주문상세 조회 중 오류가 발생했습니다.");
+        }
     }
 }

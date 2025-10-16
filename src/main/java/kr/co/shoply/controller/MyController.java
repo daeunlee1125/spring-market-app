@@ -379,4 +379,28 @@ public class MyController {
         model.addAttribute("product", product);
         return "my/product/view";
     }
+    @GetMapping("/order/detail")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getOrderDetail(
+            @RequestParam("ord_no") Long ordNo,
+            @RequestParam("item_no") Long itemNo,
+            @AuthenticationPrincipal MyUserDetails user) {
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        try {
+            String memberId = user.getMember().getMem_id();
+            Map<String, Object> orderDetail = myService.getOrderDetail(ordNo, itemNo, memberId);
+            return ResponseEntity.ok(orderDetail);
+        } catch (IllegalArgumentException e) {
+            log.warn("주문상세 조회 실패: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } catch (Exception e) {
+            log.error("주문상세 조회 오류", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }

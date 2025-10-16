@@ -55,8 +55,8 @@
                             <td>[[${seller.stat2_cnt}]]</td>
                             <td>[[${seller.stat3_cnt}]]</td>
                             <td>[[${seller.stat4_cnt}]]</td>
-                            <td>[[${#numbers.formatInteger(seller.tot_ord_price, 3, 'COMMA')}]]</td>
-                            <td>[[${#numbers.formatInteger(seller.tot_sell_price, 3, 'COMMA')}]]</td>
+                            <td>[[${seller.tot_ord_price == 0 ? 0 : #numbers.formatInteger(seller.tot_ord_price, 3, 'COMMA')}]]</td>
+                            <td>[[${seller.tot_ord_price == 0 ? 0 : #numbers.formatInteger(seller.tot_sell_price, 3, 'COMMA')}]]</td>
                         </tr>
 
 

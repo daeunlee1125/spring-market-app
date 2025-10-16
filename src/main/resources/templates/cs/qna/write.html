@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="breadcrumb">
-        <a href="#">홈</a> &gt; 문의게시판
+        <a th:href="@{/cs}">홈</a> &gt; 문의게시판
     </div>
 
     <div class="main-area">
@@ -98,9 +98,7 @@
 
 <div th:replace="~{cs/_tail.html}"></div>
 
-<!-- 폼 전용 스크립트: 1차 변경 시 2차 로딩 -->
 <script th:inline="javascript">
-    // 컨텍스트 포함한 절대경로 주입 (예: /shoply/cs/qna/cat2)
     const CAT2_URL = /*[[@{/cs/qna/cat2}]]*/ '/cs/qna/cat2';
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -115,34 +113,37 @@
             try {
                 const res = await fetch(`${CAT2_URL}?cat1=${encodeURIComponent(val)}`, { method:'GET' });
                 if(!res.ok) throw new Error('HTTP ' + res.status);
-
-                // 로그인 페이지 등의 비 JSON 응답 방지
                 const ct = res.headers.get('content-type') || '';
                 if (!ct.includes('application/json')) throw new Error('Not JSON response');
 
                 const list = await res.json();
                 (list || []).forEach(item => {
                     const opt = document.createElement('option');
-                    opt.value = item;
-                    opt.textContent = item;
+                    opt.value = item; opt.textContent = item;
                     if (preselect && preselect === item) opt.selected = true;
                     c2.appendChild(opt);
                 });
             } catch (e) {
                 console.error('cat2 load failed:', e);
                 const opt = document.createElement('option');
-                opt.value = '';
-                opt.textContent = '2차 불러오기 실패';
+                opt.value = ''; opt.textContent = '2차 불러오기 실패';
                 c2.appendChild(opt);
             }
         }
 
-        // 1차 변경 시 2차 갱신
         c1.addEventListener('change', () => loadC2(c1.value, null));
-
-        // 초기 진입 시 selCat1 존재하면 선반영
-        if (c1.value && c2.options.length <= 1) {
-            loadC2(c1.value, c2.value || null);
-        }
+        if (c1.value && c2.options.length <= 1) loadC2(c1.value, c2.value || null);
     });
+
+    /* ===== 전역 바인딩 (onclick에서 접근 가능) ===== */
+    window.showRegisterConfirm = function(){ document.getElementById('registerConfirmModal')?.classList.remove('hidden'); }
+    window.hideRegisterConfirm = function(){ document.getElementById('registerConfirmModal')?.classList.add('hidden'); }
+    window.showCancelConfirm   = function(){ document.getElementById('cancelConfirmModal')?.classList.remove('hidden'); }
+    window.hideCancelConfirm   = function(){ document.getElementById('cancelConfirmModal')?.classList.add('hidden'); }
+    window.confirmCancel       = function(){ history.back(); }
+    window.confirmRegister     = function(){
+        const form = document.querySelector('.inquiry-register-form');
+        if(!form) return;
+        form.submit();
+    }
 </script>

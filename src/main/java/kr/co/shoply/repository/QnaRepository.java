@@ -1,6 +1,9 @@
 package kr.co.shoply.repository;
 
 import kr.co.shoply.entity.Qna;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +47,31 @@ public interface QnaRepository extends JpaRepository<Qna, Integer> {
            """)
     List<Qna> findList(@Param("cat1") String cat1,
                        @Param("cat2") String cat2);
+    //  페이지네이션용 쿼리
+    @Query(
+            value = """
+                select q
+                from Qna q
+                where (:cat1 is null or q.q_cate1 = :cat1)
+                  and (:cat2 is null or q.q_cate2 = :cat2)
+                order by q.q_no desc
+                """,
+            countQuery = """
+                select count(q)
+                from Qna q
+                where (:cat1 is null or q.q_cate1 = :cat1)
+                  and (:cat2 is null or q.q_cate2 = :cat2)
+                """
+    )
+    Page<Qna> findPage(@Param("cat1") String cat1,
+                       @Param("cat2") String cat2,
+                       Pageable pageable);
+
+    @Query(value = """
+        select *
+          from QNA
+         order by Q_RDATE desc
+         fetch first :limit rows only
+    """, nativeQuery = true)
+    List<Qna> findTopN(@Param("limit") int limit);
 }

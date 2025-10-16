@@ -2,12 +2,17 @@ package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.CsFaqDTO;
 import kr.co.shoply.dto.CsNoticeDTO;
+import kr.co.shoply.dto.PageRequestDTO;
+import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.service.CsNoticeService;
 import kr.co.shoply.service.CsService;
+import kr.co.shoply.service.QnaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriUtils;
 
@@ -21,23 +26,37 @@ import java.util.List;
 public class CsController {
 
     private final CsService csService;
+    private final QnaService qnaService;
 
     @GetMapping("/cs")
-    public String csIndex(){
+    public String csIndex(Model model) {
+        // 공지사항 5개
+        model.addAttribute("noticeList", csService.getRecentNotices(5));
+        model.addAttribute("qnaList", qnaService.getRecentQna(5));
         return "cs/index";
     }
-
     @GetMapping("/cs/notice/list")
-    public String noticeList(@RequestParam(required = false) String cat1, Model model) {
+    public String noticeList(@RequestParam(required = false) String cat1,
+                             @ModelAttribute PageRequestDTO pageRequestDTO,
+                             Model model) {
 
         if ("전체".equals(cat1)) cat1 = null;
 
-        model.addAttribute("noticeList", csService.getCsNoticeList(cat1));
-        model.addAttribute("selCat1", cat1);
-        model.addAttribute("selCat2", null);
+        // 분류(cat1)를 PageRequestDTO의 csType에 실어 서비스로 전달
+        pageRequestDTO.setCsType(cat1);
+        // 페이지/사이즈 기본값은 PageRequestDTO @Builder.Default 값 사용
 
-        // notice는 2차 없음 → 사이드바용 cat2List는 빈 리스트 전달
-        model.addAttribute("cat1List", List.of("전체","고객서비스","안전거래","위해상품","이벤트당첨"));
+        PageResponseDTO<CsNoticeDTO> pageResponseDTO = csService.getCsNoticePage(pageRequestDTO);
+
+        // 사이드바용 1차 목록(공지 고정 셋)
+        List<String> cat1List = List.of("전체","고객서비스","안전거래","위해상품","이벤트당첨");
+
+        model.addAttribute("noticeList", pageResponseDTO.getDtoList());
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
+        model.addAttribute("cat1List", cat1List);
+        model.addAttribute("selCat1", cat1);
+        model.addAttribute("selCat2", null);   // 공지는 2차 없음
         model.addAttribute("cat2List", List.of());
 
         return "cs/notice/list";

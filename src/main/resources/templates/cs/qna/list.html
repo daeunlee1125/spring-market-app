@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="breadcrumb">
-        <a href="#">홈</a> &gt; 문의게시판
+        <a th:href="@{/cs}">홈</a> &gt; 문의게시판
     </div>
 
     <div class="main-area">
@@ -36,14 +36,20 @@
                 <a th:href="@{/cs/qna/write}" class="btn-register">등록하기</a>
             </div>
 
-            <!-- 페이지네이션(임시) -->
-            <div class="pagination">
-                <span>이전</span>
-                <span class="current">1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>다음</span>
-            </div>
+        <div class="pagination">
+            <a th:if="${pageResponseDTO.prev}"
+               th:href="@{/cs/qna/list(cat1=${selCat1}, cat2=${selCat2}, pg=${pageResponseDTO.start - 1}, size=${pageResponseDTO.size})}"
+               class="prev">이전</a>
+
+            <th:block th:each="num : ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                <a th:href="@{/cs/qna/list(cat1=${selCat1}, cat2=${selCat2}, pg=${num}, size=${pageResponseDTO.size})}"
+                   th:class="${num == pageResponseDTO.pg ? 'current' : 'num'}">[[${num}]]</a>
+            </th:block>
+
+            <a th:if="${pageResponseDTO.next}"
+               th:href="@{/cs/qna/list(cat1=${selCat1}, cat2=${selCat2}, pg=${pageResponseDTO.end + 1}, size=${pageResponseDTO.size})}"
+               class="next">다음</a>
+        </div>
         </div>
     </div>
 </div>

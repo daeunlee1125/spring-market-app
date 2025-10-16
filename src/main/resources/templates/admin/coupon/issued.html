@@ -1,24 +1,24 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{admin/coupon/_head.html}"></head>
 
 <body>
 
-<main>
-    <!-- 메인 -->
-    <div class="main">
-        <div class="middle main-content">
-            <div class="main-common">
-                <div class="main-head">
-                    <div><h3>쿠폰발급현황</h3></div>
-                    <div class="main-head-right">
-                        <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
-                        <a href="">쿠폰관리</a><div>&nbsp;>&nbsp;</div>
-                        <a href="" class="nav-last">쿠폰발급현황</a>
-                    </div>
-                </div>
-                <div class="main-content-top"></div>
+<div class="main">
+    <div class="middle main-content">
+        <div class="main-common">
 
+            <div class="main-head">
+                <div><h3>쿠폰발급현황</h3></div>
+                <div class="main-head-right">
+                    <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
+                    <a href="">쿠폰관리</a><div>&nbsp;>&nbsp;</div>
+                    <a href="" class="nav-last">쿠폰발급현황</a>
+                </div>
+            </div>
+
+            <div class="main-content-top"></div>
+
+            <main>
                 <div class="sub-top">
                     <div class="search-bar">
                         <form>
@@ -235,7 +235,7 @@
         const modalMsg = document.getElementById("modalMessage");
         const confirmBtn = document.getElementById("confirmActionBtn");
 
-        // ✅ "중단" 또는 "재개" 버튼 클릭 시 모달 열기
+        //  "중단" 또는 "재개" 버튼 클릭 시 모달 열기
         document.querySelectorAll(".openModalBtn.stop-btn").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -286,7 +286,7 @@
                 });
         });
 
-        // ✅ 닫기 버튼 클릭 시 모달 닫기
+        // 닫기 버튼 클릭 시 모달 닫기
         document.querySelectorAll("#confirmEndModal .closeModalBtn").forEach(btn => {
             btn.addEventListener("click", () => {
                 modal.classList.add("hidden");

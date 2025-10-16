@@ -1,34 +1,9 @@
-/* 쿠폰 검색 영역 */
-.search-bar .search-place {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    background: transparent; /* 바깥 배경 투명 */
-    border: none;
-    padding: 0;
-}
-
-.search-bar input {
-    flex: 1;
-    border: 1px solid #ccc;
-    height: 35px;
-    outline: none;
-    background-color: #fff;  /* 안쪽만 흰 배경 */
-    padding: 0 8px;
-}
 
 
-.search-bar button {
-    height: 35px;
-    font-size: 14px;
-    border: none;  /* 버튼은 border 없애야 겹치지 않음 */
-}
 
 
-.search-bar input {
-    flex: 1;
-    padding: 0 8px;
-}
+
+
 
 /* 검색 버튼 크기 맞추기 */
 .search-bar button {
@@ -51,6 +26,7 @@
 .search-bar button:hover {
     background: linear-gradient(135deg, #8d6dbd, #5936a9);
 }
+
 
 /* 모달 팝업 중앙정렬 */
 .modal {
@@ -183,14 +159,7 @@
 }
 
 
-.sub-top {
-    margin-top: 0;     /* 위쪽 여백 제거 */
-    padding-top: 0;    /* 내부 여백 제거 */
-}
 
-.search-bar {
-    margin-top: 0;     /* 혹시 search-bar 자체에 margin 있으면 제거 */
-}
 
 
 
@@ -219,21 +188,36 @@
     border: 2px solid #ccc; /* 발급현황이랑 맞춰주기 */
 }
 
-
-
 .register-btn {
     background: linear-gradient(135deg, #a77ece, #6c3fc9);
     border: none;
     color: white;
-    padding: 8px 18px !important;   /* member-edit-btn 기준 */
-    font-size: 14px !important;     /* member-edit-btn 기준 */
+    padding: 10px 20px;          /*  delete-btn과 동일하게 */
+    font-size: 14px;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.3s;
-    height: 38px !important;        /* 강제로 동일 높이 */
-    line-height: 1;
+    height: auto;                /*  고정 제거 */
+    line-height: normal;
 }
 
 .register-btn:hover {
     background: linear-gradient(135deg, #8d6dbd, #5936a9);
+}
+
+
+
+/* ✅ 모달 확인/취소 버튼 완전 정렬 */
+.modal .register-btn,
+.modal .delete-btn {
+    display: inline-flex;               /* 플렉스로 중앙 정렬 */
+    align-items: center;                /* 세로 중앙 */
+    justify-content: center;            /* 가로 중앙 */
+
+    height: 42px !important;            /* 동일 높이 */
+    padding: 0 32px !important;         /* 좌우 여백만, 위아래는 height로 통일 */
+    font-size: 16px !important;         /* 글씨 크기 통일 */
+    border-radius: 8px !important;      /* 모서리 동일 */
+    line-height: 1;                     /* 폰트 기준선 안정화 */
+    box-sizing: border-box;
 }

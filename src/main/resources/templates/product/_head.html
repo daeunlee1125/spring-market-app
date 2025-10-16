@@ -19,12 +19,6 @@
 <body>
 
 <header>
-
-    <!-- 메인화면 빼고는 이 줄 지우시면 됩니다! -->
-    <div class="top-adv"><img th:src="@{/image/qqq.png}" alt="" style="width: 100%; height: 100%;"></div>
-
-
-
     <div class="top-bar-back">
         <div class="top-bar">오늘의 행운 룰렛 → 꽝 없는 선물파티 OPEN!</div>
     </div>
@@ -64,11 +58,11 @@
     <div class="bottom-header">
         <div class="header-left">
             <a href="#" id="categoryBtn"> 전체 카테고리</a>
-            <a href="#hit-products">히트상품</a>
-            <a href="#recommended-products">추천상품</a>
-            <a href="#recent-products">최신상품</a>
-            <a href="#best-products">인기상품</a>
-            <a href="#discount-products">할인상품</a>
+            <a th:href="@{/index#hit-products}">히트상품</a>
+            <a th:href="@{/index#recommended-products}">추천상품</a>
+            <a th:href="@{/index#recent-products}">최신상품</a>
+            <a th:href="@{/index#best-products}">인기상품</a>
+            <a th:href="@{/index#discount-products}">할인상품</a>
         </div>
 
         <div class="header-right login-menu">
@@ -95,94 +89,42 @@
         <div class="inner">
             <h3>베스트 상품</h3>
 
-            <!-- 첫 번째 상품 (카드형) -->
-            <div class="product-card">
+            <!-- 첫 번째 상품 (가장 많이 팔린 1위) -->
+            <div th:if="${#lists.size(sidebarBestProducts) > 0}" class="product-card" th:with="p=${sidebarBestProducts[0]}">
                 <div class="img-box">
-                    <img th:src="@{/image/prod1.png}" alt="침대">
+                    <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                 </div>
-                <a th:href="@{/product/view}" class="name">가이온 스너그 단면매트리스 침대 화이트</a>
+                <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
                 <div class="price-box">
                     <div class="price-top">
-                        <span class="original">266,180원</span>
-                        <span class="discount">54%</span>
+                        <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                        <span class="discount" th:text="${p.prod_sale + '%'}"></span>
                     </div>
                     <div class="sale-cont">
-
-                        <span class="sale">119,800원</span>
+                    <span class="sale"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">0원</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 나머지 상품 (리스트형) -->
+            <!-- 나머지 상품 -->
             <ul class="product-list">
-                <li class="product-item">
+                <li class="product-item"
+                    th:each="p, iterStat : ${sidebarBestProducts}"
+                    th:if="${iterStat.index >= 1 and iterStat.index < 5}">
                     <div class="thumb">
-                        <img th:src="@{/image/prod2.png}" alt="운동화">
+                        <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                     </div>
                     <div class="info">
-                        <a th:href="@{/product/view}" class="name">여성용 러닝업 트래킹화</a>
+                        <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
                         <div class="price-box">
                             <div class="price-top2">
-                                <span class="original">133,090원</span>
-                                <span class="discount">54%</span>
+                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount" th:text="${p.prod_sale + '%'}"></span>
                             </div>
                             <div class="sale-cont">
-
-                                <span class="sale">59,900원</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="product-item">
-                    <div class="thumb">
-                        <img th:src="@{/image/prod3.png}" alt="세제">
-                    </div>
-                    <div class="info">
-                        <a th:href="@{/product/view}" class="name">듀얼(드럼/일반 겸용) 2.7L x2개 세탁세제</a>
-                        <div class="price-box">
-                            <div class="price-top2">
-                                <span class="original">66,600원</span>
-                                <span class="discount">54%</span>
-                            </div>
-                            <div class="sale-cont">
-
-                                <span class="sale">29,950원</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="product-item">
-                    <div class="thumb">
-                        <img th:src="@{/image/prod4.png}" alt="화장품">
-                    </div>
-                    <div class="info">
-                        <a th:href="@{/product/view}" class="name">비건 피톤치드 시카 토너</a>
-                        <div class="price-box">
-                            <div class="price-top2">
-                                <span class="original">133,090원</span>
-                                <span class="discount">54%</span>
-                            </div>
-                            <div class="sale-cont">
-
-                                <span class="sale">59,900원</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="product-item">
-                    <div class="thumb">
-                        <img th:src="@{/image/prod5.png}" alt="모자">
-                    </div>
-                    <div class="info">
-                        <a th:href="@{/product/view}" class="name">남녀공용 모자 블랙</a>
-                        <div class="price-box">
-                            <div class="price-top2">
-                                <span class="original">133,090원</span>
-                                <span class="discount">54%</span>
-                            </div>
-                            <div class="sale-cont">
-
-                                <span class="sale">59,900원</span>
+                            <span class="sale"
+                                  th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">0원</span>
                             </div>
                         </div>
                     </div>
@@ -190,7 +132,7 @@
             </ul>
         </div>
     </div>
-    <!-- 여기까지 베스트 상품!! -->
+    <!--  여기까지 베스트 상품 -->
 
 
     <div class="wrapper">

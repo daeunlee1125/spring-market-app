@@ -40,8 +40,8 @@
 
         <!-- 검색창 -->
         <div class="header-center">
-            <form action="" method="get">
-                <input type="text" placeholder="검색">
+            <form th:action="@{/product/search}" method="get">
+                <input type="text" name="keyword" placeholder="검색">
                 <button type="submit">
                     <img th:src="@{/image/search.png}" alt="검색">
                 </button>
@@ -221,7 +221,7 @@
 
                     <!-- 히트상품 리스트 반복 -->
                     <div th:each="p : ${hitProducts}" class="product-box">
-                        <a th:href="@{/product/view(prod_no=${p.prod_no})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
                             <!-- 상품명 -->
@@ -257,7 +257,7 @@
 
                     <!-- 상품 리스트 반복 -->
                     <div th:each="p : ${recommendedProducts}" class="product-box">
-                        <a th:href="@{/product/view(prod_no=${p.prod_no})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
                             <p class="name" th:text="${p.prod_name}"></p>
@@ -291,7 +291,7 @@
                 <div class="product-grid">
 
                     <div th:each="p : ${newProducts}" class="product-box">
-                        <a th:href="@{/product/view/{prodNo}(prodNo=${p.prod_no})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
 
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -329,7 +329,7 @@
                 <div class="product-grid">
                     <!-- 상품 반복 출력 -->
                     <a th:each="p : ${bestProducts}"
-                       th:href="@{'/product/view/' + ${p.prod_no}}">
+                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
                         <div class="product-box">
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -343,7 +343,7 @@
                             <!-- 할인된 가격 및 무료배송 아이콘 -->
                             <div class="sale-wrap">
                     <span class="sale"
-                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
                     </span>
                                 <img th:if="${p.prod_deliv_price == 0}"
                                      th:src="@{/image/메인/ico_freeshipping.gif}"
@@ -361,7 +361,7 @@
                 <div class="product-grid">
                     <!-- 할인율 높은 순으로 8개 반복 -->
                     <a th:each="p : ${discountProducts}"
-                       th:href="@{'/product/view/' + ${p.prod_no}}">
+                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
                         <div class="product-box">
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -387,10 +387,8 @@
                     </a>
                 </div>
             </section>
-        </div>
-</div>
-
-</main>
+        </main> </div> </div>     <footer>
+</footer>
 
 <footer>
 

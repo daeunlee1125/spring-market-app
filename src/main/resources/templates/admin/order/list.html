@@ -21,7 +21,7 @@
               <tr>
                 <th>주문번호</th>
                 <th>주문자</th>
-                <th>주문자명</th>
+
                 <th>주문건수</th>
                 <th>주문합계</th>
                 <th>결제수단</th>
@@ -31,50 +31,33 @@
               </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><a href="#" class="openModalBtn" data-target="orderDetailModal">10121211341</a></td>
-                <td>abc123</td>
-                <td>김유신</td>
-                <td>2</td>
-                <td>102,900</td>
-                <td>신용카드</td>
-                <td class="status complete">결제완료</td>
-                <td>2025/09/26 12:34:56</td>
-                <td><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
+            <tr th:each="order, stat : ${pageResponseDTO.dtoList}">
+                <td><a href="#" class="openModalBtn" data-target="orderDetailModal" th:attr="data-item=${order.item_no}">[[${order.ord_no}]]</a></td>
+                <td>[[${order.mem_id}]]</td>
+
+                <td>[[${order.item_cnt}]]</td>
+                <td>[[${#numbers.formatInteger(order.ord_total, 3, 'COMMA')}]]</td>
+                <td>[[${order.ord_payment}]]</td>
+                <td th:if="${order.ord_stat == 1}" class="status wait">결제대기</td>
+                <td th:if="${order.ord_stat == 2}" class="status complete">결제완료</td>
+                <td th:if="${order.ord_stat == 3}" class="status cancel">주문취소</td>
+                <td>[[${order.ord_date}]]</td>
+                <td th:if="${(order.ord_addr1 == null) && (order.ord_stat != 3)}"><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
+                <td th:if="${(order.ord_addr1 != null) && (order.ord_stat != 3)}">입력완료</td>
+                <td th:if="${order.ord_stat == 3}">주문취소</td>
             </tr>
-              <tr>
-                <td><a href="#" class="openModalBtn" data-target="orderDetailModal">10121211341</a></td>
-                <td>afea123</td>
-                <td>김춘추</td>
-                <td>1</td>
-                <td>36,000</td>
-                <td>계좌이체</td>
-                <td class="status wait">결제대기</td>
-                <td>2025/09/26 11:11:11</td>
-                <td><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
-              </tr>
-              <tr>
-                <td><a href="#" class="openModalBtn" data-target="orderDetailModal">10121211341</a></td>
-                <td>yaoww33</td>
-                <td>강감찬</td>
-                <td>1</td>
-                <td>89,000</td>
-                <td>휴대폰</td>
-                <td class="status cancel">주문취소</td>
-                <td>2025/09/26 10:00:00</td>
-                <td><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
-              </tr>
+
             </tbody>
           </table>
 
           <!-- 페이지네이션 -->
-          <div class="page">
-            <a href="#" class="prev">이전</a>
-            <a href="#" class="num current">1</a>
-            <a href="#" class="num">2</a>
-            <a href="#" class="num">3</a>
-            <a href="#" class="next">다음</a>
-          </div>
+            <div class="page">
+                <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/order/list(pg=${pageResponseDTO.start - 1})}" class="prev">이전</a>
+                <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                    <a th:href="@{/admin/order/list(pg=${num})}" th:class="${num == pageResponseDTO.pg ? 'current' : 'num'}">[[${num}]]</a>
+                </th:block>
+                <a th:if="${pageResponseDTO.next}" th:href="@{/admin/order/list(pg=${pageResponseDTO.end + 1})}" class="next">다음</a>
+            </div>
         </main>
       </div>
     </div>
@@ -106,28 +89,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><img src="/kmarket/inc/image/sample.png" alt="상품" style="width:60px;"></td>
-            <td>120120021</td>
-            <td>OOO</td>
-            <td>(주)상호명</td>
-            <td>24,000</td>
-            <td>-1,200</td>
-            <td>3</td>
-            <td>3,000</td>
-            <td>68,400</td>
-          </tr>
-          <tr>
-            <td><img src="/kmarket/inc/image/sample.png" alt="상품" style="width:60px;"></td>
-            <td>114514328</td>
-            <td>OOO</td>
-            <td>(주)상호명</td>
-            <td>35,000</td>
-            <td>-3,500</td>
-            <td>1</td>
-            <td>0</td>
-            <td>31,500</td>
-          </tr>
+
+
         </tbody>
       </table>
 

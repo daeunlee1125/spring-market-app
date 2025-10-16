@@ -257,7 +257,7 @@
 
                     <!-- 상품 리스트 반복 -->
                     <div th:each="p : ${recommendedProducts}" class="product-box">
-                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
                             <p class="name" th:text="${p.prod_name}"></p>
@@ -291,7 +291,7 @@
                 <div class="product-grid">
 
                     <div th:each="p : ${newProducts}" class="product-box">
-                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
 
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -329,7 +329,7 @@
                 <div class="product-grid">
                     <!-- 상품 반복 출력 -->
                     <a th:each="p : ${bestProducts}"
-                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
+                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                         <div class="product-box">
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -361,7 +361,7 @@
                 <div class="product-grid">
                     <!-- 할인율 높은 순으로 8개 반복 -->
                     <a th:each="p : ${discountProducts}"
-                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
+                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                         <div class="product-box">
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">

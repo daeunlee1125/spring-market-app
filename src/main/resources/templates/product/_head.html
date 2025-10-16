@@ -84,7 +84,7 @@
 
 <div class="container">
 
-    <!-- 베스트 상품 안 들어가는 창은 여기부터 저 아래 주석까지 삭제하고 작업 -->
+    <!-- 베스트 상품 안 들어가는 창은 여기부터 저 아래 주석까지 삭제 하고 작업 -->
     <div class="left-space">
         <div class="inner">
             <h3>베스트 상품</h3>
@@ -94,7 +94,7 @@
                 <div class="img-box">
                     <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                 </div>
-                <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
+                <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}" class="name" th:text="${p.prod_name}"></a>
                 <div class="price-box">
                     <div class="price-top">
                         <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
@@ -116,7 +116,7 @@
                         <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                     </div>
                     <div class="info">
-                        <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}" class="name" th:text="${p.prod_name}"></a>
                         <div class="price-box">
                             <div class="price-top2">
                                 <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>

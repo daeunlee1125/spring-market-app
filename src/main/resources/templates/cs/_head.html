@@ -14,12 +14,12 @@
     <a th:if="${#authorization.expr('!isAuthenticated()')}" th:href="@{/member/login}">로그인</a> |
     <a th:if="${#authorization.expr('isAuthenticated()')}" th:href="@{/member/logout}">로그아웃</a>
     <a th:if="${#authorization.expr('!isAuthenticated()')}" th:href="@{/member/join}">회원가입</a> |
-      <a href="#">마이페이지</a> |
-      <a href="#">장바구니</a>
+      <a th:href="@{/my/home}">마이페이지</a> |
+      <a th:href="@{/product/cart}">장바구니</a>
     </div>
     <!-- 로고 -->
     <div class="header-left">
-      <img th:src="@{/image/logo.jpg}" alt="로고" class="logo">
+        <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="로고" class="logo"></a>
     </div>
   </div>
 </header>

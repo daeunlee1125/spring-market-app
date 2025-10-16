@@ -19,6 +19,6 @@ public class OrderDTO {
     private String ord_addr1;
     private String ord_addr2;
     private Integer ord_total;
-    private Date ord_date;
+    private String ord_date;
     private String ord_payment;
 }

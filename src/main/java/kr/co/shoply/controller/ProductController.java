@@ -157,7 +157,7 @@ public class ProductController {
         for(CartDTO cartDTO : cartDTOList){                                            // 장바구니에 있는 상품 정보 가져오기
             cartDTO.setProductDTO(productService.getProduct3(cartDTO.getProd_no()));
             totalprice += cartDTO.getProductDTO().getProd_price() * cartDTO.getCart_item_cnt();
-            saleprice += cartDTO.getProductDTO().getProd_price() - cartDTO.getProductDTO().getRealPrice();
+            saleprice += (cartDTO.getProductDTO().getProd_price() - cartDTO.getProductDTO().getRealPrice()) * cartDTO.getCart_item_cnt();
             totaldeliv += cartDTO.getProductDTO().getProd_deliv_price();
         }
         List<SysCouponDTO> sysCouponDTOList = productService.getUserCoupon3(username); // 쿠폰 내역 확인
@@ -200,6 +200,7 @@ public class ProductController {
                 orderRequestDTO.getMemberDTO().getMem_zip(),
                 orderRequestDTO.getMemberDTO().getMem_addr1(),
                 orderRequestDTO.getMemberDTO().getMem_addr2(),
+                orderRequestDTO.getPaymentMethod(),
                 orderRequestDTO.getFinalAmount()
         );
         OrderDTO orderDTO = productService.getOrderNo(memId);
@@ -227,6 +228,11 @@ public class ProductController {
         }
         productService.saveOrderItem3(orderItemDTOList);
 
+        // 5. cart delete
+        productService.deleteSelectedCarts3(cartNoList);
+
+        // 6. point insert
+
 
         // --- JavaScript에 반환할 데이터 생성 ---
         Map<String, Object> response = new HashMap<>();
@@ -237,7 +243,6 @@ public class ProductController {
             response.put("cpCode", cpCode);
         }
         response.put("usedPoint", orderRequestDTO.getUsedPoints());
-        response.put("payment", orderRequestDTO.getPaymentMethod());
 
         return response;
     }
@@ -249,14 +254,25 @@ public class ProductController {
     public String showCompletePage(@RequestParam String orderId,
                                    @RequestParam String cpCode,
                                    @RequestParam int usedPoint,
-                                   @RequestParam String payment,
                                    Model model) {
 
         // 서비스에 주문 정보와 주문 아이템 리스트를 함께 가져오는 메서드를 만듭니다.
         OrderDTO orderInfo = productService.getOrderById(orderId); // 주문 기본 정보 조회
         List<CompleteDTO> orderItems = productService.getCompleteOrder3(orderId); // 주문 상품 목록 조회
-        log.info("orderInfo: " +  orderInfo.toString());
-        log.info("orderItems: " +  orderItems.toString());
+
+        // 날짜 String으로 설정
+        // 1. 원본 문자열의 형식에 맞는 포매터를 준비해 LocalDateTime 객체로 변환
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(orderInfo.getOrd_date(), inputFormatter);
+
+        // 2. 원하는 출력 형식("yyyy년 MM월 dd일")의 포매터를 새로 정의
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+
+        // 3. LocalDateTime 객체를 새로운 포매터로 포맷팅하여 문자열로 변환
+        String formattedDate = dateTime.format(outputFormatter);
+
+        // 4. 다시 저장
+        orderInfo.setOrd_date(formattedDate);
 
         int totalPrice = 0;
         int totalSalePrice = 0;
@@ -290,7 +306,6 @@ public class ProductController {
                     *
                     completeDTO.getOrderItems().getItem_cnt()
             );
-            log.info("상품 할인 가격: " +  completeDTO.getOrderItems().getProduct().getSaleprice());
 
             // 총 할인 금액
             totalSalePrice += completeDTO.getOrderItems().getProduct().getSaleprice();
@@ -326,7 +341,6 @@ public class ProductController {
         model.addAttribute("totalRealPrice", totalRealPrice);
         model.addAttribute("totalDeliv", totalDeliv);
         model.addAttribute("totalPoint", totalPoint);
-        model.addAttribute("payment", payment);
 
         return "product/complete";
     }

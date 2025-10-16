@@ -9,10 +9,12 @@
                         <tr>
                             <th>배송지 정보</th>
                             <td>
-                                <p>
-                                    <strong th:text="${memberDTO.getMem_name() + ' ' + memberDTO.getMem_hp()}">이민준 010-1234-1234</strong>
-                                    <input type="checkbox" id="saveAddr"> 안심번호 사용
-                                </p>
+                                <div class="recipient-info-inputs">
+                                    <span>이름: </span>
+                                    <input type="text" id="recipientName" th:value="${memberDTO.getMem_name()}">
+                                    <span>전화번호: </span>
+                                    <input type="text" id="recipientHp" th:value="${memberDTO.getMem_hp()}">
+                                </div>
 
                                 <p id="address-display" th:text="${'[' + memberDTO.getMem_zip() + '] ' + memberDTO.getMem_addr1()}">
                                     [01234] 부산광역시 부산진구 동의대학교
@@ -119,7 +121,7 @@
                         <label><input type="radio" name="payment"> <strong>계좌이체</strong></label>
                     </div>
                     <div class="payment-method-option">
-                        <label><input type="radio" name="payment" checked> <strong>무통장입금</strong></label>
+                        <label><input type="radio" name="payment"> <strong>무통장입금</strong></label>
                     </div>
                     <div class="payment-method-option">
                         <label><input type="radio" name="payment"> <strong>휴대폰결제</strong></label>

@@ -82,8 +82,8 @@ public class ProductService {
         pointMapper.insertUsedPoint3(memId, pType, pPoint, pInfo);
     }
 
-    public void saveOrder3(String memId, String ordName, String ordHp, String ordZip, String ordAddr1, String ordAddr2, int ordTotal){
-        orderMapper.insertOrder3(memId, ordName, ordHp, ordZip, ordAddr1, ordAddr2,ordTotal);
+    public void saveOrder3(String memId, String ordName, String ordHp, String ordZip, String ordAddr1, String ordAddr2, String payment, int ordTotal){
+        orderMapper.insertOrder3(memId, ordName, ordHp, ordZip, ordAddr1, ordAddr2, payment, ordTotal);
     }
 
     public void insertCart3(String mem_id, String prod_no, int cart_item_cnt, String cart_option){

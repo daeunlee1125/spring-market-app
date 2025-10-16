@@ -96,11 +96,29 @@
     border-right: 1px solid #ccc;
 }
 
+/* 기존 .cart-item-price 에서는 너비와 정렬을 제거 */
 .cart-item-price {
     font-size: 16px;
     font-weight: bold;
-    width: 120px;
-    text-align: right;
+    /* width: 120px;  <- 이 속성은 아래 그룹으로 이동 */
+    /* text-align: right; <- 이 속성은 아래 그룹으로 이동 */
+}
+
+/* 묶어준 가격 그룹에 대한 스타일 추가 */
+.cart-item-price-group {
+    display: flex;
+    flex-direction: column; /* 아이템들을 세로로 배치 */
+    align-items: flex-end;  /* 아이템들을 오른쪽으로 정렬 */
+    width: 120px;           /* 기존과 동일한 너비 유지 */
+    margin-left: 40px;      /* 수량 선택기와 간격 (기존 .quantity-selector의 margin-right 값과 동일하게) */
+}
+
+/* 배송비에 대한 스타일 추가 */
+.cart-item-price.delivery-fee {
+    font-size: 13px;      /* 글자 크기 작게 */
+    color: #888;          /* 회색으로 변경 */
+    font-weight: normal;  /* 일반 굵기 */
+    margin-top: 5px;      /* 위 가격과의 간격 추가 */
 }
 
 .cart-item-actions {
@@ -348,6 +366,35 @@
 /* 정보 테이블 스타일 */
 .info-table {
     border-top: 1px solid #eee;
+}
+
+/* '받는 분 정보'의 input과 label을 감싸는 컨테이너 */
+.recipient-info-inputs {
+    display: grid; /* Grid 레이아웃으로 전환하여 정렬 */
+    grid-template-columns: 70px 1fr; /* 1열(라벨)은 70px, 2열(입력창)은 나머지 공간 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 8px 10px; /* 행(세로) 간격 8px, 열(가로) 간격 10px */
+}
+/* 라벨(span) 오른쪽 정렬 */
+.recipient-info-inputs span {
+    text-align: right;
+}
+/* '받는 분 정보' 섹션의 input 박스 크기 재정의 */
+.recipient-info-inputs input[type="text"] {
+    width: 250px;       /* 너비를 250px로 고정 */
+    height: 32px;       /* 높이를 살짝 줄임 */
+    max-width: none;    /* 기존의 max-width 스타일 무시 */
+}
+
+/* 상세 주소 입력창 너비 조절 */
+#mem_addr2_input {
+    margin-top: 5px;
+    width: 330px; /* 이름/전화번호 너비와 비슷하게 맞춤 (70px + 10px + 250px) */
+}
+
+/* 배송지 변경 버튼 위치 조정 */
+#change-address-btn {
+    margin-top: 8px;
 }
 .info-row {
     display: flex;

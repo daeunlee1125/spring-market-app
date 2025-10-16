@@ -99,11 +99,11 @@
                 <div class="img-box">
                     <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                 </div>
-                <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}">상품명</a>
+                <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
                 <div class="price-box">
                     <div class="price-top">
-                        <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'">0원</span>
-                        <span class="discount" th:text="${p.prod_sale + '%'}">0%</span>
+                        <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                        <span class="discount" th:text="${p.prod_sale + '%'}"></span>
                     </div>
                     <div class="sale-cont">
                     <span class="sale"
@@ -121,11 +121,11 @@
                         <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                     </div>
                     <div class="info">
-                        <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}">상품명</a>
+                        <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
                         <div class="price-box">
                             <div class="price-top2">
-                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'">0원</span>
-                                <span class="discount" th:text="${p.prod_sale + '%'}">0%</span>
+                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount" th:text="${p.prod_sale + '%'}"></span>
                             </div>
                             <div class="sale-cont">
                             <span class="sale"
@@ -225,20 +225,19 @@
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
                             <!-- 상품명 -->
-                            <p class="name" th:text="${p.prod_name}">상품명</p>
+                            <p class="name" th:text="${p.prod_name}"></p>
 
                             <!-- 원가 + 할인율 -->
                             <div class="price-wrap">
-                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'">30,000원</span>
+                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
                                 <span class="discount" th:if="${p.prod_sale > 0}"
-                                      th:text="${p.prod_sale + '%↓'}">10%↓</span>
+                                      th:text="${p.prod_sale + '%↓'}"></span>
                             </div>
 
                             <!-- 판매가 + 무료배송 아이콘 -->
                             <div class="sale-wrap">
                             <span class="sale"
                                   th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
-                                27,000원
                             </span>
                                 <img th:if="${p.prod_deliv_price == 0}"
                                      th:src="@{/image/메인/ico_freeshipping.gif}"
@@ -261,19 +260,18 @@
                         <a th:href="@{/product/view(prod_no=${p.prod_no})}">
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
-                            <p class="name" th:text="${p.prod_name}">추천상품명</p>
+                            <p class="name" th:text="${p.prod_name}"></p>
 
                             <div class="price-wrap">
                     <span class="original"
-                          th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'">40,000원</span>
+                          th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
                                 <span class="discount" th:if="${p.prod_sale > 0}"
-                                      th:text="${p.prod_sale + '%↓'}">20%↓</span>
+                                      th:text="${p.prod_sale + '%↓'}"></span>
                             </div>
 
                             <div class="sale-wrap">
                     <span class="sale"
                           th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
-                        32,000원
                     </span>
                                 <img th:if="${p.prod_deliv_price == 0}"
                                      th:src="@{/image/메인/ico_freeshipping.gif}"
@@ -336,17 +334,16 @@
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                             <!-- 상품명 -->
-                            <p class="name" th:text="${p.prod_name}">인기상품명</p>
+                            <p class="name" th:text="${p.prod_name}"></p>
                             <!-- 가격 정보 -->
                             <div class="price-wrap">
-                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'">40,000원</span>
-                                <span class="discount" th:text="${p.prod_sale + '%↓'}">20%↓</span>
+                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount" th:text="${p.prod_sale + '%↓'}"></span>
                             </div>
                             <!-- 할인된 가격 및 무료배송 아이콘 -->
                             <div class="sale-wrap">
                     <span class="sale"
-                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
-                        32,000원
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'"
                     </span>
                                 <img th:if="${p.prod_deliv_price == 0}"
                                      th:src="@{/image/메인/ico_freeshipping.gif}"
@@ -369,19 +366,18 @@
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                             <!-- 상품명 -->
-                            <p class="name" th:text="${p.prod_name}">할인상품명</p>
+                            <p class="name" th:text="${p.prod_name}"></p>
                             <!-- 가격 및 할인율 -->
                             <div class="price-wrap">
                     <span class="original"
-                          th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'">50,000원</span>
+                          th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
                                 <span class="discount"
-                                      th:text="${p.prod_sale + '%↓'}">30%↓</span>
+                                      th:text="${p.prod_sale + '%↓'}"></span>
                             </div>
                             <!-- 할인가격 및 무료배송 표시 -->
                             <div class="sale-wrap">
                     <span class="sale"
                           th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
-                        35,000원
                     </span>
                                 <img th:if="${p.prod_deliv_price == 0}"
                                      th:src="@{/image/메인/ico_freeshipping.gif}"

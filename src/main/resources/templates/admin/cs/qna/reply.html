@@ -25,32 +25,30 @@
                     <table class="notice-view-table_2">
                         <tr>
                             <th>유형</th>
-                            <td>회원 - 가입</td>
+                            <td th:text="${qnaDTO.getQ_cate1()} + ' - ' + ${qnaDTO.getQ_cate2()}">회원 - 가입</td>
                         </tr>
                         <tr>
                             <th>제목</th>
-                            <td>개인회원과 법인회원에 차이가 있나요?</td>
+                            <td th:text="${qnaDTO.getQ_title()}">아이디를 여러개 사용할 수 있나요?</td>
                         </tr>
                         <tr>
                             <th>내용</th>
-                            <td class="notice-content_2">개인회원하고 법인회원하고 차이를 알고 싶어요.
-                                그리고 법인회원으로 가입하면 혜택이 있나요?
-                                마지막으로 법인가입 하려면 어떻게 해야하죠?
-                                알려주세요.
+                            <td class="notice-content_2" th:text="${qnaDTO.getQ_content()}">개인적으로 아이디를 3개 사용했으면 하는데
+                                사용할 수 있나요?
                             </td>
                         </tr>
                         <tr>
                             <th>답변</th>
                             <td>
-                                <textarea class="qna-textarea_2" name="content" > </textarea>
+                                <textarea class="qna-textarea_2" id="qnaAnswerContent" name="content"></textarea>
                             </td>
                         </tr>
                     </table>
 
                     <div class="notice-buttons_2">
-                        <button class="notice-btn_2 btn-delete_2">삭제</button>
-                        <button class="notice-btn_2 btn-add_2">답변등록</button>
-                        <button class="notice-btn_2 btn-list_2">목록</button>
+                        <button class="notice-btn_2 btn-delete_2" id="removeViewBtn" th:data-delQnaBtn="${qnaDTO.getQ_no()}">삭제</button>
+                        <button class="notice-btn_2 btn-add_2" id="answerQna" th:data-qna-no="${qnaDTO.getQ_no()}">답변등록</button>
+                        <button class="notice-btn_2 btn-list_2"><a th:href="@{/admin/cs/qna/list}">목록</a></button>
                     </div>
                 </main>
             </div>
@@ -58,7 +56,7 @@
     </div>
 
 <div th:replace="~{admin/coupon/_tail.html}"></div>
-
+<script th:src="@{/js/admin/qna.js}"></script>
 
 
 </body>

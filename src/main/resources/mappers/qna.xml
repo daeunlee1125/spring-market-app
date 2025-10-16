@@ -68,6 +68,18 @@
         OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
 
+    <select id="selectQna3" resultType="kr.co.shoply.dto.QnaDTO">
+        SELECT *
+        FROM QNA
+        WHERE Q_NO = #{q_no}
+    </select>
+
+    <update id="updateQnaReply3" parameterType="kr.co.shoply.dto.QnaAnswerRequestDTO">
+        UPDATE QNA
+        SET Q_REPLY = #{qNo}
+        WHERE Q_NO =#{content}
+    </update>
+
     <delete id="deleteQnaList3" parameterType="java.util.List">
         DELETE FROM QNA
         WHERE Q_NO IN

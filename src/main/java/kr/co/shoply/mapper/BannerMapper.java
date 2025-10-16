@@ -10,7 +10,7 @@ public interface BannerMapper{
     public void saveBanner(BannerDTO bannerDTO);
     public void statusToZero(int ban_no);
     public void statusToOne(int ban_no);
-
+    String selectProductBanner3();
     public List<BannerDTO> getBanners2();
 
 }

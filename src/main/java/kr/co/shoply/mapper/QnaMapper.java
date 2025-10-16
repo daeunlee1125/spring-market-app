@@ -1,9 +1,6 @@
 package kr.co.shoply.mapper;
 
-import kr.co.shoply.dto.AdInfoDTO;
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
-import kr.co.shoply.dto.QnaDTO;
+import kr.co.shoply.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,6 +16,9 @@ public interface QnaMapper {
     // 여러 파라미터 대신 DTO 하나만 받도록 변경
     int selectQnaCnt3(PageRequestDTO pageRequestDTO);
     List<QnaDTO> selectQnaByCate3(PageRequestDTO pageRequestDTO);
+    QnaDTO selectQna3(int q_no);
+    void updateQnaReply3(QnaAnswerRequestDTO qnaDTO);
+
 
     void deleteQnaList3(@Param("list") List<Integer> list);
 }

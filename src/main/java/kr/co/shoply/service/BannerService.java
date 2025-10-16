@@ -52,4 +52,8 @@ public class BannerService {
             bannerMapper.statusToOne(ban_no);
         }
     }
+
+    public String getProductBanner3(){
+        return bannerMapper.selectProductBanner3();
+    }
 }

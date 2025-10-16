@@ -7,6 +7,7 @@ import kr.co.shoply.mapper.*;
 import kr.co.shoply.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,10 @@ public class ProductService {
 
     public ProductDTO getProduct3(String prod_no){
         return productMapper.select3(prod_no);
+    }
+
+    public List<ProFileDTO> getFiles3(String prod_no){
+        return productMapper.selectFiles3(prod_no);
     }
 
     public List<ProdOptionDTO> getProductOption3(String prod_no){
@@ -72,6 +77,20 @@ public class ProductService {
 
     public void saveOrderItem3(List<OrderItemDTO> list){
         orderMapper.insertOrderItemList3(list);
+    }
+
+    public List<ProductDTO> getSearchProduct3(String keyword, String sort){
+        return productMapper.selectSearchProduct3(keyword, sort);
+    }
+
+    public List<ProductDTO> getSearch2Product3(String keyword,
+                                               String sort,
+                                               String type,
+                                               String keyword2,
+                                               Integer start_price,
+                                               Integer end_price){
+
+        return  productMapper.selectSearch2Product3(keyword, sort, type, keyword2, start_price, end_price);
     }
 
     public void modifyUsedCoupon3(String cpCode, String memId){

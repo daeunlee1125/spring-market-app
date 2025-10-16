@@ -16,7 +16,7 @@ public interface OrderMapper {
     OrderDTO selectOrderNo3(String mem_id);
     OrderDTO selectOrderById(String ord_no);
 
-    void insertOrderItemList3(List<OrderItemDTO> list);
+    void insertOrderItemList3(List<OrderItemDTO> orderItemDTOList);
 
     List<CompleteDTO> selectCompleteOrder3(@Param("ord_no") String ord_no);
 }

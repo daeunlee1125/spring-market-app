@@ -421,4 +421,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     }
+
+    // ==========================================================
+// 6. 바로구매 기능 (동적 Form 생성 및 제출)
+// ==========================================================
+    const btnBuyNow = document.querySelector('.btn-buy');
+
+    if (btnBuyNow) {
+        btnBuyNow.addEventListener('click', function () {
+
+            const orderItems = []; // 서버로 보낼 주문 상품 정보를 담을 배열
+
+            // CASE 1: 옵션이 있는 상품
+            const selectedItems = document.querySelectorAll('#selected-options-list .selected-item');
+            if (selectedItems.length > 0) {
+                selectedItems.forEach(item => {
+                    const prodNo = document.getElementById('btn-add-to-cart').dataset.prodNo;
+                    const quantity = item.querySelector('.quantity-input').value;
+                    const optionText = item.querySelector('.item-name').textContent;
+                    const productName = document.querySelector('#selected-options-list').dataset.name;
+                    const cart_option = optionText.replace(productName + ' / ', '');
+
+                    orderItems.push({
+                        prod_no: prodNo,
+                        cart_item_cnt: parseInt(quantity, 10),
+                        cart_option: cart_option
+                    });
+                });
+            }
+            // CASE 2: 옵션이 없는 단일 상품
+            else {
+                const noOptionItem = document.querySelector('#no-option-product .quantity-input');
+                if (noOptionItem) {
+                    const prodNo = document.getElementById('btn-add-to-cart').dataset.prodNo;
+                    const quantity = noOptionItem.value;
+                    orderItems.push({
+                        prod_no: prodNo,
+                        cart_item_cnt: parseInt(quantity, 10),
+                        cart_option: '' // 옵션 없음
+                    });
+                }
+            }
+
+            if (orderItems.length === 0) {
+                alert('구매할 상품을 선택해주세요.');
+                return;
+            }
+
+            // 1. 동적으로 form 요소 생성
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/shoply/product/order';
+
+            // 2. 수집된 상품 정보를 hidden input으로 만들어 form에 추가
+            orderItems.forEach((item, index) => {
+                // Spring MVC가 List<DTO> 형태로 데이터를 받을 수 있도록 name을 지정
+                form.innerHTML += `<input type="hidden" name="orderItems[${index}].prod_no" value="${item.prod_no}">`;
+                form.innerHTML += `<input type="hidden" name="orderItems[${index}].cart_item_cnt" value="${item.cart_item_cnt}">`;
+                form.innerHTML += `<input type="hidden" name="orderItems[${index}].cart_option" value="${item.cart_option}">`;
+            });
+
+            // 3. form을 body에 추가하고 submit 후 제거
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        });
+    }
 });

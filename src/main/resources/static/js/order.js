@@ -147,12 +147,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     mem_addr2: document.getElementById('mem_addr2_input').value
                 };
 
-                const cartItems = [];
+                const orderItems = []; // cartItems -> orderItems로 이름 변경 (의미 명확화)
                 document.querySelectorAll('.order-item').forEach(item => {
-                    const cartId = item.dataset.cartId;
-                    if(cartId) {
-                        cartItems.push({ cart_id: parseInt(cartId, 10) });
-                    }
+                    // cartId 대신 상품의 상세 정보를 직접 읽어옴
+                    const prodNo = item.dataset.prodNo;
+                    const quantity = item.dataset.quantity;
+                    const option = item.dataset.option;
+
+                    // cart_id를 보내는 대신, 상품 정보를 직접 보냄
+                    orderItems.push({
+                        prod_no: prodNo,
+                        cart_item_cnt: parseInt(quantity, 10),
+                        cart_option: option,
+
+                        // cart_id는 장바구니에서 넘어온 경우에만 존재하므로, 있을 때만 추가
+                        cart_id: item.dataset.cartId ? parseInt(item.dataset.cartId, 10) : null
+                    });
                 });
 
                 const finalPaymentText = document.getElementById('summaryFinalPayment').textContent;
@@ -168,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     usedPoints: usedPoints,
                     usedCouponId: usedCouponId,
                     memberDTO: memberDTO,
-                    orderItems: cartItems,
+                    orderItems: orderItems, // 수정된 orderItems 배열 사용
                     paymentMethod: paymentMethod,
                     finalAmount: finalPaymentAmount
                 };

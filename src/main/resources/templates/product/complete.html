@@ -39,12 +39,12 @@
                         <div class="order-item-price">
                             <p class="price" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_price(), 0, 'COMMA', 0, 'POINT')} + '원'">23,580원</p>
                             <p class="discount" th:text="'상품 할인 -' + ${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getSaleprice(), 0, 'COMMA', 0, 'POINT')} + '원'">할인 -2,358원</p>
-                            <th:block th:if="${sysCouponDTO.getCp_type() == 3}">
+                            <div th:if="${sysCouponDTO != null and sysCouponDTO.getCp_type() == 3}">
                                 <p style="text-decoration: line-through;" class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')} + '원'">배송비 +2,358원</p>
-                            </th:block>
-                            <th:block th:unless="${sysCouponDTO.getCp_type() == 3}">
+                            </div>
+                            <div th:unless="${sysCouponDTO != null and sysCouponDTO.getCp_type() == 3}">
                                 <p class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')} + '원'">배송비 +2,358원</p>
-                            </th:block>
+                            </div>
                         </div>
                     </div>
                 </section>

@@ -8,21 +8,31 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="cno" keyColumn="CNO">
     </insert>
 
-
-
-    <select id="select3" resultType="kr.co.shoply.dto.ProductDTO">
+    <select id="select3" resultMap="productResultMap">
         SELECT
-        p.*,
-        COUNT(r.REV_NO) AS cntRating,  p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE  / 100)) AS realPrice,
-        NVL(ROUND(AVG(r.REV_RATING),1), 0) AS avgRating FROM
-        PRODUCT p
-        LEFT JOIN  REVIEW r ON p.PROD_NO = r.PROD_NO
+            p.*,
+            pf.F_NAME
+        FROM
+            PRO_FILE pf
+        JOIN
+        (
+            SELECT
+                p.*,
+                COUNT(r.REV_NO) AS cntRating,  p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE  / 100)) AS realPrice,
+                NVL(ROUND(AVG(r.REV_RATING),1), 0) AS avgRating
+            FROM
+                PRODUCT p
+            LEFT JOIN
+                REVIEW r ON p.PROD_NO = r.PROD_NO
+            WHERE
+                p.PROD_NO = #{prod_no}
+            GROUP BY
+                p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
+                p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
+                p.PROD_SOLD, p.PROD_HIT
+        ) p ON p.PROD_NO = pf.PROD_NO
         WHERE
-        p.PROD_NO = #{prod_no}
-        GROUP BY
-        p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
-        p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
-        p.PROD_SOLD, p.PROD_HIT
+            pf.F_DIST = 3
     </select>
 
     <select id="selectOption3" resultType="kr.co.shoply.dto.ProdOptionDTO">
@@ -35,40 +45,131 @@
     <sql id="sorting">
         <choose>
             <when test="sort == 'sold'">
-                ORDER BY PROD_SOLD DESC
+                ORDER BY p.PROD_SOLD DESC
             </when>
             <when test="sort == 'priceAsc'">
-                ORDER BY realPrice ASC
+                ORDER BY p.realPrice ASC
             </when>
             <when test="sort == 'priceDesc'">
-                ORDER BY realPrice DESC
+                ORDER BY p.realPrice DESC
             </when>
             <when test="sort == 'score'">
-                ORDER BY avgRating DESC
+                ORDER BY p.avgRating DESC
             </when>
             <when test="sort == 'review'">
-                ORDER BY cntRating DESC
+                ORDER BY p.cntRating DESC
             </when>
-            <otherwise> ORDER BY PROD_NO ASC </otherwise>
+            <otherwise> ORDER BY p.PROD_NO ASC </otherwise>
         </choose>
     </sql>
 
-    <select id="selectAll3" resultType="kr.co.shoply.dto.ProductDTO">
+    <sql id="sorting2">
+        <choose>
+            <when test="type == 'name'">
+                AND p.PROD_NAME LIKE '%' || #{keyword2} || '%'
+            </when>
+            <when test="type == 'context'">
+                AND p.PROD_INFO LIKE '%' || #{keyword2} || '%'
+            </when>
+            <when test="type == 'price'">
+                AND p.realPrice BETWEEN #{startPrice} AND #{endPrice}
+            </when>
+        </choose>
+    </sql>
+
+    <resultMap id="productResultMap" type="kr.co.shoply.dto.ProductDTO">
+        <result column="F_NAME" property="fName"/>
+    </resultMap>
+
+    <select id="selectFiles3" resultType="kr.co.shoply.dto.ProFileDTO">
+        SELECT *
+        FROM PRO_FILE pf
+        WHERE pf.PROD_NO = #{prod_no}
+    </select>
+
+    <select id="selectAll3" resultMap="productResultMap">
         SELECT
             p.*,
-            round(avg(r.REV_RATING ),1) AS avgRating,
-            count(*) AS cntRating,
-            p.PROD_PRICE-(p.PROD_PRICE * (p.PROD_SALE/100)) AS realPrice
-        FROM
-            PRODUCT p
-        LEFT JOIN
-            REVIEW r ON p.PROD_NO = r.PROD_NO
+            pf.F_NAME
+        FROM PRO_FILE pf
+        JOIN
+        (
+            SELECT
+                p.*,
+                round(avg(r.REV_RATING ),1) AS avgRating,
+                count(r.REV_RATING) AS cntRating, p.PROD_PRICE-(p.PROD_PRICE * (p.PROD_SALE/100)) AS realPrice
+            FROM
+                PRODUCT p
+            LEFT JOIN
+                REVIEW r ON p.PROD_NO = r.PROD_NO
+            WHERE
+                p.CATE2_NO = #{cate2_no}
+            GROUP BY
+                p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
+                p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
+                p.PROD_SOLD, p.PROD_HIT
+        ) p ON pf.PROD_NO = p.PROD_NO
         WHERE
-            p.CATE2_NO = #{cate2_no}
-        GROUP BY
-            p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
-            p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
-            p.PROD_SOLD, p.PROD_HIT
+            pf.F_DIST = 1
+        <include refid="sorting"/>
+    </select>
+
+    <select id="selectSearchProduct3" resultMap="productResultMap">
+        SELECT
+            p.*,
+            pf.F_NAME
+        FROM
+            PRO_FILE pf
+        JOIN
+        (
+            SELECT
+                p.*,
+                round(avg(r.REV_RATING ),1) AS avgRating,
+                count(r.REV_RATING) AS cntRating,
+                p.PROD_PRICE-(p.PROD_PRICE * (p.PROD_SALE/100)) AS realPrice
+            FROM
+                PRODUCT p
+            LEFT JOIN
+                REVIEW r ON p.PROD_NO = r.PROD_NO
+            GROUP BY
+                p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
+                p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
+                p.PROD_SOLD, p.PROD_HIT
+            ) p ON pf.PROD_NO = p.PROD_NO
+        WHERE
+            pf.F_DIST = 1 AND p.PROD_NAME LIKE '%' || #{keyword} || '%'
+        <include refid="sorting"/>
+    </select>
+
+    <select id="selectSearch2Product3" resultMap="productResultMap">
+        SELECT *
+        FROM (
+            SELECT
+                p.*,
+                pf.F_NAME
+                FROM PRO_FILE pf
+            JOIN
+                (
+                SELECT
+                    p.*,
+                    round(avg(r.REV_RATING ),1) AS avgRating,
+                    count(r.REV_RATING) AS cntRating,
+                    p.PROD_PRICE-(p.PROD_PRICE * (p.PROD_SALE/100)) AS realPrice
+                FROM
+                    PRODUCT p
+                LEFT JOIN
+                    REVIEW r ON p.PROD_NO = r.PROD_NO
+                GROUP BY
+                    p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
+                    p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
+                    p.PROD_SOLD, p.PROD_HIT
+                ) p ON pf.PROD_NO = p.PROD_NO
+            WHERE
+                pf.F_DIST = 1 AND p.PROD_NAME LIKE '%' || #{keyword} || '%'
+            ) p
+        <where>
+            <include refid="sorting2"/>
+        </where>
         <include refid="sorting"/>
     </select>
 

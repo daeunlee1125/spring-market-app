@@ -90,7 +90,7 @@
 
     <insert id="insertOrderItemList3" parameterType="java.util.List">
         INSERT ALL
-        <foreach item="item" collection="list">
+        <foreach item="item" collection="orderItemDTOList">
             INTO ORDER_ITEM (ORD_NO, PROD_NO, ITEM_NAME, ITEM_CNT, ITEM_STAT, PROD_OPTION)
             VALUES
             (

@@ -13,4 +13,5 @@ public class ProFileDTO {
     private String prod_no;
     private String f_name;
     private String f_rdate;
+    private int f_dist;
 }

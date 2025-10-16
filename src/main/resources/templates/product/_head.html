@@ -41,8 +41,8 @@
 
         <!-- 검색창 -->
         <div class="header-center">
-            <form action="" method="get">
-                <input type="text" placeholder="검색">
+            <form th:action="@{/product/search}" method="get">
+                <input type="text" name="keyword" placeholder="검색">
                 <button type="submit">
                     <img th:src="@{/image/search.png}" alt="검색">
                 </button>

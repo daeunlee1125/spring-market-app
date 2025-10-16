@@ -33,4 +33,16 @@ public class OrderService {
     public List<OrderDTO> OrderDetails2() {
         return orderMapper.getOrderDetails2();
     }
+
+    public PageResponseDTO getDelivs2(PageRequestDTO pageRequestDTO) {
+
+        List<OrderDTO> ordList = orderMapper.getDelivList2(pageRequestDTO);
+        int total = orderMapper.selectCountDelvTotal2(pageRequestDTO);
+
+        return PageResponseDTO.<OrderDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(ordList)
+                .total(total)
+                .build();
+    }
 }

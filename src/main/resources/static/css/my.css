@@ -1,3 +1,38 @@
+/* my.css */
+
+/* 별점 노란색 */
+.star-rating, .rating {
+    color: #FFD700 !important; /* 금색 */
+}
+
+/* 페이징 active */
+.pagination button.active {
+    background-color: #946ccf;
+    color: white;
+    font-weight: bold;
+}
+
+/* modal css */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
 /* qna 모달 기본 스타일 */
 .modal {
     display: none; /* 처음엔 숨김 */
@@ -366,7 +401,7 @@ footer {
 .table-container td:last-child {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
     align-items: flex-start;
 }
 .table-container td button {

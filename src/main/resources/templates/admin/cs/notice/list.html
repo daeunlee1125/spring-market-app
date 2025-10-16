@@ -20,6 +20,7 @@
                   <select name="csType" onchange="this.form.submit()">
                       <option value="">유형선택</option>
                       <option th:value="'전체'" th:selected="${param.csType == '전체'}">전체 글 보기</option>
+
                       <option th:value="'고객서비스'" th:selected="${param.csType == '고객서비스'}">고객서비스</option>
                       <option th:value="'이벤트당첨'" th:selected="${param.csType == '이벤트당첨'}">이벤트 당첨</option>
                       <option th:value="'안전거래'" th:selected="${param.csType == '안전거래'}">안전거래</option>

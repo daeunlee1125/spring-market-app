@@ -1,53 +1,41 @@
 package kr.co.shoply.controller;
 
-import jakarta.servlet.http.HttpSession;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.MyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
-import kr.co.shoply.dto.ProductDTO;
-import kr.co.shoply.dto.ProdOptionDTO;
-import kr.co.shoply.dto.ProFileDTO;
-
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
+
 @Slf4j
-
 @RequiredArgsConstructor
-
 @Controller
-
 @RequestMapping("/my")
-
 public class MyController {
 
-
-
     private final MyService myService;
+    private final String uploadDir = "C:/shoply/uploads/";
 
-
-
-    @GetMapping("/home")
-    public String home(Model model, @AuthenticationPrincipal MyUserDetails user) {
-        String mem_id = user.getMember().getMem_id();
-
-        // MyService에서 한 번에 DTO 가져오기
-        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-
+    // ===================== 공통 메소드 =====================
+    private void addMyPageSummary(Model model, String memberId) {
+        MyPageHomeDTO homeData = myService.getMyPageHomeData(memberId);
         model.addAttribute("orderCount", homeData.getOrderCount());
         model.addAttribute("couponCount", homeData.getCouponCount());
         model.addAttribute("pointTotal", homeData.getPointTotal());
@@ -57,118 +45,177 @@ public class MyController {
         model.addAttribute("recentReviews", homeData.getRecentReviews());
         model.addAttribute("recentQnas", homeData.getRecentQnas());
 
-        // productMap 추가
         Map<String, ProductDTO> productMap = homeData.getRecentOrders().stream()
                 .map(OrderItemDTO::getProd_no)
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toMap(
                         prodNo -> prodNo,
-                        prodNo -> myService.getProduct3(prodNo)
+                        myService::getProduct3
                 ));
         model.addAttribute("productMap", productMap);
+    }
 
+// MyController.java의 주문 섹션에 추가
+
+    // ===================== 반품 신청 =====================
+    @PostMapping("/order/return")
+    @ResponseBody
+    public ResponseEntity<String> returnOrder(@RequestParam("item_no") Long itemNo,
+                                              @RequestParam("reason") String reason,
+                                              @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        String memberId = user.getMember().getMem_id();
+
+        try {
+            myService.requestReturn(itemNo, memberId, reason);
+            log.info("반품 신청 완료: item_no={}, mem_id={}", itemNo, memberId);
+            return ResponseEntity.ok("success");
+        } catch (IllegalArgumentException e) {
+            log.error("반품 신청 실패: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // ===================== 교환 신청 =====================
+    @PostMapping("/order/exchange")
+    @ResponseBody
+    public ResponseEntity<String> exchangeOrder(@RequestParam("item_no") Long itemNo,
+                                                @RequestParam("reason") String reason,
+                                                @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        String memberId = user.getMember().getMem_id();
+
+        try {
+            myService.requestExchange(itemNo, memberId, reason);
+            log.info("교환 신청 완료: item_no={}, mem_id={}", itemNo, memberId);
+            return ResponseEntity.ok("success");
+        } catch (IllegalArgumentException e) {
+            log.error("교환 신청 실패: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    // ===================== 리뷰 =====================
+    @GetMapping("/review")
+    public String reviewPage(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            Model model,
+            @AuthenticationPrincipal MyUserDetails user) {
+
+        if (user == null) {
+            return "redirect:/member/login";
+        }
+
+        String memberId = user.getMember().getMem_id();
+
+        // 페이지네이션 설정 (10개씩)
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("rev_rdate").descending());
+
+        // 리뷰 페이지 조회
+        Page<ReviewDTO> reviewPage = myService.getReviewsByMemIdPaged(memberId, pageable);
+        model.addAttribute("reviewPage", reviewPage);
+
+        // 마이페이지 요약 정보
+        addMyPageSummary(model, memberId);
+
+        return "my/review";
+    }
+
+    private List<String> saveFiles(List<MultipartFile> files) {
+        List<String> savedFiles = new ArrayList<>();
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    try {
+                        String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                        File dest = new File(uploadDir + "review/" + filename);
+                        dest.getParentFile().mkdirs();
+                        file.transferTo(dest);
+                        savedFiles.add(filename);
+                        log.info("업로드 파일 저장 완료: {}", filename);
+                    } catch (IOException e) {
+                        log.error("파일 업로드 실패", e);
+                    }
+                }
+            }
+        }
+        return savedFiles;
+    }
+
+    // ===================== 홈 =====================
+    @GetMapping("/home")
+    public String homePage(Model model, @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
+            return "redirect:/member/login";
+        }
+
+        addMyPageSummary(model, user.getMember().getMem_id());
         return "my/home";
     }
 
-
+    // ===================== 회원 정보 =====================
     @GetMapping("/info")
     public String info(Model model, @AuthenticationPrincipal MyUserDetails user) {
-        // 세션 대신 Spring Security 인증 정보 사용
-        String mem_id = user.getMember().getMem_id();
-        MemberDTO memberInfo = myService.getMemberInfo(mem_id);
+        String memberId = user.getMember().getMem_id();
+        MemberDTO memberInfo = myService.getMemberInfo(memberId);
         model.addAttribute("memberInfo", memberInfo);
-        // 세션 DTO는 더 이상 필요하지 않습니다.
-        // MyService에서 한 번에 DTO 가져오기
-        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-
-        model.addAttribute("orderCount", homeData.getOrderCount());
-        model.addAttribute("couponCount", homeData.getCouponCount());
-        model.addAttribute("pointTotal", homeData.getPointTotal());
-        model.addAttribute("qnaCount", homeData.getQnaCount());
-        model.addAttribute("recentOrders", homeData.getRecentOrders());
-        model.addAttribute("recentPoints", homeData.getRecentPoints());
-        model.addAttribute("recentReviews", homeData.getRecentReviews());
-        model.addAttribute("recentQnas", homeData.getRecentQnas());
-
-        // productMap 추가
-        Map<String, ProductDTO> productMap = homeData.getRecentOrders().stream()
-                .map(OrderItemDTO::getProd_no)
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toMap(
-                        prodNo -> prodNo,
-                        prodNo -> myService.getProduct3(prodNo)
-                ));
-        model.addAttribute("productMap", productMap);
-
+        addMyPageSummary(model, memberId);
         return "my/info";
     }
 
     @PostMapping("/info/update")
     @ResponseBody
-    public ResponseEntity<String> updateInfo(@RequestBody MemberDTO memberDTO, @AuthenticationPrincipal MyUserDetails user) {
-        String mem_id = user.getMember().getMem_id();
-        memberDTO.setMem_id(mem_id);
+    public ResponseEntity<String> updateInfo(@RequestBody MemberDTO memberDTO,
+                                             @AuthenticationPrincipal MyUserDetails user) {
+        String memberId = user.getMember().getMem_id();
+        memberDTO.setMem_id(memberId);
         myService.updateMemberInfo(memberDTO);
+        log.info("회원 정보 수정 성공: mem_id={}", memberId);
         return ResponseEntity.ok("success");
     }
-
 
     @PostMapping("/info/changePassword")
-
     @ResponseBody
-
-    public ResponseEntity<String> changePassword(@RequestBody String newPassword, HttpSession session) {
-
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-
-        if (sessUser == null) {
-
+    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> passwordData,
+                                                 @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
+            log.warn("비밀번호 변경 실패: 로그인 필요");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-
         }
 
+        String newPassword = passwordData.get("newPassword");
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("새 비밀번호를 입력해주세요.");
+        }
 
-
-        myService.changePassword(sessUser.getMem_id(), newPassword);
-
+        String memberId = user.getMember().getMem_id();
+        myService.changePassword(memberId, newPassword);
+        log.info("비밀번호 변경 성공: mem_id={}", memberId);
         return ResponseEntity.ok("success");
-
     }
-
-
 
     @PostMapping("/info/withdrawal")
-
-    public String withdrawal(HttpSession session) {
-
-        log.info("withdrawal() POST 요청...");
-
-
-
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-
-        if (sessUser == null) {
-
+    public String withdrawal(@AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
+            log.warn("회원 탈퇴 시도 실패: 로그인 필요");
             return "redirect:/member/login";
-
         }
-
-
-
-        myService.withdrawMember(sessUser.getMem_id());
-
-        session.invalidate();
-
-
-
+        String memberId = user.getMember().getMem_id();
+        myService.withdrawMember(memberId);
+        log.info("회원 탈퇴 완료: mem_id={}", memberId);
         return "redirect:/member/login?withdrawal=true";
-
     }
 
+    @GetMapping("/info/withdrawal")
+    public String withdrawalPage() {
+        return "my/withdrawal";
+    }
 
-
+    // ===================== 주문 =====================
     @PostMapping("/order/confirm")
     @ResponseBody
     public ResponseEntity<String> confirmOrder(@RequestParam("item_no") Long itemNo,
@@ -176,244 +223,160 @@ public class MyController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
-        myService.confirmOrder(itemNo, user.getMember().getMem_id());
+        String memberId = user.getMember().getMem_id();
+        myService.confirmOrder(itemNo, memberId);
         return ResponseEntity.ok("success");
     }
-
-
-
-    @PostMapping("/review/write")
-
-    @ResponseBody
-
-    public ResponseEntity<String> writeReview(@ModelAttribute ReviewDTO reviewDTO, HttpSession session) {
-
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-
-        if (sessUser == null) {
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-
-        }
-
-
-
-        reviewDTO.setMem_id(sessUser.getMem_id());
-
-        myService.writeReview(reviewDTO);
-
-        return ResponseEntity.ok("success");
-
-    }
-
-
-
-    @PostMapping("/qna/write")
-
-    @ResponseBody
-
-    public ResponseEntity<String> writeQna(@ModelAttribute QnaDTO qnaDTO, HttpSession session) {
-
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-
-        if (sessUser == null) {
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-
-        }
-
-
-
-        qnaDTO.setMem_id(sessUser.getMem_id());
-
-        myService.writeQna(qnaDTO);
-
-        return ResponseEntity.ok("success");
-
-    }
-
-    @GetMapping("/review")
-    public String review(Model model, HttpSession session, @AuthenticationPrincipal MyUserDetails user) {
-        log.info("review() GET 요청...");
-
-        // 세션 대신 Security 인증 정보 사용
-        String mem_id = user.getMember().getMem_id();
-
-        // 서비스에서 해당 회원의 리뷰 리스트 가져오기
-        List<ReviewDTO> reviewList = myService.getReviewsByMemId(mem_id);
-        model.addAttribute("reviewList", reviewList);
-
-        // 상단 요약 정보 가져오기
-        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-        model.addAttribute("orderCount", homeData.getOrderCount());
-        model.addAttribute("couponCount", homeData.getCouponCount());
-        model.addAttribute("pointTotal", homeData.getPointTotal());
-        model.addAttribute("qnaCount", homeData.getQnaCount());
-
-        return "my/review"; // templates/my/review.html
-    }
-
-    @GetMapping("/coupon")
-    public String coupon(Model model,
-                         @AuthenticationPrincipal MyUserDetails user) {
-        log.info("coupon() GET 요청...");
-
-        String mem_id = user.getMember().getMem_id(); // MyUserDetails에서 mem_id 가져오기
-
-        // 사용자 쿠폰 리스트 가져오기
-        List<UserCouponDTO> userCoupons = myService.getUserCouponsByMemId(mem_id);
-        model.addAttribute("userCoupons", userCoupons);
-
-        // 상단 요약 정보
-        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-        model.addAttribute("orderCount", homeData.getOrderCount());
-        model.addAttribute("couponCount", homeData.getCouponCount());
-        model.addAttribute("pointTotal", homeData.getPointTotal());
-        model.addAttribute("qnaCount", homeData.getQnaCount());
-
-        return "my/coupon"; // templates/my/coupon.html
-    }
-
 
     @PostMapping("/order/cancel")
     @ResponseBody
-    public ResponseEntity<String> cancelOrder(@RequestParam("item_no") Long itemNo, HttpSession session) {
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-        if (sessUser == null) {
+    public ResponseEntity<String> cancelOrder(@RequestParam("item_no") Long itemNo,
+                                              @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
-
-        myService.cancelOrder(itemNo, sessUser.getMem_id());
+        String memberId = user.getMember().getMem_id();
+        myService.cancelOrder(itemNo, memberId);
         return ResponseEntity.ok("success");
     }
 
-    @GetMapping("/info/withdrawal")
-    public String withdrawalPage(HttpSession session) {
-        MemberSessionDTO sessUser = (MemberSessionDTO) session.getAttribute("sessUser");
-        if (sessUser == null) {
-            return "redirect:/member/login";
-        }
-        return "my/withdrawal"; // templates/my/withdrawal.html
-    }
-
-
     @GetMapping("/order")
-    public String orderPage(Model model, @AuthenticationPrincipal MyUserDetails user) {
-        log.info("orderPage() GET 요청...");
+    public String orderPage(Model model, @AuthenticationPrincipal MyUserDetails user,
+                            @PageableDefault(size = 5) Pageable pageable) { // size는 페이지네이션 5개씩 나오도록 설정
+        String memberId = user.getMember().getMem_id();
+        Page<OrderItemDTO> orderPage = myService.getOrdersByMemId(memberId, pageable);
 
-        String mem_id = user.getMember().getMem_id();
-
-        // 주문 내역
-        List<OrderItemDTO> orderList = myService.getOrdersByMemId(mem_id);
-
-        // 상품 정보 Map 추가
         Map<String, ProductDTO> productMap = new HashMap<>();
-        for (OrderItemDTO item : orderList) {
+        for (OrderItemDTO item : orderPage.getContent()) {
             ProductDTO product = myService.getProduct3(item.getProd_no());
-            if (product != null) {
-                productMap.put(item.getProd_no(), product);
-            }
+            if (product != null) productMap.put(item.getProd_no(), product);
         }
 
-        model.addAttribute("orderList", orderList);
+        model.addAttribute("orderList", orderPage.getContent());
         model.addAttribute("productMap", productMap);
-
-        // 상단 요약 정보
-        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-        model.addAttribute("orderCount", homeData.getOrderCount());
-        model.addAttribute("couponCount", homeData.getCouponCount());
-        model.addAttribute("pointTotal", homeData.getPointTotal());
-        model.addAttribute("qnaCount", homeData.getQnaCount());
-
+        model.addAttribute("currentPage", orderPage.getNumber());
+        model.addAttribute("totalPages", orderPage.getTotalPages());
+        addMyPageSummary(model, memberId);
         return "my/order";
     }
 
-    @GetMapping("/view/{prodNo}")
-    public String viewProduct(@PathVariable String prodNo, Model model) {
-        log.info("viewProduct() GET 요청... prodNo={}", prodNo);
+    // ===================== 리뷰 작성 (Ajax + 파일 업로드) =====================
+    @PostMapping("/review/write")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> writeReview(
+            @RequestParam("prod_no") String prodNo,        // ✅ 추가
+            @RequestParam("rating") int rating,
+            @RequestParam("content") String content,
+            @RequestParam(value = "file1", required = false) MultipartFile file1,
+            @RequestParam(value = "file2", required = false) MultipartFile file2,
+            @RequestParam(value = "file3", required = false) MultipartFile file3,
+            @AuthenticationPrincipal MyUserDetails user
+    ) {
+        Map<String, Object> result = new HashMap<>();
 
-        // 1. 상품 기본 정보
-        ProductDTO product = myService.getProduct3(prodNo);
-
-        if (product != null) {
-            // 2. 옵션 리스트
-            List<ProdOptionDTO> options = product.getOptions();
-            if (options == null) {
-                options = myService.getProductOption3(prodNo);
-                product.setOptions(options);
-            }
-
-            // 3. 파일 리스트
-            List<ProFileDTO> files = product.getFiles();
-            if (files == null) {
-                files = myService.getProductFiles(prodNo);
-                product.setFiles(files);
-            }
-        } else {
-            log.warn("해당 상품(prodNo={})이 존재하지 않습니다.", prodNo);
+        if (user == null) {
+            log.warn("리뷰 작성 실패: 로그인 필요");
+            result.put("success", false);
+            result.put("message", "로그인이 필요합니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
-        // 4. 모델에 담기
-        model.addAttribute("product", product);
+        // ✅ prod_no 검증 추가
+        if (prodNo == null || prodNo.trim().isEmpty()) {
+            log.warn("리뷰 작성 실패: 상품번호 없음");
+            result.put("success", false);
+            result.put("message", "상품 정보를 찾을 수 없습니다.");
+            return ResponseEntity.badRequest().body(result);
+        }
 
-        return "my/product/view"; // templates/my/product/view.html
+        List<MultipartFile> files = Arrays.asList(file1, file2, file3);
+        List<String> savedFiles = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            if (file != null && !file.isEmpty()) {
+                try {
+                    String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                    File dest = new File(uploadDir + "review/" + filename);
+                    dest.getParentFile().mkdirs();
+                    file.transferTo(dest);
+                    savedFiles.add(filename);
+                    log.info("업로드 파일 저장 완료: {}", filename);
+                } catch (IOException e) {
+                    log.error("파일 업로드 실패", e);
+                }
+            }
+        }
+
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setMem_id(user.getMember().getMem_id());
+        reviewDTO.setProd_no(prodNo);  // ✅ prod_no 설정
+        reviewDTO.setRev_rating(rating);
+        reviewDTO.setRev_content(content);
+        reviewDTO.setRev_files(savedFiles);
+
+        ReviewDTO savedReview = myService.writeReview(reviewDTO);
+
+        result.put("success", true);
+        result.put("newReview", savedReview);
+        result.put("savedFiles", savedFiles);
+
+        log.info("리뷰 작성 성공: mem_id={}, prod_no={}, content={}",
+                user.getMember().getMem_id(), prodNo, content);
+
+        return ResponseEntity.ok(result);
+    }
+    // ===================== QnA =====================
+    @PostMapping("/qna/write")
+    @ResponseBody
+    public ResponseEntity<String> writeQna(@ModelAttribute QnaDTO qnaDTO,
+                                           @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        String memberId = user.getMember().getMem_id();
+        qnaDTO.setMem_id(memberId);
+        myService.writeQna(qnaDTO);
+        return ResponseEntity.ok("success");
     }
 
-    // MyController.java
+    @GetMapping("/qna")
+    public String qnaPage(Model model, @AuthenticationPrincipal MyUserDetails user) {
+        String memberId = user.getMember().getMem_id();
+        List<QnaDTO> recentQnas = myService.getRecentQnas(memberId);
+        model.addAttribute("recentQnas", recentQnas);
+        addMyPageSummary(model, memberId);
+        return "my/qna";
+    }
+
+    // ===================== 쿠폰 =====================
+    @GetMapping("/coupon")
+    public String coupon(Model model, @AuthenticationPrincipal MyUserDetails user) {
+        String memberId = user.getMember().getMem_id();
+        List<UserCouponDTO> userCoupons = myService.getUserCouponsByMemId(memberId);
+        model.addAttribute("userCoupons", userCoupons);
+        addMyPageSummary(model, memberId);
+        return "my/coupon";
+    }
+
+    // ===================== 포인트 =====================
     @GetMapping("/point")
-    public String point(Model model, @AuthenticationPrincipal MyUserDetails user,
-                         @RequestParam(defaultValue = "1") int pg) {
-        String mem_id = user.getMember().getMem_id();
-
-        // DTO를 수정하지 않는 경우, 서비스에서 String으로 변환
-        List<PointDTO> pointHistory = myService.getPointHistory(mem_id);
+    public String point(Model model, @AuthenticationPrincipal MyUserDetails user) {
+        String memberId = user.getMember().getMem_id();
+        List<PointDTO> pointHistory = myService.getPointHistory(memberId);
         model.addAttribute("pointHistory", pointHistory);
-
-        MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-        model.addAttribute("orderCount", homeData.getOrderCount());
-        model.addAttribute("couponCount", homeData.getCouponCount());
-        model.addAttribute("pointTotal", homeData.getPointTotal());
-        model.addAttribute("qnaCount", homeData.getQnaCount());
-
+        addMyPageSummary(model, memberId);
         return "my/point";
     }
 
-    @Controller
-    @RequestMapping("/my")
-    public class MyPageController {
-
-        private final MyService myService;
-
-        public MyPageController(MyService myService) {
-            this.myService = myService;
+    // ===================== 상품 상세 =====================
+    @GetMapping("/view/{prodNo}")
+    public String viewProduct(@PathVariable String prodNo, Model model) {
+        ProductDTO product = myService.getProduct3(prodNo);
+        if (product != null) {
+            if (product.getOptions() == null) product.setOptions(myService.getProductOption3(prodNo));
+            if (product.getFiles() == null) product.setFiles(myService.getProductFiles(prodNo));
         }
-
-        @GetMapping("/qna")
-        public String qnaPage(Model model, @AuthenticationPrincipal MyUserDetails user) {
-            String mem_id = user.getMember().getMem_id();
-
-            // 최근 문의 내역
-            List<QnaDTO> recentQnas = myService.getRecentQnas(mem_id);
-            model.addAttribute("recentQnas", recentQnas);
-
-            // MyService에서 한 번에 DTO 가져오기
-            MyPageHomeDTO homeData = myService.getMyPageHomeData(mem_id);
-
-            model.addAttribute("orderCount", homeData.getOrderCount());
-            model.addAttribute("couponCount", homeData.getCouponCount());
-            model.addAttribute("pointTotal", homeData.getPointTotal());
-            model.addAttribute("qnaCount", homeData.getQnaCount());
-            model.addAttribute("recentOrders", homeData.getRecentOrders());
-            model.addAttribute("recentPoints", homeData.getRecentPoints());
-            model.addAttribute("recentReviews", homeData.getRecentReviews());
-            model.addAttribute("recentQnas", homeData.getRecentQnas());
-
-            return "my/qna";
-        }
-
+        model.addAttribute("product", product);
+        return "my/product/view";
     }
-
-
-
 }
-

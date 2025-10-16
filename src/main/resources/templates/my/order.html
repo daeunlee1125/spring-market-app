@@ -1,3 +1,4 @@
+<!-- order.html -->
 <div th:replace="~{my/_head.html}"></div>
 
 <main class="container">
@@ -32,38 +33,27 @@
                     <div class="count" th:text="${qnaCount}">1</div>
                     <div>문의</div>
                 </div>
+                <div class="info-item">
+                    <div class="count" th:text="${reviewCount}">5</div>
+                    <div>리뷰</div>
+                </div>
             </div>
         </div>
 
-        <div class="banner">
-            810 x 86 배너 광고
+        <!-- 배너 -->
+        <div class="banner" th:if="${banner != null}" th:style="'background-color:' + ${banner.ban_bg_color}">
+            <img th:if="${banner.ban_img != null}"
+                 th:src="@{'/uploads/banner/' + ${banner.ban_img}}"
+                 alt="배너" style="width:100%; height:100%; object-fit:cover;">
+            <span th:if="${banner.ban_img == null}">810 x 86 배너 광고</span>
         </div>
 
+        <!-- 기간 필터 -->
         <div class="filter-section">
-            <button>1주일</button>
-            <button>15일</button>
-            <button>1개월</button>
-            <button>2개월</button>
-            <select>
-                <option>년</option>
-            </select>
-            <select>
-                <option>월</option>
-            </select>
-            <select>
-                <option>일</option>
-            </select>
-            <span>~</span>
-            <select>
-                <option>년</option>
-            </select>
-            <select>
-                <option>월</option>
-            </select>
-            <select>
-                <option>일</option>
-            </select>
-            <button>조회</button>
+            <button onclick="filterOrders('7d')">1주일</button>
+            <button onclick="filterOrders('15d')">15일</button>
+            <button onclick="filterOrders('1m')">1개월</button>
+            <button onclick="filterOrders('2m')">2개월</button>
         </div>
 
         <table class="table-container">
@@ -75,55 +65,141 @@
                 <th>확인/신청</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="orderTableBody">
             <tr th:each="orderItem : ${orderList}">
                 <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
                 <td>
                     <div class="product-info">
-                        <img src="/images/placeholder.png" alt="상품 이미지">
+                        <img th:if="${productMap[orderItem.prod_no] != null and productMap[orderItem.prod_no].files != null and productMap[orderItem.prod_no].files.size() > 0}"
+                             th:src="@{'/uploads/' + ${productMap[orderItem.prod_no].files[0].f_name}}"
+                             alt="상품 이미지" style="width: 80px; height: 80px;">
+                        <img th:if="${productMap[orderItem.prod_no] == null or productMap[orderItem.prod_no].files == null or productMap[orderItem.prod_no].files.size() == 0}"
+                             src="/images/placeholder.png" alt="기본 이미지" style="width: 80px; height: 80px;">
                         <div class="product-details">
-                            <p>주문번호 : <a href="#" th:text="${orderItem.ord_no}" onclick="openModal('orderDetailPopup')">1012211341</a></p>
-                            <p>(주) <a href="#" onclick="openModal('sellerInfoPopup')">상호명</a></p>
-                            <p>상품명 : <span th:text="${orderItem.item_name}">상품명</span></p>
-                            <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
+                            <p>주문번호: <a href="#" class="link-order-detail" th:text="${orderItem.ord_no}" th:data-ord-no="${orderItem.ord_no}">1012211341</a></p>
+                            <p>상품명: <span th:text="${orderItem.item_name}">상품명</span></p>
+                            <p>수량: <span th:text="${orderItem.item_cnt}">1</span>개</p>
                             <strong th:if="${productMap[orderItem.prod_no] != null}"
                                     th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">34,000원</strong>
-                            <strong th:if="${productMap[orderItem.prod_no] == null}">가격 정보 없음</strong>
                         </div>
                     </div>
                 </td>
                 <td th:switch="${orderItem.item_stat}">
-                    <span th:case="1">배송전</span>
+                    <span th:case="0">결제완료</span>
+                    <span th:case="1">배송준비</span>
                     <span th:case="2">배송중</span>
                     <span th:case="3">배송완료</span>
                     <span th:case="4">구매확정</span>
+                    <span th:case="5">교환신청</span>
+                    <span th:case="6">반품신청</span>
                     <span th:case="*">상태없음</span>
                 </td>
-
                 <td>
-                    <button onclick="openModal('confirmModal')">구매확정</button>
-                    <button onclick="openModal('reviewModal')">상품평쓰기</button>
-                    <button onclick="openModal('returnModal')">반품신청</button>
-                    <button onclick="openModal('exchangeModal')">교환신청</button>
+                    <button class="btn-confirm"
+                            th:data-item-no="${orderItem.item_no}"
+                            th:disabled="${orderItem.item_stat >= 4}">구매확정</button>
+                    <button class="btn-review"
+                            th:data-prod-no="${orderItem.prod_no}"
+                            th:data-prod-name="${orderItem.item_name}"
+                            th:disabled="${orderItem.item_stat < 4}">상품평쓰기</button>
+                    <button class="btn-return"
+                            th:data-item-no="${orderItem.item_no}"
+                            th:disabled="${orderItem.item_stat != 3}">반품신청</button>
+                    <button class="btn-exchange"
+                            th:data-item-no="${orderItem.item_no}"
+                            th:disabled="${orderItem.item_stat != 3}">교환신청</button>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(recentOrders)}">
-                <td colspan="4" style="text-align: center;">최근 주문 내역이 없습니다.</td>
+            <tr th:if="${#lists.isEmpty(orderList)}">
+                <td colspan="4" style="text-align: center;">주문 내역이 없습니다.</td>
             </tr>
             </tbody>
         </table>
 
+        <!-- 페이징 -->
         <div class="pagination">
-            <button>&lt; 이전</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-            <button>5</button>
-            <button>다음 &gt;</button>
+            <button th:disabled="${currentPage == 0}" th:onclick="'goPage(' + ${currentPage - 1} + ')'">&lt; 이전</button>
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <button th:text="${i + 1}"
+                        th:onclick="'goPage(' + ${i} + ')'"
+                        th:classappend="${i == currentPage} ? 'active' : ''"></button>
+            </span>
+            <button th:disabled="${currentPage >= totalPages - 1}" th:onclick="'goPage(' + ${currentPage + 1} + ')'">다음 &gt;</button>
         </div>
     </div>
 </main>
 
 <div th:replace="~{my/modal.html}"></div>
 <div th:replace="~{my/_tail.html}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 구매확정 버튼
+        document.querySelectorAll('.btn-confirm').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemNo = this.getAttribute('data-item-no');
+                const modal = document.getElementById('confirmModal');
+                modal.dataset.itemNo = itemNo;
+                openModal('confirmModal');
+            });
+        });
+
+        // 리뷰 작성 버튼
+        document.querySelectorAll('.btn-review').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const prodNo = this.getAttribute('data-prod-no');
+                const prodName = this.getAttribute('data-prod-name');
+                document.getElementById('review_prod_no').value = prodNo;
+                document.querySelector('.product-name-display').textContent = prodName;
+                openModal('reviewModal');
+            });
+        });
+
+        // 반품 버튼
+        document.querySelectorAll('.btn-return').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemNo = this.getAttribute('data-item-no');
+                const modal = document.getElementById('returnModal');
+                modal.dataset.itemNo = itemNo;
+                openModal('returnModal');
+            });
+        });
+
+        // 교환 버튼
+        document.querySelectorAll('.btn-exchange').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemNo = this.getAttribute('data-item-no');
+                const modal = document.getElementById('exchangeModal');
+                modal.dataset.itemNo = itemNo;
+                openModal('exchangeModal');
+            });
+        });
+    });
+
+    // 페이지 이동
+    function goPage(page) {
+        window.location.href = `/shoply/my/order?page=${page}`;
+    }
+
+    // 기간별 필터
+    function filterOrders(period) {
+        fetch(`/shoply/my/order/filter?period=${period}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // 테이블 갱신 로직
+                    location.reload();
+                }
+            });
+    }
+
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.style.display = 'none';
+    }
+</script>

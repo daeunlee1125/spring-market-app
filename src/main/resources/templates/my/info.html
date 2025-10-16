@@ -1,3 +1,4 @@
+<!-- info.html -->
 <div th:replace="~{my/_head.html}"></div>
 
 <main class="container">
@@ -9,7 +10,7 @@
             <li><a th:href="@{/my/coupon}">쿠폰</a></li>
             <li><a th:href="@{/my/review}">나의리뷰</a></li>
             <li><a th:href="@{/my/qna}">문의하기</a></li>
-            <li><a th:href="@{/my/info} " class="active">나의설정</a></li>
+            <li><a th:href="@{/my/info}" class="active">나의설정</a></li>
         </ul>
     </div>
     <div class="content">
@@ -25,7 +26,6 @@
                     <div>쿠폰</div>
                 </div>
                 <div class="info-item">
-
                     <div class="count" th:text="${#numbers.formatInteger(pointTotal, 0, 'COMMA')}">1,000</div>
                     <div>포인트</div>
                 </div>
@@ -35,12 +35,14 @@
                 </div>
             </div>
         </div>
+
         <div style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
             810 x 86 배너 광고
         </div>
+
         <div class="info-section">
             <h3>나의 설정</h3>
-            <form>
+            <form id="infoForm">
                 <table class="info-table">
                     <tbody>
                     <tr>
@@ -50,7 +52,7 @@
                     <tr>
                         <th>비밀번호</th>
                         <td>
-                            <button type="button" onclick="showPasswordModal()">변경</button>
+                            <button type="button" onclick="openModal('passwordModal')">변경</button>
                         </td>
                     </tr>
                     <tr>
@@ -62,48 +64,146 @@
                         <td>
                             <input type="text" id="emailId" th:value="${#strings.substringBefore(memberInfo.mem_email, '@')}">@
                             <select id="emailDomain" onchange="checkEmailDomain()">
-                                <option th:each="domain : ${{'naver.com'}}"
-                                        th:value="${domain}" th:text="${domain} == 'self' ? '직접입력' : ${domain}"
-                                        th:selected="${#strings.substringAfter(memberInfo.mem_email, '@') == domain}">
-                                </option>
+                                <option value="naver.com">naver.com</option>
+                                <option value="gmail.com">gmail.com</option>
+                                <option value="self">직접입력</option>
                             </select>
-                            <input type="text" id="emailInput" placeholder="직접입력"
-                                   th:style="${#strings.substringAfter(memberInfo.mem_email, '@') == 'self'} ? 'display: inline-block;' : 'display: none;'">
-                            <button type="button" onclick="editEmail()">수정하기</button>
+                            <input type="text" id="emailInput" placeholder="직접입력" style="display:none;">
                         </td>
                     </tr>
                     <tr>
                         <th>휴대폰</th>
                         <td>
-                            <input type="text" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[0]}" style="width: 50px;"> -
-                            <input type="text" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[1]}" style="width: 50px;"> -
-                            <input type="text" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[2]}" style="width: 50px;">
-                            <button type="button" onclick="editPhone()">수정하기</button>
+                            <input type="text" id="hp1" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[0]}" style="width: 50px;"> -
+                            <input type="text" id="hp2" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[1]}" style="width: 50px;"> -
+                            <input type="text" id="hp3" th:value="${#strings.arraySplit(memberInfo.mem_hp, '-')[2]}" style="width: 50px;">
                         </td>
                     </tr>
                     <tr>
                         <th>주소</th>
                         <td>
                             <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                                <input type="text" placeholder="우편번호" style="width: 80px;" th:value="${memberInfo.mem_zip}" readonly>
+                                <input type="text" id="zipcode" name="mem_zip" placeholder="우편번호" th:value="${memberInfo.mem_zip}" readonly style="width: 80px;">
                                 <button type="button" onclick="searchAddress()">주소검색</button>
                             </div>
-                            <input type="text" class="address-input" placeholder="기본주소입력" style="width: 400px;" th:value="${memberInfo.mem_addr1}" readonly>
-                            <input type="text" class="address-input" placeholder="상세주소입력" style="width: 400px; margin-top: 5px;" th:value="${memberInfo.mem_addr2}">
+                            <input type="text" id="addr1" name="mem_addr1" placeholder="기본주소입력" style="width: 400px;" th:value="${memberInfo.mem_addr1}" readonly>
+                            <input type="text" id="addr2" name="mem_addr2" placeholder="상세주소입력" style="width: 400px; margin-top: 5px;" th:value="${memberInfo.mem_addr2}">
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <br>
-                <td>
+
+                <div style="margin-top: 10px;">
                     <button type="button" class="withdrawal-btn" onclick="confirmWithdrawal()">탈퇴하기</button>
-                </td>
-                <div class="button-group">
-                    <button type="submit" class="save-btn" onclick="saveChanges()">수정하기</button>
+                    <button type="button" class="save-btn" onclick="saveChanges()">수정하기</button>
                 </div>
             </form>
         </div>
     </div>
 </main>
 
+<div th:replace="~{my/modal.html}"></div>
 <div th:replace="~{my/_tail.html}"></div>
+
+<script>
+    // 이메일 도메인 선택
+    function checkEmailDomain() {
+        document.getElementById('emailInput').style.display =
+            document.getElementById('emailDomain').value === 'self' ? 'inline-block' : 'none';
+    }
+
+    // 주소 검색 (Daum 우편번호 API)
+    function searchAddress() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                document.getElementById('addr1').value = data.address;
+                document.getElementById('zipcode').value = data.zonecode;
+            }
+        }).open();
+    }
+
+    // 회원 탈퇴
+    function confirmWithdrawal() {
+        if (!confirm('정말 탈퇴하시겠습니까?')) return;
+
+        fetch('/shoply/my/info/withdrawal', { method: 'POST' })
+            .then(res => {
+                if (res.ok) {
+                    alert('회원 탈퇴가 완료되었습니다.');
+                    window.location.href = '/';
+                } else {
+                    alert('탈퇴 실패');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('오류가 발생했습니다.');
+            });
+    }
+
+    // 전체 정보 수정 저장
+    function saveChanges() {
+        const emailId = document.getElementById('emailId').value.trim();
+        const domain = document.getElementById('emailDomain').value === 'self'
+            ? document.getElementById('emailInput').value.trim()
+            : document.getElementById('emailDomain').value;
+
+        if (!emailId || !domain) {
+            alert('이메일을 올바르게 입력해주세요.');
+            return;
+        }
+
+        const hp1 = document.getElementById('hp1').value.trim();
+        const hp2 = document.getElementById('hp2').value.trim();
+        const hp3 = document.getElementById('hp3').value.trim();
+
+        if (!hp1 || !hp2 || !hp3) {
+            alert('휴대폰 번호를 올바르게 입력해주세요.');
+            return;
+        }
+
+        const memberData = {
+            mem_email: `${emailId}@${domain}`,
+            mem_hp: `${hp1}-${hp2}-${hp3}`,
+            mem_zip: document.getElementById('zipcode').value,
+            mem_addr1: document.getElementById('addr1').value,
+            mem_addr2: document.getElementById('addr2').value
+        };
+
+        fetch('/shoply/my/info/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(memberData)
+        })
+            .then(res => res.text())
+            .then(data => {
+                if (data === 'success') {
+                    alert('회원 정보가 수정되었습니다.');
+                    location.reload();
+                } else {
+                    alert('수정 실패');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('오류가 발생했습니다.');
+            });
+    }
+
+    // 모달 공통 함수
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+</script>

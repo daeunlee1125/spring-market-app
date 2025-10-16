@@ -53,9 +53,10 @@ public class AdminProductService {
                 .toList();
     }
 
+    //상품목록
     public List<ProductListDTO> getProductList(String memId, int memLevel){
 
-        return null;
+        return adminProductMapper.selectProductList(memId, memLevel);
     }
 
 

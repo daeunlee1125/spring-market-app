@@ -23,4 +23,6 @@ public class IndexController {
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
         return "index";
     }
+
+
 }

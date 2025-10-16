@@ -99,7 +99,7 @@
                 <div class="img-box">
                     <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                 </div>
-                <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
+                <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}" class="name" th:text="${p.prod_name}"></a>
                 <div class="price-box">
                     <div class="price-top">
                         <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
@@ -121,7 +121,7 @@
                         <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                     </div>
                     <div class="info">
-                        <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}" class="name" th:text="${p.prod_name}"></a>
                         <div class="price-box">
                             <div class="price-top2">
                                 <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
@@ -221,7 +221,7 @@
 
                     <!-- 히트상품 리스트 반복 -->
                     <div th:each="p : ${hitProducts}" class="product-box">
-                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prod_no=${p.getProd_no()})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
                             <!-- 상품명 -->

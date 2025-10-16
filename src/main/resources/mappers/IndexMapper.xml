@@ -9,6 +9,7 @@
     <select id="selectNewProducts" resultType="kr.co.shoply.dto.ProductDTO">
         SELECT
         p.prod_no,
+        p.cate2_no,
         p.prod_name,
         p.prod_price,
         p.prod_sale,
@@ -31,6 +32,7 @@
     <select id="selectHitProducts" resultType="kr.co.shoply.dto.ProductDTO">
         SELECT
         p.prod_no,
+        p.cate2_no,
         p.prod_name,
         p.prod_price,
         p.prod_sale,
@@ -55,6 +57,7 @@
     <select id="selectRecommendedProducts" resultType="kr.co.shoply.dto.ProductDTO">
         SELECT
         p.prod_no,
+        p.cate2_no,
         p.prod_name,
         p.prod_price,
         p.prod_sale,
@@ -82,6 +85,7 @@
     <select id="selectBestProducts" resultType="kr.co.shoply.dto.ProductDTO">
         SELECT
         p.prod_no,
+        p.cate2_no,
         p.prod_name,
         p.prod_price,
         p.prod_sale,
@@ -105,6 +109,7 @@
     <select id="selectDiscountProducts" resultType="kr.co.shoply.dto.ProductDTO">
         SELECT
         p.prod_no,
+        p.cate2_no,
         p.prod_name,
         p.prod_price,
         p.prod_sale,
@@ -128,6 +133,7 @@
     <select id="selectSidebarBestProducts" resultType="kr.co.shoply.dto.ProductDTO">
         SELECT
         p.prod_no,
+        p.cate2_no,
         p.prod_name,
         p.prod_price,
         p.prod_sale,

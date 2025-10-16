@@ -43,21 +43,30 @@
         FROM SYS_COUPON s
         LEFT JOIN USER_COUPON u ON s.cp_code = u.cp_code
         LEFT JOIN MEMBER m ON s.cp_issuer_id = m.mem_id
+
         <where>
             <if test="keyword != null and keyword != ''">
                 <choose>
+                    <!-- 쿠폰명 검색 -->
                     <when test="searchType == 'name'">
                         AND s.cp_name LIKE '%' || #{keyword} || '%'
                     </when>
+                    <!-- 쿠폰코드 검색 -->
                     <when test="searchType == 'code'">
                         AND s.cp_code LIKE '%' || #{keyword} || '%'
                     </when>
+                    <!--  쿠폰종류 검색 (부분검색 + 한글명 검색 가능) -->
                     <when test="searchType == 'type'">
-                        AND s.cp_type LIKE '%' || #{keyword} || '%'
+                        AND CASE s.cp_type
+                        WHEN 1 THEN '개별상품 할인'
+                        WHEN 2 THEN '주문상품 할인'
+                        WHEN 3 THEN '배송비 무료'
+                        END LIKE '%' || #{keyword} || '%'
                     </when>
                 </choose>
             </if>
         </where>
+
         GROUP BY s.cp_code, s.cp_name, s.cp_type, s.cp_value,
         s.cp_min_price, s.cp_issue_date, s.cp_exp_date,
         s.cp_stat, s.cp_issuer_id, s.cp_note, m.mem_name

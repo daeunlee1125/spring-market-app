@@ -20,7 +20,7 @@
         m.mem_rank,
         m.mem_stat,
         m.mem_rdate,
-        NVL(p.p_point, 0) AS p_point,
+        NVL(SUM(p.p_point), 0) AS p_point,  <!-- 포인트 누적합 -->
         m.mem_note
         FROM MEMBER m
         LEFT JOIN POINT p ON m.mem_id = p.mem_id
@@ -43,12 +43,17 @@
                 </choose>
             </if>
         </where>
+        <!--  회원별로 그룹핑 -->
+        GROUP BY m.mem_id, m.mem_name, m.mem_email, m.mem_hp,
+        m.mem_gen, m.mem_rank, m.mem_stat, m.mem_rdate, m.mem_note
+
         ORDER BY m.mem_rdate DESC
         ) a
         WHERE ROWNUM &lt;= #{offset} + #{size}
         )
         WHERE rnum &gt; #{offset}
     </select>
+
 
     <!-- 전체 회원 수 카운트 -->
     <select id="selectMemberTotal" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="int">

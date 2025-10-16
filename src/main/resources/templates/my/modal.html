@@ -1,68 +1,14 @@
-
+<!-- modal.html -->
 <!-- 주문 상세 모달 -->
 <div id="orderDetailPopup" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>주문상세 20xx-12-13</h4>
+            <h4>주문상세</h4>
             <span class="close-btn" onclick="closeModal('orderDetailPopup')">&times;</span>
         </div>
-
         <div class="order-info">
             <h5>주문정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td colspan="2">
-                        <div class="product-details">
-                            <img src="/images/placeholder.png" alt="상품 이미지" style="width: 80px; height: 80px; margin-right: 15px; display: inline-block; vertical-align: middle;">
-                            <div style="display: inline-block; vertical-align: middle;">
-                                <p>주문번호 : 1012211341</p>
-                                <p>(주) 상호명</p>
-                                <p>상품명 : 상품명</p>
-                                <p>수량 : 1개</p>
-                                <strong>34,000원</strong>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>결제금액</td>
-                    <td>
-                        <p>판매가 34,000원</p>
-                        <p>할인 -3,000원</p>
-                        <p>결제금액 <strong>34,000원</strong></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>상태</td>
-                    <td>배송완료</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="delivery-info">
-            <h5>배송정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td>이름</td>
-                    <td>홍길동</td>
-                </tr>
-                <tr>
-                    <td>연락처</td>
-                    <td>010-1234-1001</td>
-                </tr>
-                <tr>
-                    <td>주소</td>
-                    <td>부산광역시 부산진구 대연동 121 10층 1004호</td>
-                </tr>
-                <tr>
-                    <td>배송요청사항</td>
-                    <td>없음</td>
-                </tr>
-                </tbody>
-            </table>
+            <p>주문번호: <span id="orderDetailNo">-</span></p>
         </div>
     </div>
 </div>
@@ -77,85 +23,58 @@
         <table class="info-table">
             <tbody>
             <tr>
-                <td class="label" style="width: 150px; background-color: #f9f9f9;">상호</td>
+                <td class="label" style="width: 150px;">상호</td>
                 <td>(주) 상호명</td>
             </tr>
             <tr>
-                <td class="label" style="background-color: #f9f9f9;">대표자</td>
+                <td class="label">대표자</td>
                 <td>홍길동</td>
-            </tr>
-            <tr>
-                <td class="label" style="background-color: #f9f9f9;">전화번호</td>
-                <td>051-123-1000</td>
-            </tr>
-            <tr>
-                <td class="label" style="background-color: #f9f9f9;">FAX</td>
-                <td>051-123-1001</td>
-            </tr>
-            <tr>
-                <td class="label" style="background-color: #f9f9f9;">Email</td>
-                <td>company@abc.com</td>
-            </tr>
-            <tr>
-                <td class="label" style="background-color: #f9f9f9;">사업자번호</td>
-                <td>123-12-123457</td>
-            </tr>
-            <tr>
-                <td class="label" style="background-color: #f9f9f9;">영업장소재지</td>
-                <td>부산광역시 부산진구 대연동 121 10층 1004호</td>
             </tr>
             </tbody>
         </table>
         <div style="text-align: right; margin-top: 20px;">
-            <button onclick="openModal('qnaPopup'); closeModal('sellerInfoPopup');" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer;">문의하기</button>
+            <button onclick="openModal('qnaPopup'); closeModal('sellerInfoPopup');">문의하기</button>
         </div>
     </div>
 </div>
 
-
+<!-- 문의하기 모달 -->
 <div id="qnaPopup" class="modal">
     <div class="modal-content" style="width: 500px;">
         <div class="modal-header">
             <h4>문의하기</h4>
             <span class="close-btn" onclick="closeModal('qnaPopup')">&times;</span>
         </div>
-        <form>
+        <form id="qnaForm">
             <table class="info-table">
                 <tbody>
                 <tr>
-                    <td class="label" style="width: 100px; background-color: #f9f9f9;">문의유형</td>
+                    <td class="label">문의유형</td>
                     <td>
-                        <input type="radio" name="qna_type" value="상품" id="qna1"> <label for="qna1">상품</label>
-                        <input type="radio" name="qna_type" value="배송" id="qna2"> <label for="qna2">배송</label>
-                        <input type="radio" name="qna_type" value="환불/반품" id="qna3"> <label for="qna3">환불/반품</label>
-                        <input type="radio" name="qna_type" value="교환" id="qna4"> <label for="qna4">교환</label>
-                        <input type="radio" name="qna_type" value="기타" id="qna5"> <label for="qna5">기타</label>
+                        <input type="radio" name="qna_type" value="상품"> 상품
+                        <input type="radio" name="qna_type" value="배송"> 배송
+                        <input type="radio" name="qna_type" value="기타"> 기타
                     </td>
                 </tr>
                 <tr>
-                    <td class="label" style="background-color: #f9f9f9;">Email</td>
-                    <td><input type="email" name="email" value="chh**@gmail.com" readonly style="width: 95%; padding: 8px;"></td>
+                    <td class="label">제목</td>
+                    <td><input type="text" name="title" style="width: 95%;"></td>
                 </tr>
                 <tr>
-                    <td class="label" style="background-color: #f9f9f9;">제목</td>
-                    <td><input type="text" name="title" style="width: 95%; padding: 8px;"></td>
-                </tr>
-                <tr>
-                    <td class="label" style="background-color: #f9f9f9;">내용</td>
-                    <td><textarea name="content" style="width: 95%; height: 150px; padding: 8px;"></textarea></td>
+                    <td class="label">내용</td>
+                    <td><textarea name="content" style="width: 95%; height: 150px;"></textarea></td>
                 </tr>
                 </tbody>
             </table>
             <div style="text-align: right; margin-top: 20px;">
-                <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">등록하기</button>
-                <button type="button" onclick="openModal('sellerInfoPopup'); closeModal('qnaPopup');" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+                <button type="submit">등록하기</button>
+                <button type="button" onclick="closeModal('qnaPopup')">취소</button>
             </div>
         </form>
     </div>
 </div>
 
-
-<!-- ✅ 구매확정 모달 추가 -->
+<!-- 구매확정 모달 -->
 <div id="confirmModal" class="modal">
     <div class="modal-content" style="width: 400px; text-align: center;">
         <div class="modal-header">
@@ -165,35 +84,36 @@
         <p>상품을 받으셨나요?</p>
         <p>상품을 받으신 분만 구매확정을 해주세요.</p>
         <div style="margin-top: 20px;">
-            <button style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">확인</button>
+            <button id="confirmOrderBtn" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">확인</button>
             <button onclick="closeModal('confirmModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
         </div>
     </div>
 </div>
 
-<!-- 상품평 작성 모달 -->
+<!-- 리뷰 작성 모달 -->
 <div id="reviewModal" class="modal">
     <div class="modal-content" style="width: 500px;">
         <div class="modal-header">
             <h4>상품평 작성하기</h4>
             <span class="close-btn" onclick="closeModal('reviewModal')">&times;</span>
         </div>
-        <form>
+        <form id="reviewForm">
+            <input type="hidden" name="prod_no" id="review_prod_no">
             <table class="info-table">
                 <tbody>
                 <tr>
-                    <td class="label" style="width: 100px; background-color: #f9f9f9;">상품명</td>
-                    <td><p>상품명 출력</p></td>
+                    <td class="label">상품명</td>
+                    <td><p class="product-name-display">상품명</p></td>
                 </tr>
                 <tr>
-                    <td class="label" style="background-color: #f9f9f9;">만족도</td>
+                    <td class="label">만족도</td>
                     <td>
                         <div class="rating-container">
                             <input type="radio" name="rating" id="star5" value="5">
                             <label for="star5">★</label>
                             <input type="radio" name="rating" id="star4" value="4">
                             <label for="star4">★</label>
-                            <input type="radio" name="rating" id="star3" value="3">
+                            <input type="radio" name="rating" id="star3" value="3" checked>
                             <label for="star3">★</label>
                             <input type="radio" name="rating" id="star2" value="2">
                             <label for="star2">★</label>
@@ -203,154 +123,320 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="label" style="background-color: #f9f9f9;">내용</td>
+                    <td class="label">내용</td>
                     <td>
-                        <textarea name="content" style="width: 95%; height: 100px; padding: 8px;" placeholder="최소 10자 이상 200자 이내로 작성하세요"></textarea>
+                        <textarea name="content" id="review_content" style="width: 95%; height: 100px;" placeholder="최소 10자 이상"></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td class="label" style="background-color: #f9f9f9;">사진</td>
+                    <td class="label">사진</td>
                     <td>
-                        <input type="file" name="file1"><br>
-                        <input type="file" name="file2"><br>
-                        <input type="file" name="file3">
+                        <input type="file" name="file1" accept="image/*"><br>
+                        <input type="file" name="file2" accept="image/*"><br>
+                        <input type="file" name="file3" accept="image/*">
                     </td>
                 </tr>
                 </tbody>
             </table>
             <div style="text-align: right; margin-top: 20px;">
-                <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">작성완료</button>
-                <button type="button" onclick="closeModal('reviewModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+                <button type="submit">작성완료</button>
+                <button type="button" onclick="closeModal('reviewModal')">취소</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- 반품 신청 모달 -->
+<!-- 반품/교환 모달 -->
 <div id="returnModal" class="modal">
     <div class="modal-content" style="width: 600px;">
         <div class="modal-header">
             <h4>반품신청</h4>
             <span class="close-btn" onclick="closeModal('returnModal')">&times;</span>
         </div>
-
-        <div class="order-info">
-            <h5>상품정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td colspan="2">
-                        <div class="product-details" style="display: flex; align-items: center;">
-                            <img src="/images/placeholder.png" alt="상품 이미지" style="width: 80px; height: 80px; margin-right: 15px;">
-                            <div>
-                                <p>주문번호 : 1012211341</p>
-                                <p>(주) 상호명</p>
-                                <p>상품명 : 상품명</p>
-                                <p>수량 : 1개</p>
-                                <strong>34,000원</strong>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="delivery-info">
-            <h5>반품정보 입력</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td class="label" style="width: 150px; background-color: #f9f9f9;">반품유형</td>
-                    <td>
-                        <input type="radio" name="return_type" value="단순 변심" id="ret1"> <label for="ret1">단순 변심</label>
-                        <input type="radio" name="return_type" value="파손 및 불량" id="ret2"> <label for="ret2">파손 및 불량</label>
-                        <input type="radio" name="return_type" value="주문 실수" id="ret3"> <label for="ret3">주문 실수</label>
-                        <input type="radio" name="return_type" value="기타" id="ret4"> <label for="ret4">기타</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label" style="background-color: #f9f9f9;">사유입력</td>
-                    <td><textarea style="width: 95%; height: 100px; padding: 8px;"></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label" style="background-color: #f9f9f9;">사진첨부(선택)</td>
-                    <td>
-                        <input type="file">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
+        <p>반품 신청 내용</p>
         <div style="text-align: right; margin-top: 20px;">
-            <button style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">반품신청</button>
-            <button onclick="closeModal('returnModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+            <button onclick="closeModal('returnModal')">닫기</button>
         </div>
     </div>
 </div>
 
-<!-- 교환 신청 모달 -->
 <div id="exchangeModal" class="modal">
     <div class="modal-content" style="width: 600px;">
         <div class="modal-header">
             <h4>교환신청</h4>
             <span class="close-btn" onclick="closeModal('exchangeModal')">&times;</span>
         </div>
-
-        <div class="order-info">
-            <h5>상품정보</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td colspan="2">
-                        <div class="product-details" style="display: flex; align-items: center;">
-                            <img src="/images/placeholder.png" alt="상품 이미지" style="width: 80px; height: 80px; margin-right: 15px;">
-                            <div>
-                                <p>주문번호 : 1012211341</p>
-                                <p>(주) 상호명</p>
-                                <p>상품명 : 상품명</p>
-                                <p>수량 : 1개</p>
-                                <strong>34,000원</strong>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="delivery-info">
-            <h5>교환정보 입력</h5>
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td class="label" style="width: 150px; background-color: #f9f9f9;">교환유형</td>
-                    <td>
-                        <input type="radio" name="exchange_type" value="단순 변심" id="ex1"> <label for="ex1">단순 변심</label>
-                        <input type="radio" name="exchange_type" value="파손 및 불량" id="ex2"> <label for="ex2">파손 및 불량</label>
-                        <input type="radio" name="exchange_type" value="주문 실수" id="ex3"> <label for="ex3">주문 실수</label>
-                        <input type="radio" name="exchange_type" value="기타" id="ex4"> <label for="ex4">기타</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label" style="background-color: #f9f9f9;">사유입력</td>
-                    <td><textarea style="width: 95%; height: 100px; padding: 8px;"></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label" style="background-color: #f9f9f9;">사진첨부(선택)</td>
-                    <td>
-                        <input type="file">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
+        <p>교환 신청 내용</p>
         <div style="text-align: right; margin-top: 20px;">
-            <button style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">교환신청</button>
-            <button onclick="closeModal('exchangeModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+            <button onclick="closeModal('exchangeModal')">닫기</button>
         </div>
     </div>
 </div>
 
+<!-- 비밀번호 변경 모달 -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content" style="width: 400px;">
+        <div class="modal-header">
+            <h4>비밀번호 변경</h4>
+            <span class="close-btn" onclick="closeModal('passwordModal')">&times;</span>
+        </div>
+        <form id="passwordForm">
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td class="label" style="width: 120px;">현재 비밀번호</td>
+                    <td>
+                        <input type="password" id="currentPassword" style="width: 95%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">새 비밀번호</td>
+                    <td>
+                        <input type="password" id="newPassword" style="width: 95%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">비밀번호 확인</td>
+                    <td>
+                        <input type="password" id="confirmPassword" style="width: 95%; padding: 8px;">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">변경하기</button>
+                <button type="button" onclick="closeModal('passwordModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 반품 모달 -->
+<div id="returnModal" class="modal">
+    <div class="modal-content" style="width: 600px;">
+        <div class="modal-header">
+            <h4>반품신청</h4>
+            <span class="close-btn" onclick="closeModal('returnModal')">&times;</span>
+        </div>
+        <form id="returnForm">
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td class="label" style="width: 120px;">반품 사유</td>
+                    <td>
+                        <select name="reason" style="width: 95%; padding: 8px;">
+                            <option value="">선택하세요</option>
+                            <option value="단순변심">단순변심</option>
+                            <option value="상품불량">상품불량</option>
+                            <option value="배송지연">배송지연</option>
+                            <option value="상품정보불일치">상품정보불일치</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">상세 내용</td>
+                    <td>
+                        <textarea name="detail" style="width: 95%; height: 100px;" placeholder="반품 사유를 자세히 입력해주세요"></textarea>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">신청하기</button>
+                <button type="button" onclick="closeModal('returnModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 교환 모달 -->
+<div id="exchangeModal" class="modal">
+    <div class="modal-content" style="width: 600px;">
+        <div class="modal-header">
+            <h4>교환신청</h4>
+            <span class="close-btn" onclick="closeModal('exchangeModal')">&times;</span>
+        </div>
+        <form id="exchangeForm">
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td class="label" style="width: 120px;">교환 사유</td>
+                    <td>
+                        <select name="reason" style="width: 95%; padding: 8px;">
+                            <option value="">선택하세요</option>
+                            <option value="사이즈/색상 변경">사이즈/색상 변경</option>
+                            <option value="상품불량">상품불량</option>
+                            <option value="오배송">오배송</option>
+                            <option value="상품정보불일치">상품정보불일치</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">상세 내용</td>
+                    <td>
+                        <textarea name="detail" style="width: 95%; height: 100px;" placeholder="교환 사유를 자세히 입력해주세요"></textarea>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">신청하기</button>
+                <button type="button" onclick="closeModal('exchangeModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 반품 신청 폼
+        const returnForm = document.getElementById('returnForm');
+        if (returnForm) {
+            returnForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const modal = document.getElementById('returnModal');
+                const itemNo = modal.dataset.itemNo;
+                const reason = returnForm.querySelector('select[name="reason"]').value;
+                const detail = returnForm.querySelector('textarea[name="detail"]').value.trim();
+
+                if (!reason) {
+                    alert('반품 사유를 선택해주세요.');
+                    return;
+                }
+
+                if (!detail) {
+                    alert('상세 내용을 입력해주세요.');
+                    return;
+                }
+
+                const fullReason = reason + (detail ? ' - ' + detail : '');
+
+                fetch(`/shoply/my/order/return?item_no=${itemNo}&reason=${encodeURIComponent(fullReason)}`, {
+                    method: 'POST'
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('반품 신청이 완료되었습니다.');
+                            closeModal('returnModal');
+                            returnForm.reset();
+                            location.reload();
+                        } else {
+                            alert('반품 신청 실패: ' + data);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        }
+
+        // 교환 신청 폼
+        const exchangeForm = document.getElementById('exchangeForm');
+        if (exchangeForm) {
+            exchangeForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const modal = document.getElementById('exchangeModal');
+                const itemNo = modal.dataset.itemNo;
+                const reason = exchangeForm.querySelector('select[name="reason"]').value;
+                const detail = exchangeForm.querySelector('textarea[name="detail"]').value.trim();
+
+                if (!reason) {
+                    alert('교환 사유를 선택해주세요.');
+                    return;
+                }
+
+                if (!detail) {
+                    alert('상세 내용을 입력해주세요.');
+                    return;
+                }
+
+                const fullReason = reason + (detail ? ' - ' + detail : '');
+
+                fetch(`/shoply/my/order/exchange?item_no=${itemNo}&reason=${encodeURIComponent(fullReason)}`, {
+                    method: 'POST'
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('교환 신청이 완료되었습니다.');
+                            closeModal('exchangeModal');
+                            exchangeForm.reset();
+                            location.reload();
+                        } else {
+                            alert('교환 신청 실패: ' + data);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        }
+    });
+</script>
+<script>
+    // 비밀번호 변경 폼 제출
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordForm = document.getElementById('passwordForm');
+        if (passwordForm) {
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const currentPassword = document.getElementById('currentPassword').value.trim();
+                const newPassword = document.getElementById('newPassword').value.trim();
+                const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+                if (!currentPassword) {
+                    alert('현재 비밀번호를 입력해주세요.');
+                    return;
+                }
+
+                if (!newPassword) {
+                    alert('새 비밀번호를 입력해주세요.');
+                    return;
+                }
+
+                if (newPassword.length < 6) {
+                    alert('비밀번호는 최소 6자 이상이어야 합니다.');
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    alert('비밀번호가 일치하지 않습니다.');
+                    return;
+                }
+
+                fetch('/shoply/my/info/changePassword', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        currentPassword: currentPassword,
+                        newPassword: newPassword
+                    })
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('비밀번호가 변경되었습니다.');
+                            closeModal('passwordModal');
+                            passwordForm.reset();
+                        } else {
+                            alert('비밀번호 변경 실패: ' + data);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        }
+    });
+
+
+</script>

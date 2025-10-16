@@ -59,8 +59,14 @@
                         <span th:text="${#numbers.formatInteger(coupon.cp_min_price, 3, 'COMMA')} + '원 이상 구매시'">10,000원 이상 구매시</span>
                         <span th:if="${coupon.cp_type == 1}">(중복 가능)</span>
                     </td>
-                    <td th:text="${coupon.cp_stat}">사용가능</td>
-                    <td th:text="${#dates.format(coupon.cp_exp_date, 'yyyy-MM-dd')}">~12/31</td>
+                    <td>
+                        <!-- cp_stat: 0-사용, 1-사용가능, 2-발급중단, 3-발급종료 -->
+                        <span th:if="${coupon.cp_stat == 0}" style="color: #999;">사용완료</span>
+                        <span th:if="${coupon.cp_stat == 1}" style="color: #946ccf; font-weight: bold;">사용가능</span>
+                        <span th:if="${coupon.cp_stat == 2}" style="color: #ff6b6b;">발급중단</span>
+                        <span th:if="${coupon.cp_stat == 3}" style="color: #999;">발급종료</span>
+                    </td>
+                    <td th:text="${coupon.cp_exp_date != null ? #dates.format(coupon.cp_exp_date, 'yyyy-MM-dd') : '기간 없음'}"></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(userCoupons)}">
                     <td colspan="5" style="text-align: center;">쿠폰 내역이 없습니다.</td>
@@ -79,7 +85,6 @@
                 <li>유효기간이 지난 쿠폰은 자동 소멸됩니다.</li>
             </ul>
         </div>
-
 
     </div>
 </main>

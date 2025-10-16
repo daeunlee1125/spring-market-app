@@ -24,4 +24,56 @@
         OFFSET 0 row FETCH NEXT 4 ROWS ONLY
     </select>
 
+    <select id="selectQnaAll3" resultType="kr.co.shoply.dto.QnaDTO">
+        SELECT *
+        FROM QNA
+        <where>
+            <if test="cate1 != null and cate1 != ''">
+                AND Q_CATE1 = #{cate1}
+            </if>
+            <if test="cate2 != null and cate2 != ''">
+                AND Q_CATE2 = #{cate2}
+            </if>
+        </where>
+        ORDER BY Q_NO DESC
+    </select>
+
+    <!-- 1. 필터링된 전체 QNA 개수를 가져오는 쿼리 -->
+    <select id="selectQnaCnt3" resultType="int" parameterType="kr.co.shoply.dto.PageRequestDTO">
+        SELECT COUNT(*)
+        FROM QNA
+        <where>
+            <if test="cate1 != null and cate1 != ''">
+                AND Q_CATE1 = #{cate1}
+            </if>
+            <if test="cate2 != null and cate2 != ''">
+                AND Q_CATE2 = #{cate2}
+            </if>
+        </where>
+    </select>
+
+    <!-- 2. 필터링 및 페이징이 적용된 QNA 목록을 가져오는 쿼리 (Oracle 기준) -->
+    <select id="selectQnaByCate3" resultType="kr.co.shoply.dto.QnaDTO" parameterType="kr.co.shoply.dto.PageRequestDTO">
+        SELECT *
+        FROM QNA
+        <where>
+            <if test="cate1 != null and cate1 != ''">
+                AND Q_CATE1 = #{cate1}
+            </if>
+            <if test="cate2 != null and cate2 != ''">
+                AND Q_CATE2 = #{cate2}
+            </if>
+        </where>
+        ORDER BY Q_NO DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+
+    <delete id="deleteQnaList3" parameterType="java.util.List">
+        DELETE FROM QNA
+        WHERE Q_NO IN
+        <foreach item="q_no" collection="list" open="(" separator="," close=")">
+            #{q_no}
+        </foreach>
+    </delete>
+
 </mapper>

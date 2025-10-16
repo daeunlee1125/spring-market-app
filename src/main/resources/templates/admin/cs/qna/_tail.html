@@ -8,30 +8,3 @@
     </div>
 </footer>
 
-
-
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // 열기 버튼
-        document.querySelectorAll(".openModalBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                const targetId = btn.dataset.target;
-                if (targetId && document.getElementById(targetId)) {
-                    document.getElementById(targetId).classList.remove("hidden");
-                }
-            });
-        });
-
-        // 닫기 버튼 + 배경 클릭
-        document.querySelectorAll(".modal").forEach(modal => {
-            modal.addEventListener("click", (e) => {
-                if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                    modal.classList.add("hidden");
-                }
-            });
-        });
-    });
-</script>

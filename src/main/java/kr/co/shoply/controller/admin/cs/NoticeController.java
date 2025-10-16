@@ -34,7 +34,7 @@ public class NoticeController {
         model.addAttribute("pageResponse", pageResponse);
         model.addAttribute("csType", csType);
 
-        return "/admin/cs/notice/list";
+        return "admin/cs/notice/list";
     }
 
     // 글 삭제(체크박스)

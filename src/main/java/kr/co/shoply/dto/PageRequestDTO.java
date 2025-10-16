@@ -38,6 +38,10 @@ public class PageRequestDTO {
         return (pg - 1) * size;
     }
 
+    // ✅ QNA 필터링을 위한 필드 추가
+    private String cate1;
+    private String cate2;
+
     public Pageable getPageable(String sort) {
         return PageRequest.of(this.pg - 1, this.size, Sort.by(sort).descending());
     }

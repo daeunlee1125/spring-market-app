@@ -16,8 +16,10 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("newProducts", indexService.getNewProducts());
-        //model.addAttribute("hitProducts", indexService.getHitProducts());
-        //model.addAttribute("recommendedProducts", indexService.getRecommendedProducts());
+        model.addAttribute("hitProducts", indexService.getHitProducts());
+        model.addAttribute("recommendedProducts", indexService.getRecommendedProducts());
+        model.addAttribute("bestProducts", indexService.getBestProducts());
+        model.addAttribute("discountProducts", indexService.getDiscountProducts());
         return "index";
     }
 }

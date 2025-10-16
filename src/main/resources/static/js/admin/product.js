@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    const cate1 = document.querySelector('select[name="cate1"]');
-    const cate2 = document.querySelector('select[name="cate2"]');
+    const cate1 = document.querySelector('select[name="cate1_no"]');
+    const cate2 = document.querySelector('select[name="cate2_no"]');
 
     cate1.addEventListener('change', async function (){
             try{
@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <th>옵션${next}</th>
-            <td><input type="text" name="option${next}" class="input-1"></td>
+            <td><input type="text" name="optNames" class="input-1"></td>
             <th>옵션${next} 항목</th>
-            <td><input type="text" name="option${next}_items" class="input-1"></td>
+            <td><input type="text" name="optVals" class="input-1"></td>
         `;
         table.appendChild(tr);
     });

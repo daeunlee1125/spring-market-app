@@ -74,10 +74,14 @@
                                  alt="기본 상품 이미지"/>
                             <div class="product-details">
                                 <p>주문번호 :
-                                    <a href="#" th:text="${orderItem.ord_no}" onclick="openModal('orderDetailPopup')"></a>
+                                    <a href="#"
+                                       class="order-number-link"
+                                       th:text="${orderItem.ord_no}"
+                                       th:data-ord-no="${orderItem.ord_no}"
+                                       th:data-item-no="${orderItem.item_no}"></a>
                                 </p>
                                 <p>(주) <a href="#" onclick="openModal('sellerInfoPopup')">상호명</a></p>
-                                <p>상품명 : <span th:text="${orderItem.item_name}">상품명</span></p>
+                                <span th:text="${productMap[orderItem.prod_no].prod_name}">상품명</span>
                                 <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
                                 <strong th:if="${productMap[orderItem.prod_no] != null}"
                                         th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">
@@ -88,10 +92,13 @@
                         </div>
                     </td>
                     <td th:switch="${orderItem.item_stat}">
-                        <span th:case="1">배송전</span>
+                        <span th:case="0">결제완료</span>
+                        <span th:case="1">배송준비</span>
                         <span th:case="2">배송중</span>
                         <span th:case="3">배송완료</span>
                         <span th:case="4">구매확정</span>
+                        <span th:case="5">교환신청</span>
+                        <span th:case="6">반품신청</span>
                         <span th:case="*">상태없음</span>
                     </td>
                     <!-- home.html의 최근 주문내역 테이블 부분 -->
@@ -232,11 +239,69 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        // ===== 주문번호 클릭 시 상세정보 조회 =====
+        document.querySelectorAll('.order-number-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const ordNo = this.getAttribute('data-ord-no');
+                const itemNo = this.getAttribute('data-item-no');
+
+                fetch(`/shoply/my/order/detail?ord_no=${ordNo}&item_no=${itemNo}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data) {
+                            document.getElementById('orderNo').textContent = data.ordNo || '-';
+                            document.getElementById('orderProdName').textContent = data.prodName || '상품명 없음';
+                            document.getElementById('orderQty').textContent = data.itemCnt || '-';
+                            document.getElementById('orderProdPrice').textContent = (data.prodPrice ? formatPrice(data.prodPrice) : '-');
+                            document.getElementById('orderDiscount').textContent = (data.discount ? '-' + formatPrice(data.discount) : '0원');
+                            document.getElementById('orderTotalPrice').textContent = (data.totalPrice ? formatPrice(data.totalPrice) : '-');
+                            document.getElementById('orderStatus').textContent = getStatusText(data.itemStat);
+                            document.getElementById('orderDate').textContent = data.ordDate || '-';
+
+                            if (data.prodImage) {
+                                document.getElementById('orderDetailImage').src = '/uploads/' + data.prodImage;
+                            }
+
+                            document.getElementById('deliveryName').textContent = data.memName || '-';
+                            document.getElementById('deliveryPhone').textContent = data.memHp || '-';
+                            const addr = (data.memAddr1 ? '[' + data.memZip + '] ' + data.memAddr1 : '-');
+                            document.getElementById('deliveryAddr').textContent = addr + (data.memAddr2 ? ' ' + data.memAddr2 : '');
+                            document.getElementById('deliveryMemo').textContent = data.deliveryMemo || '없음';
+
+                            openModal('orderDetailPopup');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('주문상세 조회 실패:', err);
+                        alert('주문정보를 불러올 수 없습니다.');
+                    });
+            });
+        });
+
+        function formatPrice(price) {
+            if (!price) return '0원';
+            return parseInt(price).toLocaleString('ko-KR') + '원';
+        }
+
+        function getStatusText(stat) {
+            const statusMap = {
+                1: '배송전', 2: '배송중', 3: '배송완료',
+                4: '구매확정', 5: '교환신청', 6: '반품신청'
+            };
+            return statusMap[stat] || '상태없음';
+        }
+
         // 구매확정 버튼
         document.querySelectorAll('.btn-confirm').forEach(btn => {
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
-                openConfirmModal(itemNo);
+                const modal = document.getElementById('confirmModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('confirmModal');
+                }
             });
         });
 
@@ -245,7 +310,12 @@
             btn.addEventListener('click', function() {
                 const prodNo = this.getAttribute('data-prod-no');
                 const prodName = this.getAttribute('data-prod-name');
-                openReviewModal(prodNo, prodName);
+                const modal = document.getElementById('reviewModal');
+                if(modal) {
+                    document.getElementById('review_prod_no').value = prodNo;
+                    document.querySelector('.product-name-display').textContent = prodName;
+                    openModal('reviewModal');
+                }
             });
         });
 
@@ -254,8 +324,10 @@
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
                 const modal = document.getElementById('returnModal');
-                modal.dataset.itemNo = itemNo;
-                openModal('returnModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('returnModal');
+                }
             });
         });
 
@@ -264,8 +336,10 @@
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
                 const modal = document.getElementById('exchangeModal');
-                modal.dataset.itemNo = itemNo;
-                openModal('exchangeModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('exchangeModal');
+                }
             });
         });
 
@@ -278,24 +352,6 @@
         });
     });
 
-    function openConfirmModal(itemNo) {
-        const modal = document.getElementById('confirmModal');
-        if(modal) {
-            modal.dataset.itemNo = itemNo;
-            modal.style.display = 'block';
-        }
-    }
-
-    function openReviewModal(prodNo, prodName) {
-        const modal = document.getElementById('reviewModal');
-        if(modal) {
-            modal.dataset.prodNo = prodNo;
-            document.getElementById('review_prod_no').value = prodNo;
-            document.querySelector('.product-name-display').textContent = prodName;
-            modal.style.display = 'block';
-        }
-    }
-
     function openModal(id) {
         const modal = document.getElementById(id);
         if(modal) modal.style.display = 'block';
@@ -306,3 +362,4 @@
         if(modal) modal.style.display = 'none';
     }
 </script>
+

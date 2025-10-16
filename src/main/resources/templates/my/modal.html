@@ -1,14 +1,90 @@
 <!-- modal.html -->
 <!-- 주문 상세 모달 -->
+
+<!-- 주문 상세 모달 -->
 <div id="orderDetailPopup" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 700px;">
         <div class="modal-header">
             <h4>주문상세</h4>
             <span class="close-btn" onclick="closeModal('orderDetailPopup')">&times;</span>
         </div>
-        <div class="order-info">
-            <h5>주문정보</h5>
-            <p>주문번호: <span id="orderDetailNo">-</span></p>
+
+        <div class="modal-body" style="padding: 20px;">
+            <!-- 주문정보 섹션 -->
+            <div class="section-title" style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+                주문정보
+            </div>
+
+            <div style="display: flex; gap: 20px; margin-bottom: 15px;">
+                <div style="flex-shrink: 0;">
+                    <img id="orderDetailImage" alt="상품 이미지"
+                         style="width: 100px; height: 100px; background: #eee; border-radius: 4px; object-fit: cover;">
+                </div>
+                <div style="flex: 1;">
+                    <p style="margin-bottom: 8px; font-size: 13px; color: #666;">주문번호: <span id="orderNo" style="color: #333; font-weight: 500;">-</span></p>
+                    <p style="margin-bottom: 8px; font-size: 13px; color: #666;">(주) <a href="#" onclick="openModal('sellerInfoPopup'); closeModal('orderDetailPopup');" style="color: #0066cc; text-decoration: none;">샵플리닷컴</a></p>
+                    <p id="orderProdName" style="font-size: 14px; font-weight: 600; color: #333; margin: 8px 0;">-</p>
+                    <p style="margin-bottom: 8px; font-size: 13px; color: #666;">수량: <span id="orderQty" style="color: #333; font-weight: 500;">-</span>개</p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                        <div style="padding: 12px; background: #f9f9f9; border-radius: 4px; text-align: center;">
+                            <div style="font-size: 12px; color: #999; margin-bottom: 5px;">상품가격</div>
+                            <div id="orderProdPrice" style="font-size: 16px; font-weight: 700; color: #333;">-</div>
+                        </div>
+                        <div style="padding: 12px; background: #f9f9f9; border-radius: 4px; text-align: center;">
+                            <div style="font-size: 12px; color: #999; margin-bottom: 5px;">할인/쿠폰</div>
+                            <div id="orderDiscount" style="font-size: 16px; font-weight: 700; color: #ff6b6b;">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table style="width: 100%; font-size: 13px; margin-top: 15px;">
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">결제금액</td>
+                    <td style="color: #666; padding-left: 15px; font-size: 15px; font-weight: 700; color: #946ccf;" id="orderTotalPrice">-</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">배송상태</td>
+                    <td style="color: #666; padding-left: 15px;" id="orderStatus">-</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">주문날짜</td>
+                    <td style="color: #666; padding-left: 15px;" id="orderDate">-</td>
+                </tr>
+            </table>
+
+            <!-- 배송정보 섹션 -->
+            <div class="section-title" style="font-size: 14px; font-weight: 700; color: #333; margin-top: 20px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+                </span>배송정보
+            </div>
+
+            <table style="width: 100%; font-size: 13px;">
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">이름</td>
+                    <td style="color: #666; padding-left: 15px;" id="deliveryName">-</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">연락처</td>
+                    <td style="color: #666; padding-left: 15px;" id="deliveryPhone">-</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">주소</td>
+                    <td style="color: #666; padding-left: 15px;" id="deliveryAddr">-</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">배송요청사항</td>
+                    <td style="color: #666; padding-left: 15px;" id="deliveryMemo">없음</td>
+                </tr>
+            </table>
+
+            <!-- 버튼 -->
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd;">
+                <button onclick="openModal('qnaPopup'); closeModal('orderDetailPopup');"
+                        style="padding: 8px 16px; background: #946ccf; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;">문의하기</button>
+                <button onclick="closeModal('orderDetailPopup')"
+                        style="padding: 8px 16px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;">닫기</button>
+            </div>
         </div>
     </div>
 </div>
@@ -24,7 +100,7 @@
             <tbody>
             <tr>
                 <td class="label" style="width: 150px;">상호</td>
-                <td>(주) 상호명</td>
+                <td>(주) 샵플리</td>
             </tr>
             <tr>
                 <td class="label">대표자</td>
@@ -146,71 +222,6 @@
     </div>
 </div>
 
-<!-- 반품/교환 모달 -->
-<div id="returnModal" class="modal">
-    <div class="modal-content" style="width: 600px;">
-        <div class="modal-header">
-            <h4>반품신청</h4>
-            <span class="close-btn" onclick="closeModal('returnModal')">&times;</span>
-        </div>
-        <p>반품 신청 내용</p>
-        <div style="text-align: right; margin-top: 20px;">
-            <button onclick="closeModal('returnModal')">닫기</button>
-        </div>
-    </div>
-</div>
-
-<div id="exchangeModal" class="modal">
-    <div class="modal-content" style="width: 600px;">
-        <div class="modal-header">
-            <h4>교환신청</h4>
-            <span class="close-btn" onclick="closeModal('exchangeModal')">&times;</span>
-        </div>
-        <p>교환 신청 내용</p>
-        <div style="text-align: right; margin-top: 20px;">
-            <button onclick="closeModal('exchangeModal')">닫기</button>
-        </div>
-    </div>
-</div>
-
-<!-- 비밀번호 변경 모달 -->
-<div id="passwordModal" class="modal">
-    <div class="modal-content" style="width: 400px;">
-        <div class="modal-header">
-            <h4>비밀번호 변경</h4>
-            <span class="close-btn" onclick="closeModal('passwordModal')">&times;</span>
-        </div>
-        <form id="passwordForm">
-            <table class="info-table">
-                <tbody>
-                <tr>
-                    <td class="label" style="width: 120px;">현재 비밀번호</td>
-                    <td>
-                        <input type="password" id="currentPassword" style="width: 95%; padding: 8px;">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">새 비밀번호</td>
-                    <td>
-                        <input type="password" id="newPassword" style="width: 95%; padding: 8px;">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">비밀번호 확인</td>
-                    <td>
-                        <input type="password" id="confirmPassword" style="width: 95%; padding: 8px;">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="text-align: right; margin-top: 20px;">
-                <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">변경하기</button>
-                <button type="button" onclick="closeModal('passwordModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <!-- 반품 모달 -->
 <div id="returnModal" class="modal">
     <div class="modal-content" style="width: 600px;">
@@ -284,6 +295,44 @@
             <div style="text-align: right; margin-top: 20px;">
                 <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">신청하기</button>
                 <button type="button" onclick="closeModal('exchangeModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 비밀번호 변경 모달 -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content" style="width: 400px;">
+        <div class="modal-header">
+            <h4>비밀번호 변경</h4>
+            <span class="close-btn" onclick="closeModal('passwordModal')">&times;</span>
+        </div>
+        <form id="passwordForm">
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td class="label" style="width: 120px;">현재 비밀번호</td>
+                    <td>
+                        <input type="password" id="currentPassword" style="width: 95%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">새 비밀번호</td>
+                    <td>
+                        <input type="password" id="newPassword" style="width: 95%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">비밀번호 확인</td>
+                    <td>
+                        <input type="password" id="confirmPassword" style="width: 95%; padding: 8px;">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="submit" style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">변경하기</button>
+                <button type="button" onclick="closeModal('passwordModal')" style="padding: 8px 15px; background-color: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer;">취소</button>
             </div>
         </form>
     </div>
@@ -440,3 +489,4 @@
 
 
 </script>
+

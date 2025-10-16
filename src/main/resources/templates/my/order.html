@@ -33,10 +33,6 @@
                     <div class="count" th:text="${qnaCount}">1</div>
                     <div>문의</div>
                 </div>
-                <div class="info-item">
-                    <div class="count" th:text="${reviewCount}">5</div>
-                    <div>리뷰</div>
-                </div>
             </div>
         </div>
 
@@ -46,14 +42,6 @@
                  th:src="@{'/uploads/banner/' + ${banner.ban_img}}"
                  alt="배너" style="width:100%; height:100%; object-fit:cover;">
             <span th:if="${banner.ban_img == null}">810 x 86 배너 광고</span>
-        </div>
-
-        <!-- 기간 필터 -->
-        <div class="filter-section">
-            <button onclick="filterOrders('7d')">1주일</button>
-            <button onclick="filterOrders('15d')">15일</button>
-            <button onclick="filterOrders('1m')">1개월</button>
-            <button onclick="filterOrders('2m')">2개월</button>
         </div>
 
         <table class="table-container">
@@ -72,15 +60,23 @@
                     <div class="product-info">
                         <img th:if="${productMap[orderItem.prod_no] != null and productMap[orderItem.prod_no].files != null and productMap[orderItem.prod_no].files.size() > 0}"
                              th:src="@{'/uploads/' + ${productMap[orderItem.prod_no].files[0].f_name}}"
-                             alt="상품 이미지" style="width: 80px; height: 80px;">
+                             alt="상품 이미지" style="width: 80px; height: 80px; border-radius: 4px;">
                         <img th:if="${productMap[orderItem.prod_no] == null or productMap[orderItem.prod_no].files == null or productMap[orderItem.prod_no].files.size() == 0}"
-                             src="/images/placeholder.png" alt="기본 이미지" style="width: 80px; height: 80px;">
+                             th:src="@{'/image/product/cap_3_thumb2.jpg'}" alt="기본 이미지" style="width: 80px; height: 80px; border-radius: 4px;">
                         <div class="product-details">
-                            <p>주문번호: <a href="#" class="link-order-detail" th:text="${orderItem.ord_no}" th:data-ord-no="${orderItem.ord_no}">1012211341</a></p>
-                            <p>상품명: <span th:text="${orderItem.item_name}">상품명</span></p>
+                            <p>주문번호:
+                                <a href="#"
+                                   class="order-number-link"
+                                   th:text="${orderItem.ord_no}"
+                                   th:data-ord-no="${orderItem.ord_no}"
+                                   th:data-item-no="${orderItem.item_no}"
+                                   style="color: #0066cc; text-decoration: none;">1012211341</a>
+                            </p>
+                            <span th:text="${productMap[orderItem.prod_no] != null ? productMap[orderItem.prod_no].prod_name : '상품명 없음'}">상품명</span>
                             <p>수량: <span th:text="${orderItem.item_cnt}">1</span>개</p>
                             <strong th:if="${productMap[orderItem.prod_no] != null}"
                                     th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">34,000원</strong>
+                            <strong th:if="${productMap[orderItem.prod_no] == null}">가격 정보 없음</strong>
                         </div>
                     </div>
                 </td>
@@ -94,7 +90,7 @@
                     <span th:case="6">반품신청</span>
                     <span th:case="*">상태없음</span>
                 </td>
-                <td>
+                <td style="display: flex; flex-direction: column; gap: 5px;">
                     <button class="btn-confirm"
                             th:data-item-no="${orderItem.item_no}"
                             th:disabled="${orderItem.item_stat >= 4}">구매확정</button>
@@ -117,6 +113,7 @@
         </table>
 
         <!-- 페이징 -->
+        <!-- 페이징 -->
         <div class="pagination">
             <button th:disabled="${currentPage == 0}" th:onclick="'goPage(' + ${currentPage - 1} + ')'">&lt; 이전</button>
             <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
@@ -134,13 +131,76 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        // ===== 주문번호 클릭 시 상세정보 조회 =====
+        document.querySelectorAll('.order-number-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const ordNo = this.getAttribute('data-ord-no');
+                const itemNo = this.getAttribute('data-item-no');
+
+                fetch(`/shoply/my/order/detail?ord_no=${ordNo}&item_no=${itemNo}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data) {
+                            // 주문정보 채우기
+                            document.getElementById('orderNo').textContent = data.ordNo || '-';
+                            document.getElementById('orderProdName').textContent = data.prodName || '상품명 없음';
+                            document.getElementById('orderQty').textContent = data.itemCnt || '-';
+                            document.getElementById('orderProdPrice').textContent = (data.prodPrice ? formatPrice(data.prodPrice) : '-');
+                            document.getElementById('orderDiscount').textContent = (data.discount ? '-' + formatPrice(data.discount) : '0원');
+                            document.getElementById('orderTotalPrice').textContent = (data.totalPrice ? formatPrice(data.totalPrice) : '-');
+
+                            // 배송상태 표시
+                            const statusText = getStatusText(data.itemStat);
+                            document.getElementById('orderStatus').textContent = statusText;
+                            document.getElementById('orderDate').textContent = data.ordDate || '-';
+
+                            // 상품 이미지
+                            if (data.prodImage) {
+                                document.getElementById('orderDetailImage').src = '/uploads/' + data.prodImage;
+                            }
+
+                            // 배송정보 채우기
+                            document.getElementById('deliveryName').textContent = data.memName || '-';
+                            document.getElementById('deliveryPhone').textContent = data.memHp || '-';
+                            const addr = (data.memAddr1 ? '[' + data.memZip + '] ' + data.memAddr1 : '-');
+                            document.getElementById('deliveryAddr').textContent = addr + (data.memAddr2 ? ' ' + data.memAddr2 : '');
+                            document.getElementById('deliveryMemo').textContent = data.deliveryMemo || '없음';
+
+                            // 모달 열기
+                            openModal('orderDetailPopup');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('주문상세 조회 실패:', err);
+                        alert('주문정보를 불러올 수 없습니다.');
+                    });
+            });
+        });
+
+        function formatPrice(price) {
+            if (!price) return '0원';
+            return parseInt(price).toLocaleString('ko-KR') + '원';
+        }
+
+        function getStatusText(stat) {
+            const statusMap = {
+                0: '결제완료', 1: '배송준비', 2: '배송중',
+                3: '배송완료', 4: '구매확정', 5: '교환신청', 6: '반품신청'
+            };
+            return statusMap[stat] || '상태없음';
+        }
+
         // 구매확정 버튼
         document.querySelectorAll('.btn-confirm').forEach(btn => {
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
                 const modal = document.getElementById('confirmModal');
-                modal.dataset.itemNo = itemNo;
-                openModal('confirmModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('confirmModal');
+                }
             });
         });
 
@@ -149,8 +209,11 @@
             btn.addEventListener('click', function() {
                 const prodNo = this.getAttribute('data-prod-no');
                 const prodName = this.getAttribute('data-prod-name');
+                const prodNameDisplay = document.querySelector('.product-name-display');
+                if(prodNameDisplay) {
+                    prodNameDisplay.textContent = prodName;
+                }
                 document.getElementById('review_prod_no').value = prodNo;
-                document.querySelector('.product-name-display').textContent = prodName;
                 openModal('reviewModal');
             });
         });
@@ -160,8 +223,10 @@
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
                 const modal = document.getElementById('returnModal');
-                modal.dataset.itemNo = itemNo;
-                openModal('returnModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('returnModal');
+                }
             });
         });
 
@@ -170,8 +235,10 @@
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
                 const modal = document.getElementById('exchangeModal');
-                modal.dataset.itemNo = itemNo;
-                openModal('exchangeModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('exchangeModal');
+                }
             });
         });
     });
@@ -181,25 +248,13 @@
         window.location.href = `/shoply/my/order?page=${page}`;
     }
 
-    // 기간별 필터
-    function filterOrders(period) {
-        fetch(`/shoply/my/order/filter?period=${period}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    // 테이블 갱신 로직
-                    location.reload();
-                }
-            });
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if(modal) modal.style.display = 'blockf';
     }
 
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.style.display = 'flex';
-    }
-
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.style.display = 'none';
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if(modal) modal.style.display = 'none';
     }
 </script>

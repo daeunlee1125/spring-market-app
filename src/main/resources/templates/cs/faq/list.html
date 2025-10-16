@@ -1,57 +1,123 @@
-<div th:replace ="~{cs/_head.html}"></div>
-<div th:replace ="~{cs/_sidebar2.html}"></div>
+<div th:replace="~{cs/_head.html}"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="#">홈</a> &gt; 자주묻는질문
+    </div>
+
+<div class="main-area">
+<!-- 사이드바: faq 는 2차 사용 -->
+<div th:replace="~{cs/_sidebar :: catSidebar('faq','자주묻는질문', ${selCat1}, ${selCat2}, ${cat1List}, ${cat2List})}"></div>
 
 <!-- 메인 콘텐츠 -->
-<div class="main-content">
+<div class="main-content" th:with="faqs=${csqList ?: #lists.list()}">
+    <!-- FAQ 헤더 -->
+    <div class="notice-header">
+        <h2 th:text="${selCat2 != null ? selCat2 : (selCat1 != null ? selCat1 : '전체')}">FAQ</h2>
+        <p>자주 묻는 질문입니다.</p>
+    </div>
 
-<!-- 공지사항 헤더 -->
-<div class="notice-header">
-    <h2>전체</h2>
-    <p>공지사항 전체 내용입니다.</p>
-</div>
+    <!-- (A) 2차가 선택된 경우: 단일 섹션 -->
+    <div class="faq-section"
+         th:if="${selCat2 != null}"
+         th:with="
+      filtered=${(faqs).?[#this.cs_faq_cate1 == #vars.selCat1 and #this.cs_faq_cate2 == #vars.selCat2]},
+      secId='sec-A'
+   ">
+        <div class="faq-section-title" th:text="${selCat2}">2차 카테고리</div>
 
-    <!-- 가입 섹션 -->
-<div class="faq-section">
-    <div class="faq-section-title">가입</div>
-    
-    <div class="faq-item">
-        <button class="faq-question" onclick="toggleAnswer(this)">
-            개인회원과 법인회원에는어떤차이가있나요?
-            <span class="faq-arrow">▼</span>
-        </button>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                <p>개인회원과 법인회원의 주요 차이점은 사업자등록증 제출 여부와 세금계산서 발행 가능 여부입니다.</p>
+        <div class="faq-item"
+             th:each="f, stat : ${filtered}"
+             th:classappend="${stat.index >= 3} ? ' hidden' : ''">
+            <a class="faq-link"
+               th:href="@{/cs/faq/view(faqNo=${f.cs_faq_no})}">
+                <button class="faq-question" type="button" onclick="toggleAnswer(this)">
+                    <span th:text="${f.cs_faq_title ?: ''}">질문</span>
+                    <span class="faq-arrow">▼</span>
+                </button>
+            </a>
+            <div class="faq-answer">
+                <div class="faq-answer-content" th:utext="${f.cs_faq_content ?: ''}">답변</div>
             </div>
+        </div>
+
+        <div class="more-button" th:if="${#lists.size(filtered) > 3}">
+            <button class="btn-more"
+                    th:attr="data-section=${secId}"
+                    onclick="toggleMore(this.dataset.section)">더보기</button>
         </div>
     </div>
 
-    <div class="more-button">
-        <button class="btn-more" onclick="toggleMore('signup')" data-section="signup">더보기</button>
-    </div>
-</div>
+    <!-- (B) 1차만 선택된 경우: 해당 1차의 질문을 2차별로 그룹핑 -->
+    <div th:if="${selCat1 != null and selCat2 == null}">
+        <!-- cat2List가 있으면 2차별로 섹션 나누기 -->
+        <th:block th:if="${!#lists.isEmpty(cat2List)}">
+            <div class="faq-section"
+                 th:each="c2, c2Stat : ${cat2List}"
+                 th:with="
+          filtered=${(faqs).?[#this.cs_faq_cate1 == #vars.selCat1 and #this.cs_faq_cate2 == #vars.c2]},
+          secId=${'sec-B-' + c2Stat.index}
+       ">
+                <div th:if="${!#lists.isEmpty(filtered)}">
+                    <div class="faq-section-title" th:text="${c2}">2차 카테고리</div>
 
-<!-- 탈퇴 섹션 -->
-<div class="faq-section">
-    <div class="faq-section-title">탈퇴</div>
-    
-    <div class="faq-item">
-        <button class="faq-question" onclick="toggleAnswer(this)">
-            회원 탈퇴 후 재가입이 가능한가요?
-            <span class="faq-arrow">▼</span>
-        </button>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                <p>회원 탈퇴 후 일정 기간이 지나면 동일한 정보로 재가입이 가능합니다.</p>
+                    <div class="faq-item"
+                         th:each="f, stat : ${filtered}"
+                         th:classappend="${stat.index >= 3} ? ' hidden' : ''">
+                        <a class="faq-link"
+                           th:href="@{/cs/faq/view(faqNo=${f.cs_faq_no})}">
+                            <button class="faq-question" type="button" onclick="toggleAnswer(this)">
+                                <span th:text="${f.cs_faq_title ?: ''}">질문</span>
+                                <span class="faq-arrow">▼</span>
+                            </button>
+                        </a>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content" th:utext="${f.cs_faq_content ?: ''}">답변</div>
+                        </div>
+                    </div>
+
+                    <div class="more-button" th:if="${#lists.size(filtered) > 3}">
+                        <button class="btn-more"
+                                th:attr="data-section=${secId}"
+                                onclick="toggleMore(this.dataset.section)">더보기</button>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+
+        <!-- cat2List가 없으면 1차 카테고리 전체 질문 출력 -->
+        <div class="faq-section"
+             th:if="${#lists.isEmpty(cat2List)}"
+             th:with="
+        filtered=${(faqs).?[#this.cs_faq_cate1 == #vars.selCat1]},
+        secId='sec-C'
+     ">
+            <div class="faq-section-title" th:text="${selCat1}">FAQ</div>
+
+            <div class="faq-item"
+                 th:each="f, stat : ${filtered}"
+                 th:classappend="${stat.index >= 3} ? ' hidden' : ''">
+                <a class="faq-link"
+                   th:href="@{/cs/faq/view(faqNo=${f.cs_faq_no})}">
+                    <button class="faq-question" type="button" onclick="toggleAnswer(this)">
+                        <span th:text="${f.cs_faq_title ?: ''}">질문</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                </a>
+                <div class="faq-answer">
+                    <div class="faq-answer-content" th:utext="${f.cs_faq_content ?: ''}">답변</div>
+                </div>
+            </div>
+
+            <div class="more-button" th:if="${#lists.size(filtered) > 3}">
+                <button class="btn-more"
+                        th:attr="data-section=${secId}"
+                        onclick="toggleMore(this.dataset.section)">더보기</button>
             </div>
         </div>
     </div>
+</div>
+</div>
+</div>
 
-    <div class="more-button">
-        <button class="btn-more" onclick="toggleMore('withdrawal')" data-section="withdrawal">더보기</button>
-    </div>
-</div>
-</div>
-</div>
-</div>
-<div th:replace ="~{cs/_tail.html}"></div>
+<div th:replace="~{cs/_tail.html}"></div>

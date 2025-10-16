@@ -228,7 +228,7 @@ tr td .del-btn{
 }
 
 .input-1 {
-    width: 95%;
+    width: 75%;
     padding: 12px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -285,3 +285,16 @@ td select {
 }
 
 
+.delete-option-btn {
+    padding: 5px 10px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 90%;
+}
+
+.delete-option-btn:hover {
+    background-color: #cc0000;
+}

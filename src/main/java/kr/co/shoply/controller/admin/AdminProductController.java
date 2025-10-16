@@ -2,10 +2,13 @@ package kr.co.shoply.controller.admin;
 
 import kr.co.shoply.dto.Cate1DTO;
 import kr.co.shoply.dto.Cate2DTO;
+import kr.co.shoply.dto.ProductListDTO;
 import kr.co.shoply.dto.ProductRegisterDTO;
+import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.AdminProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +25,19 @@ public class AdminProductController {
     private final AdminProductService adminProductService;
 
     @GetMapping("/list")
-    public String list(){
+    public String list(Model model, @AuthenticationPrincipal MyUserDetails user) {
+
+        String memId = user.getUsername();
+        int memLevel =  user.getMemLevel();
+
+        log.info("memId:{} memLevel:{}", memId, memLevel);
+
+        List<ProductListDTO> products = adminProductService.getProductList(memId, memLevel);
+
+        log.info("products:{}", products);
+
+        model.addAttribute("products", products);
+
         return "admin/product/list";
     }
 

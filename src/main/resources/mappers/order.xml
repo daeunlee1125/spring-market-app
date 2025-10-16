@@ -189,4 +189,28 @@
         prod_price, prod_sale, ord_payment, ord_stat, ord_name, ord_hp, ord_zip, ord_addr1, ord_addr2, prod_deliv_price, item_no
     </select>
 
+    <select id="getDelivList2" resultType="kr.co.shoply.dto.OrderDTO">
+        SELECT item_no, item_trk_num, ord_no, prod_name, ITEM_CNT, item_stat, ord_name, sum((prod_price * (100-prod_sale)/100) * item_cnt)+prod_deliv_price AS ord_total, prod_deliv_price, ord_date, item_delv FROM "order" o JOIN order_item i USING (ord_no) JOIN product p USING (prod_no) JOIN MEMBER m ON m.mem_id = p.MEM_ID
+        <include refid="delivSearch2"/>
+        GROUP BY ord_no, item_trk_num, prod_name, mem_name, item_cnt, item_delv, item_stat, ord_name, prod_deliv_price, item_no, ord_date ORDER BY ord_no DESC OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+
+    <sql id="delivSearch2">
+        <where>
+            item_stat != 0
+            <if test="searchType != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'ord_no'"> AND ord_no LIKE '%' || #{keyword} || '%' </when>
+                    <when test="searchType == 'item_trk_num'"> AND item_trk_num LIKE '%' || #{keyword} || '%' </when>
+                    <when test="searchType == 'ord_name'"> AND ord_name LIKE '%' || #{keyword} || '%' </when>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectCountDelvTotal2" resultType="int">
+        SELECT COUNT(*) FROM Order_item i Join "order" o on o.ord_no = i.ord_no
+        <include refid="delivSearch2"/>
+    </select>
+
 </mapper>

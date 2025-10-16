@@ -29,7 +29,9 @@ public class AdminOrderController {
         return "admin/order/list";
     }
     @GetMapping("/admin/order/delivery")
-    public String orderDelivery() {
+    public String orderDelivery(Model model, PageRequestDTO pageRequestDTO) {
+        PageResponseDTO pageResponseDTO = orderService.getDelivs2(pageRequestDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "admin/order/delivery";
     }

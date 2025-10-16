@@ -13,7 +13,7 @@ public class IndexController {
 
     private final IndexService indexService;
 
-    @GetMapping("/")
+    @GetMapping({"/","/index"})
     public String index(Model model) {
         model.addAttribute("newProducts", indexService.getNewProducts());
         model.addAttribute("hitProducts", indexService.getHitProducts());

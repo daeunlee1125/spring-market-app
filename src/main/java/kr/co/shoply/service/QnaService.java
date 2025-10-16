@@ -1,10 +1,15 @@
 package kr.co.shoply.service;
 
+import kr.co.shoply.dto.PageRequestDTO;
+import kr.co.shoply.dto.PageResponseDTO;
 import kr.co.shoply.dto.QnaDTO;
 import kr.co.shoply.entity.Qna;
 import kr.co.shoply.repository.QnaRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +22,26 @@ public class QnaService {
     private final QnaRepository qnaRepository;
     private final ModelMapper modelMapper;
 
+    @Transactional(readOnly = true)
+    public List<QnaDTO> getRecentQna(int limit) {
+        return qnaRepository.findTopN(limit).stream()
+                .map(e -> {
+                    QnaDTO d = new QnaDTO();
+                    d.setQ_no(e.getQ_no());
+                    d.setMem_id(e.getMem_id());
+                    d.setQ_cate1(e.getQ_cate1());
+                    d.setQ_cate2(e.getQ_cate2());
+                    d.setQ_channel(e.getQ_channel());
+                    d.setQ_title(e.getQ_title());
+                    d.setQ_content(e.getQ_content());
+                    d.setQ_reply(e.getQ_reply());
+                    d.setQ_comment(e.getQ_comment());
+                    // ★ 포인트: DTO의 q_rdate는 String 이어야 하며, 여기서 문자열로 변환
+                    d.setQ_rdate(e.getQ_rdate() == null ? null : e.getQ_rdate().toString());
+                    return d;
+                })
+                .toList();
+    }
     /** 폼/사이드바에서 사용할 마스터 카테고리 */
     private static final Map<String, List<String>> CAT2_MASTER =
             new LinkedHashMap<>() {{
@@ -39,13 +64,26 @@ public class QnaService {
 
     private boolean has(String s){ return s != null && !s.isBlank(); }
 
-    /* 목록 (정렬은 레포지토리 JPQL ORDER BY 사용) */
-    public List<QnaDTO> getQnaList(String cat1, String cat2){
-        var list = qnaRepository.findList(has(cat1) ? cat1 : null,
-                has(cat2) ? cat2 : null);
-        return list.stream()
+    @Transactional(readOnly = true)
+    public PageResponseDTO<QnaDTO> getQnaPage(PageRequestDTO req, String cat1, String cat2) {
+
+        Pageable pageable = PageRequest.of(Math.max(req.getPg() - 1, 0), req.getSize());
+
+        Page<Qna> page = qnaRepository.findPage(
+                (cat1 == null || cat1.isBlank()) ? null : cat1,
+                (cat2 == null || cat2.isBlank()) ? null : cat2,
+                pageable
+        );
+
+        List<QnaDTO> dtoList = page.getContent().stream()
                 .map(v -> modelMapper.map(v, QnaDTO.class))
                 .toList();
+
+        return PageResponseDTO.<QnaDTO>builder()
+                .pageRequestDTO(req)
+                .dtoList(dtoList)
+                .total((int) page.getTotalElements())
+                .build();
     }
 
     /* 단건 */

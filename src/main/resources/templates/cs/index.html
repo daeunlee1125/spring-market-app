@@ -10,28 +10,12 @@
         <a th:href="@{/cs/notice/list}">전체보기</a>
     </header-sec>
 <ul class="notice-list">
-<!-- DB 데이터 반복 -->
-    <li>
-        <a href="#"><span class="title">[안내] 서버 점검 안내</span></a>
-        <span class="date">2025-09-19</span>
+    <li th:each="notice : ${noticeList}">
+        <a th:href="@{/cs/notice/view(cs_no=${notice.cs_no})}">
+            <span class="title" th:text="${notice.cs_title}"></span></a>
+        <span class="date" th:text="${notice.cs_rdate}"></span>
     </li>
-    <li>
-        <a href="#"><span class="title">[안내] 서버 점검 안내</span></a>
-        <span class="date">2025-09-18</span>
-    </li>
-    <li>
-        <a href="#">[안내] 서버 점검 안내</a>
-        <span class="date">2025-09-19</span>
-    </li>
-    <li>
-        <a href="#"><span class="title">[안내] 서버 점검 안내</span></a>
-        <span class="date">2025-09-18</span>
-    </li>
-    <li>
-        <a href="#"><span class="title">[안내] 서버 점검 안내</span></a>
-        <span class="date">2025-09-19</span>
-    </li>
-    </ul>
+</ul>
 </section>
 <section class="faq">
     <header-sec>
@@ -75,38 +59,16 @@
 <section class="qna">
     <header-sec>
         <h3>문의하기</h3>
-        <a href="#">전체보기</a>
+        <a th:href="@{/cs/qna/list}">전체보기</a>
     </header-sec>
     <ul class="qna-list">
-        <li>
-            <span class="type">[회원]</span>
-            <a href="#"><span class="title">개인회원과 법인회원에 차이가 있나요?</span></a>
-            <span class="writer">chchchch</span>
-            <span class="date">2025.09.19</span>
-        </li>
-        <li>
-            <span class="type">[쿠폰/이벤트]</span>
-            <a href="#"><span class="title">스마일포인트는 어디에 사용하나요?</span></a>
-            <span class="writer">chchchch</span>
-            <span class="date">2025.09.19</span>
-        </li>
-        <li>
-            <span class="type">[회원]</span>
-            <a href="#"><span class="title">개인회원과 법인회원에 차이가 있나요?</span></a>
-            <span class="writer">chchchch</span>
-            <span class="date">2025.09.19</span>
-        </li>
-        <li>
-            <span class="type">[회원]</span>
-            <a href="#"><span class="title">개인회원과 법인회원에 차이가 있나요?</span></a>
-            <span class="writer">chchchch</span>
-            <span class="date">2025.09.19</span>
-        </li>
-        <li>
-            <span class="type">[회원]</span>
-            <a href="#"><span class="title">개인회원과 법인회원에 차이가 있나요?</span></a>
-            <span class="writer">chchchch</span>
-            <span class="date">2025.09.19</span>
+        <li th:each="qna : ${qnaList}">
+            <span class="type" th:text="'[' + ${qna.q_cate1} + '/' + ${qna.q_cate2} + ']'"></span>
+            <a th:href="@{/cs/qna/view(qNo=${qna.q_no})}">
+                <span class="title" th:text="${qna.q_title}"></span>
+            </a>
+            <span class="writer" th:text="${qna.mem_id}"></span>
+            <span class="date" th:text="${qna.q_rdate}"></span>
         </li>
     </ul>
 </section>

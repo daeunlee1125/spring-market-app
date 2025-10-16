@@ -2,12 +2,17 @@ package kr.co.shoply.service;
 
 import kr.co.shoply.dto.CsFaqDTO;
 import kr.co.shoply.dto.CsNoticeDTO;
+import kr.co.shoply.dto.PageRequestDTO;
+import kr.co.shoply.dto.PageResponseDTO;
 import kr.co.shoply.entity.CsFaq;
 import kr.co.shoply.entity.CsNotice;
 import kr.co.shoply.repository.CsFaqRepository;
 import kr.co.shoply.repository.CsNoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +26,17 @@ public class CsService {
     private final CsNoticeRepository csNoticeRepository;
     private final ModelMapper modelMapper;
     private final CsFaqRepository csFaqRepository;
+
+    public List<CsNoticeDTO> getRecentNotices(int limit) {
+        return csNoticeRepository.findTopN(limit)
+                .stream()
+                .map(entity -> CsNoticeDTO.builder()
+                        .cs_no(entity.getCs_no())
+                        .cs_title(entity.getCs_title())
+                        .cs_rdate(entity.getCs_rdate().toString())
+                        .build())
+                .toList();
+    }
 
     /* ---------------- NOTICE  ---------------- */
     /** 단일 공지 조회 */
@@ -39,22 +55,24 @@ public class CsService {
                 .toList();
     }
 
-    /** 카테고리별 공지 목록 */
     @Transactional(readOnly = true)
-    public List<CsNoticeDTO> getCsNoticeList(String cat1) {
-        List<CsNotice> list;
-        if (cat1 == null || cat1.isBlank()) {
-            // 전체
-            list = csNoticeRepository.findList(null);
-        } else {
-            // 특정 카테고리
-            list = csNoticeRepository.findList(cat1);
-        }
-        return list.stream()
+    public PageResponseDTO<CsNoticeDTO> getCsNoticePage(PageRequestDTO req) {
+        // 정렬을 JPQL에서 하고 있으니 여기선 정렬 없이 Pageable만 구성
+        Pageable pageable = PageRequest.of(Math.max(req.getPg() - 1, 0), req.getSize());
+
+        String type = req.getCsType(); // cat1(=분류)이 여기로 들어오게 컨트롤러에서 세팅
+        Page<CsNotice> page = csNoticeRepository.findPage(type, pageable);
+
+        List<CsNoticeDTO> dtoList = page.getContent().stream()
                 .map(v -> modelMapper.map(v, CsNoticeDTO.class))
                 .toList();
-    }
 
+        return PageResponseDTO.<CsNoticeDTO>builder()
+                .pageRequestDTO(req)
+                .dtoList(dtoList)
+                .total((int) page.getTotalElements())
+                .build();
+    }
 
     /* ---------------- FAQ ---------------- */
 

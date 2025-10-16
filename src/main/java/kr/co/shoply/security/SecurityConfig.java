@@ -45,7 +45,10 @@ public class SecurityConfig {
                 .requestMatchers("/admin/cs/**").hasRole("7") // 관리자 - 고객센터
                 .requestMatchers("/admin/**").hasAnyRole("7", "2") // 그 외 관리자 페이지 전체
                 .requestMatchers("/my/**").hasAnyRole("1", "2", "7") // 마이페이지
+                .requestMatchers("/cs/qna/write/**").authenticated() //qna 등록은 로그인만 가능
                 .anyRequest().permitAll()
+
+
         );
 
         // 기타 설정

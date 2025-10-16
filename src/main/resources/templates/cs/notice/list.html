@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="breadcrumb">
-        <a href="#">홈</a> &gt; 공지사항
+        <a th:href="@{/cs}">홈</a> &gt; 공지사항
     </div>
 
     <div class="main-area">
@@ -22,24 +22,27 @@
         <li class="notice-item" th:each="notice : ${noticeList}">
             <a th:href="@{/cs/notice/view(cs_no=${notice.cs_no})}">
                 <div class="notice-content">
-                    <span class="notice-category" th:text="'[' + ${notice.cs_type} + ']'">[분류]</span>
-                    <span class="notice-title" th:text="${notice.cs_title}">제목</span>
+                    <span class="notice-category" th:text="'[' + ${notice.cs_type} + ']'"></span>
+                    <span class="notice-title" th:text="${notice.cs_title}"></span>
                 </div>
-                <div class="notice-date" th:text="${notice.cs_rdate}">24-01-01</div>
+                <div class="notice-date" th:text="${notice.cs_rdate}"></div>
             </a>
         </li>
     </ul>
+    <div class="pagination">
+        <a th:if="${pageResponseDTO.prev}"
+           th:href="@{/cs/notice/list(cat1=${selCat1}, pg=${pageResponseDTO.start - 1}, size=${pageResponseDTO.size})}"
+           class="prev">이전</a>
 
-<!-- 페이지네이션 -->
-<div class="pagination">
-    <span>처음</span>
-    <span class="current">1</span>
-    <span>2</span>
-    <span>3</span>
-    <span>4</span>
-    <span>5</span>
-    <span>다음</span>
-</div>
+        <th:block th:each="num : ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+            <a th:href="@{/cs/notice/list(cat1=${selCat1}, pg=${num}, size=${pageResponseDTO.size})}"
+               th:class="${num == pageResponseDTO.pg ? 'current' : 'num'}">[[${num}]]</a>
+        </th:block>
+
+        <a th:if="${pageResponseDTO.next}"
+           th:href="@{/cs/notice/list(cat1=${selCat1}, pg=${pageResponseDTO.end + 1}, size=${pageResponseDTO.size})}"
+           class="next">다음</a>
+    </div>
     </div>
 </div>
 </div>

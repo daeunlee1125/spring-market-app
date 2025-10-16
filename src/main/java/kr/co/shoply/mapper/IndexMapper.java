@@ -12,8 +12,15 @@ public interface IndexMapper {
     List<ProductDTO> selectNewProducts();
 
     // 히트상품
-    //List<ProductDTO> selectHitProducts();
+    List<ProductDTO> selectHitProducts();
 
     // 추천상품
-    // List<ProductDTO> selectRecomProducts();
+    List<ProductDTO> selectRecommendedProducts();
+
+    // 인기상품
+    List<ProductDTO> selectBestProducts();
+
+    // 할인상품
+    List<ProductDTO> selectDiscountProducts();
+
 }

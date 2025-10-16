@@ -5,14 +5,26 @@
 
 <mapper namespace="kr.co.shoply.mapper.AdminProductMapper">
     <!-- registerProduct에서 한번에 INSERT / Transactional -->
-    <insert id="insertProduct" useGeneratedKeys="true" keyProperty="prod_no">
-        INSERT INTO PRODUCT (CATE2_NO, PROD_NAME, PROD_INFO , PROD_COMPANY , MEM_ID , PROD_PRICE , PROD_SALE , PROD_DELIV_PRICE , PROD_POINT , PROD_STOCK , PROD_SOLD , PROD_HIT)
-                    VALUES  (#{cate2_no}, #{prod_name}, #{prod_info}, #{prod_company}, #{mem_id}, #{prod_price}, #{prod_sale}, #{prod_deliv_price}, #{prod_point}, #{prod_stock}, #{prod_sold}, #{prod_hit})
+    <insert id="insertProduct">
+        <selectKey keyProperty="prod_no" resultType="string" order="BEFORE">
+            SELECT LPAD(#{cate2_no}, 2, '0') || LPAD(product_seq.NEXTVAL, 7, '0') FROM DUAL
+        </selectKey>
+        INSERT INTO PRODUCT (
+            PROD_NO, CATE2_NO, PROD_NAME, PROD_INFO, PROD_COMPANY, MEM_ID,
+            PROD_PRICE, PROD_SALE, PROD_DELIV_PRICE, PROD_POINT,
+            PROD_STOCK, PROD_SOLD, PROD_HIT
+        )
+        VALUES (
+            #{prod_no}, #{cate2_no}, #{prod_name}, #{prod_info}, #{prod_company}, #{mem_id},
+            #{prod_price}, #{prod_sale}, #{prod_deliv_price}, #{prod_point},
+            #{prod_stock}, #{prod_sold}, #{prod_hit}
+        )
     </insert>
+
 
     <insert id="insertProductFile">
         INSERT INTO PRO_FILE (PROD_NO, F_NAME, F_RDATE, F_DIST)
-                    VALUES (#{prod_no}, #{f_name}, #{f_rdate}, #{f_dist})
+                    VALUES (#{prod_no}, #{f_name}, SYSDATE, #{f_dist})
 
     </insert>
 

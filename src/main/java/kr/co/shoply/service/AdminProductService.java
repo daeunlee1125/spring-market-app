@@ -53,6 +53,12 @@ public class AdminProductService {
                 .toList();
     }
 
+    public List<ProductListDTO> getProductList(String memId, int memLevel){
+
+        return null;
+    }
+
+
     //상품등록
     @Transactional
     public void registerProduct(ProductRegisterDTO productRegisterDTO, String memId) {
@@ -93,6 +99,7 @@ public class AdminProductService {
 
         for(int i = 0; i < files.length; i++) {
             if(files[i] != null && !files[i].isEmpty()) {
+                log.info("#### registerProduct ====> files={}",files[i]);
                 uploadProductFile(files[i], prodNo, i + 1);
             }
         }
@@ -110,7 +117,9 @@ public class AdminProductService {
 
         try {
             // 업로드 경로 설정
-            String baseUploadPath = "/home/ec2-user/shoply/uploads/product/"; //"C:/uploads/product/"
+            //String baseUploadPath = "/home/ec2-user/shoply/uploads/product/";
+            String baseUploadPath = "C:/uploads/product/";
+
             Files.createDirectories(Paths.get(baseUploadPath));
 
             // 파일명 생성
@@ -132,11 +141,14 @@ public class AdminProductService {
 
             log.info("#### uploadProductFile ====> filePath={}", filePath.toString());
 
+            String dbPath = "/uploads/product/" + newName;
+
+            log.info("#### uploadProductFile ====> dbPath={}", dbPath);
+
             // DB에 저장할 정보
             ProFileDTO fileDTO = ProFileDTO.builder()
                     .prod_no(prodNo)
-                    .f_name(newName)
-                    .f_rdate(String.valueOf(LocalDateTime.now()))
+                    .f_name(dbPath)
                     .f_dist(fileType)
                     .build();
 
@@ -180,6 +192,8 @@ public class AdminProductService {
                         .not_val(noticeVals[i])
                         .build();
 
+                log.info("#### insertProductNotices ==> noticeDTO={}", noticeDTO);
+
                 int result = adminProductMapper.insertProductNotice(noticeDTO);
                 if(result == 0) {
                     throw new RuntimeException("고시정보 INSERT 실패");
@@ -194,7 +208,7 @@ public class AdminProductService {
         List<String> optVals = dto.getOptVals();
 
         if(optNames == null || optVals == null) {
-            throw new RuntimeException("옵션이 없습니다.");
+            return; // 옵션 없으면 스킵
         }
 
         for(int i = 0; i < optNames.size(); i++) {
@@ -207,6 +221,8 @@ public class AdminProductService {
                         .opt_name(optName)
                         .opt_val(optVal)
                         .build();
+
+                log.info("#### insertProductOptions ==> optionDTO={}", optionDTO);
 
                 int result = adminProductMapper.insertProductOption(optionDTO);
                 if(result == 0) {

@@ -61,4 +61,9 @@ public class MyUserDetails implements UserDetails {
         // 계정 활성화 여부 (false면 로그인을 못하겟죵)
         return true;
     }
+
+    public int getMemLevel() {
+        //
+        return member.getMem_level();
+    }
 }

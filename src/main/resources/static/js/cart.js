@@ -174,19 +174,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- 기능: 주문하기 버튼 클릭 시 확인 대화상자 ---
-    document.getElementById('orderBtn').addEventListener('click', function() {
-        const checkedItems = document.querySelectorAll('.item-checkbox:checked');
-        if(checkedItems.length === 0) {
-            alert('주문할 상품을 선택해주세요.');
-            return;
-        }
-        if(confirm('선택한 상품을 주문하시겠습니까?')) {
-            // 실제로는 주문 페이지로 이동하는 로직이 들어갑니다.
-            alert('주문 페이지로 이동합니다.');
-            // window.location.href = '/order-page-url';
-        }
-    });
+    // // --- 기능: 주문하기 버튼 클릭 시 확인 대화상자 ---
+    // document.getElementById('orderBtn').addEventListener('click', function() {
+    //     const checkedItems = document.querySelectorAll('.item-checkbox:checked');
+    //     if(checkedItems.length === 0) {
+    //         alert('주문할 상품을 선택해주세요.');
+    //         return;
+    //     }
+    //     if(confirm('선택한 상품을 주문하시겠습니까?')) {
+    //         // 실제로는 주문 페이지로 이동하는 로직이 들어갑니다.
+    //         alert('주문 페이지로 이동합니다.');
+    //         // window.location.href = '/order-page-url';
+    //     }
+    // });
 
 
     // --- 기능: 합계 계산 및 업데이트 ---
@@ -197,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let totalShippingFee = 0; // 총 배송비
         let totalPayment = 0;     // 결제예정금액
         let totalpoint = 0;       // 적립포인트
+        let totalprice = 0;
 
         // 모든 장바구니 아이템들을 순회
         document.querySelectorAll('.cart-item').forEach(item => {
@@ -215,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 2. DTO 로직에 맞춰 각 항목을 계산하고 누적
                 totalItemsCount += quantity;
                 orderAmount += price * quantity; // 주문금액 = 원가 * 수량
-                totalpoint += point;
+                totalpoint += point * quantity;
 
                 // 상품할인 = (원가 * 할인율 / 100) * 수량
                 // 소수점 계산이 있을 수 있으므로 Math.floor로 버림 처리

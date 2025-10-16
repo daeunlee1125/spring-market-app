@@ -33,8 +33,8 @@
     </select>
 
     <insert id="insertOrder3">
-        INSERT INTO "order"(MEM_ID, ORD_NAME, ORD_HP, ORD_ZIP, ORD_ADDR1, ORD_ADDR2, ORD_TOTAL, ORD_DATE, ORD_STAT)
-        VALUES (#{mem_id}, #{ord_name}, #{ord_hp}, #{ord_zip}, #{ord_addr1}, #{ord_addr2}, #{ord_total}, SYSDATE, 2)
+        INSERT INTO "order"(MEM_ID, ORD_NAME, ORD_HP, ORD_ZIP, ORD_ADDR1, ORD_ADDR2, ORD_PAYMENT, ORD_TOTAL, ORD_DATE, ORD_STAT)
+        VALUES (#{mem_id}, #{ord_name}, #{ord_hp}, #{ord_zip}, #{ord_addr1}, #{ord_addr2}, #{ord_payment}, #{ord_total}, SYSDATE, 2)
     </insert>
 
     <resultMap id="orderItemWithProductMap" type="kr.co.shoply.dto.OrderItemDTO">
@@ -90,7 +90,7 @@
 
     <insert id="insertOrderItemList3" parameterType="java.util.List">
         INSERT ALL
-        <foreach item="item" collection="list">
+        <foreach item="item" collection="orderItemDTOList">
             INTO ORDER_ITEM (ORD_NO, PROD_NO, ITEM_NAME, ITEM_CNT, ITEM_STAT, PROD_OPTION)
             VALUES
             (

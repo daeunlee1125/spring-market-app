@@ -8,7 +8,7 @@
                 </div>
 
                 <div class="order-info-bar">
-                    <span th:text="${orderInfo.getOrd_date()} + '에 주문하신 주문건의 주문번호는'">2025년 9월 28일(일)에 주문하신 주문건의 주문번호는 <strong th:text="${orderInfo.getOrd_no()}">202509280952869</strong>입니다.</span>
+                    <span th:text="${orderInfo.getOrd_date()} + '에 주문하신 주문건의 주문번호는' + ${orderInfo.getOrd_no()} + '입니다.'">2025년 9월 28일(일)에 주문하신 주문건의 주문번호는</span>
                 </div>
 
                 <div class="recipient-info">
@@ -39,12 +39,12 @@
                         <div class="order-item-price">
                             <p class="price" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_price(), 0, 'COMMA', 0, 'POINT')} + '원'">23,580원</p>
                             <p class="discount" th:text="'상품 할인 -' + ${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getSaleprice(), 0, 'COMMA', 0, 'POINT')} + '원'">할인 -2,358원</p>
-                            <th:block th:if="${sysCouponDTO.getCp_type() == 3}">
+                            <div th:if="${sysCouponDTO != null and sysCouponDTO.getCp_type() == 3}">
                                 <p style="text-decoration: line-through;" class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')} + '원'">배송비 +2,358원</p>
-                            </th:block>
-                            <th:block th:unless="${sysCouponDTO.getCp_type() == 3}">
+                            </div>
+                            <div th:unless="${sysCouponDTO != null and sysCouponDTO.getCp_type() == 3}">
                                 <p class="discount" th:text="${#numbers.formatDecimal(completeDTO.getOrderItems().getProduct().getProd_deliv_price(), 0, 'COMMA', 0, 'POINT')} + '원'">배송비 +2,358원</p>
-                            </th:block>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -56,7 +56,7 @@
                             <div class="info-table">
                                 <div class="info-row">
                                     <span class="label">결제 방법</span>
-                                    <span class="value" th:text="${payment} + '(일시불)'">신용카드 (일시불)</span>
+                                    <span class="value" th:text="${orderInfo.getOrd_payment()} + '(일시불)'">신용카드 (일시불)</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">총 결제금액</span>
@@ -104,10 +104,13 @@
                         <section class="order-section">
                             <h2>이번 주문으로 누리는 구매혜택</h2>
                             <div class="benefits-box">
-                                <p class="benefit-title"><strong>21원</strong> 혜택을 받으셨어요!</p>
+                                <p class="benefit-title">
+                                    <strong th:text="${#numbers.formatDecimal(totalPoint, 0, 'COMMA', 0, 'POINT')} + '원'">21</strong>
+                                    <span>은 구매확정시 혜택을 받을 수 있어요!</span>
+                                </p>
                                 <div class="benefit-item">
                                     <span>SHOPLY 포인트</span>
-                                    <span>21원</span>
+                                    <span th:text="${#numbers.formatDecimal(totalPoint, 0, 'COMMA', 0, 'POINT')} + '원'">21원</span>
                                 </div>
                             </div>
                             <div class="promo-banner">

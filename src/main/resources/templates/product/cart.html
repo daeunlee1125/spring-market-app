@@ -30,7 +30,13 @@
                             <input type="text" th:value="${dto.getCart_item_cnt()}" readonly class="quantity-input">
                             <button class="quantity-up" type="button">+</button>
                         </div>
-                        <div class="cart-item-price" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice() * dto.getCart_item_cnt(), 3, 'COMMA')} + '원'">58,000원</div>
+                        <div class="cart-item-price-group">
+                            <div class="cart-item-price" style="color: red;" th:text="${#numbers.formatInteger(dto.getProductDTO().getRealPrice() * dto.getCart_item_cnt(), 3, 'COMMA')} + '원'">58,000원</div>
+
+                            <div class="cart-item-price" style="text-decoration: line-through;" th:text="${#numbers.formatInteger(dto.getProductDTO().getProd_price() * dto.getCart_item_cnt(), 3, 'COMMA')} + '원'">58,000원</div>
+
+                            <div class="cart-item-price delivery-fee" th:text="'배송비: ' + ${#numbers.formatInteger(dto.getProductDTO().getProd_deliv_price(), 3, 'COMMA')} + '원'">58,000원</div>
+                        </div>
                         <div class="cart-item-actions">
                             <button class="buy-now">바로구매</button>
                             <div class="action-icons">

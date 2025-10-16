@@ -30,7 +30,7 @@ public class ProductDTO {
     private int saleprice; // 총 할인 가격
     private int totalprice; // 총 주문 가격
     private int totaldeliv; // 총 주문 배송비
-    
+    private String fName;
     private String f_name; // 이미지파일 경로
     private String f_rdate; // 상품 등록일 = 파일 등록일
 

@@ -9,10 +9,12 @@
                         <tr>
                             <th>배송지 정보</th>
                             <td>
-                                <p>
-                                    <strong th:text="${memberDTO.getMem_name() + ' ' + memberDTO.getMem_hp()}">이민준 010-1234-1234</strong>
-                                    <input type="checkbox" id="saveAddr"> 안심번호 사용
-                                </p>
+                                <div class="recipient-info-inputs">
+                                    <span>이름: </span>
+                                    <input type="text" id="recipientName" th:value="${memberDTO.getMem_name()}">
+                                    <span>전화번호: </span>
+                                    <input type="text" id="recipientHp" th:value="${memberDTO.getMem_hp()}">
+                                </div>
 
                                 <p id="address-display" th:text="${'[' + memberDTO.getMem_zip() + '] ' + memberDTO.getMem_addr1()}">
                                     [01234] 부산광역시 부산진구 동의대학교
@@ -46,7 +48,12 @@
             <section class="checkout-section">
                 <h2 th:text="${'주문상품: ' + cartDTOList.size() + '개'}">주문상품: 3개</h2>
                 <div class="order-item-list">
-                    <article class="order-item" th:each="cartDTO : ${cartDTOList}" th:data-cart-id="${cartDTO.getCart_no()}">
+                    <article class="order-item" th:each="cartDTO : ${cartDTOList}"
+                                                 th:data-cart-id="${cartDTO.getCart_no()}"
+                                                 th:data-prod-no="${cartDTO.getProd_no()}"
+                                                 th:data-quantity="${cartDTO.getCart_item_cnt()}"
+                                                 th:data-option="${cartDTO.getCart_option()}">
+
                         <img th:src="@{https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg}" alt="마스마룰즈">
                         <div class="order-item-info">
                             <p class="brand" th:text="${cartDTO.getProductDTO().getProd_company()}">마스마룰즈</p>
@@ -119,7 +126,7 @@
                         <label><input type="radio" name="payment"> <strong>계좌이체</strong></label>
                     </div>
                     <div class="payment-method-option">
-                        <label><input type="radio" name="payment" checked> <strong>무통장입금</strong></label>
+                        <label><input type="radio" name="payment"> <strong>무통장입금</strong></label>
                     </div>
                     <div class="payment-method-option">
                         <label><input type="radio" name="payment"> <strong>휴대폰결제</strong></label>

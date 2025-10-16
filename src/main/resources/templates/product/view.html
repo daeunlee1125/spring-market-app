@@ -15,7 +15,7 @@
 
                         <div class="product-image-section">
                             <div class="main-image">
-                                <img th:src="@{/image/test1.jpeg}" alt="베이직 레더 벨트">
+                                <img th:src="@{${prodPathMap.get(3)}}" alt="베이직 레더 벨트">
                             </div>
                         </div>
                         <div class="product-info-section" data-product-price="16830">
@@ -104,12 +104,12 @@
                                 </div>
                                 <div class="action-buttons">
                                     <button type="button" id="btn-add-to-cart" class="btn-cart" th:data-prod-no="${productDTO.getProd_no()}">장바구니</button>
-                                    <a th:href="@{/product/order}"><button class="btn-buy">바로구매</button></a>
+                                    <button type="button" class="btn-buy">바로구매</button>
                                 </div>
                             </div>
 
                             <div class="banner">
-                                <img th:src="@{/inc/image/banner-top.jpg}" alt="배너 광고">
+                                <img th:src="@{${productDTO.getFName()}}" alt="배너 광고">
                             </div>
                         </div>
                     </div>
@@ -131,11 +131,8 @@
                             상품 번호: 1000722586634<br>
                             모델 번호: Y0251LCL158S1N00125F
                         </p>
-                        <img th:src="@{/image/product/wc_1_thumb1.jpg}" alt="SSG Guarantee">
-                        <img th:src="@{/image/product/wc_1_thumb2.jpg}" alt="짧은 상세 이미지">
-
                         <div class="long-detail-container">
-                            <img th:src="@{/image/product/wc_1_detail.jpg}" alt="긴 상세 이미지" class="long-detail-image">
+                            <img th:src="@{${prodPathMap.get(4)}}" alt="긴 상세 이미지" class="long-detail-image">
                             <div class="fade-overlay"></div>
                         </div>
                         <button type="button" class="toggle-detail-btn">상세정보 펼쳐보기 ▼</button>

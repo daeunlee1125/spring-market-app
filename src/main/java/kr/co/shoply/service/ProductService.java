@@ -7,6 +7,7 @@ import kr.co.shoply.mapper.*;
 import kr.co.shoply.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,10 @@ public class ProductService {
 
     public ProductDTO getProduct3(String prod_no){
         return productMapper.select3(prod_no);
+    }
+
+    public List<ProFileDTO> getFiles3(String prod_no){
+        return productMapper.selectFiles3(prod_no);
     }
 
     public List<ProdOptionDTO> getProductOption3(String prod_no){
@@ -74,6 +79,20 @@ public class ProductService {
         orderMapper.insertOrderItemList3(list);
     }
 
+    public List<ProductDTO> getSearchProduct3(String keyword, String sort){
+        return productMapper.selectSearchProduct3(keyword, sort);
+    }
+
+    public List<ProductDTO> getSearch2Product3(String keyword,
+                                               String sort,
+                                               String type,
+                                               String keyword2,
+                                               Integer start_price,
+                                               Integer end_price){
+
+        return  productMapper.selectSearch2Product3(keyword, sort, type, keyword2, start_price, end_price);
+    }
+
     public void modifyUsedCoupon3(String cpCode, String memId){
         couponMapper.updateUsedCoupon3(cpCode, memId);
     }
@@ -82,8 +101,8 @@ public class ProductService {
         pointMapper.insertUsedPoint3(memId, pType, pPoint, pInfo);
     }
 
-    public void saveOrder3(String memId, String ordName, String ordHp, String ordZip, String ordAddr1, String ordAddr2, int ordTotal){
-        orderMapper.insertOrder3(memId, ordName, ordHp, ordZip, ordAddr1, ordAddr2,ordTotal);
+    public void saveOrder3(String memId, String ordName, String ordHp, String ordZip, String ordAddr1, String ordAddr2, String payment, int ordTotal){
+        orderMapper.insertOrder3(memId, ordName, ordHp, ordZip, ordAddr1, ordAddr2, payment, ordTotal);
     }
 
     public void insertCart3(String mem_id, String prod_no, int cart_item_cnt, String cart_option){

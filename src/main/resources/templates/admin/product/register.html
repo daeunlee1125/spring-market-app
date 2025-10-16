@@ -22,7 +22,7 @@
 
             <main>
 
-                <form method="post">
+                <form th:action="@{/admin/product/register}" method="post">
 
                     <h2 class="h2-1">상품분류</h2>
                     <div class="gray-1">필수 선택 항목입니다.</div>
@@ -31,7 +31,7 @@
                         <tr>
                             <th>1차 분류</th>
                             <td>
-                                <select name="cate1" id="cate1">
+                                <select name="cate1_no" id="cate1_no">
                                     <option value="default" selected>-- 1차분류 선택 --</option>
                                     <option th:each="cate : ${cate1DTOList}" th:value="${cate.cate1_no}" th:text="${cate.cate1_name}"></option>
                                 </select>
@@ -40,8 +40,8 @@
                         <tr>
                             <th>2차 분류</th>
                             <td>
-                                <select name="cate2" id="">
-                                    <option value="" selected>-- 2차분류 선택 --</option>
+                                <select name="cate2_no" id="cate2_no">
+                                    <option value="default" selected>-- 2차분류 선택 --</option>
                                 </select>
                             </td>
                         </tr>
@@ -52,50 +52,50 @@
                     <h2 class="h2-1">기본정보</h2>
                     <div class="gray-1">필수 입력 항목입니다.</div>
 
-                    <table class="table-1">
+                    <table class="table-1" id="prod-table">
                         <tr>
                             <th>상품명</th>
-                            <td><input type="text" name="#" class="input-1"></td>
+                            <td><input type="text" name="prod_name" class="input-1"></td>
                         </tr>
                         <tr>
                             <th>기본설명</th>
-                            <td><input type="text" name="#" class="input-1"></td>
+                            <td><input type="text" name="prod_info" class="input-1"></td>
                         </tr>
                         <tr>
                             <th>제조사</th>
-                            <td><input type="text" name="#" class="input-1"></td>
+                            <td><input type="text" name="prod_company" class="input-1"></td>
                         </tr>
                         <tr>
                             <th>상품금액</th>
-                            <td><input type="number" name="#" class="input-1"> 원</td>
+                            <td><input type="number" name="prod_price" class="input-1"> 원</td>
                         </tr>
                         <tr>
                             <th>할인율</th>
-                            <td><input type="number" name="#" class="input-1"> %</td>
+                            <td><input type="number" name="prod_sale" class="input-1"> %</td>
                         </tr>
                         <tr>
                             <th>포인트</th>
-                            <td><input type="number" name="#" class="input-1"> 원</td>
+                            <td><input type="number" name="prod_point" class="input-1"> 원</td>
                         </tr>
                         <tr>
                             <th>재고수량</th>
-                            <td><input type="number" name="#" class="input-1"> 개</td>
+                            <td><input type="number" name="prod_stock" class="input-1"> 개</td>
                         </tr>
                         <tr>
                             <th>배송비</th>
-                            <td><input type="number" name="#" class="input-1"> 원</td>
+                            <td><input type="number" name="prod_deliv_price" class="input-1"> 원</td>
                         </tr>
                         <tr>
                             <th>상품 이미지</th>
                             <td>
-                                <input type="file" name="#" class="input-1"> 크기 190x190, 상품목록에 출력될 이미지입니다.<br>
-                                <input type="file" name="#" class="input-1"> 크기 190x190, 상품메인에 출력될 이미지입니다.<br>
-                                <input type="file" name="#" class="input-1"> 크기 190x190, 상품상세에 출력될 이미지입니다.
+                                <input type="file" name="file1" class="input-1"> 크기 190x190, 상품목록에 출력될 이미지입니다.<br>
+                                <input type="file" name="file2" class="input-1"> 크기 190x190, 상품메인에 출력될 이미지입니다.<br>
+                                <input type="file" name="file3" class="input-1"> 크기 190x190, 상품상세에 출력될 이미지입니다.
                             </td>
                         </tr>
                         <tr>
                             <th>상품 상세정보</th>
-                            <td><input type="file" name="#" class="input-1"> 크기 가로 940px, 높이 제약없음, 크기 최대 1MB</td>
+                            <td><input type="file" name="file4" class="input-1"> 크기 가로 940px, 높이 제약없음, 크기 최대 1MB</td>
                         </tr>
 
                     </table>
@@ -109,23 +109,10 @@
                     <table class="table-1" id="option-table">
                         <tr>
                             <th>옵션1</th>
-                            <td><input type="text" name="#" class="input-1"></td>
+                            <td><input type="text" name="optNames" class="input-1"></td>
                             <th>옵션1 항목</th>
-                            <td><input type="text" name="#" class="input-1"></td>
+                            <td><input type="text" name="optVals" class="input-1"></td>
                         </tr>
-                        <tr>
-                            <th>옵션2</th>
-                            <td><input type="text" name="#" class="input-1"></td>
-                            <th>옵션2 항목</th>
-                            <td><input type="text" name="#" class="input-1"></td>
-                        </tr>
-                        <tr>
-                            <th>옵션3</th>
-                            <td><input type="text" name="#" class="input-1"></td>
-                            <th>옵션3 항목</th>
-                            <td><input type="text" name="#" class="input-1"></td>
-                        </tr>
-
                     </table>
 
                     <button type="button" class="submit-btn-1" id="add-option-btn">옵션 추가</button><br>
@@ -136,26 +123,26 @@
                     <h2 class="h2-1">상품정보 제공고시</h2>
                     <div class="gray-1">[전자상거래에 관한 상품정보 제공에 관한 고시] 항목에 의거 등록하는 정보입니다.</div>
 
-                    <table class="table-1">
+                    <table class="table-1" id="notice-table">
                         <tr>
-                            <th>상품상태</th>
-                            <td><input type="text" name="#" class="input-1" value="새상품"></td>
+                            <th>상품상태</th><!--not_name-->
+                            <td><input type="text" name="not_val1" class="input-1" placeholder="ex)새상품"></td>
                         </tr>
                         <tr>
-                            <th>부가세 면세여부</th>
-                            <td><input type="text" name="#" class="input-1" value="과세상품"></td>
+                            <th>부가세 면세여부</th><!--not_name-->
+                            <td><input type="text" name="not_val2" class="input-1" placeholder="ex)과세상품"></td>
                         </tr>
                         <tr>
-                            <th>영수증 발행</th>
-                            <td><input type="text" name="#" class="input-1" value="발행가능 - 신용카드전표, 온라인현금영수증"></td>
+                            <th>영수증 발행</th><!--not_name-->
+                            <td><input type="text" name="not_val3" class="input-1" placeholder="ex)발행가능 - 신용카드전표, 온라인현금영수증"></td>
                         </tr>
                         <tr>
-                            <th>사업자구분</th>
-                            <td><input type="text" name="#" class="input-1" value="사업자판매자"></td>
+                            <th>사업자구분</th><!--not_name-->
+                            <td><input type="text" name="not_val4" class="input-1" placeholder="ex)사업자판매자"></td>
                         </tr>
                         <tr>
-                            <th>원산지</th>
-                            <td><input type="text" name="#" class="input-1" value="국내산"></td>
+                            <th>원산지</th><!--not_name-->
+                            <td><input type="text" name="not_val5" class="input-1" placeholder="ex)국내산"></td>
                         </tr>
                     </table>
 

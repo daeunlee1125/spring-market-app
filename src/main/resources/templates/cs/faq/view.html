@@ -1,61 +1,44 @@
-<div th:replace ="~{cs/_head.html}"></div>
-<div th:replace ="~{cs/_sidebar2.html}"></div>
+<div th:replace="~{cs/_head.html}"></div>
 
-<!-- 메인 콘텐츠 -->
-    <div class="main-content">
+<div class="container">
+    <div class="breadcrumb">
+        <a href="#">홈</a> &gt; 자주묻는질문
+    </div>
 
-        <!-- 공지사항 헤더 -->
-        <div class="notice-header">
-            <h2>전체</h2>
-            <p>공지사항 전체 내용입니다.</p>
-        </div>
+    <div class="main-area">
+        <!-- 사이드바: faq 는 2차 사용 -->
+        <div th:replace="~{cs/_sidebar :: catSidebar('faq','자주묻는질문', ${selCat1}, ${selCat2}, ${cat1List}, ${cat2List})}"></div>
 
-        <!-- 상세 페이지 헤더 -->
-        <div class="detail-header">
-            <h4 id="faqTitle">[공지] 제품가격 및 배송료 정책변경안내 (제품, 제조사로부터의 변경사유 안내)</h4>
-            <div class="detail-meta">
-                <span>작성일: <span id="noticeDate">2025.01.01</span></span>
-                <span>조회수: 247</span>
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+
+            <!-- FAQ 헤더 -->
+            <div class="notice-header">
+                <h2>FAQ</h2>
+                <p>자주 묻는 질문 상세입니다.</p>
             </div>
-        </div>
 
-        <!-- 상세 내용 -->
-        <div class="detail-content" id="faqContent">
-            <p>안녕하세요. 고객님께 안내드립니다.</p>
+            <!-- 상세 페이지 헤더 -->
+            <div class="detail-header">
+                <h4 id="faqTitle" th:text="${csFaqDTO.cs_faq_title}">제목</h4>
+                <div class="detail-meta">
+                    <span>작성일: <span id="noticeDate" th:text="${csFaqDTO.csFaqRdateShort}">24-01-01</span></span>
+                    <span>조회수: <span th:text="${csFaqDTO.cs_faq_hit}">0</span></span>
+                </div>
+            </div>
 
-            <p>제조사의 원가상승 및 배송비 정책 변경으로 인하여 일부 제품의 가격과 배송료가 변경됩니다.</p>
+            <!-- 상세 내용 -->
+            <div class="detail-content" id="faqContent" th:utext="${csFaqDTO.cs_faq_content}">
+                내용
+            </div>
 
-            <p><strong>■ 적용 일시</strong></p>
-            <ul>
-                <li>2025년 1월 15일(월) 오전 9시부터 적용</li>
-            </ul>
-
-            <p><strong>■ 변경 내용</strong></p>
-            <ul>
-                <li>건강기능식품: 평균 5-10% 가격 인상</li>
-                <li>대용량 제품: 배송비 3,000원 → 4,000원</li>
-                <li>냉동/냉장 제품: 별도 배송비 2,000원 추가</li>
-            </ul>
-
-            <p><strong>■ 변경 사유</strong></p>
-            <ul>
-                <li>원재료 및 포장재 가격 상승</li>
-                <li>운송업체 배송료 정책 변경</li>
-                <li>품질 유지를 위한 냉장/냉동 배송 서비스 강화</li>
-            </ul>
-
-            <p>고객님의 양해를 부탁드리며, 더욱 좋은 제품과 서비스로 보답하겠습니다.</p>
-
-            <p>문의사항이 있으시면 고객센터(1588-0000)로 연락주시기 바랍니다.</p>
-
-            <p>감사합니다.</p>
-        </div>
-
-        <!-- 버튼 영역 -->
-        <div class="button-area">
-            <a href="#" class="btn-list">목록</a>
+            <!-- 버튼 영역 -->
+            <div class="button-area">
+                <a class="btn-list"
+                   th:href="@{/cs/faq/list(cat1=${csFaqDTO.cs_faq_cate1}, cat2=${csFaqDTO.cs_faq_cate2})}">목록</a>
+            </div>
         </div>
     </div>
 </div>
-</div>
-<div th:replace ="~{cs/_tail.html}"></div>
+
+<div th:replace="~{cs/_tail.html}"></div>

@@ -1,14 +1,21 @@
-<div th:replace ="~{cs/_head.html}"></div>
-<div th:replace ="~{cs/_sidebar.html}"></div>
+<div th:replace="~{cs/_head.html}"></div>
 
-<!-- 메인 콘텐츠 -->
-    <div class="main-content">
+<div class="container">
+    <div class="breadcrumb">
+        <a href="#">홈</a> &gt; 공지사항
+    </div>
 
-        <!-- 공지사항 헤더 -->
-        <div class="notice-header">
-            <h2>전체</h2>
-            <p>공지사항 전체 내용입니다.</p>
-        </div>
+    <div class="main-area">
+        <!-- 뷰에서도 사이드바 노출 -->
+        <div th:replace="~{cs/_sidebar :: catSidebar('notice','공지사항', ${selCat1}, ${null}, ${cat1List}, ${null})}"></div>
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+
+            <!-- 공지사항 헤더 -->
+            <div class="notice-header">
+                <h2>전체</h2>
+                <p>공지사항 전체 내용입니다.</p>
+            </div>
 
         <!-- 상세 페이지 헤더 -->
         <div class="detail-header">

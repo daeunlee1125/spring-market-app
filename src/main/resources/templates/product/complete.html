@@ -4,7 +4,7 @@
                 <h1>주문완료</h1>
 
                 <div class="complete-message-box">
-                    <p><strong th:text="${orderInfo.getOrd_name()}">이민준</strong> 고객님 주문이 완료되었습니다.</p>
+                    <p><strong th:text="${memberDTO.getMem_name()}">이민준</strong> 고객님 주문이 완료되었습니다.</p>
                 </div>
 
                 <div class="order-info-bar">
@@ -73,11 +73,11 @@
                                 </div>
                                 <div class="info-row">
                                     <span class="label">주문자</span>
-                                    <span class="value" th:text="${orderInfo.getOrd_name()}">이민준</span>
+                                    <span class="value" th:text="${memberDTO.getMem_name()}">이민준</span>
                                 </div>
                                 <div class="info-row">
                                     <span class="label">연락처</span>
-                                    <span class="value" th:text="${orderInfo.getOrd_hp()}">010-2109-8237</span>
+                                    <span class="value" th:text="${memberDTO.getMem_hp()}">010-2109-8237</span>
                                 </div>
                             </div>
                         </section>
@@ -113,18 +113,12 @@
                                     <span th:text="${#numbers.formatDecimal(totalPoint, 0, 'COMMA', 0, 'POINT')} + '원'">21원</span>
                                 </div>
                             </div>
-                            <div class="promo-banner">
-                                <p>더 많은 혜택을 누리려면</p>
-                                <a href="#"><img
-                                        th:src="@{https://sui.ssgcdn.com/cmpt/banner/202403/2024032113572839817171954381_63.png}"
-                                        alt="프로모션 배너"></a>
-                            </div>
                         </section>
                     </div>
                 </div>
 
                 <div class="action-buttons">
-                    <a th:href="@{/product/list}"><button type="button" class="btn-secondary">쇼핑 계속하기</button></a>
+                    <a th:href="@{/}"><button type="button" class="btn-secondary">쇼핑 계속하기</button></a>
                 </div>
             </div>
         </div>

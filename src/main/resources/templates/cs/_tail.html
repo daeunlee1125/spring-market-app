@@ -1,191 +1,143 @@
 <footer>
-  <div class="top-footer">
+    <div class="top-footer">
+        <div class="footer-wrapper">
+            <div class="top-f">
+                <a th:href="@{/static}" style="margin-left: 0px;">회사소개</a> |
+                <a href="#">서비스이용약관</a> |
+                <a href="#">개인정보처리방침</a> |
+                <a href="#">전자금융거래약관</a>
+            </div>
+        </div>
+    </div>
+
+
     <div class="footer-wrapper">
-      <div class="top-f">
-        <a th:href="@{/static}" style="margin-left: 0px;">회사소개</a> |
-        <a href="#">서비스이용약관</a> |
-        <a href="#">개인정보처리방침</a> |
-        <a href="#">전자금융거래약관</a>
-      </div>
-    </div>
-  </div>
+        <h3 class="cpname">(주)샵플리닷컴</h3>
+        <div class="call-cont">
+            <img th:src="@{/image/call3.png}" alt="" style="height: 45px; margin-top: 5px;">
+            <span class="tel">1234-5678</span>
+            <span class="time"> (평일 09:00~18:00)</span>
+        </div>
+        <div style="color: gray; margin-top: 15px">
+            <span>대표이사 : 홍길동</span>
+            <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
+            <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
 
-
-  <div class="footer-wrapper">
-    <h3 class="cpname">(주)샵플리닷컴</h3>
-    <div class="call-cont">
-      <img th:src="@{/image/call3.png}" alt="" style="height: 45px; margin-top: 5px;">
-      <span class="tel">1234-5678</span>
-      <span class="time"> (평일 09:00~18:00)</span>
+            <div style="margin-top: 3px;">
+                <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
+            </div>
+        </div>
     </div>
-    <div style="color: gray; margin-top: 15px">
-      <span>대표이사 : 홍길동</span>
-      <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-      <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
-
-      <div style="margin-top: 3px;">
-        <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
-      </div>
-    </div>
-  </div>
 </footer>
 </body>
 </html>
- <script>
-        // FAQ 답변 토글
-        function toggleAnswer(button) {
-            const answer = button.nextElementSibling;
-            const isActive = button.classList.contains('active');
-            
-            // 모든 FAQ 아이템 닫기
-            document.querySelectorAll('.faq-question').forEach(q => {
-                q.classList.remove('active');
-                q.nextElementSibling.classList.remove('active');
+<script>
+    /* ================== FAQ ================== */
+    // FAQ 답변 토글
+    function toggleAnswer(button) {
+        const answer = button.nextElementSibling;
+        const isActive = button.classList.contains('active');
+
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.classList.remove('active');
+            q.nextElementSibling?.classList.remove('active');
+        });
+
+        if (!isActive) {
+            button.classList.add('active');
+            answer?.classList.add('active');
+        }
+    }
+
+    // 더보기 / 간단히보기 토글
+    function toggleMore(section) {
+        const button = document.querySelector(`[data-section="${section}"]`);
+        if (!button) return;
+
+        const sectionElement = button.closest('.faq-section');
+        if (!sectionElement) return;
+
+        const allItems = sectionElement.querySelectorAll('.faq-item');
+        const isExpanded = button.textContent.trim() === '간단히보기';
+
+        if (isExpanded) {
+            for (let i = 3; i < allItems.length; i++) {
+                allItems[i].classList.add('hidden');
+                const q = allItems[i].querySelector('.faq-question');
+                const a = allItems[i].querySelector('.faq-answer');
+                q?.classList.remove('active');
+                a?.classList.remove('active');
+            }
+            button.textContent = '더보기';
+        } else {
+            for (let i = 3; i < allItems.length; i++) {
+                allItems[i].classList.remove('hidden');
+            }
+            button.textContent = '간단히보기';
+        }
+    }
+
+    /* ================== NOTICE ================== */
+    // (샘플) 공지 데이터 – 실제 구현에선 서버 데이터 사용
+    const noticeData = {};
+
+    // 공지 로드
+    function loadNotice(title, date) {
+        const cleanTitle = title.replace('[공지] ', '');
+        const data = noticeData[cleanTitle];
+        if (!data) return;
+        const t = document.getElementById('noticeTitle');
+        const d = document.getElementById('noticeDate');
+        const c = document.getElementById('noticeContent');
+        if (t) t.textContent = '[공지] ' + cleanTitle;
+        if (d) d.textContent = data.date;
+        if (c) c.innerHTML = data.content;
+    }
+
+    // URL 파라미터로 공지 로드
+    function loadFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const title = urlParams.get('title');
+        const date = urlParams.get('date');
+        if (title && date) loadNotice(title, date);
+    }
+
+    /* ================== SIDEBAR: 접기/펼치기 ================== */
+    /*
+      요구사항:
+      - 1차(최상위) 항목을 '다시' 클릭하면 해당 2차만 접기/펼치기
+      - 2차 항목을 클릭해도 접히지 않고 정상 이동
+    */
+    function initSidebarToggle() {
+        // 1) 최상위(1차) 링크들
+        const topLinks = document.querySelectorAll('.sidebar .sidebar-menu > li > a');
+        topLinks.forEach(a => {
+            a.addEventListener('click', (e) => {
+                // 현재 활성 1차를 다시 클릭한 경우에만 토글
+                if (a.classList.contains('active')) {
+                    const sub = a.parentElement.querySelector('.sub-menu');
+                    if (sub) {
+                        e.preventDefault();           // 페이지 이동 막기
+                        sub.classList.toggle('open'); // 접기/펼치기
+                    }
+                }
+                // 활성 아닌 다른 1차 클릭 시에는 정상 네비게이션
             });
-            
-            // 클릭한 아이템이 닫혀있었다면 열기
-            if (!isActive) {
-                button.classList.add('active');
-                answer.classList.add('active');
-            }
-        }
-
-        // 더보기/간단히보기 토글
-        function toggleMore(section) {
-            const button = document.querySelector(`[data-section="${section}"]`);
-            const sectionElement = button.closest('.faq-section');
-            const allItems = sectionElement.querySelectorAll('.faq-item');
-            const isExpanded = button.textContent === '간단히보기';
-            
-            if (isExpanded) {
-                // 간단히보기 -> 3개만 보이기 (4, 5번째 숨기기)
-                for (let i = 3; i < allItems.length; i++) {
-                    allItems[i].classList.add('hidden');
-                    // 열려있는 답변도 닫기
-                    const question = allItems[i].querySelector('.faq-question');
-                    const answer = allItems[i].querySelector('.faq-answer');
-                    question.classList.remove('active');
-                    answer.classList.remove('active');
-                }
-                button.textContent = '더보기';
-            } else {
-                // 더보기 -> 5개 보이기 (4, 5번째 보이기)
-                for (let i = 3; i < allItems.length; i++) {
-                    allItems[i].classList.remove('hidden');
-                }
-                button.textContent = '간단히보기';
-            }
-        }
-        // 공지사항 데이터 (실제로는 서버에서 가져올 데이터)
-        const noticeData = {
-
-        }
-
-        // 공지사항 로드 함수
-        function loadNotice(title, date) {
-            const cleanTitle = title.replace('[공지] ', '');
-            const data = noticeData[cleanTitle];
-
-            if (data) {
-                document.getElementById('noticeTitle').textContent = '[공지] ' + cleanTitle;
-                document.getElementById('noticeDate').textContent = data.date;
-                document.getElementById('noticeContent').innerHTML = data.content;
-            }
-        }
-
-        // URL 파라미터로 공지사항 로드 (실제 구현 시 사용)
-        function loadFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const title = urlParams.get('title');
-            const date = urlParams.get('date');
-
-            if (title && date) {
-                loadNotice(title, date);
-            }
-        }
-
-        // 페이지 로드 시 실행
-        document.addEventListener('DOMContentLoaded', function() {
-            loadFromURL();
         });
 
-        // ========== 취소 관련 함수들 ==========
-        function showCancelConfirm() {
-            document.getElementById('cancelConfirmModal').classList.remove('hidden');
-        }
-
-        function hideCancelConfirm() {
-            document.getElementById('cancelConfirmModal').classList.add('hidden');
-        }
-
-        function confirmCancel() {
-            hideCancelConfirm();
-            // 필요시 history.back() 또는 페이지 이동 추가
-        }
-
-        // ========== 등록 관련 함수들 ==========
-        function showRegisterConfirm() {
-            // 폼 검증
-            const category = document.querySelector('select[name="category"]');
-            const title = document.querySelector('input[name="title"]');
-            const content = document.querySelector('textarea[name="content"]');
-
-            if (!category?.value) {
-                alert('문의유형을 선택해주세요.');
-                category?.focus();
-                return;
-            }
-
-            if (!title?.value.trim()) {
-                alert('제목을 입력해주세요.');
-                title?.focus();
-                return;
-            }
-
-            if (!content?.value.trim()) {
-                alert('내용을 입력해주세요.');
-                content?.focus();
-                return;
-            }
-
-            // 검증 통과시 모달 표시
-            document.getElementById('registerConfirmModal').classList.remove('hidden');
-        }
-
-        function hideRegisterConfirm() {
-            document.getElementById('registerConfirmModal').classList.add('hidden');
-        }
-
-        function confirmRegister() {
-            hideRegisterConfirm();
-            alert('문의가 등록되었습니다.');
-
-            // 실제 서버 전송이 필요하다면 여기에 추가
-            // const form = document.querySelector('form');
-            // form.submit();
-        }
-
-        // ========== 모달 이벤트 리스너 ==========
-        document.addEventListener('DOMContentLoaded', function() {
-            // 취소 모달 배경 클릭시 닫기
-            const cancelModal = document.getElementById('cancelConfirmModal');
-            if (cancelModal) {
-                cancelModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        hideCancelConfirm();
-                    }
-                });
-            }
-
-            // 등록 모달 배경 클릭시 닫기
-            const registerModal = document.getElementById('registerConfirmModal');
-            if (registerModal) {
-                registerModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        hideRegisterConfirm();
-                    }
-                });
-            }
-
+        // 2) 2차 링크들은 상위로 버블링 금지 (1차 토글 방지)
+        const subLinks = document.querySelectorAll('.sidebar .sub-menu a');
+        subLinks.forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.stopPropagation(); // 상위로 이벤트 전파 막기
+                // 기본 동작(페이지 이동)은 그대로
+            });
         });
-    </script>
+    }
+
+    /* ================== INIT ================== */
+    document.addEventListener('DOMContentLoaded', function () {
+        loadFromURL();
+        initSidebarToggle();
+    });
+</script>

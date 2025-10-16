@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,34 +28,96 @@ public class CsController {
     }
 
     @GetMapping("/cs/notice/list")
-    public String list(Model model){
-        List<CsNoticeDTO> noticeList = csService.getCsNoticeAll();
-        model.addAttribute("noticeList", noticeList);
+    public String noticeList(@RequestParam(required = false) String cat1, Model model) {
+
+        if ("전체".equals(cat1)) cat1 = null;
+
+        model.addAttribute("noticeList", csService.getCsNoticeList(cat1));
+        model.addAttribute("selCat1", cat1);
+        model.addAttribute("selCat2", null);
+
+        // notice는 2차 없음 → 사이드바용 cat2List는 빈 리스트 전달
+        model.addAttribute("cat1List", List.of("전체","고객서비스","안전거래","위해상품","이벤트당첨"));
+        model.addAttribute("cat2List", List.of());
+
         return "cs/notice/list";
     }
 
     @GetMapping("/cs/notice/view")
-    public String view(@RequestParam("cs_no") int cs_no, Model model){
-        log.info("cs_no:{}",cs_no);
+    public String noticeView(@RequestParam("cs_no") int csNo, Model model) {
+        var dto = csService.getCsNotice(csNo);
+        if (dto == null) return "redirect:/cs/notice/list";
 
-        CsNoticeDTO csNoticeDTO = csService.getCsNotice(cs_no);
-        model.addAttribute("csNoticeDTO", csNoticeDTO);
+        model.addAttribute("csNoticeDTO", dto);
+
+        // 뷰에서도 사이드바 유지
+        model.addAttribute("selCat1", dto.getCs_type());
+        model.addAttribute("selCat2", null);
+        model.addAttribute("cat1List", List.of("전체","고객서비스","안전거래","위해상품","이벤트당첨"));
+        model.addAttribute("cat2List", List.of());
+
         return "cs/notice/view";
     }
 
+    /* ---------------- FAQ ---------------- */
     @GetMapping("/cs/faq/list")
-    public String flist(Model model){
-        List<CsFaqDTO> csqList = csService.getCsFaqAll();
-        model.addAttribute("csqList", csqList);
+    public String faqList(@RequestParam(required = false) String cat1,
+                          @RequestParam(required = false) String cat2,
+                          Model model) {
+
+        // '전체'는 미선택과 동일 처리
+        if ("전체".equals(cat1)) cat1 = null;
+        if ("전체".equals(cat2)) cat2 = null;
+
+        // cat1, cat2가 아예 없으면 기본값으로 이동 (배송 > 당일배송)
+        if (cat1 == null && cat2 == null) {
+            return "redirect:/cs/faq/list?cat1=" + UriUtils.encode("배송", StandardCharsets.UTF_8)
+                    + "&cat2=" + UriUtils.encode("당일배송", StandardCharsets.UTF_8);
+        }
+
+        // 1차만 선택됐을 때 첫 번째 2차로 리다이렉트
+        if (cat1 != null && (cat2 == null || cat2.isBlank())) {
+            List<String> cat2ListForRedirect = csService.getCat2List(cat1);
+            if (cat2ListForRedirect != null && !cat2ListForRedirect.isEmpty()) {
+                String encodedCat1 = UriUtils.encode(cat1, StandardCharsets.UTF_8);
+                String encodedCat2 = UriUtils.encode(cat2ListForRedirect.get(0), StandardCharsets.UTF_8);
+                return "redirect:/cs/faq/list?cat1=" + encodedCat1 + "&cat2=" + encodedCat2;
+            }
+        }
+
+        // 데이터 바인딩
+        model.addAttribute("csqList", csService.getCsFaqList(cat1, cat2));
+        model.addAttribute("selCat1", cat1);
+        model.addAttribute("selCat2", cat2);
+        model.addAttribute("cat1List", csService.getCat1List());
+        model.addAttribute("cat2List", csService.getCat2List(cat1));
+
         return "cs/faq/list";
     }
 
+    /* ---------------- FAQ 상세 ---------------- */
     @GetMapping("/cs/faq/view")
-    public String fview(@RequestParam("cs_faq_no") int cs_faq_no, Model model){
-        log.info("cs_faq_no:{}",cs_faq_no);
+    public String faqView(@RequestParam("faqNo") int faqNo, Model model) {
+        log.info("faqNo: {}", faqNo);
 
-        CsFaqDTO csFaqDTO = csService.getCsFaq(cs_faq_no);
-        model.addAttribute("csFaqDTO", csFaqDTO);
+        CsFaqDTO dto = csService.getCsFaq(faqNo);
+        if (dto == null) {
+            return "redirect:/cs/faq/list";
+        }
+
+        // 상세 표시
+        model.addAttribute("csFaqDTO", dto);
+
+        // ✅ DTO가 스네이크 케이스이므로 접근자도 스네이크(getCs_faq_*) 사용
+        String c1 = dto.getCs_faq_cate1();
+        String c2 = dto.getCs_faq_cate2();
+
+        // 사이드바 표시용
+        model.addAttribute("selCat1", c1);
+        model.addAttribute("selCat2", c2);
+        model.addAttribute("cat1List", csService.getCat1List());
+        model.addAttribute("cat2List", csService.getCat2List(c1));
+
         return "cs/faq/view";
     }
 

@@ -21,4 +21,16 @@ public class OrderDTO {
     private Integer ord_total;
     private String ord_date;
     private String ord_payment;
+    private int ord_stat;
+    // 추가 필드
+    private String mem_name;
+    private int item_cnt;
+    private String prod_no;
+    private String prod_name;
+    private int prod_price;
+    private int prod_sale;
+    private int prod_deliv_price;
+    private int item_no;
+    private String corp_name;
+    private String f_name;
 }

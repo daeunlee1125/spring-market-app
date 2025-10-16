@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.IndexMapper">
+
+    <!-- 최신상품 -->
+    <select id="selectNewProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        f.f_name,
+        f.f_rdate
+        FROM product p
+        LEFT JOIN (
+        SELECT prod_no, MIN(f_no) AS min_f_no
+        FROM pro_file
+        GROUP BY prod_no
+        ) first_file ON p.prod_no = first_file.prod_no
+        LEFT JOIN pro_file f ON f.f_no = first_file.min_f_no
+        ORDER BY f.f_rdate DESC
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+    <!-- 히트상품 -->
+    <select id="selectHitProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        f.f_name,
+        p.prod_hit
+        FROM product p
+        LEFT JOIN pro_file f
+        ON p.prod_no = f.prod_no
+        AND f.f_no = (
+        SELECT MIN(f2.f_no)
+        FROM pro_file f2
+        WHERE f2.prod_no = p.prod_no
+        )
+        ORDER BY p.prod_hit DESC
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+
+    <!-- 추천상품 (평점 높은 순) -->
+    <select id="selectRecommendedProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        f.f_name
+        FROM product p
+        LEFT JOIN (
+        SELECT prod_no, AVG(rev_rating) AS avg_rating
+        FROM review
+        GROUP BY prod_no
+        ) r ON p.prod_no = r.prod_no
+        LEFT JOIN pro_file f
+        ON p.prod_no = f.prod_no
+        AND f.f_no = (
+        SELECT MIN(f2.f_no)
+        FROM pro_file f2
+        WHERE f2.prod_no = p.prod_no
+        )
+        ORDER BY r.avg_rating DESC NULLS LAST
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+    <!-- 인기상품 (판매횟수 기준) -->
+    <select id="selectBestProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        f.f_name,
+        p.prod_sold
+        FROM product p
+        LEFT JOIN pro_file f
+        ON p.prod_no = f.prod_no
+        AND f.f_no = (
+        SELECT MIN(f2.f_no)
+        FROM pro_file f2
+        WHERE f2.prod_no = p.prod_no
+        )
+        ORDER BY p.prod_sold DESC
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+    <!-- 할인상품 (할인율 높은 순) -->
+    <select id="selectDiscountProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        f.f_name
+        FROM product p
+        LEFT JOIN pro_file f
+        ON p.prod_no = f.prod_no
+        AND f.f_no = (
+        SELECT MIN(f2.f_no)
+        FROM pro_file f2
+        WHERE f2.prod_no = p.prod_no
+        )
+        WHERE p.prod_sale > 0
+        ORDER BY p.prod_sale DESC
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+    <!-- 베스트상품 (왼쪽 사이드) -->
+    <select id="selectSidebarBestProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        p.prod_sold,
+        f.f_name
+        FROM product p
+        LEFT JOIN pro_file f
+        ON p.prod_no = f.prod_no
+        AND f.f_no = (
+        SELECT MIN(f2.f_no)
+        FROM pro_file f2
+        WHERE f2.prod_no = p.prod_no
+        )
+        ORDER BY p.prod_sold DESC
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+
+
+
+
+
+
+</mapper>

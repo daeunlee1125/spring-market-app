@@ -1,36 +1,44 @@
-<div th:replace ="~{cs/_head.html}"></div>
-<div th:replace ="~{cs/_sidebar3.html}"></div>
+<div th:replace="~{cs/_head.html}"></div>
 
-<!-- 메인 콘텐츠 -->
-<div class="main-content">
-<!-- 공지사항 헤더 -->
-<div class="notice-header">
-    <h2>전체</h2>
-    <p>공지사항 전체 내용입니다.</p>
-</div>
-        
-<div class="detail-header">
-    <h4>[가입] 가입문의내용</h4>
-    <div class="detail-meta">
-        <span>작성자: chh***</span>
-        <span>작성일: 22-11-21</span>
-        <span class="inquiry-status">답변 완료</span>
+<div class="container">
+    <div class="breadcrumb">
+        <a href="#">홈</a> &gt; 문의게시판
+    </div>
+
+    <div class="main-area">
+        <!-- 사이드바 -->
+        <div th:replace="~{cs/_sidebar :: catSidebar('qna','문의게시판', ${selCat1}, ${selCat2}, ${cat1List}, ${cat2List})}"></div>
+
+        <div class="main-content">
+            <div class="notice-header">
+                <h2>문의 상세</h2>
+                <p>등록하신 문의 내용입니다.</p>
+            </div>
+
+            <div class="detail-header">
+                <h4 th:text="'[' + ${qnaDTO.q_cate2} + '] ' + ${qnaDTO.q_title}"></h4>
+                <div class="detail-meta">
+                    <span th:text="'작성자: ' + ${qnaDTO.mem_id}"></span>
+                    <span th:text="'작성일: ' + ${qnaDTO.q_rdate}"></span>
+                    <span class="inquiry-status"
+                          th:text="${qnaDTO.q_reply != null ? '답변 완료' : '답변 대기'}"></span>
+                </div>
+            </div>
+
+            <div class="detail-content">
+                <p th:utext="${qnaDTO.q_content}"></p>
+            </div>
+
+            <div class="detail-answer" th:if="${qnaDTO.q_reply != null}">
+                <h4>[답변] <span th:text="${qnaDTO.q_title}"></span></h4>
+                <p th:utext="${qnaDTO.q_reply}"></p>
+            </div>
+
+            <div class="button-area">
+                <button class="btn-list" onclick="history.back()">목록으로</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="detail-content">
-    <p>회원가입하고 싶어요. 어떻게 해야하나요?</p>
-</div>
-
-<div class="detail-answer">
-    <h4>[답변] 가입문의내용</h4>
-    <p>안녕하세요, 회원님. 회원가입하시면 됩니다.</p>
-</div>
-
-<div class="button-area">
-    <button class="btn-list" onclick="history.back()">목록으로</button>
-</div>
-    </div>
-  </div>
-</div>
-<div th:replace ="~{cs/_tail.html}"></div>
+<div th:replace="~{cs/_tail.html}"></div>

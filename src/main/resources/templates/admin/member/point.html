@@ -17,12 +17,13 @@
                 </div>
             </div>
 
-<div th:replace="~{admin/coupon/_head.html}"></div>
+
+            <div class="main-content-top"></div>
 
 
             <main>
-                <!--  검색 영역 -->
-                <div class="main-content-top" style="border:none; margin:15px 0;">
+                <!-- 검색 영역 -->
+                <div class="sub-top">
                     <div class="search-bar">
                         <form th:action="@{/admin/member/point}" method="get">
                             <select name="searchType">
@@ -31,6 +32,7 @@
                                 <option value="mem_email" th:selected="${pageRequestDTO.searchType == 'mem_email'}">이메일</option>
                                 <option value="mem_hp" th:selected="${pageRequestDTO.searchType == 'mem_hp'}">휴대폰</option>
                             </select>
+
                             <div class="search-place">
                                 <input type="text" name="keyword" placeholder="검색어 입력"
                                        th:value="${pageRequestDTO.keyword}">
@@ -40,6 +42,7 @@
                         </form>
                     </div>
                 </div>
+
 
                 <!-- 포인트 테이블 -->
                 <table class="table">
@@ -79,7 +82,7 @@
                 </div>
 
 
-<div th:replace="~{admin/coupon/_tail.html}"></div>
+
 
 
                 <!-- 페이지네이션 버튼 -->

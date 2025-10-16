@@ -2,16 +2,15 @@ package kr.co.shoply.controller.admin;
 
 import kr.co.shoply.dto.Cate1DTO;
 import kr.co.shoply.dto.Cate2DTO;
+import kr.co.shoply.dto.ProductRegisterDTO;
 import kr.co.shoply.service.AdminProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -35,6 +34,14 @@ public class AdminProductController {
         model.addAttribute("cate1DTOList",cate1DTOList);
 
         return "admin/product/register";
+    }
+
+    @PostMapping("/register")
+    public String register(ProductRegisterDTO productRegisterDTO, Principal principal){
+        log.info("productRegisterDTO={}",productRegisterDTO);
+        adminProductService.registerProduct(productRegisterDTO, principal.getName());
+
+        return "/admin/product/register";
     }
 
     @GetMapping("/{cate1}/cate2")

@@ -1,11 +1,10 @@
 package kr.co.shoply.mapper;
 
-import kr.co.shoply.dto.AdInfoDTO;
-import kr.co.shoply.dto.CompleteDTO;
-import kr.co.shoply.dto.OrderDTO;
-import kr.co.shoply.dto.OrderItemDTO;
+import kr.co.shoply.dto.*;
+import kr.co.shoply.entity.Order;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -19,4 +18,8 @@ public interface OrderMapper {
     void insertOrderItemList3(List<OrderItemDTO> orderItemDTOList);
 
     List<CompleteDTO> selectCompleteOrder3(@Param("ord_no") String ord_no);
+
+    public List<OrderDTO> getOrderList2(PageRequestDTO pageRequestDTO);
+    public int selectCountTotal2(PageRequestDTO pageRequestDTO);
+    public List<OrderDTO> getOrderDetails2();
 }

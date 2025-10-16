@@ -94,94 +94,42 @@
         <div class="inner">
             <h3>베스트 상품</h3>
 
-            <!-- 첫 번째 상품 (카드형) -->
-            <div class="product-card">
+            <!-- 첫 번째 상품 (가장 많이 팔린 1위) -->
+            <div th:if="${#lists.size(sidebarBestProducts) > 0}" class="product-card" th:with="p=${sidebarBestProducts[0]}">
                 <div class="img-box">
-                    <img th:src="@{/image/prod1.png}" alt="침대">
+                    <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                 </div>
-                <a th:href="@{/product/view}" class="name">가이온 스너그 단면매트리스 침대 화이트</a>
+                <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
                 <div class="price-box">
                     <div class="price-top">
-                        <span class="original">266,180원</span>
-                        <span class="discount">54%</span>
+                        <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                        <span class="discount" th:text="${p.prod_sale + '%'}"></span>
                     </div>
                     <div class="sale-cont">
-
-                        <span class="sale">119,800원</span>
+                    <span class="sale"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">0원</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 나머지 상품 (리스트형) -->
+            <!-- 나머지 상품 -->
             <ul class="product-list">
-                <li class="product-item">
+                <li class="product-item"
+                    th:each="p, iterStat : ${sidebarBestProducts}"
+                    th:if="${iterStat.index >= 1 and iterStat.index < 5}">
                     <div class="thumb">
-                        <img th:src="@{/image/prod2.png}" alt="운동화">
+                        <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                     </div>
                     <div class="info">
-                        <a th:href="@{/product/view}" class="name">여성용 러닝업 트래킹화</a>
+                        <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
                         <div class="price-box">
                             <div class="price-top2">
-                                <span class="original">133,090원</span>
-                                <span class="discount">54%</span>
+                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount" th:text="${p.prod_sale + '%'}"></span>
                             </div>
                             <div class="sale-cont">
-
-                                <span class="sale">59,900원</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="product-item">
-                    <div class="thumb">
-                        <img th:src="@{/image/prod3.png}" alt="세제">
-                    </div>
-                    <div class="info">
-                        <a th:href="@{/product/view}" class="name">듀얼(드럼/일반 겸용) 2.7L x2개 세탁세제</a>
-                        <div class="price-box">
-                            <div class="price-top2">
-                                <span class="original">66,600원</span>
-                                <span class="discount">54%</span>
-                            </div>
-                            <div class="sale-cont">
-
-                                <span class="sale">29,950원</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="product-item">
-                    <div class="thumb">
-                        <img th:src="@{/image/prod4.png}" alt="화장품">
-                    </div>
-                    <div class="info">
-                        <a th:href="@{/product/view}" class="name">비건 피톤치드 시카 토너</a>
-                        <div class="price-box">
-                            <div class="price-top2">
-                                <span class="original">133,090원</span>
-                                <span class="discount">54%</span>
-                            </div>
-                            <div class="sale-cont">
-
-                                <span class="sale">59,900원</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="product-item">
-                    <div class="thumb">
-                        <img th:src="@{/image/prod5.png}" alt="모자">
-                    </div>
-                    <div class="info">
-                        <a th:href="@{/product/view}" class="name">남녀공용 모자 블랙</a>
-                        <div class="price-box">
-                            <div class="price-top2">
-                                <span class="original">133,090원</span>
-                                <span class="discount">54%</span>
-                            </div>
-                            <div class="sale-cont">
-
-                                <span class="sale">59,900원</span>
+                            <span class="sale"
+                                  th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">0원</span>
                             </div>
                         </div>
                     </div>
@@ -189,7 +137,7 @@
             </ul>
         </div>
     </div>
-    <!-- 여기까지 베스트 상품!! -->
+    <!--  여기까지 베스트 상품 -->
 
 
     <div class="wrapper">
@@ -266,291 +214,180 @@
             </div>
 
 
-        <!-- 히트상품 -->
-        <section id="hit-products" class="product-section">
-            <h3>🔥 히트상품</h3>
-            <div class="product-grid">
-                <a th:href="@{/product/view}">
-                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                        <p class="name">히트상품1</p>
-                        <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                        <div class="sale-wrap"><span class="sale">27,000원</span><img
-                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                    </div>
-                </a>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">히트상품2</p>
-                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">27,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">히트상품3</p>
-                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">27,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">히트상품4</p>
-                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">27,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">히트상품5</p>
-                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">27,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">히트상품6</p>
-                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">27,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">히트상품7</p>
-                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">27,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">히트상품8</p>
-                    <div class="price-wrap"><span class="original">30,000원</span><span class="discount">10%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">27,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-            </div>
-        </section>
+            <!-- 히트상품 -->
+            <section id="hit-products" class="product-section">
+                <h3>🔥 히트상품</h3>
+                <div class="product-grid">
 
-        <!-- 추천상품 -->
-        <section id="recommended-products" class="product-section">
-            <h3>💎 추천상품</h3>
-            <div class="product-grid">
-                <a th:href="@{/product/view}">
-                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                        <p class="name">추천상품1</p>
-                        <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                        <div class="sale-wrap"><span class="sale">32,000원</span><img
-                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                    </div>
-                </a>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">추천상품2</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">추천상품3</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">추천상품4</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">추천상품5</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">추천상품6</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">추천상품7</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">추천상품8</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-            </div>
-        </section>
+                    <!-- 히트상품 리스트 반복 -->
+                    <div th:each="p : ${hitProducts}" class="product-box">
+                        <a th:href="@{/product/view(prod_no=${p.prod_no})}">
+                            <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
-        <!-- 최신상품 -->
-        <section id="recent-products" class="product-section">
-            <h3>💎 최신상품</h3>
-            <div class="product-grid">
-                <a th:href="@{/product/view}">
-                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                        <p class="name">최신상품1</p>
-                        <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                        <div class="sale-wrap"><span class="sale">32,000원</span><img
-                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                    </div>
-                </a>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">최신상품2</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">최신상품3</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">최신상품4</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">최신상품5</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">최신상품6</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">최신상품7</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">최신상품8</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-            </div>
-        </section>
+                            <!-- 상품명 -->
+                            <p class="name" th:text="${p.prod_name}"></p>
 
-        <!-- 인기상품 -->
-        <section id="best-products" class="product-section">
-            <h3>💎 인기상품</h3>
-            <div class="product-grid">
-                <a th:href="@{/product/view}">
-                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                        <p class="name">인기상품1</p>
-                        <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                        <div class="sale-wrap"><span class="sale">32,000원</span><img
-                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                    </div>
-                </a>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">인기상품2</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">인기상품3</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">인기상품4</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">인기상품5</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">인기상품6</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">인기상품7</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">인기상품8</p>
-                    <div class="price-wrap"><span class="original">40,000원</span><span class="discount">20%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">32,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-            </div>
-        </section>
+                            <!-- 원가 + 할인율 -->
+                            <div class="price-wrap">
+                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount" th:if="${p.prod_sale > 0}"
+                                      th:text="${p.prod_sale + '%↓'}"></span>
+                            </div>
 
-        <!-- 할인상품 -->
-        <section id="discount-products" class="product-section">
-            <h3>💸 할인상품</h3>
-            <div class="product-grid">
-                <a th:href="@{/product/view}">
-                    <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                        <p class="name">할인상품1</p>
-                        <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                        <div class="sale-wrap"><span class="sale">35,000원</span><img
-                                th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+                            <!-- 판매가 + 무료배송 아이콘 -->
+                            <div class="sale-wrap">
+                            <span class="sale"
+                                  th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
+                            </span>
+                                <img th:if="${p.prod_deliv_price == 0}"
+                                     th:src="@{/image/메인/ico_freeshipping.gif}"
+                                     alt="무료배송" class="free-icon">
+                            </div>
+                        </a>
                     </div>
-                </a>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">할인상품2</p>
-                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">35,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+
                 </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">할인상품3</p>
-                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">35,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+            </section>
+
+
+            <!-- 추천상품 -->
+            <section id="recommended-products" class="product-section">
+                <h3>💎 추천상품</h3>
+                <div class="product-grid">
+
+                    <!-- 상품 리스트 반복 -->
+                    <div th:each="p : ${recommendedProducts}" class="product-box">
+                        <a th:href="@{/product/view(prod_no=${p.prod_no})}">
+                            <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
+
+                            <p class="name" th:text="${p.prod_name}"></p>
+
+                            <div class="price-wrap">
+                    <span class="original"
+                          th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount" th:if="${p.prod_sale > 0}"
+                                      th:text="${p.prod_sale + '%↓'}"></span>
+                            </div>
+
+                            <div class="sale-wrap">
+                    <span class="sale"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
+                    </span>
+                                <img th:if="${p.prod_deliv_price == 0}"
+                                     th:src="@{/image/메인/ico_freeshipping.gif}"
+                                     alt="무료배송" class="free-icon">
+                            </div>
+                        </a>
+                    </div>
+
                 </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">할인상품4</p>
-                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">35,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+            </section>
+
+
+
+            <!-- 최신상품 -->
+            <section id="recent-products" class="product-section">
+                <h3>💎 최신상품</h3>
+                <div class="product-grid">
+
+                    <div th:each="p : ${newProducts}" class="product-box">
+                        <a th:href="@{/product/view/{prodNo}(prodNo=${p.prod_no})}">
+
+                            <!-- 상품 이미지 -->
+                            <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
+
+                            <!-- 상품명 -->
+                            <p class="name" th:text="${p.prod_name}"></p>
+
+                            <!-- 가격 / 할인율 -->
+                            <div class="price-wrap">
+                            <span class="original"
+                          th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+
+                                <span class="discount"
+                                      th:if="${p.prod_sale > 0}"
+                                      th:text="${p.prod_sale} + '%↓'"></span>
+                            </div>
+
+                            <!-- 할인 적용가 및 무료배송 -->
+                            <div class="sale-wrap">
+                    <span class="sale"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'"></span>
+
+                                <img th:if="${p.prod_deliv_price == 0}"
+                                     th:src="@{/image/메인/ico_freeshipping.gif}"
+                                     alt="무료배송" class="free-icon">
+                            </div>
+                        </a>
+                    </div>
                 </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">할인상품5</p>
-                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">35,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+            </section>
+
+            <!-- 💎 인기상품 -->
+            <section id="best-products" class="product-section">
+                <h3>💎 인기상품</h3>
+                <div class="product-grid">
+                    <!-- 상품 반복 출력 -->
+                    <a th:each="p : ${bestProducts}"
+                       th:href="@{'/product/view/' + ${p.prod_no}}">
+                        <div class="product-box">
+                            <!-- 상품 이미지 -->
+                            <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
+                            <!-- 상품명 -->
+                            <p class="name" th:text="${p.prod_name}"></p>
+                            <!-- 가격 정보 -->
+                            <div class="price-wrap">
+                                <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount" th:text="${p.prod_sale + '%↓'}"></span>
+                            </div>
+                            <!-- 할인된 가격 및 무료배송 아이콘 -->
+                            <div class="sale-wrap">
+                    <span class="sale"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'"
+                    </span>
+                                <img th:if="${p.prod_deliv_price == 0}"
+                                     th:src="@{/image/메인/ico_freeshipping.gif}"
+                                     alt="무료배송" class="free-icon">
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">할인상품6</p>
-                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">35,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
+            </section>
+
+
+            <!-- 💸 할인상품 -->
+            <section id="discount-products" class="product-section">
+                <h3>💸 할인상품</h3>
+                <div class="product-grid">
+                    <!-- 할인율 높은 순으로 8개 반복 -->
+                    <a th:each="p : ${discountProducts}"
+                       th:href="@{'/product/view/' + ${p.prod_no}}">
+                        <div class="product-box">
+                            <!-- 상품 이미지 -->
+                            <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
+                            <!-- 상품명 -->
+                            <p class="name" th:text="${p.prod_name}"></p>
+                            <!-- 가격 및 할인율 -->
+                            <div class="price-wrap">
+                    <span class="original"
+                          th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
+                                <span class="discount"
+                                      th:text="${p.prod_sale + '%↓'}"></span>
+                            </div>
+                            <!-- 할인가격 및 무료배송 표시 -->
+                            <div class="sale-wrap">
+                    <span class="sale"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
+                    </span>
+                                <img th:if="${p.prod_deliv_price == 0}"
+                                     th:src="@{/image/메인/ico_freeshipping.gif}"
+                                     alt="무료배송" class="free-icon">
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">할인상품7</p>
-                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">35,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-                <div class="product-box"><img th:src="@{/image/prod2.png}" alt="상품" class="prod-img">
-                    <p class="name">할인상품8</p>
-                    <div class="price-wrap"><span class="original">50,000원</span><span class="discount">30%↓</span></div>
-                    <div class="sale-wrap"><span class="sale">35,000원</span><img
-                            th:src="@{/image/메인/ico_freeshipping.gif}" alt="무료배송" class="free-icon"></div>
-                </div>
-            </div>
-        </section>
-    </div>
+            </section>
+        </div>
 </div>
 
 </main>

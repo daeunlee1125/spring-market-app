@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.AdminProductMapper">
+    <!-- registerProduct에서 한번에 INSERT / Transactional -->
+    <insert id="insertProduct" useGeneratedKeys="true" keyProperty="prod_no">
+        INSERT INTO PRODUCT (CATE2_NO, PROD_NAME, PROD_INFO , PROD_COMPANY , MEM_ID , PROD_PRICE , PROD_SALE , PROD_DELIV_PRICE , PROD_POINT , PROD_STOCK , PROD_SOLD , PROD_HIT)
+                    VALUES  (#{cate2_no}, #{prod_name}, #{prod_info}, #{prod_company}, #{mem_id}, #{prod_price}, #{prod_sale}, #{prod_deliv_price}, #{prod_point}, #{prod_stock}, #{prod_sold}, #{prod_hit})
+    </insert>
+
+    <insert id="insertProductFile">
+        INSERT INTO PRO_FILE (PROD_NO, F_NAME, F_RDATE, F_DIST)
+                    VALUES (#{prod_no}, #{f_name}, #{f_rdate}, #{f_dist})
+
+    </insert>
+
+    <insert id="insertProductNotice">
+        INSERT INTO PROD_NOTICE (PROD_NO, NOT_NAME, NOT_VAL)
+                    VALUES(#{prod_no}, #{not_name}, #{not_val})
+    </insert>
+
+    <insert id="insertProductOption">
+        INSERT INTO PROD_OPTION (PROD_NO, OPT_NAME, OPT_VAL)
+                    VALUES(#{prod_no}, #{opt_name}, #{opt_val})
+    </insert>
+    <!-- registerProduct에서 한번에 INSERT / Transactional -->
+</mapper>

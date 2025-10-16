@@ -18,4 +18,9 @@ public class CsFaqDTO {
     private int cs_faq_hit;
     private String cs_faq_rdate;
 
+    public String getCsFaqRdateShort() {
+        if (cs_faq_rdate == null || cs_faq_rdate.length() < 10) return cs_faq_rdate;
+        return cs_faq_rdate.substring(2, 10).replace("T", " ");
+    }
+
 }

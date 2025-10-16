@@ -19,7 +19,7 @@ public class IndexController {
         model.addAttribute("hitProducts", indexService.getHitProducts());
         model.addAttribute("recommendedProducts", indexService.getRecommendedProducts());
         model.addAttribute("bestProducts", indexService.getBestProducts());
-        model.addAttribute("discountProducts", indexService.getDiscountProducts());
+        model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
         return "index";
     }
 }

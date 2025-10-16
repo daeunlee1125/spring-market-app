@@ -124,6 +124,32 @@
     </select>
 
 
+    <!-- 베스트상품 (왼쪽 사이드) -->
+    <select id="selectSidebarBestProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        p.prod_sold,
+        f.f_name
+        FROM product p
+        LEFT JOIN pro_file f
+        ON p.prod_no = f.prod_no
+        AND f.f_no = (
+        SELECT MIN(f2.f_no)
+        FROM pro_file f2
+        WHERE f2.prod_no = p.prod_no
+        )
+        ORDER BY p.prod_sold DESC
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+
+
+
 
 
 

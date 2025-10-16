@@ -23,4 +23,7 @@ public interface IndexMapper {
     // 할인상품
     List<ProductDTO> selectDiscountProducts();
 
+    // 사이드 베스트상품
+    List<ProductDTO> selectSidebarBestProducts();
+
 }

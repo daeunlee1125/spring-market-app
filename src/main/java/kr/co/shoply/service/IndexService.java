@@ -37,10 +37,20 @@ public class IndexService {
     }
 
 
-    // 💸 할인상품 (할인율 높은 순)
+    //  할인상품 (할인율 높은 순)
     public List<ProductDTO> getDiscountProducts() {
         List<ProductDTO> products = indexMapper.selectDiscountProducts();
         return products;
     }
+
+
+    // 베스트상품 (왼쪽 사이드)
+    public List<ProductDTO> getSidebarBestProducts() {
+        List<ProductDTO> products = indexMapper.selectSidebarBestProducts();
+        return products;
+    }
+
+
+
 
 }

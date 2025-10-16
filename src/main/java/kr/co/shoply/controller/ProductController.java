@@ -55,7 +55,6 @@ public class ProductController {
         model.addAttribute("cate2DTO", cate2DTO);
 
         ProductDTO productDTO = productService.getProduct3(prodNo);
-        log.info("productDTO={}", productDTO);
         if (productDTO == null) {
             log.warn("존재하지 않는 상품 번호로 접근: {}", prodNo);
             // 존재하지 않는 상품이므로 상품 목록 페이지로 리다이렉트
@@ -455,7 +454,7 @@ public class ProductController {
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
-        
+
         return "product/search";
     }
 

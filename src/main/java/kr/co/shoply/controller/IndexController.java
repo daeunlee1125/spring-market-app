@@ -26,8 +26,6 @@ public class IndexController {
         model.addAttribute("bestProducts", indexService.getBestProducts());
         model.addAttribute("discountProducts", indexService.getDiscountProducts());
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
-        List<ProductDTO> productDTOs = indexService.getSidebarBestProducts();
-        log.info("productDTOs={}",productDTOs);
         return "index";
     }
 

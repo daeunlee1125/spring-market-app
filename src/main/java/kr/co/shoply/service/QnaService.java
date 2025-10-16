@@ -2,6 +2,7 @@ package kr.co.shoply.service;
 
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.dto.QnaAnswerRequestDTO;
 import kr.co.shoply.dto.QnaDTO;
 import kr.co.shoply.entity.Qna;
 import kr.co.shoply.mapper.QnaMapper;
@@ -142,6 +143,14 @@ public class QnaService {
         // 4. PageResponseDTO의 생성자에 pageRequestDTO를 전달하여 객체를 생성하고 반환합니다.
         // 이제 생성자 형식이 일치하므로 에러가 발생하지 않습니다.
         return new PageResponseDTO<>(pageRequestDTO, dtoList, total);
+    }
+
+    public QnaDTO getQna3(int q_no) {
+        return qnaMapper.selectQna3(q_no);
+    }
+
+    public void modifyAnswerQna3(QnaAnswerRequestDTO dto) {
+        qnaMapper.updateQnaReply3(dto);
     }
 
     public void removeQnaList3(List<Integer> list){

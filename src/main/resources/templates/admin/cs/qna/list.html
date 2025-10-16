@@ -52,19 +52,21 @@
             </tr>
         </thead>
             <tbody>
-            <!-- dtoList를 사용하여 현재 페이지의 목록만 반복 -->
-            <tr th:each="qnaDTO : ${pageResponse.dtoList}">
-                <td class="checkbox-cell">
-                    <input type="checkbox" name="itemCheck" th:value="${qnaDTO.getQ_no()}">
-                </td>
-                <td th:text="${qnaDTO.getQ_no()}">100</td>
-                <td th:text="${qnaDTO.getQ_cate1()}">회원</td>
-                <td th:text="${qnaDTO.getQ_cate2()}">가입</td>
-                <td th:text="${qnaDTO.getQ_title()}">[안내] 해외결제사칭문자주의</td>
-                <td th:text="${qnaDTO.getMem_id()}">chhok</td>
-                <td th:text="${qnaDTO.getQ_rdate()}">2025.09.27</td>
-                <td style="color: blue;" th:if="${qnaDTO.getQ_reply() != null}">답변완료</td>
-                <td style="color: red;" th:unless="${qnaDTO.getQ_reply() != null}">검토중</td>
+            <tr class="clickable-row" style="cursor: pointer;" th:each="qnaDTO : ${pageResponse.dtoList}">
+                <form th:action="@{${qnaDTO.getQ_reply() != null ? '/admin/cs/qna/view' : '/admin/cs/qna/reply'}}" method="get">
+                    <input type="hidden" name="qNo" th:value="${qnaDTO.getQ_no()}">
+                    <td class="checkbox-cell">
+                        <input type="checkbox" name="itemCheck" th:value="${qnaDTO.getQ_no()}">
+                    </td>
+                    <td th:text="${qnaDTO.getQ_no()}">100</td>
+                    <td th:text="${qnaDTO.getQ_cate1()}">회원</td>
+                    <td th:text="${qnaDTO.getQ_cate2()}">가입</td>
+                    <td th:text="${qnaDTO.getQ_title()}">[안내] 해외결제사칭문자주의</td>
+                    <td th:text="${qnaDTO.getMem_id()}">chhok</td>
+                    <td th:text="${qnaDTO.getQ_rdate()}">2025.09.27</td>
+                    <td style="color: blue;" th:if="${qnaDTO.getQ_reply() != null}">답변완료</td>
+                    <td style="color: red;" th:unless="${qnaDTO.getQ_reply() != null}">검토중</td>
+                </form>
             </tr>
             </tbody>
         </table>

@@ -30,6 +30,7 @@ public class ProductController {
     private final ReviewService reviewService;
     private final MemberService memberService;
     private final IndexService  indexService;
+    private final BannerService bannerService;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
@@ -53,6 +54,9 @@ public class ProductController {
     public String view(@PathVariable int cate2No, @PathVariable String prodNo, Model model) {
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
         model.addAttribute("cate2DTO", cate2DTO);
+
+        String bannerPath = bannerService.getProductBanner3();
+        model.addAttribute("bannerPath", bannerPath);
 
         ProductDTO productDTO = productService.getProduct3(prodNo);
         if (productDTO == null) {

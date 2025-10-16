@@ -1,10 +1,7 @@
 package kr.co.shoply.controller.admin.cs;
 
 
-import kr.co.shoply.dto.CsNoticeDTO;
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
-import kr.co.shoply.dto.QnaDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.mapper.QnaMapper;
 import kr.co.shoply.service.QnaService;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +37,30 @@ public class AdminQnaController {
     }
 
     @GetMapping("/admin/cs/qna/view")
-    public String qnaView(){
+    public String qnaView(@RequestParam("qNo") int qNo, Model model) {
+
+        QnaDTO qnaDTO = qnaService.getQna3(qNo);
+        if (qnaDTO == null) {
+            // 데이터가 없으면 목록 페이지로 리다이렉트하고 메시지를 전달할 수 있습니다.
+            return "redirect:/admin/cs/qna/list";
+        }
+        model.addAttribute("qnaDTO", qnaDTO);
+
         return "admin/cs/qna/view";
+    }
+
+    @GetMapping("/admin/cs/qna/reply")
+    public String qnaReply(@RequestParam("qNo") int qNo, Model model) {
+
+        QnaDTO qnaDTO = qnaService.getQna3(qNo);
+        model.addAttribute("qnaDTO", qnaDTO);
+
+        return "admin/cs/qna/reply";
     }
 
     @ResponseBody // 페이지 리턴이 아닌 데이터(응답 상태)를 리턴하기 위함
     @PostMapping("/admin/cs/qna/deleteSelected")
-    public ResponseEntity<?> deleteSelectedQna(@RequestBody List<Integer> qnaIds) {
+    public ResponseEntity<?> deleteSelectedQna(@RequestBody(required = false) List<Integer> qnaIds) {
 
         if (qnaIds == null || qnaIds.isEmpty()) {
             return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
@@ -65,5 +79,30 @@ public class AdminQnaController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @ResponseBody
+    @PostMapping("/admin/cs/qna/modifyAnswerQna")
+    public ResponseEntity<?> modifyAnswerQna(@RequestBody QnaAnswerRequestDTO requestDTO) {
+
+        // 데이터 유효성 검사 (필요 시)
+        if (requestDTO == null || requestDTO.getContent() == null || requestDTO.getContent().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("답변 내용이 비어있습니다.");
+        }
+
+        try {
+            // 서비스 레이어를 호출하여 DB 업데이트 수행
+            // (예시: qnaService에 qNo와 content를 넘겨 업데이트하는 메서드)
+            qnaService.modifyAnswerQna3(requestDTO);
+
+            // 성공 시 200 OK 응답과 함께 간단한 메시지 반환
+            return ResponseEntity.ok().body("답변이 성공적으로 등록되었습니다.");
+
+        } catch (Exception e) {
+            log.error("QNA 답변 등록 중 에러 발생", e);
+            // 실패 시 500 서버 에러 응답 반환
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 
 }

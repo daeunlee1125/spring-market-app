@@ -1,6 +1,23 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // 'clickable-row' 클래스를 가진 모든 <tr> 요소를 가져옵니다.
+    const rows = document.querySelectorAll('.clickable-row');
 
-    // --- 1. 1차/2차 카테고리 동적 변경 기능 ---
+    rows.forEach(row => {
+        row.addEventListener('click', function(event) {
+            // 💡 중요: 체크박스나 input을 클릭했을 때는 행 클릭이 동작하지 않도록 예외처리
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON') {
+                return;
+            }
+            // 클릭된 행(row) 내부의 form을 찾습니다.
+            const form = this.querySelector('form');
+            // form이 존재하면 전송(submit)합니다.
+            if (form) {
+                form.submit();
+            }
+        });
+    });
+
+    // --- 1. 1차/2차 카테고리 동적 변경 및 필터링 기능 ---
     const categories = {
         '회원': ['가입', '탈퇴', '회원정보', '로그인'],
         '쿠폰/혜택/이벤트': ['쿠폰/할인혜택', '포인트', '제휴', '이벤트'],
@@ -13,123 +30,165 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const category1Select = document.getElementById('category1');
     const category2Select = document.getElementById('category2');
-
-    // HTML의 data-* 속성에서 현재 선택된 카테고리 값을 가져옴
     const searchBar = document.querySelector('.search-bar');
-    const currentCate1 = searchBar.dataset.cate1;
-    const currentCate2 = searchBar.dataset.cate2;
 
-    /**
-     * 2차 카테고리 옵션을 업데이트하는 함수
-     * @param {string} selectedCategory1 - 선택된 1차 카테고리 값
-     */
-    function updateCategory2(selectedCategory1) {
-        category2Select.innerHTML = '<option value="">2차 선택</option>'; // 초기화
-        if (selectedCategory1 && categories[selectedCategory1]) {
-            categories[selectedCategory1].forEach(function(subcategory) {
-                const option = document.createElement('option');
-                option.value = subcategory;
-                option.textContent = subcategory;
-                category2Select.appendChild(option);
-            });
+    // searchBar 요소가 있는 list.html에서만 아래 로직 전체를 실행
+    if (searchBar) {
+        const currentCate1 = searchBar.dataset.cate1;
+        const currentCate2 = searchBar.dataset.cate2;
+
+        function updateCategory2(selectedCategory1) {
+            category2Select.innerHTML = '<option value="">2차 선택</option>';
+            if (selectedCategory1 && categories[selectedCategory1]) {
+                categories[selectedCategory1].forEach(function(subcategory) {
+                    const option = document.createElement('option');
+                    option.value = subcategory;
+                    option.textContent = subcategory;
+                    category2Select.appendChild(option);
+                });
+            }
         }
-    }
 
-    if (category1Select) {
-        // ✅ 페이지가 처음 로드될 때 1차 카테고리가 선택되어 있다면, 2차 카테고리를 바로 채워줌
         if (currentCate1) {
             updateCategory2(currentCate1);
-            // 2차 카테고리 값도 있다면 선택 상태로 만듦
             category2Select.value = currentCate2;
         }
-    }
 
-    // --- 2. 모달(팝업) 기능 ---
-    // 모든 '모달 열기' 버튼(class="openModalBtn")에 이벤트 리스너를 추가
-    document.querySelectorAll(".openModalBtn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetModalId = btn.dataset.target; // 버튼의 data-target 속성 값 (예: "confirmEndModal")
-            const modal = document.getElementById(targetModalId);
-            if (modal) {
-                modal.classList.remove("hidden"); // 해당 id를 가진 모달의 'hidden' 클래스를 제거하여 보여줌
-            }
-        });
-    });
-
-    // 모든 모달의 닫기 기능(배경 클릭 포함)에 이벤트 리스너를 추가
-    // HTML에서 모달의 가장 바깥쪽 요소에 class="modal-overlay" 또는 "modal"이 있어야 함
-    document.querySelectorAll(".modal, .modal-overlay").forEach(modal => {
-        modal.addEventListener("click", (e) => {
-            // 닫기 버튼(class="closeModalBtn")을 클릭했거나,
-            // 모달의 배경 부분을 직접 클릭했을 때
-            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                modal.classList.add("hidden"); // 'hidden' 클래스를 추가하여 모달을 숨김
-            }
-        });
-    });
-
-
-    // --- 3. 카테고리 선택 시 필터링 기능 ---
-    if (category1Select && category2Select) {
+        // 카테고리 선택 시 필터링 기능
         function triggerCategorySearch() {
             const cate1 = category1Select.value;
             const cate2 = category2Select.value;
-
             const params = new URLSearchParams();
             if (cate1) params.append('cate1', cate1);
             if (cate2) params.append('cate2', cate2);
-
             const queryString = params.toString();
-            const finalUrl = `/shoply/admin/cs/qna/list${queryString ? '?' + queryString : ''}`;
+            // 💡 중요: 컨텍스트 경로가 있다면 `/shoply`를 포함해야 하고, 없다면 `/admin...` 으로 시작해야 합니다.
+            const finalUrl = `/admin/cs/qna/list${queryString ? '?' + queryString : ''}`;
             window.location.href = finalUrl;
         }
 
-        // 1차 또는 2차 카테고리가 변경될 때 페이지 리로드(필터링) 실행
         category1Select.addEventListener('change', triggerCategorySearch);
         category2Select.addEventListener('change', triggerCategorySearch);
     }
 
-    // --- 4. 선택 삭제 기능 ---
+    // --- 2. 모달(팝업) 기능 ---
+    document.querySelectorAll(".openModalBtn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetModalId = btn.dataset.target;
+            const modal = document.getElementById(targetModalId);
+            if (modal) {
+                modal.classList.remove("hidden");
+            }
+        });
+    });
+
+    document.querySelectorAll(".modal, .modal-overlay").forEach(modal => {
+        modal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+    });
+
+    // --- 4. 삭제 기능 ---
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const removeViewBtn = document.getElementById('removeViewBtn');
 
     if (confirmDeleteBtn) {
         confirmDeleteBtn.addEventListener('click', function() {
-            // 1. 체크된 모든 체크박스를 선택
             const checkedItems = document.querySelectorAll('input[name="itemCheck"]:checked');
-
             if (checkedItems.length === 0) {
                 alert('삭제할 항목을 선택해주세요.');
                 return;
             }
+            const idsToDelete = Array.from(checkedItems).map(checkbox => checkbox.value);
+            deleteQnaItems(idsToDelete);
+        });
+    }
 
-            // 2. 체크된 항목들의 value(q_no)를 수집하여 리스트(배열)로 만듦
-            const idsToDelete = [];
-            checkedItems.forEach(checkbox => {
-                idsToDelete.push(checkbox.value);
+    if (removeViewBtn) {
+        removeViewBtn.addEventListener('click', function() {
+            if (!confirm('해당 문의를 정말 삭제하시겠습니까?')) {
+                return;
+            }
+            const idToDelete = [ this.dataset.delqnabtn ];
+            deleteQnaItems(idToDelete, true);
+        });
+    }
+
+    function deleteQnaItems(ids, isFromViewPage = false) {
+        fetch('/shoply/admin/cs/qna/deleteSelected', { // 💡 컨텍스트 경로가 있다면 `/shoply`를 포함해야 합니다.
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ids)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('삭제가 완료되었습니다.');
+                    if (isFromViewPage) {
+                        window.location.href = '/shoply/admin/cs/qna/list'; // 💡 컨텍스트 경로 주의
+                    } else {
+                        window.location.reload();
+                    }
+                } else {
+                    alert('삭제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+                }
+            })
+            .catch(error => {
+                console.error('삭제 처리 중 네트워크 오류 발생:', error);
+                alert('삭제 중 오류가 발생했습니다.');
             });
+    }
 
-            // 3. fetch API를 사용하여 서버에 데이터 전송
-            fetch('/shoply/admin/cs/qna/deleteSelected', {
-                method: 'POST', // 또는 'DELETE'
+    // --- 5. 문의하기 답변 등록 기능 ---
+    const answerQnaBtn = document.getElementById('answerQna');
+
+    if (answerQnaBtn) {
+        answerQnaBtn.addEventListener('click', function() {
+            // 1. 버튼의 data 속성에서 게시글 번호(qNo)를 가져옵니다.
+            const qNo = this.dataset.qnaNo;
+
+            // 2. textarea에서 답변 내용을 가져옵니다.
+            const contentTextarea = document.getElementById('qnaAnswerContent');
+            const content = contentTextarea.value;
+
+            // 3. 내용이 비어있는지 확인합니다.
+            if (!content || content.trim() === '') {
+                alert('답변 내용을 입력해주세요.');
+                contentTextarea.focus(); // textarea에 포커스를 줍니다.
+                return;
+            }
+
+            // 4. 서버로 보낼 JSON 데이터를 구성합니다.
+            const dataToSend = {
+                qNo: qNo,
+                content: content
+            };
+
+            // 5. fetch API를 사용하여 서버에 POST 요청을 보냅니다.
+            fetch('/shoply/admin/cs/qna/modifyAnswerQna', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(idsToDelete) // JavaScript 배열을 JSON 문자열로 변환
+                body: JSON.stringify(dataToSend)
             })
                 .then(response => {
                     if (response.ok) {
-                        // 성공적으로 삭제되었을 때
-                        alert('선택한 항목이 삭제되었습니다.');
-                        window.location.reload(); // 페이지를 새로고침하여 변경사항 반영
+                        alert('답변이 성공적으로 등록되었습니다.');
+                        // 성공 시, 해당 게시글의 view 페이지로 이동합니다.
+                        window.location.href = `/shoply/admin/cs/qna/view?qNo=${qNo}`;
                     } else {
-                        // 서버에서 에러 응답이 왔을 때
-                        alert('삭제에 실패했습니다.');
+                        // 서버에서 에러 응답(4xx, 5xx)이 왔을 때
+                        alert('답변 등록에 실패했습니다. 다시 시도해주세요.');
                     }
                 })
                 .catch(error => {
-                    console.error('삭제 처리 중 에러 발생:', error);
-                    alert('삭제 중 오류가 발생했습니다.');
+                    console.error('답변 등록 중 네트워크 오류 발생:', error);
+                    alert('답변 등록 중 오류가 발생했습니다.');
                 });
         });
     }

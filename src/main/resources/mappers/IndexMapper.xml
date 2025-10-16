@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.shoply.mapper.IndexMapper">
+
+    <!-- 최신상품 -->
+    <select id="selectNewProducts" resultType="kr.co.shoply.dto.ProductDTO">
+        SELECT
+        p.prod_no,
+        p.prod_name,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        f.f_name,
+        f.f_rdate
+        FROM product p
+        LEFT JOIN (
+        SELECT prod_no, MIN(f_no) AS min_f_no
+        FROM pro_file
+        GROUP BY prod_no
+        ) first_file ON p.prod_no = first_file.prod_no
+        LEFT JOIN pro_file f ON f.f_no = first_file.min_f_no
+        ORDER BY f.f_rdate DESC
+        FETCH FIRST 8 ROWS ONLY
+    </select>
+
+
+
+
+
+
+
+</mapper>

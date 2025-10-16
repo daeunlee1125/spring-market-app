@@ -16,8 +16,6 @@ public class PageResponseDTO<T> {
 
     private List<T> dtoList;
 
-
-
     private String cate;
     private int pg;
     private int size;
@@ -28,6 +26,10 @@ public class PageResponseDTO<T> {
 
     private String searchType;
     private String keyword;
+
+    // ✅ QNA 필터링 상태 유지를 위한 필드 추가
+    private String cate1;
+    private String cate2;
 
 
     @Builder
@@ -43,7 +45,8 @@ public class PageResponseDTO<T> {
         this.end = (int) (Math.ceil(this.pg / 10.0)) * 10;
         this.start = this.end - 9;
 
-        int last = (int) (Math.ceil(total / (double) size));
+        // 0일 때 1로 수정
+        int last = (total > 0) ? (int) (Math.ceil(total / (double) size)) : 1;
         this.end = Math.min(end, last);
         this.prev = this.start > 1;
         this.next = total > this.end * this.size;
@@ -51,6 +54,9 @@ public class PageResponseDTO<T> {
         this.searchType = pageRequestDTO.getSearchType();
         this.keyword = pageRequestDTO.getKeyword();
 
+        // qna
+        this.cate1 = pageRequestDTO.getCate1();
+        this.cate2 = pageRequestDTO.getCate2();
     }
 
 

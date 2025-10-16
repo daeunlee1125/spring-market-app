@@ -111,6 +111,7 @@
         m.mem_id,
         mem_name,
         ITEM_CNT,
+        item_trk_num,
         sum(prod_price * (100-prod_sale)/100) AS ord_total,
         prod_no,
         ord_payment,
@@ -126,7 +127,7 @@
         JOIN order_item i USING (ord_no)
         JOIN product p USING (prod_no)
         <include refid="searchWhere2"/>
-        GROUP BY ord_no, m.mem_id, mem_name, item_cnt, prod_no, ord_payment, ord_stat, ord_date, ord_name, item_no, ord_hp, ord_addr1, ord_addr2
+        GROUP BY ord_no, m.mem_id, mem_name, item_trk_num, item_cnt, prod_no, ord_payment, ord_stat, ord_date, ord_name, item_no, ord_hp, ord_addr1, ord_addr2
         ORDER BY ord_no DESC
         OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
@@ -212,5 +213,10 @@
         SELECT COUNT(*) FROM Order_item i Join "order" o on o.ord_no = i.ord_no
         <include refid="delivSearch2"/>
     </select>
+
+    <update id="setOrdDelvInfo2">
+        update "order" set ord_name=#{ord_name}, ord_zip=#{ord_zip}, ord_addr1=#{ord_addr1}, ord_addr2=#{ord_addr2}
+        where ord_no=#{ord_no}
+    </update>
 
 </mapper>

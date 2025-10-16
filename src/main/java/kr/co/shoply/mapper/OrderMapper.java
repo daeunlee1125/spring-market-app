@@ -24,4 +24,6 @@ public interface OrderMapper {
     public List<OrderDTO> getOrderDetails2();
     public List<OrderDTO> getDelivList2(PageRequestDTO pageRequestDTO);
     public int selectCountDelvTotal2(PageRequestDTO pageRequestDTO);
+    public void setOrdDelvInfo2(OrderDTO orderDTO);
+
 }

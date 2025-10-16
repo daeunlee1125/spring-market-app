@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -28,6 +29,15 @@ public class AdminOrderController {
 
         return "admin/order/list";
     }
+
+    @PostMapping("/admin/order/list")
+    public String list(OrderDTO orderDTO) {
+
+        orderService.setDelvs(orderDTO);
+
+        return "redirect:/admin/order/list";
+    }
+
     @GetMapping("/admin/order/delivery")
     public String orderDelivery(Model model, PageRequestDTO pageRequestDTO) {
         PageResponseDTO pageResponseDTO = orderService.getDelivs2(pageRequestDTO);
@@ -35,4 +45,6 @@ public class AdminOrderController {
 
         return "admin/order/delivery";
     }
+
+
 }

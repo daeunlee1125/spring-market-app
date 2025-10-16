@@ -1,6 +1,7 @@
 package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.ProductDTO;
+import kr.co.shoply.service.BannerService;
 import kr.co.shoply.service.IndexService;
 import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 public class IndexController {
 
     private final IndexService indexService;
+    private final BannerService bannerService;
 
     @GetMapping({"/","/index"})
     public String index(Model model) {
@@ -26,6 +28,7 @@ public class IndexController {
         model.addAttribute("bestProducts", indexService.getBestProducts());
         model.addAttribute("discountProducts", indexService.getDiscountProducts());
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+        model.addAttribute("banners", bannerService.mainBanners2());
         return "index";
     }
 

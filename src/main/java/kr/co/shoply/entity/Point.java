@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @ToString
 @NoArgsConstructor
@@ -28,5 +29,5 @@ public class Point {
     private LocalDateTime p_date;
     private LocalDateTime p_exp_date;
 
-    private Integer  ord_no;
+    private String ord_no;
 }

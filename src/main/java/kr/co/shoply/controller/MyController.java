@@ -419,6 +419,9 @@ public class MyController {
     @GetMapping("/point")
     public String point(Model model, @AuthenticationPrincipal MyUserDetails user) {
         String memberId = user.getMember().getMem_id();
+        
+        myService.debugPointData(memberId);
+
         List<PointDTO> pointHistory = myService.getPointHistory(memberId);
         model.addAttribute("pointHistory", pointHistory);
         addMyPageSummary(model, memberId);
@@ -428,7 +431,6 @@ public class MyController {
 
         return "my/point";
     }
-
     // ===================== 상품 상세 =====================
     @GetMapping("/view/{prodNo}")
     public String viewProduct(@PathVariable String prodNo, Model model) {

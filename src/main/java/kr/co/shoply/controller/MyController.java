@@ -76,6 +76,8 @@ public class MyController {
         log.debug("productMap 최종 크기: {}", productMap.size());
         model.addAttribute("productMap", productMap);
     }
+
+    
 // MyController.java의 주문 섹션에 추가
 
     // ===================== 반품 신청 =====================
@@ -445,19 +447,27 @@ public class MyController {
     @GetMapping("/point")
     public String point(Model model,
                         @AuthenticationPrincipal MyUserDetails user,
-                        @PageableDefault(size = 10) Pageable pageable) {
+                        @PageableDefault(size = 10) Pageable pageable,
+                        @RequestParam(value = "periodType", required = false) String periodType,
+                        @RequestParam(value = "period", required = false) String period,
+                        @RequestParam(value = "startMonth", required = false) String startMonth,
+                        @RequestParam(value = "endMonth", required = false) String endMonth) {
         String memberId = user.getMember().getMem_id();
 
         // 디버그 로그
         myService.debugPointData(memberId);
 
-        // 기존 기능 유지
-        List<PointDTO> pointHistory = myService.getPointHistory(memberId);
-        model.addAttribute("pointHistory", pointHistory);
+        // 기간에 맞게 필터링된 데이터 조회
+        Page<PointDTO> pointPage = myService.getPointHistoryPagedWithPeriod(
+                memberId, pageable, periodType, period, startMonth, endMonth);
 
-        // 페이지네이션 추가
-        Page<PointDTO> pointPage = myService.getPointHistoryPaged(memberId, pageable);
         model.addAttribute("pointPage", pointPage);
+
+        // 선택된 기간 값 다시 전달 (UI에서 사용)
+        model.addAttribute("periodType", periodType);
+        model.addAttribute("period", period);
+        model.addAttribute("startMonth", startMonth);
+        model.addAttribute("endMonth", endMonth);
 
         addMyPageSummary(model, memberId);
 
@@ -508,5 +518,6 @@ public class MyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 }

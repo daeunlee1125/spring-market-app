@@ -41,6 +41,47 @@
             810 x 86 배너 광고
         </div>
 
+        <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+            <h3 style="margin-top: 0;">기간별 조회</h3>
+            <form id="periodForm" method="get" th:action="@{/my/point}" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+
+                <!-- 빠른 선택 버튼 -->
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="period-btn" data-period="1day" style="padding: 8px 15px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer;">1일</button>
+                    <button type="button" class="period-btn" data-period="1week" style="padding: 8px 15px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer;">1주일</button>
+                    <button type="button" class="period-btn" data-period="1month" style="padding: 8px 15px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer;">1개월</button>
+                </div>
+
+                <!-- 개월 선택 -->
+                <div>
+                    <select id="monthSelect" name="month" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="">개월 선택</option>
+                        <option value="3">3개월</option>
+                        <option value="6">6개월</option>
+                        <option value="12">12개월</option>
+                    </select>
+                </div>
+
+                <!-- 커스텀 기간 (년월일) -->
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span style="font-weight: bold;">기간:</span>
+                    <input type="date" id="startMonth" name="startMonth" placeholder="시작 날짜" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <span>~</span>
+                    <input type="date" id="endMonth" name="endMonth" placeholder="종료 날짜" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+
+                <!-- 숨겨진 기간 값 -->
+                <input type="hidden" id="periodType" name="periodType" value="">
+                <input type="hidden" id="period" name="period" value="">
+
+                <!-- 조회 버튼 -->
+                <button type="submit" style="padding: 8px 20px; background: #946ccf; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">조회</button>
+
+                <!-- 초기화 버튼 -->
+                <button type="button" id="resetBtn" style="padding: 8px 20px; background: #ddd; color: #333; border: none; border-radius: 4px; cursor: pointer;">초기화</button>
+            </form>
+        </div>
+
         <div class="point-summary">
             <p>총 적립 포인트 : <span th:text="${#numbers.formatInteger(pointTotal, 0, 'COMMA')}">1,000</span> P</p>
         </div>
@@ -154,3 +195,67 @@
     </div>
 </main>
 <div th:replace="~{my/_tail.html}"></div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const periodBtns = document.querySelectorAll('.period-btn');
+        const monthSelect = document.getElementById('monthSelect');
+        const startMonth = document.getElementById('startMonth');
+        const endMonth = document.getElementById('endMonth');
+        const periodType = document.getElementById('periodType');
+        const periodInput = document.getElementById('period');
+        const resetBtn = document.getElementById('resetBtn');
+        const periodForm = document.getElementById('periodForm');
+
+        // 빠른 선택 버튼
+        periodBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                periodBtns.forEach(b => b.style.background = '#fff');
+                this.style.background = '#946ccf';
+                this.style.color = '#fff';
+
+                periodType.value = this.getAttribute('data-period');
+                monthSelect.value = '';
+                startMonth.value = '';
+                endMonth.value = '';
+                periodForm.submit();
+            });
+        });
+
+        // 개월 선택
+        monthSelect.addEventListener('change', function() {
+            if(this.value) {
+                periodBtns.forEach(b => b.style.background = '#fff');
+                periodType.value = 'month';
+                periodInput.value = this.value;
+                startMonth.value = '';
+                endMonth.value = '';
+                periodForm.submit();
+            }
+        });
+
+        // 커스텀 기간 (조회 버튼 클릭)
+        periodForm.addEventListener('submit', function(e) {
+            if(!periodType.value && !periodInput.value && !startMonth.value && !endMonth.value) {
+                return true;
+            }
+
+            if(startMonth.value && endMonth.value) {
+                periodType.value = 'custom';
+                periodInput.value = '';
+            }
+        });
+
+        // 초기화
+        resetBtn.addEventListener('click', function() {
+            periodBtns.forEach(b => b.style.background = '#fff');
+            monthSelect.value = '';
+            startMonth.value = '';
+            endMonth.value = '';
+            periodType.value = '';
+            periodInput.value = '';
+            window.location.href = '/shoply/my/point';
+        });
+    });
+</script>

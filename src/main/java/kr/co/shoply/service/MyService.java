@@ -58,6 +58,85 @@ public class MyService {
         return options;
     }
 
+    // MyService.java에 추가 - 포인트 기간별 필터링
+    @Transactional(readOnly = true)
+    public Page<PointDTO> getPointHistoryPagedWithPeriod(String memId, Pageable pageable,
+                                                         String periodType, String period,
+                                                         String startMonth, String endMonth) {
+        // 1. 회원의 모든 포인트 가져오기
+        List<Point> allPoints = pointRepository.findByMem_idOrderByP_dateDesc(memId);
+
+        // 2. 기간에 따라 필터링
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1);
+
+        if ("1day".equals(periodType)) {
+            startDate = LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("1week".equals(periodType)) {
+            startDate = LocalDateTime.now().minusWeeks(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("1month".equals(periodType)) {
+            startDate = LocalDateTime.now().minusMonths(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("month".equals(periodType) && period != null && !period.isEmpty()) {
+            try {
+                int months = Integer.parseInt(period);
+                startDate = LocalDateTime.now().minusMonths(months).withHour(0).withMinute(0).withSecond(0);
+            } catch (NumberFormatException e) {
+                log.error("개월 파싱 오류", e);
+                startDate = null;
+            }
+        } else if ("custom".equals(periodType) && startMonth != null && endMonth != null) {
+            try {
+                startDate = LocalDate.parse(startMonth).atStartOfDay();
+                endDate = LocalDate.parse(endMonth).atTime(23, 59, 59);
+                log.info("커스텀 포인트 기간 설정: {} ~ {}", startDate, endDate);
+            } catch (Exception e) {
+                log.error("커스텀 기간 파싱 오류", e);
+                startDate = null;
+            }
+        }
+
+        // 3. 기간으로 필터링
+        final LocalDateTime finalStartDate = startDate;
+        final LocalDateTime finalEndDate = endDate;
+
+        List<PointDTO> allPointDTOs = allPoints.stream()
+                .filter(point -> {
+                    if (finalStartDate == null) return true;
+
+                    LocalDateTime pointDate = point.getP_date();
+
+                    boolean inRange = !pointDate.isBefore(finalStartDate) && !pointDate.isAfter(finalEndDate);
+                    return inRange;
+                })
+                .map(point -> {
+                    PointDTO dto = modelMapper.map(point, PointDTO.class);
+
+                    if (point.getP_date() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setP_date(point.getP_date().format(formatter));
+                    }
+                    if (point.getP_exp_date() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setP_exp_date(point.getP_exp_date().format(formatter));
+                    } else {
+                        dto.setP_exp_date("-");
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        log.info("필터링된 포인트 내역 수: {}", allPointDTOs.size());
+
+        // 4. 페이지네이션
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), allPointDTOs.size());
+
+        List<PointDTO> pageContent = allPointDTOs.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, allPointDTOs.size());
+    }
+
     @Transactional(readOnly = true)
     public List<ProFileDTO> getProductFiles(String prodNo) {
         return myproductMapper.selectFiles(prodNo);

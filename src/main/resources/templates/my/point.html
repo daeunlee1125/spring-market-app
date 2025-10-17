@@ -110,7 +110,7 @@
                 <td th:text="${point.p_info}">상품구매확정</td>
                 <td th:text="${point.p_exp_date}">2024-12-10</td>
             </tr>
-            <tr th:if="${pointPage.empty}">
+            <tr th:if="${#lists.isEmpty(pointPage.content)}">
                 <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>
             </tr>
             </tbody>

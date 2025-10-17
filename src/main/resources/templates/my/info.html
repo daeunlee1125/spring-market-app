@@ -36,8 +36,19 @@
             </div>
         </div>
 
-        <div style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
-            810 x 86 배너 광고
+        <div th:if="${banner}"
+             style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
+            <a th:href="${banner.ban_banner_link}" target="_blank">
+                <img th:if="${banner.ban_img}" th:src="@{/uploads/banner/{img}(img=${banner.ban_img})}"
+                     alt="배너" style="height: 86px;">
+                <span th:unless="${banner.ban_img}" th:text="${banner.ban_name}">배너 광고</span>
+            </a>
+        </div>
+
+        <!-- 배너가 없을 경우 기본 표시 -->
+        <div th:unless="${banner}"
+             style="width: 810px; height: 86px; background-color: #eee; text-align: center; line-height: 86px; margin-bottom: 20px;">
+            배너 준비 중
         </div>
 
         <div class="info-section">
@@ -104,7 +115,10 @@
 
 <div th:replace="~{my/modal.html}"></div>
 <div th:replace="~{my/_tail.html}"></div>
+<!-- 1️⃣ Daum Postcode API 스크립트 로드 (HTML의 </body> 직전에 추가) -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
+<!-- 2️⃣ 함수들은 별도의 스크립트 태그에서 정의 -->
 <script>
     // 이메일 도메인 선택
     function checkEmailDomain() {
@@ -112,8 +126,14 @@
             document.getElementById('emailDomain').value === 'self' ? 'inline-block' : 'none';
     }
 
-    // 주소 검색 (Daum 우편번호 API)
+    // ✅ 주소 검색 함수 (Daum 스크립트 로드 후 사용)
     function searchAddress() {
+        // daum 객체가 존재하는지 확인
+        if (typeof daum === 'undefined' || !daum.Postcode) {
+            alert('주소 검색 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+            return;
+        }
+
         new daum.Postcode({
             oncomplete: function(data) {
                 document.getElementById('addr1').value = data.address;

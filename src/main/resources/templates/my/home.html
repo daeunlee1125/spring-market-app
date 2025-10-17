@@ -102,18 +102,20 @@
                         <span th:case="*">상태없음</span>
                     </td>
                     <!-- home.html의 최근 주문내역 테이블 부분 -->
+
+
                     <td>
                         <br>
                         <button class="btn-confirm"
                                 th:data-item-no="${orderItem.item_no}"
-                                th:disabled="${orderItem.item_stat >= 4}">구매확정</button>
+                                th:disabled="${orderItem.item_stat != 3}">구매확정</button>
                         <button class="btn-review"
                                 th:data-prod-no="${orderItem.prod_no}"
                                 th:data-prod-name="${orderItem.item_name}"
-                                th:disabled="${orderItem.item_stat < 4}">상품평쓰기</button>
+                                th:disabled="${orderItem.item_stat != 4}">상품평쓰기</button>
                         <button class="btn-return"
                                 th:data-item-no="${orderItem.item_no}"
-                                th:disabled="${orderItem.item_stat != 3}">반품신청</button>
+                                th:disabled="${orderItem.item_stat > 3}">반품신청</button>
                         <button class="btn-exchange"
                                 th:data-item-no="${orderItem.item_no}"
                                 th:disabled="${orderItem.item_stat != 3}">교환신청</button>
@@ -287,8 +289,8 @@
 
         function getStatusText(stat) {
             const statusMap = {
-                1: '배송전', 2: '배송중', 3: '배송완료',
-                4: '구매확정', 5: '교환신청', 6: '반품신청'
+                0: '결제완료', 1: '배송준비', 2: '배송중',
+                3: '배송완료', 4: '구매확정', 5: '교환신청', 6: '반품신청'
             };
             return statusMap[stat] || '상태없음';
         }

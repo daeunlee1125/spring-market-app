@@ -338,14 +338,38 @@ public class MyService {
     public List<PointDTO> getPointHistory(String memId) {
         List<Point> points = pointRepository.findByMem_idOrderByP_dateDesc(memId);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         return points.stream()
                 .map(point -> {
                     PointDTO dto = modelMapper.map(point, PointDTO.class);
-                    dto.setP_date(point.getP_date().format(formatter));
-                    dto.setP_exp_date(point.getP_exp_date().format(formatter));
+
+                    // 날짜 포맷팅
+                    if (point.getP_date() != null) {
+                        dto.setP_date(point.getP_date().format(formatter));
+                    }
+                    if (point.getP_exp_date() != null) {
+                        dto.setP_exp_date(point.getP_exp_date().format(formatter));
+                    } else {
+                        dto.setP_exp_date("-");
+                    }
+
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    // ✅ 상태명 변환 헬퍼 메서드
+    private String getItemStatName(int stat) {
+        switch(stat) {
+            case 0: return "결제완료";
+            case 1: return "배송준비";
+            case 2: return "배송중";
+            case 3: return "배송완료";
+            case 4: return "구매확정";
+            case 5: return "교환신청";
+            case 6: return "반품신청";
+            default: return "알수없음";
+        }
     }
 
     @Transactional

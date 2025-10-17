@@ -36,6 +36,8 @@ public class MyController {
     // ===================== 공통 메소드 =====================
     private void addMyPageSummary(Model model, String memberId) {
         MyPageHomeDTO homeData = myService.getMyPageHomeData(memberId);
+
+        // 기본 정보 추가
         model.addAttribute("orderCount", homeData.getOrderCount());
         model.addAttribute("couponCount", homeData.getCouponCount());
         model.addAttribute("pointTotal", homeData.getPointTotal());
@@ -45,17 +47,30 @@ public class MyController {
         model.addAttribute("recentReviews", homeData.getRecentReviews());
         model.addAttribute("recentQnas", homeData.getRecentQnas());
 
-        Map<String, ProductDTO> productMap = homeData.getRecentOrders().stream()
-                .map(OrderItemDTO::getProd_no)
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toMap(
-                        prodNo -> prodNo,
-                        myService::getProduct3
-                ));
+        // productMap 생성 - order.html 방식으로 수정
+        Map<String, ProductDTO> productMap = new HashMap<>();
+        for (OrderItemDTO item : homeData.getRecentOrders()) {
+            String prodNo = item.getProd_no();
+            if (prodNo != null && !prodNo.isEmpty()) {
+                try {
+                    ProductDTO product = myService.getProduct3(prodNo);
+                    if (product != null) {
+                        log.debug("상품 로드 성공: prodNo={}, files={}",
+                                prodNo,
+                                product.getFiles() != null ? product.getFiles().size() : 0);
+                        productMap.put(prodNo, product);
+                    } else {
+                        log.warn("상품 로드 실패 (null): prodNo={}", prodNo);
+                    }
+                } catch (Exception e) {
+                    log.error("상품 로드 중 오류: prodNo={}", prodNo, e);
+                }
+            }
+        }
+
+        log.debug("productMap 최종 크기: {}", productMap.size());
         model.addAttribute("productMap", productMap);
     }
-
 // MyController.java의 주문 섹션에 추가
 
     // ===================== 반품 신청 =====================

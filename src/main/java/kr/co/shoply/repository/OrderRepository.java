@@ -22,4 +22,7 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     // ⭐ @Query 어노테이션을 사용하여 명시적인 쿼리 작성
     @Query("SELECT o FROM Order o WHERE o.mem_id = :memId ORDER BY o.ord_date DESC")
     Page<Order> findByMem_id(@Param("memId") String memId, Pageable pageable);
+
+    @Query("SELECT o FROM Order o WHERE o.mem_id = :memId ORDER BY o.ord_date DESC")
+    List<Order> findByMem_idOrderByOrd_dateDesc(@Param("memId") String memId);
 }

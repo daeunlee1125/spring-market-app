@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -55,6 +56,85 @@ public class MyService {
         List<ProdOptionDTO> options = myproductMapper.selectOption(prodNo);
         options.forEach(opt -> opt.setOptValList(Arrays.asList(opt.getOpt_val().split("\\s*,\\s*"))));
         return options;
+    }
+
+    // MyService.java에 추가 - 포인트 기간별 필터링
+    @Transactional(readOnly = true)
+    public Page<PointDTO> getPointHistoryPagedWithPeriod(String memId, Pageable pageable,
+                                                         String periodType, String period,
+                                                         String startMonth, String endMonth) {
+        // 1. 회원의 모든 포인트 가져오기
+        List<Point> allPoints = pointRepository.findByMem_idOrderByP_dateDesc(memId);
+
+        // 2. 기간에 따라 필터링
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1);
+
+        if ("1day".equals(periodType)) {
+            startDate = LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("1week".equals(periodType)) {
+            startDate = LocalDateTime.now().minusWeeks(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("1month".equals(periodType)) {
+            startDate = LocalDateTime.now().minusMonths(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("month".equals(periodType) && period != null && !period.isEmpty()) {
+            try {
+                int months = Integer.parseInt(period);
+                startDate = LocalDateTime.now().minusMonths(months).withHour(0).withMinute(0).withSecond(0);
+            } catch (NumberFormatException e) {
+                log.error("개월 파싱 오류", e);
+                startDate = null;
+            }
+        } else if ("custom".equals(periodType) && startMonth != null && endMonth != null) {
+            try {
+                startDate = LocalDate.parse(startMonth).atStartOfDay();
+                endDate = LocalDate.parse(endMonth).atTime(23, 59, 59);
+                log.info("커스텀 포인트 기간 설정: {} ~ {}", startDate, endDate);
+            } catch (Exception e) {
+                log.error("커스텀 기간 파싱 오류", e);
+                startDate = null;
+            }
+        }
+
+        // 3. 기간으로 필터링
+        final LocalDateTime finalStartDate = startDate;
+        final LocalDateTime finalEndDate = endDate;
+
+        List<PointDTO> allPointDTOs = allPoints.stream()
+                .filter(point -> {
+                    if (finalStartDate == null) return true;
+
+                    LocalDateTime pointDate = point.getP_date();
+
+                    boolean inRange = !pointDate.isBefore(finalStartDate) && !pointDate.isAfter(finalEndDate);
+                    return inRange;
+                })
+                .map(point -> {
+                    PointDTO dto = modelMapper.map(point, PointDTO.class);
+
+                    if (point.getP_date() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setP_date(point.getP_date().format(formatter));
+                    }
+                    if (point.getP_exp_date() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setP_exp_date(point.getP_exp_date().format(formatter));
+                    } else {
+                        dto.setP_exp_date("-");
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        log.info("필터링된 포인트 내역 수: {}", allPointDTOs.size());
+
+        // 4. 페이지네이션
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), allPointDTOs.size());
+
+        List<PointDTO> pageContent = allPointDTOs.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, allPointDTOs.size());
     }
 
     @Transactional(readOnly = true)
@@ -411,11 +491,67 @@ public class MyService {
         orderItemRepository.save(orderItem);
     }
 
-    // PageImpl을 사용하여 DTO 페이지를 반환하는 메서드로 수정
     @Transactional(readOnly = true)
-    public Page<OrderItemDTO> getOrdersByMemId(String memId, Pageable pageable) {
-        Page<Order> orderPage = orderRepository.findByMem_id(memId, pageable);
-        List<OrderItemDTO> items = orderPage.getContent().stream()
+    public Page<OrderItemDTO> getOrdersByMemIdWithPeriod(String memId, Pageable pageable,
+                                                         String periodType, String period,
+                                                         String startMonth, String endMonth) {
+        // 1. 회원의 모든 Order 가져오기
+        List<Order> allOrders = orderRepository.findByMem_idOrderByOrd_dateDesc(memId);
+
+        // 2. 기간에 따라 필터링
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1); // 오늘까지 포함
+
+        if ("1day".equals(periodType)) {
+            // 1일 (오늘)
+            startDate = LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("1week".equals(periodType)) {
+            // 1주일
+            startDate = LocalDateTime.now().minusWeeks(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("1month".equals(periodType)) {
+            // 1개월
+            startDate = LocalDateTime.now().minusMonths(1).withHour(0).withMinute(0).withSecond(0);
+        } else if ("month".equals(periodType) && period != null && !period.isEmpty()) {
+            // N개월 (3, 6, 12개월)
+            try {
+                int months = Integer.parseInt(period);
+                startDate = LocalDateTime.now().minusMonths(months).withHour(0).withMinute(0).withSecond(0);
+            } catch (NumberFormatException e) {
+                log.error("개월 파싱 오류", e);
+                startDate = null;
+            }
+        } else if ("custom".equals(periodType) && startMonth != null && endMonth != null) {
+            // 커스텀 기간 (예: 2024-01-15 ~ 2024-12-25)
+            try {
+                // startMonth: "2024-01-15" 형식
+                // endMonth: "2024-12-25" 형식
+                startDate = LocalDate.parse(startMonth).atStartOfDay();
+                endDate = LocalDate.parse(endMonth).atTime(23, 59, 59);
+
+                log.info("커스텀 기간 설정: {} ~ {}", startDate, endDate);
+            } catch (Exception e) {
+                log.error("커스텀 기간 파싱 오류", e);
+                startDate = null;
+            }
+        }
+
+        // 3. 기간으로 필터링
+        final LocalDateTime finalStartDate = startDate;
+        final LocalDateTime finalEndDate = endDate;
+
+        log.info("필터링 기간: {} ~ {}", finalStartDate, finalEndDate);
+
+        List<OrderItemDTO> allItems = allOrders.stream()
+                .filter(order -> {
+                    if (finalStartDate == null) return true; // 기간 미선택 시 전체
+
+                    LocalDateTime ordDate = order.getOrd_date().toInstant()
+                            .atZone(java.time.ZoneId.systemDefault())
+                            .toLocalDateTime();
+
+                    boolean inRange = !ordDate.isBefore(finalStartDate) && !ordDate.isAfter(finalEndDate);
+                    return inRange;
+                })
                 .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
                         .map(item -> {
                             OrderItemDTO dto = modelMapper.map(item, OrderItemDTO.class);
@@ -423,7 +559,41 @@ public class MyService {
                             return dto;
                         }))
                 .collect(Collectors.toList());
-        return new PageImpl<>(items, pageable, orderPage.getTotalElements());
+
+        log.info("필터링된 주문 항목 수: {}", allItems.size());
+
+        // 4. 페이지네이션 (10개씩)
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), allItems.size());
+
+        List<OrderItemDTO> pageContent = allItems.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, allItems.size());
+    }
+
+    // PageImpl을 사용하여 DTO 페이지를 반환하는 메서드로 수정
+    @Transactional(readOnly = true)
+    public Page<OrderItemDTO> getOrdersByMemId(String memId, Pageable pageable) {
+        // 1. 회원의 모든 Order 가져오기 (페이지 X)
+        List<Order> allOrders = orderRepository.findByMem_idOrderByOrd_dateDesc(memId);
+
+        // 2. Order의 모든 OrderItem을 펼치기
+        List<OrderItemDTO> allItems = allOrders.stream()
+                .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
+                        .map(item -> {
+                            OrderItemDTO dto = modelMapper.map(item, OrderItemDTO.class);
+                            dto.setOrd_date(order.getOrd_date());
+                            return dto;
+                        }))
+                .collect(Collectors.toList());
+
+        // 3. OrderItem 기준으로 페이지네이션 (정확히 10개씩)
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), allItems.size());
+
+        List<OrderItemDTO> pageContent = allItems.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, allItems.size());
     }
 
 
@@ -470,7 +640,6 @@ public class MyService {
     }
 
 
-    // MyService.java에 추가
     @Transactional(readOnly = true)
     public void debugPointData(String memId) {
         List<Point> points = pointRepository.findByMem_idOrderByP_dateDesc(memId);
@@ -483,6 +652,62 @@ public class MyService {
                     point.getP_info());
         }
         log.info("===== 디버그 종료 =====");
+    }
+
+    // ===================== 포인트 페이지네이션 =====================
+    @Transactional(readOnly = true)
+    public Page<PointDTO> getPointHistoryPaged(String memId, Pageable pageable) {
+        List<PointDTO> allPoints = getPointHistory(memId);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), allPoints.size());
+
+        List<PointDTO> pageContent = allPoints.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, allPoints.size());
+    }
+
+    // ===================== QnA 페이지네이션 =====================
+    @Transactional(readOnly = true)
+    public Page<QnaDTO> getQnasByMemIdPaged(String memId, Pageable pageable) {
+        List<Qna> allQnas = qnaRepository.findByMem_idOrderByQ_rdateDesc(memId);
+
+        List<QnaDTO> qnaDTOs = allQnas.stream()
+                .map(entity -> {
+                    QnaDTO dto = modelMapper.map(entity, QnaDTO.class);
+                    if (entity.getQ_rdate() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setQ_rdate(
+                                entity.getQ_rdate().toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate()
+                                        .format(formatter)
+                        );
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), qnaDTOs.size());
+
+        List<QnaDTO> pageContent = qnaDTOs.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, qnaDTOs.size());
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<UserCouponDTO> getUserCouponsByMemIdPaged(String memId, Pageable pageable) {
+        // 기존 메서드 결과를 Page로 변환
+        List<UserCouponDTO> allCoupons = getUserCouponsByMemId(memId);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), allCoupons.size());
+
+        List<UserCouponDTO> pageContent = allCoupons.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, allCoupons.size());
     }
 
     @Transactional(readOnly = true)

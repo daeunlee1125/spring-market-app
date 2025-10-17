@@ -64,35 +64,71 @@
             </tbody>
         </table>
 
-        <!-- 페이지네이션 부분을 이렇게 수정하세요 -->
-        <div class="pagination">
-            <!-- 이전 버튼 -->
+        <!-- 페이지네이션 -->
+        <div style="text-align: center; margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+            <!-- 첫 페이지 -->
+            <a th:if="${reviewPage.number > 0}"
+               th:href="@{/my/review(page=0)}"
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">«</a>
+            <span th:unless="${reviewPage.number > 0}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">«</span>
+
+            <!-- 이전 페이지 -->
             <a th:if="${reviewPage.hasPrevious()}"
                th:href="@{/my/review(page=${reviewPage.number - 1})}"
-               class="btn-prev">&lt; 이전</a>
-            <button th:unless="${reviewPage.hasPrevious()}"
-                    disabled
-                    class="btn-prev">&lt; 이전</button>
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">‹</a>
+            <span th:unless="${reviewPage.hasPrevious()}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">‹</span>
 
             <!-- 페이지 번호 -->
-            <th:block th:each="pageNum : ${#numbers.sequence(0, reviewPage.totalPages - 1)}">
-                <a th:if="${pageNum != reviewPage.number}"
-                   th:href="@{/my/review(page=${pageNum})}"
-                   th:text="${pageNum + 1}"
-                   class="page-btn"></a>
-                <button th:if="${pageNum == reviewPage.number}"
-                        th:text="${pageNum + 1}"
-                        class="page-btn active"
-                        disabled></button>
+            <th:block th:each="i : ${#numbers.sequence(0, reviewPage.totalPages - 1)}">
+                <a th:if="${i != reviewPage.number}"
+                   th:href="@{/my/review(page=${i})}"
+                   th:text="${i + 1}"
+                   style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                  border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+                  background: #fff; color: #555; text-decoration: none; font-weight: 600;"></a>
+                <span th:if="${i == reviewPage.number}"
+                      th:text="${i + 1}"
+                      style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                    border: 1px solid #946ccf; border-radius: 6px; margin: 0 2px;
+                    background: linear-gradient(135deg, #a86cc1, #946ccf); color: #fff;
+                    font-weight: 700;"></span>
             </th:block>
 
-            <!-- 다음 버튼 -->
+            <!-- 다음 페이지 -->
             <a th:if="${reviewPage.hasNext()}"
                th:href="@{/my/review(page=${reviewPage.number + 1})}"
-               class="btn-next">다음 &gt;</a>
-            <button th:unless="${reviewPage.hasNext()}"
-                    disabled
-                    class="btn-next">다음 &gt;</button>
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">›</a>
+            <span th:unless="${reviewPage.hasNext()}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">›</span>
+
+            <!-- 마지막 페이지 -->
+            <a th:if="${reviewPage.number < reviewPage.totalPages - 1}"
+               th:href="@{/my/review(page=${reviewPage.totalPages - 1})}"
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">»</a>
+            <span th:unless="${reviewPage.number < reviewPage.totalPages - 1}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">»</span>
+
+            <div style="margin-top: 12px; font-size: 13px; color: #999;">
+                <th:block th:text="${reviewPage.number + 1} + ' / ' + ${reviewPage.totalPages}"></th:block>
+            </div>
         </div>
     </div>
 </main>

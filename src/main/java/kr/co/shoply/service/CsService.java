@@ -57,7 +57,6 @@ public class CsService {
 
     @Transactional(readOnly = true)
     public PageResponseDTO<CsNoticeDTO> getCsNoticePage(PageRequestDTO req) {
-        // 정렬을 JPQL에서 하고 있으니 여기선 정렬 없이 Pageable만 구성
         Pageable pageable = PageRequest.of(Math.max(req.getPg() - 1, 0), req.getSize());
 
         String type = req.getCsType(); // cat1(=분류)이 여기로 들어오게 컨트롤러에서 세팅

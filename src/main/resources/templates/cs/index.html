@@ -22,38 +22,44 @@
         <h3>자주하는질문</h3>
         <a th:href="@{/cs/faq/list}">전체보기</a>
     </header-sec>
-<ul class="faq-list">
-    <li>
-        <a href="#"><img src="" alt="">
-            <span class="category-text">회원</span>
-        </a>
-    </li>
-    <li>
-        <a href="#"><img src="" alt="">
-            <span class="category-text">쿠폰/이벤트</span>
-        </a>
-    </li>
-    <li>
-        <a href="#"><img src="" alt="">
-            <span class="category-text">주문/결제</span>
-        </a>
-    </li>
-    <li>
-        <a href="#"><img src="" alt="">
-            <span class="category-text">배송</span>
-        </a>
-    </li>
-    <li>
-        <a href="#"><img src="" alt="">
-            <span class="category-text">취소/반품/환불</span>
-        </a>
-    </li>
-    <li>
-        <a href="#"><img src="" alt="">
-            <span class="category-text">안전결제</span>
-        </a>
-    </li>
-</ul>
+    <ul class="faq-list">
+        <li>
+            <a th:href="@{/cs/faq/list(cat1='회원')}">
+                <img th:src="@{/image/member.png}" alt="회원">
+                <span class="category-text">회원</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/cs/faq/list(cat1='쿠폰/이벤트')}">
+                <img th:src="@{/image/coupon.png}" alt="쿠폰/이벤트">
+                <span class="category-text">쿠폰/이벤트</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/cs/faq/list(cat1='주문/결제')}">
+                <img th:src="@{/image/order.png}" alt="주문/결제">
+                <span class="category-text">주문/결제</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/cs/faq/list(cat1='배송')}">
+                <img th:src="@{/image/delivery.png}" alt="배송">
+                <span class="category-text">배송</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/cs/faq/list(cat1='취소/반품/환불')}">
+                <img th:src="@{/image/refund.png}" alt="취소/반품/환불">
+                <span class="category-text">취소/반품/환불</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/cs/faq/list(cat1='안전결제')}">
+                <img th:src="@{/image/payment.png}" alt="안전결제">
+                <span class="category-text">안전결제</span>
+            </a>
+        </li>
+    </ul>
 </section>
 
 <section class="qna">

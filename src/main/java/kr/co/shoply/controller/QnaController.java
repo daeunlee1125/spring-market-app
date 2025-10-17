@@ -67,7 +67,6 @@ public class QnaController {
                        @RequestParam(value = "q_no", required = false) Integer qNoSnake,
                        Model model) {
 
-        // qNo 또는 q_no 둘 중 들어온 값 사용
         Integer qNo = qNoParam != null ? qNoParam : qNoSnake;
         if (qNo == null) {
             return "redirect:/cs/qna/list";
@@ -144,7 +143,6 @@ public class QnaController {
             return "redirect:/member/login?redirect=" + ret;
         }
 
-        // ★ 여기서 확실히 mem_id 주입
         form.setMem_id(authentication.getName());
 
         int saved = qnaService.register(form);

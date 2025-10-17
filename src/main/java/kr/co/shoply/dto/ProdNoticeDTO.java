@@ -11,6 +11,9 @@ import lombok.*;
 public class ProdNoticeDTO {
     private int not_no;
     private String prod_no;
-    private String not_name;
-    private String not_val;
+    private String tax_type;
+    private String receipt_issue;
+    private String business_type;
+    private String origin;
+    private String product_status;
 }

@@ -1,9 +1,6 @@
 package kr.co.shoply.controller.admin;
 
-import kr.co.shoply.dto.Cate1DTO;
-import kr.co.shoply.dto.Cate2DTO;
-import kr.co.shoply.dto.ProductListDTO;
-import kr.co.shoply.dto.ProductRegisterDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.AdminProductService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +32,7 @@ public class AdminProductController {
 
     private final AdminProductService adminProductService;
 
+    //e2c log 확인용 API
     @ResponseBody
     @GetMapping("/logs")
     public ResponseEntity<String> getLogFile() throws Exception {
@@ -59,18 +57,18 @@ public class AdminProductController {
     }
 
     @GetMapping("/list")
-    public String list(Model model, @AuthenticationPrincipal MyUserDetails user) {
+    public String list(PageRequestDTO pageRequestDTO, Model model, @AuthenticationPrincipal MyUserDetails user) {
 
         String memId = user.getUsername();
         int memLevel =  user.getMemLevel();
 
-        log.info("memId:{} memLevel:{}", memId, memLevel);
+        log.info("memId:{} memLevel:{} pageRequestDTO:{}" , memId, memLevel, pageRequestDTO);
 
-        List<ProductListDTO> products = adminProductService.getProductList(memId, memLevel);
+        PageResponseDTO<ProductListDTO> pageResponse = adminProductService.getProductList(memId, memLevel, pageRequestDTO);
 
-        log.info("products:{}", products);
+        log.info("pageResponse:{}", pageResponse);
 
-        model.addAttribute("products", products);
+        model.addAttribute("pageResponse", pageResponse);
 
         return "admin/product/list";
     }

@@ -35,59 +35,61 @@
                         </form>
                     </div>
                 </div>
-                <table class="table">
-                    <tr>
-                        <th><input type="checkbox"></th>
-                        <th>사진</th>
-                        <th>상품번호</th>
-                        <th>상품명</th>
-                        <th>판매가격</th>
-                        <th>포인트</th>
-                        <th>재고</th>
-                        <th>판매자</th>
-                        <th>조회</th>
-                        <th>관리</th>
-                    </tr>
+                <form id="deleteForm" method="post" th:action="@{/admin/product/delete}">
+                    <table class="table">
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>사진</th>
+                            <th>상품번호</th>
+                            <th>상품명</th>
+                            <th>판매가격</th>
+                            <th>포인트</th>
+                            <th>재고</th>
+                            <th>판매자</th>
+                            <th>조회</th>
+                            <!--<th>관리</th>-->
+                        </tr>
 
-                    <!-- products가 비어있을 때 -->
-                    <tr th:if="${#lists.isEmpty(pageResponse.dtoList)}">
-                        <td colspan="10" style="text-align: center; padding: 50px;">
-                            등록된 상품이 없습니다.
-                        </td>
-                    </tr>
+                        <!-- products가 비어있을 때 -->
+                        <tr th:if="${#lists.isEmpty(pageResponse.dtoList)}">
+                            <td colspan="10" style="text-align: center; padding: 50px;">
+                                등록된 상품이 없습니다.
+                            </td>
+                        </tr>
 
-                    <tr th:each="product : ${pageResponse.dtoList}">
-                        <td><input type="checkbox"></td>
-                        <td><img th:src="${product.f_name}" alt="상품이미지" style="width: 50px; height: 50px;"></td>
-                        <td th:text="${product.prod_no}"></td>
-                        <td th:text="${product.prod_name}"></td>
-                        <td th:text="${#numbers.formatInteger(product.prod_price, 3, 'COMMA')}"></td>
-                        <td th:text="${product.prod_point}"></td>
-                        <td th:text="${product.prod_stock}"></td>
-                        <td th:text="${product.prod_company}"></td>
-                        <td th:text="${#numbers.formatInteger(product.prod_hit, 3, 'COMMA')}"></td>
-                        <td>
-                            <button class="del-btn">[ 삭제 ]</button>
-                        </td>
-                    </tr>
-                </table>
-                <div class="banner-actions">
-                    <button class="delete-btn">선택삭제</button>
-                    <div class="page">
-                        <a th:if="${pageResponse.prev}"
-                           th:href="@{/admin/product/list(pg=${pageResponse.start - 1})}"
-                           class="prev">이전</a>
-                        <th:block th:each="i : ${#numbers.sequence(pageResponse.start, pageResponse.end)}">
-                            <a th:href="@{/admin/product/list(pg=${i})}"
-                               th:class="${i == pageResponse.pg} ? 'num current' : 'num'"
-                               th:text="${i}">1</a>
-                        </th:block>
-                        <a th:if="${pageResponse.next}"
-                           th:href="@{/admin/product/list(pg=${pageResponse.end + 1})}"
-                           class="next">다음</a>
+                        <tr th:each="product : ${pageResponse.dtoList}">
+                            <td><input type="checkbox" name="prodNos" th:value="${product.prod_no}"></td>
+                            <td><img th:src="@{${product.f_name}}" alt="상품이미지" style="width: 50px; height: 50px;"></td>
+                            <td th:text="${product.prod_no}"></td>
+                            <td th:text="${product.prod_name}"></td>
+                            <td th:text="${#numbers.formatInteger(product.prod_price, 3, 'COMMA')}"></td>
+                            <td th:text="${product.prod_point}"></td>
+                            <td th:text="${product.prod_stock}"></td>
+                            <td th:text="${product.prod_company}"></td>
+                            <td th:text="${#numbers.formatInteger(product.prod_hit, 3, 'COMMA')}"></td>
+                            <!--<td>
+                                <button class="del-btn">[ 삭제 ]</button>
+                            </td>-->
+                        </tr>
+                    </table>
+                    <div class="banner-actions">
+                        <button type="button" class="delete-btn" onclick="submitDelete()">선택삭제</button>
+                        <div class="page">
+                            <a th:if="${pageResponse.prev}"
+                               th:href="@{/admin/product/list(pg=${pageResponse.start - 1})}"
+                               class="prev">이전</a>
+                            <th:block th:each="i : ${#numbers.sequence(pageResponse.start, pageResponse.end)}">
+                                <a th:href="@{/admin/product/list(pg=${i})}"
+                                   th:class="${i == pageResponse.pg} ? 'num current' : 'num'"
+                                   th:text="${i}">1</a>
+                            </th:block>
+                            <a th:if="${pageResponse.next}"
+                               th:href="@{/admin/product/list(pg=${pageResponse.end + 1})}"
+                               class="next">다음</a>
+                        </div>
+                        <button type="button" class="submit-btn-1" id="reg-btn" th:onclick="|location.href='@{/admin/product/register}'|">상품등록</button>
                     </div>
-                    <button class="submit-btn-1" id="reg-btn">상품등록</button><!-- register로 이동 -->
-                </div>
+                </form>
             </main>
         </div>
     </div>

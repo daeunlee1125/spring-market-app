@@ -289,7 +289,14 @@
                             <h4>고객문의</h4>
                             <ul>
                                 <li th:each="qna : ${qnaList}">
-                                    <div class="title">[ [[${qna.q_cate2}]] ] [[${qna.q_title}]]</div>
+                                    <a th:if="${qna.q_reply != null}"
+                                       th:href="@{/admin/cs/qna/view(qNo=${qna.q_no})}">
+                                        <div class="title">[ [[${qna.q_cate2}]] ] [[${qna.q_title}]]</div>
+                                    </a>
+                                    <a th:unless="${qna.q_reply != null}"
+                                       th:href="@{/admin/cs/qna/reply(qNo=${qna.q_no})}">
+                                        <div class="title">[ [[${qna.q_cate2}]] ] [[${qna.q_title}]]</div>
+                                    </a>
                                     <div class="writer">[[${qna.masked_id}]]</div>
                                     <div class="date">[[${qna.q_rdate}]]</div>
                                 </li>

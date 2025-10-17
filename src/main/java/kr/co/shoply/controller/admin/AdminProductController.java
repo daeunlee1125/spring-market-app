@@ -8,11 +8,19 @@ import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.AdminProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.nio.file.Files;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 
@@ -23,6 +31,28 @@ import java.util.List;
 public class AdminProductController {
 
     private final AdminProductService adminProductService;
+
+    @ResponseBody
+    @GetMapping("/logs")
+    public ResponseEntity<Resource> getLogFile() throws Exception {
+
+        Path localPath = Paths.get("logs/shoply.log");
+        Path ec2Path = Paths.get("/home/ec2-user/shoply/logs/shoply.log");
+
+        Path path = Files.exists(localPath) ? localPath : ec2Path;
+        path = path.toAbsolutePath();
+
+        Resource resource = new UrlResource(path.toUri());
+
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"shoply.log\"")
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(resource);
+    }
 
     @GetMapping("/list")
     public String list(Model model, @AuthenticationPrincipal MyUserDetails user) {

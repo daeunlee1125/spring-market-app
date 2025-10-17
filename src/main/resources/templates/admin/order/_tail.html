@@ -19,30 +19,32 @@
 
         const orderList = /*[[${details}]]*/ [];
         // 열기 버튼
-        document.querySelectorAll(".openModalBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
+        const modalButton = document.querySelectorAll(".openModalBtn");
+        if (modalButton) {
+            modalButton.forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    e.preventDefault();
 
-                const targetId = btn.dataset.target;
-                const modal = document.getElementById(targetId);
-                if (!modal) return;
+                    const targetId = btn.dataset.target;
+                    const modal = document.getElementById(targetId);
+                    if (!modal) return;
 
-                const itemNo = parseInt(btn.dataset.item); // 버튼에 넣은 item_no
-                const orderData = orderList.find(o => o.item_no === itemNo);
+                    const itemNo = parseInt(btn.dataset.item); // 버튼에 넣은 item_no
+                    const orderData = orderList.find(o => o.item_no === itemNo);
 
-                console.log("item_no:", itemNo);
+                    console.log("item_no:", itemNo);
 
-                if (orderData) {
-                    // 예: 주문번호 표시
-                    const detailNo = document.getElementById("detailOrderNo");
-                    if (detailNo){
-                        detailNo.innerText = `${orderData.ord_no}`;
-                    }
+                    if (orderData) {
+                        // 예: 주문번호 표시
+                        const detailNo = document.getElementById("detailOrderNo");
+                        if (detailNo){
+                            detailNo.innerText = `${orderData.ord_no}`;
+                        }
 
-                    // 예: 상품정보 표시
-                    const tbody = modal.querySelector("tbody");
-                    if (tbody){
-                        tbody.innerHTML = `
+                        // 예: 상품정보 표시
+                        const tbody = modal.querySelector("tbody");
+                        if (tbody){
+                            tbody.innerHTML = `
           <tr>
             <td><img src="/shoply${orderData.f_name}" style="width:60px;"></td>
             <td>${orderData.prod_no}</td>
@@ -55,30 +57,30 @@
             <td>${orderData.ord_total.toLocaleString()}</td>
           </tr>
         `;
-                    }
-                    const summary = modal.getElementsByClassName("summary-box")[0];
-                    if (summary) {
-                        summary.innerHTML = `
+                        }
+                        const summary = modal.getElementsByClassName("summary-box")[0];
+                        if (summary) {
+                            summary.innerHTML = `
                     <p>총 상품금액 : ${(orderData.prod_price * orderData.item_cnt).toLocaleString()}원</p>
         <p>총 할인금액 : ${(orderData.prod_price * (orderData.prod_sale) / 100).toLocaleString()}원</p>
         <p>배송비 : ${orderData.prod_deliv_price.toLocaleString()}원</p>
         <p class="total"><span class="label">총 결제금액</span> <span class="value">${orderData.ord_total.toLocaleString()}</span></p>
                     `;
-                    }
+                        }
 
 
-                    let statusHtml = "";
-                    if (orderData.ord_stat === 1) {
-                        statusHtml = `<span class="status wait">결제대기</span>`;
-                    } else if (orderData.ord_stat === 2) {
-                        statusHtml = `<span class="status complete">결제완료</span>`;
-                    } else if (orderData.ord_stat === 3) {
-                        statusHtml = `<span class="status cancel">주문취소</span>`;
-                    }
+                        let statusHtml = "";
+                        if (orderData.ord_stat === 1) {
+                            statusHtml = `<span class="status wait">결제대기</span>`;
+                        } else if (orderData.ord_stat === 2) {
+                            statusHtml = `<span class="status complete">결제완료</span>`;
+                        } else if (orderData.ord_stat === 3) {
+                            statusHtml = `<span class="status cancel">주문취소</span>`;
+                        }
 
-                    const payment = modal.getElementsByClassName("payment-box")[0];
-                    if (payment){
-                        payment.innerHTML = `
+                        const payment = modal.getElementsByClassName("payment-box")[0];
+                        if (payment){
+                            payment.innerHTML = `
 <div class="left">
           <p>주문번호 : ${orderData.ord_no}</p>
           <p>결제방법 : ${orderData.ord_payment}</p>
@@ -88,22 +90,22 @@
         <div class="right">
         </div>
                     `;
-                    }
+                        }
 
-                    const delivBox = modal.getElementsByClassName("info-box")[1];
-                    if (delivBox) {
-                        delivBox.innerHTML = `
+                        const delivBox = modal.getElementsByClassName("info-box")[1];
+                        if (delivBox) {
+                            delivBox.innerHTML = `
                     <p>수취인 : ${orderData.ord_name}</p>
         <p>연락처 : ${orderData.ord_hp}</p>
         <p>주소 : ${orderData.ord_addr1} ${orderData.ord_addr2}</p>
                     `;
-                    }
+                        }
 
-                    const deliveryOrderNo = document.getElementById("deliveryOrderNo");
-                    deliveryOrderNo.innerText = `${orderData.ord_no}`;
+                        const deliveryOrderNo = document.getElementById("deliveryOrderNo");
+                        deliveryOrderNo.innerText = `${orderData.ord_no}`;
 
-                    const content2 = document.getElementsByClassName("modal-content")[1];
-                    content2.innerHTML = `
+                        const content2 = document.getElementsByClassName("modal-content")[1];
+                        content2.innerHTML = `
                     <input type="hidden" name="item_no" value="${orderData.item_no}">
                     <div class="form-group">
                   <label>주문번호</label>
@@ -144,18 +146,37 @@
                   <input type="text" placeholder="기타정보입력">
               </div>
                     `;
-                }
+                    }
 
 
 
 
 
 
-                // ✅ 마지막에 모달 열기
-                modal.classList.remove("hidden");
+                    // ✅ 마지막에 모달 열기
+                    modal.classList.remove("hidden");
+
+                });
+            });
+        }
+
+        const modalButton2 = document.getElementById("openModBtn");
+        if (modalButton2) {
+            modalButton2.addEventListener("click", (e) => {
+                    e.preventDefault();
+
+                    const targetId2 = btn.dataset.target;
+                    const modal2 = document.getElementById(targetId2);
+                    if (!modal2) return;
+
+                    const itemNo2 = parseInt(btn.dataset.item); // 버튼에 넣은 item_no
+
+
+                    // ✅ 마지막에 모달 열기
+                    modal2.classList.remove("hidden");
 
             });
-        });
+        }
 
         /*
         document.querySelectorAll(".openModalBtn").forEach(btn => {

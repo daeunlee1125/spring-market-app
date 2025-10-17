@@ -1,10 +1,8 @@
 package kr.co.shoply.controller;
 
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
-import kr.co.shoply.dto.SysCouponDTO;
-import kr.co.shoply.dto.UserCouponDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.service.CouponService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,6 +17,7 @@ import java.security.Principal;
 public class CouponController {
 
     private final CouponService couponService;
+    private final VersionService versionService;
 
     @GetMapping("/admin/coupon/list")
     public String list(PageRequestDTO pageRequestDTO, Model model, Principal principal) {
@@ -31,6 +30,9 @@ public class CouponController {
             String memName = couponService.findMemberNameById(loginId);
             model.addAttribute("loginName", memName);
         }
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/coupon/list";
     }
@@ -82,6 +84,9 @@ public class CouponController {
 
         // ✅ 모달에서 참조할 빈 객체 추가 (null 방지용)
         model.addAttribute("couponDetail", new UserCouponDTO());
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/coupon/issued";
     }

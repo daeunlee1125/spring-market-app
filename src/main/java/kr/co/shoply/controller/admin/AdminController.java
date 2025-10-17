@@ -3,6 +3,7 @@ package kr.co.shoply.controller.admin;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.service.Cate1Service;
 import kr.co.shoply.service.SiteInfoService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.List;
 public class AdminController {
     private final SiteInfoService siteInfoService;
     private final Cate1Service cate1Service;
+    private final VersionService versionService;
 
     @GetMapping({"/admin/", "admin/admin"})
     public String admin(Model model) {
@@ -41,6 +43,10 @@ public class AdminController {
 
         List<QnaDTO> qnaList = siteInfoService.getQnaList();
         model.addAttribute("qnaList", qnaList);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
 
         return "admin/admin";
     }

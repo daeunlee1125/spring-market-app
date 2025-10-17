@@ -3,12 +3,10 @@ package kr.co.shoply.controller.admin;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.shoply.dto.MemberDTO;
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
-import kr.co.shoply.dto.PointDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.mapper.AdminMemberMapper;
 import kr.co.shoply.service.AdminMemberService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,13 +27,15 @@ public class AdminMemberController {
 
     
   private final AdminMemberMapper adminMemberMapper;
-
+  private final VersionService versionService;
 
 
     @GetMapping("/admin/member/list")
     public String list(PageRequestDTO pageRequestDTO, Model model) {
         PageResponseDTO<MemberDTO> pageResponseDTO = adminMemberService.selectMembers(pageRequestDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
         return "admin/member/list";
     }
 
@@ -55,6 +55,9 @@ public class AdminMemberController {
         model.addAttribute("pageResponseDTO", pageResponseDTO);
         model.addAttribute("openModal", true); // 모달 표시 플래그
 
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/member/list";
     }
 
@@ -63,6 +66,8 @@ public class AdminMemberController {
     public String AdminupdateMember(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         adminMemberService.AdminupdateMember(memberDTO);
         redirectAttributes.addFlashAttribute("msg", "회원정보가 수정되었습니다.");
+
+
         return "redirect:/admin/member/list";
     }
 
@@ -111,6 +116,9 @@ public class AdminMemberController {
                         .pageRequestDTO(pageRequestDTO)
                         .total(total)
                         .build());
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/member/point";
     }

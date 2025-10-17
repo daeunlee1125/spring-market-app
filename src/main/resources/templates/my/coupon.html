@@ -52,7 +52,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="coupon : ${userCoupons}">
+                <tr th:each="coupon : ${couponPage.content}">
                     <td th:text="${coupon.cp_name}">1만원 할인 중복쿠폰</td>
                     <!-- ✅ cp_type이 3이면 배송비 무료, 아니면 할인금액 표시 -->
                     <td th:switch="${coupon.cp_type}">
@@ -72,7 +72,7 @@
                     </td>
                     <td th:text="${coupon.cp_exp_date != null ? #dates.format(coupon.cp_exp_date, 'yyyy-MM-dd') : '기간 없음'}"></td>
                 </tr>
-                <tr th:if="${#lists.isEmpty(userCoupons)}">
+                <tr th:if="${#lists.isEmpty(couponPage.content)}">
                     <td colspan="5" style="text-align: center;">쿠폰 내역이 없습니다.</td>
                 </tr>
                 </tbody>
@@ -88,6 +88,67 @@
                 <li>쿠폰은 회원당 한 번씩만 발행되며, 재발행이 불가능합니다.</li>
                 <li>유효기간이 지난 쿠폰은 자동 소멸됩니다.</li>
             </ul>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+            <a th:if="${couponPage.number > 0}"
+               th:href="@{/my/coupon(page=0)}"
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">«</a>
+            <span th:unless="${couponPage.number > 0}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">«</span>
+
+            <a th:if="${couponPage.hasPrevious()}"
+               th:href="@{/my/coupon(page=${couponPage.number - 1})}"
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">‹</a>
+            <span th:unless="${couponPage.hasPrevious()}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">‹</span>
+
+            <th:block th:each="i : ${#numbers.sequence(0, couponPage.totalPages - 1)}">
+                <a th:if="${i != couponPage.number}"
+                   th:href="@{/my/coupon(page=${i})}"
+                   th:text="${i + 1}"
+                   style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                  border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+                  background: #fff; color: #555; text-decoration: none; font-weight: 600;"></a>
+                <span th:if="${i == couponPage.number}"
+                      th:text="${i + 1}"
+                      style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                    border: 1px solid #946ccf; border-radius: 6px; margin: 0 2px;
+                    background: linear-gradient(135deg, #a86cc1, #946ccf); color: #fff;
+                    font-weight: 700;"></span>
+            </th:block>
+
+            <a th:if="${couponPage.hasNext()}"
+               th:href="@{/my/coupon(page=${couponPage.number + 1})}"
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">›</a>
+            <span th:unless="${couponPage.hasNext()}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">›</span>
+
+            <a th:if="${couponPage.number < couponPage.totalPages - 1}"
+               th:href="@{/my/coupon(page=${couponPage.totalPages - 1})}"
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+              border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
+              background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">»</a>
+            <span th:unless="${couponPage.number < couponPage.totalPages - 1}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+                border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
+                background: #f5f5f5; color: #ccc; font-weight: bold;">»</span>
+
+            <div style="margin-top: 12px; font-size: 13px; color: #999;">
+                <th:block th:text="${couponPage.number + 1} + ' / ' + ${couponPage.totalPages}"></th:block>
+            </div>
         </div>
 
     </div>

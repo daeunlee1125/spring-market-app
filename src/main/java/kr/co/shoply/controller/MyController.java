@@ -287,9 +287,17 @@ public class MyController {
 
     @GetMapping("/order")
     public String orderPage(Model model, @AuthenticationPrincipal MyUserDetails user,
-                            @PageableDefault(size = 5) Pageable pageable) { // size는 페이지네이션 5개씩 나오도록 설정
+                            @PageableDefault(size = 10) Pageable pageable,
+                            @RequestParam(value = "periodType", required = false) String periodType,
+                            @RequestParam(value = "period", required = false) String period,
+                            @RequestParam(value = "startMonth", required = false) String startMonth,
+                            @RequestParam(value = "endMonth", required = false) String endMonth) {
+
         String memberId = user.getMember().getMem_id();
-        Page<OrderItemDTO> orderPage = myService.getOrdersByMemId(memberId, pageable);
+
+        // Service에서 기간에 맞게 필터링된 데이터 조회
+        Page<OrderItemDTO> orderPage = myService.getOrdersByMemIdWithPeriod(
+                memberId, pageable, periodType, period, startMonth, endMonth);
 
         Map<String, ProductDTO> productMap = new HashMap<>();
         for (OrderItemDTO item : orderPage.getContent()) {
@@ -297,10 +305,15 @@ public class MyController {
             if (product != null) productMap.put(item.getProd_no(), product);
         }
 
-        model.addAttribute("orderList", orderPage.getContent());
+        model.addAttribute("orderPage", orderPage);
         model.addAttribute("productMap", productMap);
-        model.addAttribute("currentPage", orderPage.getNumber());
-        model.addAttribute("totalPages", orderPage.getTotalPages());
+
+        // 선택된 기간 값 다시 전달 (UI에서 사용)
+        model.addAttribute("periodType", periodType);
+        model.addAttribute("period", period);
+        model.addAttribute("startMonth", startMonth);
+        model.addAttribute("endMonth", endMonth);
+
         addMyPageSummary(model, memberId);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
@@ -308,7 +321,6 @@ public class MyController {
 
         return "my/order";
     }
-
     // ===================== 리뷰 작성 (Ajax + 파일 업로드) =====================
     @PostMapping("/review/write")
     @ResponseBody
@@ -389,24 +401,38 @@ public class MyController {
     }
 
     @GetMapping("/qna")
-    public String qnaPage(Model model, @AuthenticationPrincipal MyUserDetails user) {
+    public String qnaPage(Model model,
+                          @AuthenticationPrincipal MyUserDetails user,
+                          @PageableDefault(size = 10) Pageable pageable) {
         String memberId = user.getMember().getMem_id();
+
         List<QnaDTO> recentQnas = myService.getRecentQnas(memberId);
         model.addAttribute("recentQnas", recentQnas);
-        addMyPageSummary(model, memberId);
 
+        Page<QnaDTO> qnaPage = myService.getQnasByMemIdPaged(memberId, pageable);
+        model.addAttribute("qnaPage", qnaPage);
+
+        addMyPageSummary(model, memberId);
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "my/qna";
     }
-
     // ===================== 쿠폰 =====================
     @GetMapping("/coupon")
-    public String coupon(Model model, @AuthenticationPrincipal MyUserDetails user) {
+    public String coupon(Model model,
+                         @AuthenticationPrincipal MyUserDetails user,
+                         @PageableDefault(size = 10) Pageable pageable) {
         String memberId = user.getMember().getMem_id();
+
+        // 기존 기능 유지
         List<UserCouponDTO> userCoupons = myService.getUserCouponsByMemId(memberId);
         model.addAttribute("userCoupons", userCoupons);
+
+        // 페이지네이션 추가
+        Page<UserCouponDTO> couponPage = myService.getUserCouponsByMemIdPaged(memberId, pageable);
+        model.addAttribute("couponPage", couponPage);
+
         addMyPageSummary(model, memberId);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
@@ -417,13 +443,22 @@ public class MyController {
 
     // ===================== 포인트 =====================
     @GetMapping("/point")
-    public String point(Model model, @AuthenticationPrincipal MyUserDetails user) {
+    public String point(Model model,
+                        @AuthenticationPrincipal MyUserDetails user,
+                        @PageableDefault(size = 10) Pageable pageable) {
         String memberId = user.getMember().getMem_id();
-        
+
+        // 디버그 로그
         myService.debugPointData(memberId);
 
+        // 기존 기능 유지
         List<PointDTO> pointHistory = myService.getPointHistory(memberId);
         model.addAttribute("pointHistory", pointHistory);
+
+        // 페이지네이션 추가
+        Page<PointDTO> pointPage = myService.getPointHistoryPaged(memberId, pageable);
+        model.addAttribute("pointPage", pointPage);
+
         addMyPageSummary(model, memberId);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
@@ -431,6 +466,7 @@ public class MyController {
 
         return "my/point";
     }
+
     // ===================== 상품 상세 =====================
     @GetMapping("/view/{prodNo}")
     public String viewProduct(@PathVariable String prodNo, Model model) {
@@ -446,6 +482,9 @@ public class MyController {
 
         return "my/product/view";
     }
+
+
+
     @GetMapping("/order/detail")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getOrderDetail(

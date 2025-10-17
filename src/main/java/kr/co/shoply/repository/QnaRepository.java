@@ -74,4 +74,10 @@ public interface QnaRepository extends JpaRepository<Qna, Integer> {
          fetch first :limit rows only
     """, nativeQuery = true)
     List<Qna> findTopN(@Param("limit") int limit);
+
+    // QnaRepository.java에 추가할 메서드
+
+    @Query("SELECT q FROM Qna q WHERE q.mem_id = :mem_id ORDER BY q.q_rdate DESC")
+    List<Qna> findByMem_idOrderByQ_rdateDesc(@Param("mem_id") String mem_id);
+
 }

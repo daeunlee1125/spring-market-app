@@ -1,4 +1,130 @@
 /* my.css */
+
+/* 페이지네이션*/
+
+/* 일반 페이지 번호 */
+.page-link.number {
+    font-weight: 600;
+    color: #666;
+}
+
+.page-link.number:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #a86cc1;
+    color: #a86cc1;
+}
+
+/* 활성화된 페이지 */
+.page-link.active {
+    background: linear-gradient(135deg, #a86cc1, #946ccf);
+    color: #fff;
+    border-color: #946ccf;
+    font-weight: 700;
+    box-shadow: 0 3px 10px rgba(168, 108, 193, 0.3);
+}
+
+/* 첫/이전/다음/마지막 버튼 */
+.page-link.first-page,
+.page-link.prev-page,
+.page-link.next-page,
+.page-link.last-page {
+    font-size: 16px;
+    font-weight: bold;
+    color: #946ccf;
+    border-color: #ddd;
+}
+
+.page-link.first-page:hover:not(:disabled),
+.page-link.prev-page:hover:not(:disabled),
+.page-link.next-page:hover:not(:disabled),
+.page-link.last-page:hover:not(:disabled) {
+    background: #f9f9f9;
+    border-color: #946ccf;
+    color: #946ccf;
+    transform: scale(1.05);
+}
+
+/* 비활성화된 버튼 */
+.page-link:disabled {
+    background: #f5f5f5;
+    color: #ccc;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* 생략 표시 */
+.page-numbers .ellipsis {
+    padding: 0 4px;
+    color: #999;
+    font-weight: bold;
+    user-select: none;
+}
+
+.page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* 페이지 정보 */
+.page-info {
+    font-size: 13px;
+    color: #999;
+    font-weight: 500;
+}
+
+.page-info span {
+    color: #555;
+    font-weight: 600;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .pagination {
+        gap: 2px;
+        padding: 12px 15px;
+    }
+
+    .page-link {
+        min-width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .page-link.first-page,
+    .page-link.last-page {
+        display: none; /* 모바일에서 숨김 */
+    }
+}
+
+/* 호버 애니메이션 */
+.page-link:not(:disabled) {
+    position: relative;
+}
+
+.page-link:not(:disabled)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #946ccf;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.page-link.number:not(:disabled):hover::after,
+.page-link.first-page:not(:disabled):hover::after,
+.page-link.prev-page:not(:disabled):hover::after,
+.page-link.next-page:not(:disabled):hover::after,
+.page-link.last-page:not(:disabled):hover::after {
+    width: 70%;
+}
+
+
+
 html {
     scroll-behavior: smooth;
 }

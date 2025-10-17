@@ -40,6 +40,7 @@ public class MyService {
     private final ProdOptionRepository prodOptionRepository;
     private final ProFileRepository proFileRepository;
     private final MyProductMapper myproductMapper;
+    private final BannerRepository bannerRepository;
 
     @Transactional(readOnly = true)
     public ProductDTO getProduct3(String prodNo) {
@@ -437,6 +438,15 @@ public class MyService {
     }
 
     @Transactional(readOnly = true)
+    public BannerDTO getBannerByNo(int banNo) {
+        Banner banner = bannerRepository.findById(banNo).orElse(null);
+        if (banner != null) {
+            return modelMapper.map(banner, BannerDTO.class);
+        }
+        return null;
+    }
+
+    @Transactional(readOnly = true)
     public Map<String, Object> getOrderDetail(Long ordNo, Long itemNo, String memId) {
         Map<String, Object> result = new HashMap<>();
 
@@ -503,4 +513,5 @@ public class MyService {
             throw new RuntimeException("주문상세 조회 중 오류가 발생했습니다.");
         }
     }
+
 }

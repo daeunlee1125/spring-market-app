@@ -188,6 +188,11 @@ public class MyController {
         String memberId = user.getMember().getMem_id();
         MemberDTO memberInfo = myService.getMemberInfo(memberId);
         model.addAttribute("memberInfo", memberInfo);
+
+        // ✅ 배너 정보 추가
+        BannerDTO banner = myService.getBannerByNo(1);
+        model.addAttribute("banner", banner);
+
         addMyPageSummary(model, memberId);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();

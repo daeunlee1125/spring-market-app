@@ -90,20 +90,23 @@
                     <span th:case="6">반품신청</span>
                     <span th:case="*">상태없음</span>
                 </td>
-                <td style="display: flex; flex-direction: column; gap: 5px;">
+
+                <td>
+                    <br>
                     <button class="btn-confirm"
                             th:data-item-no="${orderItem.item_no}"
-                            th:disabled="${orderItem.item_stat >= 4}">구매확정</button>
+                            th:disabled="${orderItem.item_stat != 3}">구매확정</button>
                     <button class="btn-review"
                             th:data-prod-no="${orderItem.prod_no}"
                             th:data-prod-name="${orderItem.item_name}"
-                            th:disabled="${orderItem.item_stat < 4}">상품평쓰기</button>
+                            th:disabled="${orderItem.item_stat != 4}">상품평쓰기</button>
                     <button class="btn-return"
                             th:data-item-no="${orderItem.item_no}"
-                            th:disabled="${orderItem.item_stat != 3}">반품신청</button>
+                            th:disabled="${orderItem.item_stat > 3}">반품신청</button>
                     <button class="btn-exchange"
                             th:data-item-no="${orderItem.item_no}"
                             th:disabled="${orderItem.item_stat != 3}">교환신청</button>
+                    <br>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(orderList)}">

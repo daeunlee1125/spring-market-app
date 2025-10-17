@@ -52,4 +52,6 @@ public class OrderService {
                 .total(total)
                 .build();
     }
+
+    public List<OrderDTO> delivDetails2() {return orderMapper.getDelivDetails();}
 }

@@ -160,21 +160,66 @@
             });
         }
 
-        const modalButton2 = document.getElementById("openModBtn");
+        const delvList = /*[[${delvDtls}]]*/ [];
+
+        const modalButton2 = document.querySelectorAll(".openModBtn");
         if (modalButton2) {
-            modalButton2.addEventListener("click", (e) => {
+            modalButton2.forEach(btn2 => {
+                btn2.addEventListener("click", (e) => {
                     e.preventDefault();
 
-                    const targetId2 = btn.dataset.target;
+                    const targetId2 = btn2.dataset.target;
                     const modal2 = document.getElementById(targetId2);
                     if (!modal2) return;
 
-                    const itemNo2 = parseInt(btn.dataset.item); // 버튼에 넣은 item_no
+                    const itemNo = parseInt(btn2.dataset.item); // 버튼에 넣은 item_no
+                    const delv = delvList.find(o => o.item_no === itemNo);
+
+                    const no = document.getElementById("detailOrderNo");
+                    no.innerText = `${delv.ord_no}`;
+
+                    const prodInfo = document.getElementById("prdInf");
+                    prodInfo.innerHTML = `
+                    <tr>
+                                <td><img src="/shoply${delv.f_name}" alt="이미지있음"></td>
+                                <td>${delv.prod_no}</td>
+                                <td>${delv.prod_name}</td>
+                                <td>${delv.corp_name}</td>
+                                <td>${delv.prod_price.toLocaleString()}</td>
+                                <td>${delv.item_cnt}</td>
+                                <td>${delv.prod_deliv_price.toLocaleString()}</td>
+                                <td>${delv.ord_total.toLocaleString()}</td>
+                            </tr>
+                    `;
+
+                    const delvBox = document.getElementsByClassName("payment-box")[0];
+                    delvBox.innerHTML = `
+                    <div class="left">
+                            <p>주문번호 : ${delv.ord_no}</p>
+                            <p>수령인 : ${delv.ord_name}</p>
+                            <p>연락처 : ${delv.ord_hp}</p>
+                            <p>배송지 주소 : ${delv.ord_addr1} ${delv.ord_addr2}</p>
+
+                        </div>
+                        <div class="right">
+                        </div>
+                    `;
+
+                    const delvBox2 = document.getElementsByClassName("payment-box")[1];
+                    delvBox2.innerHTML = `
+                    <div class="left">
+                            <p>택배사 : ${delv.item_delv}</p>
+                            <p>송장번호 : ${delv.item_trk_num}</p>
+                            <p>기타 : 감사합니다. 수고하세요.</p>
+                        </div>
+                        <div class="right">
+                        </div>
+                    `;
 
 
-                    // ✅ 마지막에 모달 열기
                     modal2.classList.remove("hidden");
 
+                });
             });
         }
 

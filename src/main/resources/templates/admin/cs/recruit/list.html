@@ -3,93 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <title>채용하기 목록 - SHOPLY Admin</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/common.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/admin_temp.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/coupon.css">
-  <link rel="stylesheet" href="/project2/kmarket/inc/css/admin/cs_list.css">
-  
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/cs.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/coupon.css}">
+
 </head>
 <body>
-  <!-- 사이드바 -->
- <aside class="sidebar">
-        <div class="sidebar-header">
-            SHOPLY Admin
-        </div>
-        <nav>
-            <ul class="mainSideBar">
-                <li>
-                    <div><i class="fas fa-cog"></i> 환경설정</div>
-                    <ul class="subSideBar">
-                        <li><a href="/kmarket/admin/config/basic.html">기본설정</a></li>
-                        <li><a href="/kmarket/admin/config/banner.html">배너관리</a></li>
-                        <li><a href="/kmarket/admin/config/policy.html">약관관리</a></li>
-                        <li><a href="/kmarket/admin/config/category.html">카테고리</a></li>
-                        <li><a href="/kmarket/admin/config/version.html">버전관리</a></li>
-                    </ul>
-                </li>
+<aside class="sidebar">
+    <div class="sidebar-header">
+        SHOPLY Admin
+    </div>
+    <nav>
+        <ul class="mainSideBar">
+            <li>
+                <div><i class="fas fa-cog"></i> 환경설정</div>
+                <ul class="subSideBar">
+                    <li><a th:href="@{/admin/config/basic}">기본설정</a></li>
+                    <li><a th:href="@{/admin/config/banner}">배너관리</a></li>
+                    <li><a th:href="@{/admin/config/policy}">약관관리</a></li>
+                    <li><a th:href="@{/admin/config/category}">카테고리</a></li>
+                    <li><a th:href="@{/admin/config/version}">버전관리</a></li>
+                </ul>
+            </li>
             <li>
                 <div><i class="fas fa-store"></i> 상점관리</div>
                 <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/shop/list.html">상점목록</a></li>
-                    <li><a href="/kmarket/admin/shop/sales.html">매출현황</a></li>
+                    <li><a th:href="@{/admin/shop/list}">상점목록</a></li>
+                    <li><a th:href="@{/admin/shop/sales}">매출현황</a></li>
                 </ul>
             </li>
             <li>
                 <div><i class="fas fa-users"></i> 회원관리</div>
                 <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/member/list.html">회원목록</a></li>
-                    <li><a href="/kmarket/admin/member/point.html">포인트관리</a></li>
+                    <li><a th:href="@{/admin/member/list}">회원목록</a></li>
+                    <li><a th:href="@{/admin/member/point}">포인트관리</a></li>
                 </ul>
             </li>
             <li>
                 <div><i class="fas fa-box-open"></i> 상품관리</div>
                 <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/product/list.html">상품목록</a></li>
-                    <li><a href="/kmarket/admin/product/register.html">상품등록</a></li>
+                    <li><a th:href="@{/admin/product/list}">상품목록</a></li>
+                    <li><a th:href="@{/admin/product/register}">상품등록</a></li>
                 </ul>
             </li>
             <li>
                 <div><i class="fas fa-truck"></i> 주문관리</div>
                 <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/order/list.html">주문현황</a></li>
-                    <li><a href="/kmarket/admin/order/delivery.html">배송현황</a></li>
+                    <li><a th:href="@{/admin/order/list}">주문현황</a></li>
+                    <li><a th:href="@{/admin/order/delivery}">배송현황</a></li>
                 </ul>
             </li>
             <li>
                 <div><i class="fas fa-ticket-alt"></i> 쿠폰관리</div>
                 <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/coupon/list.html">쿠폰목록</a></li>
-                    <li><a href="/kmarket/admin/coupon/issued.html">쿠폰발급현황</a></li>
+                    <li><a th:href="@{/admin/coupon/list}">쿠폰목록</a></li>
+                    <li><a th:href="@{/admin/coupon/issued}">쿠폰발급현황</a></li>
                 </ul>
             </li>
             <li>
                 <div><i class="fas fa-headset"></i> 고객센터</div>
                 <ul class="subSideBar">
-                    <li><a href="/kmarket/admin/cs/notice/list.html">공지사항</a></li>
-                    <li><a href="/kmarket/admin/cs/faq/list.html">자주묻는질문</a></li>
-                    <li><a href="/kmarket/admin/cs/qna/list.html">문의하기</a></li>
+                    <li><a th:href="@{/admin/cs/notice/list}">공지사항</a></li>
+                    <li><a th:href="@{/admin/cs/faq/list}">자주묻는질문</a></li>
+                    <li><a th:href="@{/admin/cs/qna/list}">문의하기</a></li>
+                    <li><a th:href="@{/admin/cs/recruit/list}">채용관리</a></li>
                 </ul>
             </li>
         </ul>
-        </nav>
-    </aside>
-
-    <header>
-        <div class="middle">
-            <div id="logo">
-                <a href="/kmarket/admin/admin.html"><img src="/project2/kmarket/inc/image/logo.jpg" alt="logo"></a>
-            </div>
-            
-            <div class="header-nav">
-                <ul class="header-menu">
-                    <li><a href="/kmarket/index.html">홈</a></li>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="/kmarket/admin/cs/notice/list.html">고객센터</a></li>
-                </ul>
-            </div>
+    </nav>
+</aside>
+<!-- 헤더 -->
+<header>
+    <div class="middle">
+        <div id="logo">
+            <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
         </div>
-    </header>
+
+        <div class="header-nav">
+            <ul class="header-menu">
+                <li><a th:href="@{/admin/}">홈</a></li>
+                <li><a th:href="@{/member/logout}">로그아웃</a></li>
+                <li><a th:href="@{/admin/cs/notice/list}">고객센터</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
 
   <!-- 메인 -->
   <div class="main">
@@ -117,7 +116,6 @@
             <button type="submit">검색</button>
           </form>
         </div>
-
     <main>
         <table class="table">
         <thead>
@@ -208,7 +206,6 @@
 
 <!-- ================== 모달 ================== -->
 
-        <!-- 쿠폰 등록 모달 -->
 <div class="modal hidden" id="recruitRegisterModal">
   <div class="modal-popup large">
     <div class="modal-header">

@@ -3,6 +3,8 @@ package kr.co.shoply.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter

@@ -1,11 +1,9 @@
 package kr.co.shoply.controller;
 
-import kr.co.shoply.dto.BannerDTO;
-import kr.co.shoply.dto.MemSellerDTO;
-import kr.co.shoply.dto.MemberDTO;
-import kr.co.shoply.dto.TermsDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.service.EmailService;
 import kr.co.shoply.service.MemberService;
+import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +22,12 @@ import java.util.Map;
 
         private final MemberService memberService;
         private final EmailService emailService;
+        private final SiteInfoService siteInfoService;
 
         @GetMapping("/member/join")
-        public String join(){
+        public String join(Model model) {
+            SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+            model.addAttribute("siteInfoDTO", siteInfoDTO);
             return "member/join";
         }
 
@@ -34,6 +35,10 @@ import java.util.Map;
         public String login(Model model){
             List<BannerDTO> banner = memberService.getLogBan2();
             model.addAttribute("banners",banner);
+
+            SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+            model.addAttribute("siteInfoDTO", siteInfoDTO);
+
             return "member/login";
         }
 
@@ -53,7 +58,9 @@ import java.util.Map;
         }
 
         @GetMapping("/member/registerSeller")
-        public String registerSeller(){
+        public String registerSeller(Model model){
+            SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+            model.addAttribute("siteInfoDTO", siteInfoDTO);
             return "member/registerSeller";
         }
 
@@ -73,6 +80,9 @@ import java.util.Map;
 
             model.addAttribute("type", type);
             model.addAttribute("termsDTO", termsDTO);
+
+            SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+            model.addAttribute("siteInfoDTO", siteInfoDTO);
 
             return "member/signup";
         }

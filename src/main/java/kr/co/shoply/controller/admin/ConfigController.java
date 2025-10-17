@@ -160,7 +160,7 @@ public class ConfigController {
     @GetMapping("/admin/config/policy")
     public String policy(Model model)
     {
-        TermsDTO tdto = termsService.getTerms2(1);
+        TermsDTO tdto = termsService.getTerms2(4);
         model.addAttribute("terms", tdto);
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
@@ -171,7 +171,7 @@ public class ConfigController {
 
     @PostMapping("/admin/config/policy")
     public String policy(TermsDTO tdto){
-        tdto.setT_no(1);
+        tdto.setT_no(4);
         termsService.updateTerms2(tdto);
         return "redirect:/admin/config/policy";
     }

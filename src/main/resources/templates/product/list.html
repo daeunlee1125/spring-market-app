@@ -46,7 +46,7 @@
                 <div class="product-item" th:each="productDTO : ${productDTOList}">
                     <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${cate2DTO.getCate2_no()},prodNo=${productDTO.prod_no})}" class="item-link">
                         <div class="item-thumb">
-                            <img th:src="@{${productDTO.getFName()}}" alt="상품 이미지">
+                            <img class="list-item-img" th:src="@{${productDTO.getFName()}}" alt="상품 이미지">
                         </div>
                         <div class="item-info">
                             <div class="item-header">
@@ -57,6 +57,7 @@
                                 </div>
                             </div>
                             <p class="item-name">[[${productDTO.prod_name}]]</p>
+                            <p class="item-prod-info" th:text="${productDTO.getProd_info()}"></p>
                             <div class="item-price-box">
                                 <div>
                                     <span class="discount-rate">[[${productDTO.prod_sale}]]%</span>
@@ -70,6 +71,7 @@
                             </div>
                             <div class="rating-box">
                                 <span><img th:src="@{/image/graystar.png}" alt="" class="rating_star">[[${productDTO.avgRating}]]</span>
+                                <span th:text="'('+${productDTO.getCntRating()}+')'"></span>
                                 <span class="rating-good" th:if="${productDTO.avgRating >= 4.0}">고객만족우수</span>
                             </div>
                         </div>

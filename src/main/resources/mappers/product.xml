@@ -11,7 +11,12 @@
     <select id="select3" resultMap="productResultMap">
         SELECT
             p.*,
-            pf.F_NAME
+            pf.F_NAME,
+            pn.TAX_TYPE,
+            pn.RECEIPT_ISSUE,
+            pn.BUSINESS_TYPE,
+            pn.ORIGIN,
+            pn.PRODUCT_STATUS
         FROM
             PRO_FILE pf
         JOIN
@@ -31,6 +36,7 @@
                 p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
                 p.PROD_SOLD, p.PROD_HIT
         ) p ON p.PROD_NO = pf.PROD_NO
+        JOIN PROD_NOTICE pn ON p.PROD_NO = pn.PROD_NO
         WHERE
             pf.F_DIST = 3
     </select>
@@ -79,6 +85,14 @@
 
     <resultMap id="productResultMap" type="kr.co.shoply.dto.ProductDTO">
         <result column="F_NAME" property="fName"/>
+
+        <association property="prodNoticeDTO" javaType="kr.co.shoply.dto.ProdNoticeDTO">
+            <result column="TAX_TYPE" property="tax_type"/>
+            <result column="RECEIPT_ISSUE" property="receipt_issue"/>
+            <result column="BUSINESS_TYPE" property="business_type"/>
+            <result column="ORIGIN" property="origin"/>
+            <result column="PRODUCT_STATUS" property="product_status"/>
+        </association>
     </resultMap>
 
     <select id="selectFiles3" resultType="kr.co.shoply.dto.ProFileDTO">

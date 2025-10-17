@@ -127,15 +127,48 @@
                     <div class="nav-placeholder"></div>
 
                     <div id="detail-info" class="detail-content">
-                        <p style="text-align: center; font-size: 18px; color: #888; margin-top: 10px; padding: 0 0 40px;" th:text="'상품 번호 : ' + ${productDTO.getProd_no()}">
-                            상품 번호: 1000722586634<br>
-                            모델 번호: Y0251LCL158S1N00125F
-                        </p>
                         <div class="long-detail-container">
                             <img th:src="@{${prodPathMap.get(4)}}" alt="긴 상세 이미지" class="long-detail-image">
                             <div class="fade-overlay"></div>
+                            <p style="text-align: center; font-size: 18px; color: #888; margin-top: 10px; padding: 0 0 40px;" th:text="'상품 번호 : ' + ${productDTO.getProd_no()}">
+                                상품 번호: 1000722586634
+                            </p>
+                            <table class="product-info-table">
+                                <tbody>
+                                    <tr>
+                                        <th>상품번호</th>
+                                        <td th:text="${productDTO.getProd_no()}">10010118412</td>
+                                    </tr>
+                                    <tr>
+                                        <th>상품상태</th>
+                                        <td th:text="${productDTO.getProdNoticeDTO().getProduct_status()}">새상품</td>
+                                    </tr>
+                                    <tr>
+                                        <th>부가세면세여부</th>
+                                        <td th:text="${productDTO.getProdNoticeDTO().getTax_type()}">과세상품</td>
+                                    </tr>
+                                    <tr>
+                                        <th>영수증발행</th>
+                                        <td th:text="${productDTO.getProdNoticeDTO().getReceipt_issue()}">발행가능신용카드전표 , 온라인현금영수 증</td>
+                                    </tr>
+                                    <tr>
+                                        <th>사업자구분</th>
+                                        <td th:text="${productDTO.getProdNoticeDTO().getBusiness_type()}">통신판매업자</td>
+                                    </tr>
+                                    <tr>
+                                        <th>브랜드</th>
+                                        <td th:text="${productDTO.getProd_company()}">블루포스</td>
+                                    </tr>
+                                    <tr>
+                                        <th>원산지</th>
+                                        <td th:text="${productDTO.getProdNoticeDTO().getOrigin()}">국내생산</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <button type="button" class="toggle-detail-btn">상세정보 펼쳐보기 ▼</button>
+
+
                     </div>
 
                     <div id="detail-review" class="detail-content" th:data-prod-no="${productDTO.getProd_no()}">

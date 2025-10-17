@@ -33,6 +33,7 @@ public class ProductDTO {
     private String fName;
     private String f_name; // 이미지파일 경로
     private String f_rdate; // 상품 등록일 = 파일 등록일
+    private ProdNoticeDTO prodNoticeDTO;
 
     //my페이지 by jinwon
     private List<ProdOptionDTO> options;

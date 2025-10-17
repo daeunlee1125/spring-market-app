@@ -28,7 +28,7 @@
                 <section class="order-section">
                     <h2>주문 상품 정보</h2>
                     <div class="order-item" th:each="completeDTO : ${orderItems}">
-                        <img th:src="@{https://sitem.ssgcdn.com/33/88/70/item/1000570708833_i1_110.jpg}" alt="주문상품1">
+                        <img th:src="@{${completeDTO.getOrderItems().getProduct().getFName()}}" alt="주문상품1">
                         <div class="order-item-info">
                             <span class="name" th:text="${completeDTO.getOrderItems().getProduct().getProd_name()}">마스마룰즈 스트랩파우치 모음전 VER.3</span>
                             <th:block th:if="${completeDTO.getOrderItems().getProd_option()} != null">

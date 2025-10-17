@@ -149,6 +149,7 @@ public class QnaService {
         return qnaMapper.selectQna3(q_no);
     }
 
+    @Transactional
     public void modifyAnswerQna3(QnaAnswerRequestDTO dto) {
         qnaMapper.updateQnaReply3(dto);
     }

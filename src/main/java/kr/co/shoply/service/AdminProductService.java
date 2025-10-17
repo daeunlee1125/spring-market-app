@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -121,26 +122,44 @@ public class AdminProductService {
             String baseUploadPath = "/home/ec2-user/shoply/uploads/product/";
             //String baseUploadPath = "C:/uploads/product/";
 
-            Files.createDirectories(Paths.get(baseUploadPath));
+            // 디렉토리 생성 (없으면)
+            File uploadDir = new File(baseUploadPath);
+            if (!uploadDir.exists()) {
+                boolean created = uploadDir.mkdirs();
+                log.info("디렉토리 생성 결과: {}", created);
+            }
+
+            //Files.createDirectories(Paths.get(baseUploadPath));
 
             // 파일명 생성
             String uuid = UUID.randomUUID().toString();
             String originalName = file.getOriginalFilename();
 
             if (originalName == null) {
-                throw new IllegalArgumentException("originalName cannot be null");
+                throw new IllegalArgumentException("파일명이 null입니다.");
             }
 
             String safeName = StringUtils.cleanPath(originalName);
             safeName = safeName.replaceAll("[^a-zA-Z0-9._-]", "_");
-
             String newName = uuid + "_" + safeName;
 
+            // File 객체로 변경
+            File destFile = new File(baseUploadPath + newName);
+
+            log.info("#### uploadProductFile ====> 저장 경로: {}", destFile.getAbsolutePath());
+            log.info("#### uploadProductFile ====> 파일 크기: {}", file.getSize());
+
             // 서버에 파일 저장
+            /*
             Path filePath = Paths.get(baseUploadPath + newName);
             file.transferTo(filePath);
-
             log.info("#### uploadProductFile ====> filePath={}", filePath.toString());
+            */
+
+            file.transferTo(destFile);  // Path 대신 File 사용!
+            log.info("#### uploadProductFile ====> 파일 저장 성공!");
+
+
 
             String dbPath = "/uploads/product/" + newName;
 

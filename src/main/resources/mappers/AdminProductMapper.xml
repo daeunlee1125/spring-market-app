@@ -10,8 +10,23 @@
         JOIN PRO_FILE pf ON p.PROD_NO = pf.PROD_NO
         <where>
             pf.F_DIST = 1
+
             <if test="memLevel == 2">
                 AND p.MEM_ID = #{memId}
+            </if>
+
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'prodName'">
+                        AND p.PROD_NAME LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'prodNo'">
+                        AND p.PROD_NO = #{keyword}
+                    </when>
+                    <when test="searchType == 'company'">
+                        AND p.PROD_COMPANY LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
             </if>
         </where>
     </select>
@@ -39,6 +54,20 @@
 
                     <if test="memLevel == 2">
                         AND p.MEM_ID = #{memId}
+                    </if>
+
+                    <if test="searchType != null and keyword != null and keyword != ''">
+                        <choose>
+                            <when test="searchType == 'prodName'">
+                                AND p.PROD_NAME LIKE '%' || #{keyword} || '%'
+                            </when>
+                            <when test="searchType == 'prodNo'">
+                                AND p.PROD_NO = #{keyword}
+                            </when>
+                            <when test="searchType == 'company'">
+                                AND p.PROD_COMPANY LIKE '%' || #{keyword} || '%'
+                            </when>
+                        </choose>
                     </if>
                 </where>
                 ORDER BY p.PROD_NO DESC

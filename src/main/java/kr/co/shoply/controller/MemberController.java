@@ -43,7 +43,10 @@ import java.util.Map;
         }
 
         @GetMapping("/member/register")
-        public String register(){
+        public String register(Model model){
+            SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+            model.addAttribute("siteInfoDTO", siteInfoDTO);
+
             return "member/register";
         }
 

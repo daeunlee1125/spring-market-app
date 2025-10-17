@@ -21,4 +21,14 @@
         order by ver_no ASC
     </select>
 
+    <select id="selectVersionAndSiteInfo3" resultType="kr.co.shoply.dto.CopyrightDTO">
+        SELECT
+            v.VER_VERSION AS verVersion,
+            si.S_TITLE AS sTitle,
+            si.S_COPY AS sCopy
+        FROM VERSION v, SITE_INFO si
+        ORDER BY v.VER_NO DESC
+        FETCH FIRST 1 ROWS ONLY
+    </select>
+
 </mapper>

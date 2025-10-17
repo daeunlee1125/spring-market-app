@@ -304,8 +304,8 @@
 
     <footer>
         <div class="middle">
-            <p id="footer-p">
-                Copyright ©[[${appInfo.appName}]].co.kr All rights reserved. [[${appInfo.appName}]] ADMINISTRATOR Version [[${appInfo.appVersion}]]
+            <p id="footer-p" th:text="${copyrightDTO.getSCopy()} + '.' + ${copyrightDTO.getSTitle()} + ' ADMINISTRATOR Version ' + ${copyrightDTO.getVerVersion()}">
+                Copyright ©shoply.co.kr All rights reserved. shoply ADMINISTRATOR Version 0.0.4-SNAPSHOT
             </p>
         </div>
     </footer>

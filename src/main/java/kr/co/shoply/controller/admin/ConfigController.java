@@ -25,7 +25,7 @@ import java.util.UUID;
 public class ConfigController {
     private final SiteInfoService siteInfoService;
     private final TermsService termsService;
-    private final VersionService  versionService;
+    private final VersionService versionService;
     private final Cate1Service cate1Service;
     private final Cate2Service cate2Service;
     private final BannerService bannerService;
@@ -35,6 +35,10 @@ public class ConfigController {
     {
         List<BannerDTO> banners = bannerService.getBanners2();
         model.addAttribute("banners", banners);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/config/banner";
     }
 
@@ -109,6 +113,10 @@ public class ConfigController {
         model.addAttribute("version", vdto);
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo(1);
         model.addAttribute("siteInfo", siteInfoDTO);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/config/basic";
     }
 
@@ -127,6 +135,9 @@ public class ConfigController {
 
         model.addAttribute("cate1List", cate1List);
         model.addAttribute("cate2List", cate2List);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/config/category";
     }
@@ -151,6 +162,10 @@ public class ConfigController {
     {
         TermsDTO tdto = termsService.getTerms2(1);
         model.addAttribute("terms", tdto);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/config/policy";
     }
 
@@ -166,6 +181,10 @@ public class ConfigController {
     {
         List<VersionDTO> versions = versionService.getVersions();
         model.addAttribute("versions", versions);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/config/version";
     }
 

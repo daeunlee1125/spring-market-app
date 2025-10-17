@@ -118,8 +118,8 @@ public class AdminProductService {
 
         try {
             // 업로드 경로 설정
-            // String baseUploadPath = "/home/ec2-user/shoply/uploads/product/";
-            String baseUploadPath = "C:/uploads/product/";
+            String baseUploadPath = "/home/ec2-user/shoply/uploads/product/";
+            //String baseUploadPath = "C:/uploads/product/";
 
             Files.createDirectories(Paths.get(baseUploadPath));
 

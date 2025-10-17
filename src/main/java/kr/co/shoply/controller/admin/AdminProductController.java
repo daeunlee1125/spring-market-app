@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -85,11 +86,14 @@ public class AdminProductController {
     }
 
     @PostMapping("/register")
-    public String register(ProductRegisterDTO productRegisterDTO, Principal principal){
+    public String register(ProductRegisterDTO productRegisterDTO, Principal principal, RedirectAttributes redirectAttributes){
         log.info("productRegisterDTO={}",productRegisterDTO);
         adminProductService.registerProduct(productRegisterDTO, principal.getName());
 
-        return "/admin/product/register";
+        redirectAttributes.addFlashAttribute("showAlert", true);
+
+        return "redirect:/admin/product/register";
+
     }
 
     @GetMapping("/{cate1}/cate2")

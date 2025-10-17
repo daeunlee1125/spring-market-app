@@ -5,6 +5,9 @@
         </p>
     </div>
 </footer>
+<script th:if="${showAlert}">
+    alert('상품이 등록되었습니다.');
+</script>
 <script th:src="@{/js/admin/product.js}"></script>
 </body>
 </html>

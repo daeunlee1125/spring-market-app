@@ -97,7 +97,21 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // 초기화
+      // 자동 슬라이드 기능 추가
+      let autoSlide = setInterval(() => {
+          goToSlide(currentIndex + 1);
+      }, 2000); // 4초마다 전환
+
+// 마우스 올리면 멈추고, 나가면 다시 시작
+      slides.addEventListener("mouseenter", () => clearInterval(autoSlide));
+      slides.addEventListener("mouseleave", () => {
+          autoSlide = setInterval(() => {
+              goToSlide(currentIndex + 1);
+          }, 4000);
+      });
+
+
+      // 초기화
     goToSlide(1);
   }
 

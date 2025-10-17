@@ -12,118 +12,123 @@
                 </div>
             </div>
 
-            <!-- 검색 영역 -->
-            <div class="main-content-top" style="border:none; margin:15px 0;">
-                <form class="search-bar" th:action="@{/admin/cs/faq/list}" method="get" id="faqFilterForm">
 
-                    <!--  1차 카테고리 -->
-                    <select name="cate1" id="cate1">
-                        <option value=""
-                                th:selected="${param.cate1 == null or #lists.isEmpty(param.cate1)}">1차 선택</option>
-                        <option value="회원"
-                                th:selected="${param.cate1 != null and param.cate1[0] == '회원'}">회원</option>
-                        <option value="쿠폰/혜택/이벤트"
-                                th:selected="${param.cate1 != null and param.cate1[0] == '쿠폰/혜택/이벤트'}">쿠폰/혜택/이벤트</option>
-                        <option value="주문/결제"
-                                th:selected="${param.cate1 != null and param.cate1[0] == '주문/결제'}">주문/결제</option>
-                        <option value="배송"
-                                th:selected="${param.cate1 != null and param.cate1[0] == '배송'}">배송</option>
-                        <option value="취소/반품/교환"
-                                th:selected="${param.cate1 != null and param.cate1[0] == '취소/반품/교환'}">취소/반품/교환</option>
-                        <option value="여행/숙박/항공"
-                                th:selected="${param.cate1 != null and param.cate1[0] == '여행/숙박/항공'}">여행/숙박/항공</option>
-                        <option value="안전거래"
-                                th:selected="${param.cate1 != null and param.cate1[0] == '안전거래'}">안전거래</option>
-                    </select>
-
-                    <!--  2차 카테고리 -->
-                    <select name="cate2" id="cate2">
-                        <option value=""
-                                th:selected="${param.cate2 == null or #lists.isEmpty(param.cate2)}">2차 선택</option>
-
-                        <!-- 회원 -->
-                        <option data-parent="회원" value="가입"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '가입'}">가입</option>
-                        <option data-parent="회원" value="탈퇴"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '탈퇴'}">탈퇴</option>
-                        <option data-parent="회원" value="회원정보"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '회원정보'}">회원정보</option>
-                        <option data-parent="회원" value="로그인"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '로그인'}">로그인</option>
-
-                        <!-- 쿠폰/혜택/이벤트 -->
-                        <option data-parent="쿠폰/혜택/이벤트" value="쿠폰/할인혜택"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '쿠폰/할인혜택'}">쿠폰/할인혜택</option>
-                        <option data-parent="쿠폰/혜택/이벤트" value="포인트"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '포인트'}">포인트</option>
-                        <option data-parent="쿠폰/혜택/이벤트" value="제휴"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '제휴'}">제휴</option>
-                        <option data-parent="쿠폰/혜택/이벤트" value="이벤트"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '이벤트'}">이벤트</option>
-
-                        <!-- 주문/결제 -->
-                        <option data-parent="주문/결제" value="상품"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '상품'}">상품</option>
-                        <option data-parent="주문/결제" value="결제"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '결제'}">결제</option>
-                        <option data-parent="주문/결제" value="구매내역"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '구매내역'}">구매내역</option>
-                        <option data-parent="주문/결제" value="영수증/증빙"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '영수증/증빙'}">영수증/증빙</option>
-
-                        <!-- 배송 -->
-                        <option data-parent="배송" value="배송상태/기간"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '배송상태/기간'}">배송상태/기간</option>
-                        <option data-parent="배송" value="배송정보확인/변경"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '배송정보확인/변경'}">배송정보확인/변경</option>
-                        <option data-parent="배송" value="해외배송"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '해외배송'}">해외배송</option>
-                        <option data-parent="배송" value="당일배송"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '당일배송'}">당일배송</option>
-                        <option data-parent="배송" value="해외직구"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '해외직구'}">해외직구</option>
-
-                        <!-- 취소/반품/교환 -->
-                        <option data-parent="취소/반품/교환" value="반품신청/철회"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '반품신청/철회'}">반품신청/철회</option>
-                        <option data-parent="취소/반품/교환" value="반품정보확인/변경"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '반품정보확인/변경'}">반품정보확인/변경</option>
-                        <option data-parent="취소/반품/교환" value="교환 AS신청/철회"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '교환 AS신청/철회'}">교환 AS신청/철회</option>
-                        <option data-parent="취소/반품/교환" value="교환정보확인/변경"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '교환정보확인/변경'}">교환정보확인/변경</option>
-                        <option data-parent="취소/반품/교환" value="취소신청/철회"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '취소신청/철회'}">취소신청/철회</option>
-                        <option data-parent="취소/반품/교환" value="취소확인/환불정보"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '취소확인/환불정보'}">취소확인/환불정보</option>
-
-                        <!-- 여행/숙박/항공 -->
-                        <option data-parent="여행/숙박/항공" value="여행/숙박"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '여행/숙박'}">여행/숙박</option>
-                        <option data-parent="여행/숙박/항공" value="항공"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '항공'}">항공</option>
-
-                        <!-- 안전거래 -->
-                        <option data-parent="안전거래" value="서비스 이용규칙 위반"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '서비스 이용규칙 위반'}">서비스 이용규칙 위반</option>
-                        <option data-parent="안전거래" value="지식재산권침해"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '지식재산권침해'}">지식재산권침해</option>
-                        <option data-parent="안전거래" value="법령 및 정책위반 상품"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '법령 및 정책위반 상품'}">법령 및 정책위반 상품</option>
-                        <option data-parent="안전거래" value="게시물 정책위반"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '게시물 정책위반'}">게시물 정책위반</option>
-                        <option data-parent="안전거래" value="직거래/외부거래유도"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '직거래/외부거래유도'}">직거래/외부거래유도</option>
-                        <option data-parent="안전거래" value="표시광고"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '표시광고'}">표시광고</option>
-                        <option data-parent="안전거래" value="청소년 위해상품/이미지"
-                                th:selected="${param.cate2 != null and param.cate2[0] == '청소년 위해상품/이미지'}">청소년 위해상품/이미지</option>
-                    </select>
-
-                </form>
-            </div>
 
             <main>
+
+                <!-- 검색 영역 -->
+                <div class="main-content-top" style="border:none; margin-top:15px;">
+                    <form class="search-bar" th:action="@{/admin/cs/faq/list}" method="get" id="faqFilterForm">
+
+                        <!--  1차 카테고리 -->
+                        <select name="cate1" id="cate1">
+                            <option value=""
+                                    th:selected="${param.cate1 == null or #lists.isEmpty(param.cate1)}">1차 선택</option>
+                            <option value="회원"
+                                    th:selected="${param.cate1 != null and param.cate1[0] == '회원'}">회원</option>
+                            <option value="쿠폰/혜택/이벤트"
+                                    th:selected="${param.cate1 != null and param.cate1[0] == '쿠폰/혜택/이벤트'}">쿠폰/혜택/이벤트</option>
+                            <option value="주문/결제"
+                                    th:selected="${param.cate1 != null and param.cate1[0] == '주문/결제'}">주문/결제</option>
+                            <option value="배송"
+                                    th:selected="${param.cate1 != null and param.cate1[0] == '배송'}">배송</option>
+                            <option value="취소/반품/교환"
+                                    th:selected="${param.cate1 != null and param.cate1[0] == '취소/반품/교환'}">취소/반품/교환</option>
+                            <option value="여행/숙박/항공"
+                                    th:selected="${param.cate1 != null and param.cate1[0] == '여행/숙박/항공'}">여행/숙박/항공</option>
+                            <option value="안전거래"
+                                    th:selected="${param.cate1 != null and param.cate1[0] == '안전거래'}">안전거래</option>
+                        </select>
+
+                        <!--  2차 카테고리 -->
+                        <select name="cate2" id="cate2">
+                            <option value=""
+                                    th:selected="${param.cate2 == null or #lists.isEmpty(param.cate2)}">2차 선택</option>
+
+                            <!-- 회원 -->
+                            <option data-parent="회원" value="가입"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '가입'}">가입</option>
+                            <option data-parent="회원" value="탈퇴"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '탈퇴'}">탈퇴</option>
+                            <option data-parent="회원" value="회원정보"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '회원정보'}">회원정보</option>
+                            <option data-parent="회원" value="로그인"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '로그인'}">로그인</option>
+
+                            <!-- 쿠폰/혜택/이벤트 -->
+                            <option data-parent="쿠폰/혜택/이벤트" value="쿠폰/할인혜택"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '쿠폰/할인혜택'}">쿠폰/할인혜택</option>
+                            <option data-parent="쿠폰/혜택/이벤트" value="포인트"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '포인트'}">포인트</option>
+                            <option data-parent="쿠폰/혜택/이벤트" value="제휴"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '제휴'}">제휴</option>
+                            <option data-parent="쿠폰/혜택/이벤트" value="이벤트"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '이벤트'}">이벤트</option>
+
+                            <!-- 주문/결제 -->
+                            <option data-parent="주문/결제" value="상품"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '상품'}">상품</option>
+                            <option data-parent="주문/결제" value="결제"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '결제'}">결제</option>
+                            <option data-parent="주문/결제" value="구매내역"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '구매내역'}">구매내역</option>
+                            <option data-parent="주문/결제" value="영수증/증빙"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '영수증/증빙'}">영수증/증빙</option>
+
+                            <!-- 배송 -->
+                            <option data-parent="배송" value="배송상태/기간"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '배송상태/기간'}">배송상태/기간</option>
+                            <option data-parent="배송" value="배송정보확인/변경"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '배송정보확인/변경'}">배송정보확인/변경</option>
+                            <option data-parent="배송" value="해외배송"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '해외배송'}">해외배송</option>
+                            <option data-parent="배송" value="당일배송"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '당일배송'}">당일배송</option>
+                            <option data-parent="배송" value="해외직구"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '해외직구'}">해외직구</option>
+
+                            <!-- 취소/반품/교환 -->
+                            <option data-parent="취소/반품/교환" value="반품신청/철회"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '반품신청/철회'}">반품신청/철회</option>
+                            <option data-parent="취소/반품/교환" value="반품정보확인/변경"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '반품정보확인/변경'}">반품정보확인/변경</option>
+                            <option data-parent="취소/반품/교환" value="교환 AS신청/철회"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '교환 AS신청/철회'}">교환 AS신청/철회</option>
+                            <option data-parent="취소/반품/교환" value="교환정보확인/변경"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '교환정보확인/변경'}">교환정보확인/변경</option>
+                            <option data-parent="취소/반품/교환" value="취소신청/철회"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '취소신청/철회'}">취소신청/철회</option>
+                            <option data-parent="취소/반품/교환" value="취소확인/환불정보"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '취소확인/환불정보'}">취소확인/환불정보</option>
+
+                            <!-- 여행/숙박/항공 -->
+                            <option data-parent="여행/숙박/항공" value="여행/숙박"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '여행/숙박'}">여행/숙박</option>
+                            <option data-parent="여행/숙박/항공" value="항공"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '항공'}">항공</option>
+
+                            <!-- 안전거래 -->
+                            <option data-parent="안전거래" value="서비스 이용규칙 위반"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '서비스 이용규칙 위반'}">서비스 이용규칙 위반</option>
+                            <option data-parent="안전거래" value="지식재산권침해"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '지식재산권침해'}">지식재산권침해</option>
+                            <option data-parent="안전거래" value="법령 및 정책위반 상품"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '법령 및 정책위반 상품'}">법령 및 정책위반 상품</option>
+                            <option data-parent="안전거래" value="게시물 정책위반"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '게시물 정책위반'}">게시물 정책위반</option>
+                            <option data-parent="안전거래" value="직거래/외부거래유도"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '직거래/외부거래유도'}">직거래/외부거래유도</option>
+                            <option data-parent="안전거래" value="표시광고"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '표시광고'}">표시광고</option>
+                            <option data-parent="안전거래" value="청소년 위해상품/이미지"
+                                    th:selected="${param.cate2 != null and param.cate2[0] == '청소년 위해상품/이미지'}">청소년 위해상품/이미지</option>
+                        </select>
+
+                    </form>
+                </div>
+
+
+
                 <table class="table">
                     <thead>
                     <tr>
@@ -138,9 +143,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="faq : ${faqList}">
+                    <tr th:each="faq, stat : ${faqList}">
                         <td><input type="checkbox" name="itemCheck"></td>
-                        <td th:text="${faq.cs_faq_no}"></td>
+                        <td th:text="${10 - stat.index}"></td>
                         <td th:text="${faq.cs_faq_cate1}"></td>
                         <td th:text="${faq.cs_faq_cate2}"></td>
                         <td>
@@ -157,7 +162,7 @@
                 </table>
 
                 <!-- 버튼 영역 -->
-                <div class="button-container">
+                <div class="button-container" style="margin-top: 0px">
                     <div class="left-buttons">
                         <button class="openModalBtn delete-btn" data-target="confirmEndModal">선택삭제</button>
                     </div>

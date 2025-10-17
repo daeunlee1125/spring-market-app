@@ -25,4 +25,9 @@
         WHERE ban_location=1 OR ban_location=2
     </select>
 
+    <select id="selectProductBanner3" resultType="String">
+        SELECT BAN_IMG FROM banner
+        WHERE BAN_LOCATION = 3
+    </select>
+
 </mapper>

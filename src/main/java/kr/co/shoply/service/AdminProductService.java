@@ -55,9 +55,27 @@ public class AdminProductService {
     }
 
     //상품목록
-    public List<ProductListDTO> getProductList(String memId, int memLevel){
+    public PageResponseDTO<ProductListDTO> getProductList(String memId, int memLevel , PageRequestDTO pageRequestDTO){
 
-        return adminProductMapper.selectProductList(memId, memLevel);
+        // 전체 개수
+        int total = adminProductMapper.countProductList(memId, memLevel, pageRequestDTO.getSearchType(), pageRequestDTO.getKeyword());
+
+
+        // 목록 조회
+        List<ProductListDTO> products = adminProductMapper.selectProductList(
+                memId,
+                memLevel,
+                pageRequestDTO.getOffset(),
+                pageRequestDTO.getSize(),
+                pageRequestDTO.getSearchType(),
+                pageRequestDTO.getKeyword()
+        );
+
+        return PageResponseDTO.<ProductListDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(products)
+                .total(total)
+                .build();
     }
 
 

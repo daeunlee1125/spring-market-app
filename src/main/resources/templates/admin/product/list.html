@@ -22,17 +22,15 @@
             <main>
                 <div class="sub-top">
                     <div class="search-bar">
-                        <form action="">
-                            <select name="" id="">
-                                <option value="">상품명</option>
-                                <option value="">상품번호</option>
-                                <option value="">판매자</option>
+                        <form th:action="@{/admin/product/list}" method="get">
+                            <select name="searchType" id="searchType">
+                                <option value="prodName">상품명</option>
+                                <option value="prodNo">상품번호</option>
+                                <option value="company">판매자</option>
                             </select>
                             <div class="search-place">
-                                <input type="text" placeholder="검색어 입력">
-                                <button type="submit">
-                                <img th:src="@{/image/search.png}" alt="검색">
-                                </button>
+                                <input type="text" name="keyword" placeholder="검색어 입력">
+                                <button type="submit"><img th:src="@{/image/search.png}" alt="검색"></button>
                             </div>
                         </form>
                     </div>
@@ -52,13 +50,13 @@
                     </tr>
 
                     <!-- products가 비어있을 때 -->
-                    <tr th:if="${#lists.isEmpty(products)}">
+                    <tr th:if="${#lists.isEmpty(pageResponse.dtoList)}">
                         <td colspan="10" style="text-align: center; padding: 50px;">
                             등록된 상품이 없습니다.
                         </td>
                     </tr>
 
-                    <tr th:each="product : ${products}">
+                    <tr th:each="product : ${pageResponse.dtoList}">
                         <td><input type="checkbox"></td>
                         <td><img th:src="${product.f_name}" alt="상품이미지" style="width: 50px; height: 50px;"></td>
                         <td th:text="${product.prod_no}"></td>
@@ -76,11 +74,17 @@
                 <div class="banner-actions">
                     <button class="delete-btn">선택삭제</button>
                     <div class="page">
-                        <a href="#" class="prev">이전</a>
-                        <a href="#" class="num current">1</a>
-                        <a href="#" class="num">2</a>
-                        <a href="#" class="num">3</a>
-                        <a href="#" class="next">다음</a>
+                        <a th:if="${pageResponse.prev}"
+                           th:href="@{/admin/product/list(pg=${pageResponse.start - 1})}"
+                           class="prev">이전</a>
+                        <th:block th:each="i : ${#numbers.sequence(pageResponse.start, pageResponse.end)}">
+                            <a th:href="@{/admin/product/list(pg=${i})}"
+                               th:class="${i == pageResponse.pg} ? 'num current' : 'num'"
+                               th:text="${i}">1</a>
+                        </th:block>
+                        <a th:if="${pageResponse.next}"
+                           th:href="@{/admin/product/list(pg=${pageResponse.end + 1})}"
+                           class="next">다음</a>
                     </div>
                     <button class="submit-btn-1" id="reg-btn">상품등록</button><!-- register로 이동 -->
                 </div>

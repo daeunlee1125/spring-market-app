@@ -34,6 +34,7 @@ public class AdminProductController {
     private final AdminProductService adminProductService;
     private final VersionService versionService;
 
+    //e2c log 확인용 API
     @ResponseBody
     @GetMapping("/logs")
     public ResponseEntity<String> getLogFile() throws Exception {
@@ -59,16 +60,22 @@ public class AdminProductController {
     }
 
     @GetMapping("/list")
-    public String list(Model model, @AuthenticationPrincipal MyUserDetails user) {
+    public String list(PageRequestDTO pageRequestDTO, Model model, @AuthenticationPrincipal MyUserDetails user) {
 
         String memId = user.getUsername();
         int memLevel =  user.getMemLevel();
 
 
-        List<ProductListDTO> products = adminProductService.getProductList(memId, memLevel);
+        log.info("memId:{} memLevel:{} pageRequestDTO:{}" , memId, memLevel, pageRequestDTO);
 
 
-        model.addAttribute("products", products);
+        PageResponseDTO<ProductListDTO> pageResponse = adminProductService.getProductList(memId, memLevel, pageRequestDTO);
+
+
+        log.info("pageResponse:{}", pageResponse);
+
+
+        model.addAttribute("pageResponse", pageResponse);
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);

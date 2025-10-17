@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,7 @@ public class MyController {
     private final MyService myService;
     private final String uploadDir = "C:/shoply/uploads/";
     private final SiteInfoService siteInfoService;
+    private final PasswordEncoder passwordEncoder;
 
     // ===================== 공통 메소드 =====================
     private void addMyPageSummary(Model model, String memberId) {
@@ -187,6 +189,11 @@ public class MyController {
         String memberId = user.getMember().getMem_id();
         MemberDTO memberInfo = myService.getMemberInfo(memberId);
         model.addAttribute("memberInfo", memberInfo);
+
+        // ✅ 배너 정보 추가
+        BannerDTO banner = myService.getBannerByNo(1);
+        model.addAttribute("banner", banner);
+
         addMyPageSummary(model, memberId);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
@@ -220,10 +227,19 @@ public class MyController {
             return ResponseEntity.badRequest().body("새 비밀번호를 입력해주세요.");
         }
 
-        String memberId = user.getMember().getMem_id();
-        myService.changePassword(memberId, newPassword);
-        log.info("비밀번호 변경 성공: mem_id={}", memberId);
-        return ResponseEntity.ok("success");
+        String oldPassword = passwordData.get("currentPassword");
+
+        if (passwordEncoder.matches(oldPassword, user.getPassword())){
+            String memberId = user.getMember().getMem_id();
+            myService.changePassword(memberId, newPassword);
+            log.info("비밀번호 변경 성공: mem_id={}", memberId);
+            return ResponseEntity.ok("success");
+        }else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("현재 비밀번호가 일치하지 않습니다.");
+        }
+
     }
 
     @PostMapping("/info/withdrawal")

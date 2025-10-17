@@ -1,5 +1,6 @@
 package kr.co.shoply.controller;
 
+import kr.co.shoply.dto.BannerDTO;
 import kr.co.shoply.dto.MemSellerDTO;
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.TermsDTO;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -29,7 +31,9 @@ import java.util.Map;
         }
 
         @GetMapping("/member/login")
-        public String login(){
+        public String login(Model model){
+            List<BannerDTO> banner = memberService.getLogBan2();
+            model.addAttribute("banners",banner);
             return "member/login";
         }
 

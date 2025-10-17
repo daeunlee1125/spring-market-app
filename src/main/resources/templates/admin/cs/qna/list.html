@@ -52,13 +52,13 @@
             </tr>
         </thead>
             <tbody>
-            <tr class="clickable-row" style="cursor: pointer;" th:each="qnaDTO : ${pageResponse.dtoList}">
+            <tr class="clickable-row" style="cursor: pointer;" th:each="qnaDTO, stat : ${pageResponse.dtoList}">
                 <form th:action="@{${qnaDTO.getQ_reply() != null ? '/admin/cs/qna/view' : '/admin/cs/qna/reply'}}" method="get">
                     <input type="hidden" name="qNo" th:value="${qnaDTO.getQ_no()}">
                     <td class="checkbox-cell">
                         <input type="checkbox" name="itemCheck" th:value="${qnaDTO.getQ_no()}">
                     </td>
-                    <td th:text="${qnaDTO.getQ_no()}">100</td>
+                    <td th:text="${pageResponse.startNo - stat.index}">100</td>
                     <td th:text="${qnaDTO.getQ_cate1()}">회원</td>
                     <td th:text="${qnaDTO.getQ_cate2()}">가입</td>
                     <td th:text="${qnaDTO.getQ_title()}">[안내] 해외결제사칭문자주의</td>

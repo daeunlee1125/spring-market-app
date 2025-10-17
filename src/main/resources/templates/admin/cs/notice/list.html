@@ -45,9 +45,9 @@
             </tr>
         </thead>
             <tbody>
-            <tr th:each="notice : ${pageResponse.dtoList}">
+            <tr th:each="notice, stat : ${pageResponse.dtoList}">
                 <td><input type="checkbox" name="itemCheck"></td>
-                <td th:text="${notice.cs_no}"></td>
+                <td th:text="${pageResponse.startNo - stat.index}"></td>
                 <td th:text="${notice.cs_type}"></td>
                 <td>
                     <a th:href="@{'/admin/cs/notice/view/' + ${notice.cs_no}}"

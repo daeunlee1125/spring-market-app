@@ -2,6 +2,7 @@
 // ============================
 // 모달 공통 제어
 // ============================
+
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.style.display = 'flex';

@@ -136,9 +136,18 @@ public class AdminProductService {
         }
 
         try {
-            // 업로드 경로 설정
+
+            // 업로드 경로 설정(기본은 e2c)
             String baseUploadPath = "/home/ec2-user/shoply/uploads/product/";
-            //String baseUploadPath = "C:/uploads/product/";
+
+            String os = System.getProperty("os.name").toLowerCase();
+            if(os.contains("win")) {
+                // Windows - 로컬
+                baseUploadPath = "C:/uploads/product/";
+            } else {
+                // Linux - 서버
+                baseUploadPath = "/home/ec2-user/shoply/uploads/product/";
+            }
 
             // 디렉토리 생성 (없으면)
             File uploadDir = new File(baseUploadPath);
@@ -146,8 +155,6 @@ public class AdminProductService {
                 boolean created = uploadDir.mkdirs();
                 log.info("디렉토리 생성 결과: {}", created);
             }
-
-            //Files.createDirectories(Paths.get(baseUploadPath));
 
             // 파일명 생성
             String uuid = UUID.randomUUID().toString();
@@ -168,11 +175,6 @@ public class AdminProductService {
             log.info("#### uploadProductFile ====> 파일 크기: {}", file.getSize());
 
             // 서버에 파일 저장
-            /*
-            Path filePath = Paths.get(baseUploadPath + newName);
-            file.transferTo(filePath);
-            log.info("#### uploadProductFile ====> filePath={}", filePath.toString());
-            */
 
             file.transferTo(destFile);  // Path 대신 File 사용!
             log.info("#### uploadProductFile ====> 파일 저장 성공!");
@@ -266,6 +268,46 @@ public class AdminProductService {
                 if(result == 0) {
                     throw new RuntimeException("옵션 INSERT 실패");
                 }
+            }
+        }
+    }
+
+    //상품목록 선택삭제
+    @Transactional
+    public void deleteProducts(List<String> prodNos, String memId, int memLevel) {
+
+        for(String prodNo : prodNos) {
+
+            // 권한 체크 (level 2는 본인 것만 삭제 가능)
+            if(memLevel == 2) {
+                String owner = adminProductMapper.selectProductOwner(prodNo);
+                if(!memId.equals(owner)) {
+                    throw new RuntimeException("삭제 권한이 없습니다.");
+                }
+            }
+
+            // 파일 정보 조회
+            List<ProFileDTO> files = adminProductMapper.selectProductFiles(prodNo);
+
+            // DB 삭제
+            adminProductMapper.deleteProductOptions(prodNo);
+            adminProductMapper.deleteProductNotices(prodNo);
+            adminProductMapper.deleteProductFiles(prodNo);
+            adminProductMapper.deleteProduct(prodNo);
+
+            // 실제 파일 삭제
+            deletePhysicalFiles(files);
+        }
+    }
+
+    // 실제 파일 삭제
+    private void deletePhysicalFiles(List<ProFileDTO> files) {
+        for(ProFileDTO file : files) {
+            try {
+                Path filePath = Paths.get(file.getF_name());
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                log.error("파일 삭제 실패: " + file.getF_name(), e);
             }
         }
     }

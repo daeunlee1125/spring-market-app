@@ -77,7 +77,7 @@
         WHERE RNUM > #{offset}
     </select>
 
-    <!-- registerProduct에서 한번에 INSERT / Transactional -->
+    <!-- registerProduct에서 한번에 INSERT / Transactional 시작 -->
     <insert id="insertProduct">
         <selectKey keyProperty="prod_no" resultType="string" order="BEFORE">
             SELECT LPAD(#{cate2_no}, 2, '0') || LPAD(product_seq.NEXTVAL, 7, '0') FROM DUAL
@@ -110,5 +110,38 @@
         INSERT INTO PROD_OPTION (PROD_NO, OPT_NAME, OPT_VAL)
                     VALUES(#{prod_no}, #{opt_name}, #{opt_val})
     </insert>
-    <!-- registerProduct에서 한번에 INSERT / Transactional -->
+    <!-- registerProduct에서 한번에 INSERT / Transactional 끝 -->
+
+    <select id="selectProductOwner" resultType="string">
+        SELECT MEM_ID
+        FROM PRODUCT
+        WHERE PROD_NO = #{prodNo}
+    </select>
+
+    <select id="selectProductFiles" resultType="kr.co.shoply.dto.ProFileDTO">
+        SELECT *
+        FROM PRO_FILE
+        WHERE PROD_NO = #{prodNo}
+    </select>
+
+    <delete id="deleteProductOptions">
+        DELETE FROM PROD_OPTION
+        WHERE PROD_NO = #{prodNo}
+    </delete>
+
+    <delete id="deleteProductNotices">
+        DELETE FROM PROD_NOTICE
+        WHERE PROD_NO = #{prodNo}
+    </delete>
+
+    <delete id="deleteProductFiles">
+        DELETE FROM PRO_FILE
+        WHERE PROD_NO = #{prodNo}
+    </delete>
+
+    <delete id="deleteProduct">
+        DELETE FROM PRODUCT
+        WHERE PROD_NO = #{prodNo}
+    </delete>
+
 </mapper>

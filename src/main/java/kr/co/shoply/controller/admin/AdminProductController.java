@@ -112,4 +112,25 @@ public class AdminProductController {
 
         return adminProductService.getCate2ByCate1(cate1);
     }
+
+    @PostMapping("/delete")
+    public String deleteProducts(@RequestParam(required = false) List<String> prodNos, @AuthenticationPrincipal MyUserDetails user, RedirectAttributes redirectAttributes) {
+
+        // 선택된 항목이 없으면
+        if(prodNos == null || prodNos.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "삭제할 상품을 선택해주세요.");
+            return "redirect:/admin/product/list";
+        }
+
+        try {
+            // 삭제 처리
+            adminProductService.deleteProducts(prodNos, user.getUsername(), user.getMemLevel());
+
+            redirectAttributes.addFlashAttribute("success", prodNos.size() + "개 상품이 삭제되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "삭제 중 오류가 발생했습니다.");
+        }
+
+        return "redirect:/admin/product/list";
+    }
 }

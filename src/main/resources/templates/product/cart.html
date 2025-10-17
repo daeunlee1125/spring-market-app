@@ -18,7 +18,7 @@
                          th:data-point="${dto.getProductDTO().getProd_point()}">
 
                         <input type="checkbox" class="item-checkbox" name="cart_no" th:value="${dto.getCart_no()}">
-                        <img th:src="@{https://sitem.ssgcdn.com/97/71/84/item/1000574847197_i1_110.jpg}" th:alt="${dto.getFName()}"
+                        <img th:src="@{${dto.getFName()}}" th:alt="${dto.getFName()}"
                              class="cart-item-thumb">
                         <div class="cart-item-info">
                             <p class="brand" th:text="${dto.getProductDTO().getProd_company()}">주식회사 루스부루</p>
@@ -39,12 +39,7 @@
                         </div>
                         <div class="cart-item-actions">
                             <button class="buy-now">바로구매</button>
-                            <div class="action-icons">
-                                <form th:action="@{/product/delete}" method="post">
-                                    <input type="hidden" name="cart_no" th:value="${dto.getCart_no()}">
-                                    <button type="submit" class="delete-item">&#x1F5D1;</button>
-                                </form>
-                            </div>
+
                         </div>
                     </div>
                 </th:block>

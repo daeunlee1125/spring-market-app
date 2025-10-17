@@ -1,37 +1,8 @@
 
 <footer>
     <div class="middle">
-        <p id="footer-p">
-            Copyright ©[[${appInfo.appName}]].co.kr All rights reserved. [[${appInfo.appName}]] ADMINISTRATOR Version [[${appInfo.appVersion}]]
-
+        <p id="footer-p" th:text="${copyrightDTO.getSCopy()} + '.' + ${copyrightDTO.getSTitle()} + ' ADMINISTRATOR Version ' + ${copyrightDTO.getVerVersion()}">
+            Copyright ©shoply.co.kr All rights reserved. shoply ADMINISTRATOR Version 0.0.4-SNAPSHOT
         </p>
     </div>
 </footer>
-
-
-
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // 열기 버튼
-        document.querySelectorAll(".openModalBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                const targetId = btn.dataset.target;
-                if (targetId && document.getElementById(targetId)) {
-                    document.getElementById(targetId).classList.remove("hidden");
-                }
-            });
-        });
-
-        // 닫기 버튼 + 배경 클릭
-        document.querySelectorAll(".modal").forEach(modal => {
-            modal.addEventListener("click", (e) => {
-                if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                    modal.classList.add("hidden");
-                }
-            });
-        });
-    });
-</script>

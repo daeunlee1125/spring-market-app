@@ -2,10 +2,7 @@ package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
-import kr.co.shoply.service.Cate2Service;
-import kr.co.shoply.service.MemberService;
-import kr.co.shoply.service.ProductService;
-import kr.co.shoply.service.ReviewService;
+import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +29,9 @@ public class ProductController {
     private final Cate2Service cate2Service;
     private final ReviewService reviewService;
     private final MemberService memberService;
+    private final IndexService  indexService;
+    private final BannerService bannerService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
@@ -47,6 +47,11 @@ public class ProductController {
         model.addAttribute("productDTOList", productDTOList);
         model.addAttribute("cate2DTO", cate2DTO);
         model.addAttribute("sort", sort);
+        model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "product/list";
     }
 
@@ -55,8 +60,10 @@ public class ProductController {
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
         model.addAttribute("cate2DTO", cate2DTO);
 
+        String bannerPath = bannerService.getProductBanner3();
+        model.addAttribute("bannerPath", bannerPath);
+
         ProductDTO productDTO = productService.getProduct3(prodNo);
-        log.info("productDTO={}", productDTO);
         if (productDTO == null) {
             log.warn("존재하지 않는 상품 번호로 접근: {}", prodNo);
             // 존재하지 않는 상품이므로 상품 목록 페이지로 리다이렉트
@@ -111,6 +118,10 @@ public class ProductController {
             opDto.setOptValList(values);
         }
         model.addAttribute("OpDtoList", OpDtoList);
+        model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "product/view";
     }
@@ -123,6 +134,10 @@ public class ProductController {
         String userName = myUserDetails.getUsername(); // 현재 로그인 된 id 가져오기
         List<CartDTO> cartDTOList = productService.getCartAll3(userName);
         model.addAttribute("cartDTOList", cartDTOList);
+        model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "product/cart";
     }
@@ -223,6 +238,10 @@ public class ProductController {
         model.addAttribute("cartDTOList", orderProductList); // 뷰에는 항상 cartDTOList 이름으로 전달
         model.addAttribute("memberDTO", memberDTO);
         model.addAttribute("sysCouponDTOList", sysCouponDTOList);
+        model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "product/order";
     }
@@ -315,6 +334,7 @@ public class ProductController {
         // 서비스에 주문 정보와 주문 아이템 리스트를 함께 가져오는 메서드를 만듭니다.
         OrderDTO orderInfo = productService.getOrderById(orderId); // 주문 기본 정보 조회
         List<CompleteDTO> orderItems = productService.getCompleteOrder3(orderId); // 주문 상품 목록 조회
+        MemberDTO memberDTO = memberService.getMember(orderInfo.getMem_id());
 
         // 날짜 String으로 설정
         // 1. 원본 문자열의 형식에 맞는 포매터를 준비해 LocalDateTime 객체로 변환
@@ -405,11 +425,16 @@ public class ProductController {
         // 조회한 정보를 Model에 담아 View로 전달
         model.addAttribute("orderInfo", orderInfo);
         model.addAttribute("orderItems", orderItems);
+        model.addAttribute("memberDTO", memberDTO);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalSalePrice", totalSalePrice);
         model.addAttribute("totalRealPrice", totalRealPrice);
         model.addAttribute("totalDeliv", totalDeliv);
         model.addAttribute("totalPoint", totalPoint);
+        model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "product/complete";
     }
@@ -451,6 +476,10 @@ public class ProductController {
         model.addAttribute("type", type);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "product/search";
     }

@@ -6,11 +6,11 @@
     <div class="middle main-content">
       <div class="main-common">
         <div class="main-head">
-          <div><h3>매출현황</h3></div>
+          <div><h3>주문관리</h3></div>
           <div class="main-head-right">
             <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
-            <a href="">상점관리</a><div>&nbsp;>&nbsp;</div>
-            <a href="" class="nav-last">매출현황</a>
+            <a href="">주문관리</a><div>&nbsp;>&nbsp;</div>
+            <a th:href="@{/admin/order/delivery}" class="nav-last">배송현황</a>
           </div>
         </div>
 
@@ -28,92 +28,49 @@
           <table class="table">
             <thead>
               <tr>
-                <th>번호</th>
-                <th>상호명</th>
-                <th>사업자등록번호</th>
-                <th><a href="?sort=orderCount">주문건수</a></th>
-                <th>결제완료</th>
-                <th>배송중</th>
-                <th>배송완료</th>
-                <th>구매확정</th>
-                <th><a href="?sort=orderTotal">주문합계</a></th>
-                <th><a href="?sort=salesTotal">매출합계</a></th>
+                <th>송장번호</th>
+                <th>택배사</th>
+                <th>주문번호</th>
+                <th>수령인</th>
+                <th>상품명</th>
+                <th>건수</th>
+                <th>물품합계</th>
+                <th>배송비</th>
+                <th>배송상태</th>
+                  <th>접수일</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>5</td>
-                <td>(주) 다나와</td>
-                <td>112-12-12345</td>
-                <td>103</td>
-                <td>90</td>
-                <td>56</td>
-                <td>52</td>
-                <td>50</td>
-                <td>12,870,600</td>
-                <td>10,870,600</td>
+              <tr th:each="deliv, stat : ${pageResponseDTO.dtoList}">
+                <td>[[${deliv.item_trk_num}]]</td>
+                <td>[[${deliv.item_delv}]]</td>
+                <td>[[${deliv.ord_no}]]</td>
+                <td>[[${deliv.ord_name}]]</td>
+                <td>[[${deliv.prod_name}]]</td>
+                <td>[[${deliv.item_cnt}]]</td>
+                <td>[[${#numbers.formatInteger(deliv.ord_total, 3, 'COMMA')}]]</td>
+                <td th:if="${deliv.prod_deliv_price!=0}">[[${#numbers.formatInteger(deliv.prod_deliv_price, 3, 'COMMA')}]]</td>
+                <td th:if="${deliv.prod_deliv_price==0}">무료</td>
+                <td th:if="${deliv.item_stat==1}" style="color: #4a8acc; font-weight: bold">배송준비</td>
+                  <td th:if="${deliv.item_stat==2}" style="color: #4a8acc; font-weight: bold">배송 중</td>
+                  <td th:if="${deliv.item_stat==3}" style="color: #52b878; font-weight: bold">배송완료</td>
+                  <td th:if="${deliv.item_stat==4}" style="color: #52b878; font-weight: bold">구매확정</td>
+                  <td th:if="${deliv.item_stat==5}" style="color: #c63a3a; font-weight: bold">교환신청</td>
+                  <td th:if="${deliv.item_stat==6}" style="color: #c63a3a; font-weight: bold">반품요청</td>
+                  <td>[[${deliv.ord_date}]]</td>
               </tr>
-              <tr>
-                <td>4</td>
-                <td>(주) 맛남</td>
-                <td>112-12-12344</td>
-                <td>26</td>
-                <td>24</td>
-                <td>12</td>
-                <td>6</td>
-                <td>6</td>
-                <td>5,683,200</td>
-                <td>5,230,000</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>(주) 컴퓨존</td>
-                <td>112-12-12343</td>
-                <td>36</td>
-                <td>27</td>
-                <td>20</td>
-                <td>16</td>
-                <td>14</td>
-                <td>18,720,000</td>
-                <td>16,720,000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>누리푸드</td>
-                <td>112-12-12342</td>
-                <td>56</td>
-                <td>52</td>
-                <td>37</td>
-                <td>30</td>
-                <td>28</td>
-                <td>7,581,400</td>
-                <td>7,080,800</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>굿바디 스포츠</td>
-                <td>112-12-12341</td>
-                <td>79</td>
-                <td>70</td>
-                <td>58</td>
-                <td>43</td>
-                <td>40</td>
-                <td>4,820,700</td>
-                <td>4,620,700</td>
-              </tr>
+
             </tbody>
           </table>
 
           <!-- 페이지네이션 -->
-          <div class="page">
-            <a href="#" class="prev">이전</a>
-            <a href="#" class="num current">1</a>
-            <a href="#" class="num">2</a>
-            <a href="#" class="num">3</a>
-            <a href="#" class="num">4</a>
-            <a href="#" class="num">5</a>
-            <a href="#" class="next">다음</a>
-          </div>
+            <div class="page">
+                <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/order/delivery(pg=${pageResponseDTO.start - 1})}" class="prev">이전</a>
+                <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                    <a th:href="@{/admin/order/delivery(pg=${num})}" th:class="${num == pageResponseDTO.pg ? 'current' : 'num'}">[[${num}]]</a>
+                </th:block>
+                <a th:if="${pageResponseDTO.next}" th:href="@{/admin/order/delivery(pg=${pageResponseDTO.end + 1})}" class="next">다음</a>
+            </div>
         </main>
       </div>
     </div>

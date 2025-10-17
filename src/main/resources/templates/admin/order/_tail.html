@@ -1,8 +1,8 @@
 
 <footer>
     <div class="middle">
-        <p id="footer-p">
-            Copyright ©[[${appInfo.appName}]].co.kr All rights reserved. [[${appInfo.appName}]] ADMINISTRATOR Version [[${appInfo.appVersion}]]
+        <p id="footer-p" th:text="${copyrightDTO.getSCopy()} + '.' + ${copyrightDTO.getSTitle()} + ' ADMINISTRATOR Version ' + ${copyrightDTO.getVerVersion()}">
+            Copyright ©shoply.co.kr All rights reserved. shoply ADMINISTRATOR Version 0.0.4-SNAPSHOT
         </p>
     </div>
 </footer>
@@ -27,7 +27,6 @@
                 const modal = document.getElementById(targetId);
                 if (!modal) return;
 
-                // ✅ 여기에 데이터 바인딩 로직 추가
                 const itemNo = parseInt(btn.dataset.item); // 버튼에 넣은 item_no
                 const orderData = orderList.find(o => o.item_no === itemNo);
 
@@ -36,11 +35,14 @@
                 if (orderData) {
                     // 예: 주문번호 표시
                     const detailNo = document.getElementById("detailOrderNo");
-                    detailNo.innerText = `${orderData.ord_no}`;
+                    if (detailNo){
+                        detailNo.innerText = `${orderData.ord_no}`;
+                    }
 
                     // 예: 상품정보 표시
                     const tbody = modal.querySelector("tbody");
-                    tbody.innerHTML = `
+                    if (tbody){
+                        tbody.innerHTML = `
           <tr>
             <td><img src="/shoply${orderData.f_name}" style="width:60px;"></td>
             <td>${orderData.prod_no}</td>
@@ -53,13 +55,16 @@
             <td>${orderData.ord_total.toLocaleString()}</td>
           </tr>
         `;
+                    }
                     const summary = modal.getElementsByClassName("summary-box")[0];
-                    summary.innerHTML = `
+                    if (summary) {
+                        summary.innerHTML = `
                     <p>총 상품금액 : ${(orderData.prod_price * orderData.item_cnt).toLocaleString()}원</p>
         <p>총 할인금액 : ${(orderData.prod_price * (orderData.prod_sale) / 100).toLocaleString()}원</p>
         <p>배송비 : ${orderData.prod_deliv_price.toLocaleString()}원</p>
         <p class="total"><span class="label">총 결제금액</span> <span class="value">${orderData.ord_total.toLocaleString()}</span></p>
                     `;
+                    }
 
 
                     let statusHtml = "";
@@ -72,7 +77,8 @@
                     }
 
                     const payment = modal.getElementsByClassName("payment-box")[0];
-                    payment.innerHTML = `
+                    if (payment){
+                        payment.innerHTML = `
 <div class="left">
           <p>주문번호 : ${orderData.ord_no}</p>
           <p>결제방법 : ${orderData.ord_payment}</p>
@@ -82,14 +88,67 @@
         <div class="right">
         </div>
                     `;
+                    }
 
                     const delivBox = modal.getElementsByClassName("info-box")[1];
-                    delivBox.innerHTML = `
+                    if (delivBox) {
+                        delivBox.innerHTML = `
                     <p>수취인 : ${orderData.ord_name}</p>
         <p>연락처 : ${orderData.ord_hp}</p>
         <p>주소 : ${orderData.ord_addr1} ${orderData.ord_addr2}</p>
                     `;
+                    }
+
+                    const deliveryOrderNo = document.getElementById("deliveryOrderNo");
+                    deliveryOrderNo.innerText = `${orderData.ord_no}`;
+
+                    const content2 = document.getElementsByClassName("modal-content")[1];
+                    content2.innerHTML = `
+                    <input type="hidden" name="item_no" value="${orderData.item_no}">
+                    <div class="form-group">
+                  <label>주문번호</label>
+                  <input type="text" name="ord_no" value="${orderData.ord_no}" readonly>
+              </div>
+              <div class="form-group">
+                  <label>수취인</label>
+                  <input type="text" name="ord_name" value="${orderData.ord_name}" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>우편번호</label>
+                  <input type="text" name="ord_zip" value="${orderData.ord_zip}" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>기본주소</label>
+                  <input type="text" name="ord_addr1" value="${orderData.ord_addr1}" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>상세주소</label>
+                  <input type="text" name="ord_addr2" value="${orderData.ord_addr2}" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>택배사</label>
+                  <select name="item_delv">
+                      <option>택배사 선택</option>
+                      <option value="우체국">우체국</option>
+                      <option value="한진택배">한진택배</option>
+                      <option value="롯데택배">롯데택배</option>
+                      <option value="CJ 대한통운">CJ 대한통운</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label>운송장번호</label>
+                  <input type="text" name="item_trk_num" placeholder="발급받은 11자리 운송장번호 입력">
+              </div>
+              <div class="form-group">
+                  <label>기타</label>
+                  <input type="text" placeholder="기타정보입력">
+              </div>
+                    `;
                 }
+
+
+
+
 
 
                 // ✅ 마지막에 모달 열기

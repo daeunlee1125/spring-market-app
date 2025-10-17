@@ -1,15 +1,27 @@
 package kr.co.shoply.controller.admin;
 
-import kr.co.shoply.dto.Cate1DTO;
-import kr.co.shoply.dto.Cate2DTO;
-import kr.co.shoply.dto.ProductRegisterDTO;
+import kr.co.shoply.dto.*;
+import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.AdminProductService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 
@@ -20,28 +32,77 @@ import java.util.List;
 public class AdminProductController {
 
     private final AdminProductService adminProductService;
+    private final VersionService versionService;
+
+    //e2c log 확인용 API
+    @ResponseBody
+    @GetMapping("/logs")
+    public ResponseEntity<String> getLogFile() throws Exception {
+
+        Path localPath = Paths.get("logs/shoply.log");
+        Path ec2Path = Paths.get("/home/ec2-user/shoply/logs/shoply.log");
+
+        Path path = Files.exists(localPath) ? localPath : ec2Path;
+        path = path.toAbsolutePath();
+
+        Resource resource = new UrlResource(path.toUri());
+
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+        String content = Files.readString(path, StandardCharsets.UTF_8);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"shoply.log\"")
+                .contentType(MediaType.valueOf("text/plain;charset=UTF-8"))
+                .body(content);
+
+    }
 
     @GetMapping("/list")
-    public String list(){
+    public String list(PageRequestDTO pageRequestDTO, Model model, @AuthenticationPrincipal MyUserDetails user) {
+
+        String memId = user.getUsername();
+        int memLevel =  user.getMemLevel();
+
+
+        log.info("memId:{} memLevel:{} pageRequestDTO:{}" , memId, memLevel, pageRequestDTO);
+
+
+        PageResponseDTO<ProductListDTO> pageResponse = adminProductService.getProductList(memId, memLevel, pageRequestDTO);
+
+
+        log.info("pageResponse:{}", pageResponse);
+
+
+        model.addAttribute("pageResponse", pageResponse);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/product/list";
     }
 
     @GetMapping("/register")
     public String register(Model model){
         List<Cate1DTO> cate1DTOList = adminProductService.getAllCate1();
-        log.info("cate1DTOList={}",cate1DTOList);
 
         model.addAttribute("cate1DTOList",cate1DTOList);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/product/register";
     }
 
     @PostMapping("/register")
-    public String register(ProductRegisterDTO productRegisterDTO, Principal principal){
-        log.info("productRegisterDTO={}",productRegisterDTO);
+    public String register(ProductRegisterDTO productRegisterDTO, Principal principal, RedirectAttributes redirectAttributes){
         adminProductService.registerProduct(productRegisterDTO, principal.getName());
 
-        return "/admin/product/register";
+        redirectAttributes.addFlashAttribute("showAlert", true);
+
+        return "redirect:/admin/product/register";
+
     }
 
     @GetMapping("/{cate1}/cate2")

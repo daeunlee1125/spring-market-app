@@ -1,3 +1,5 @@
+
+<!-- review.html -->
 <div th:replace="~{my/_head.html}"></div>
 
 <main class="container">
@@ -36,9 +38,7 @@
             </div>
         </div>
 
-        <div class="banner">
-            810 x 86 배너 광고
-        </div>
+        <div class="banner">810 x 86 배너 광고</div>
 
         <table class="review-table">
             <thead>
@@ -51,29 +51,60 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="review, status : ${reviewList}">
-                <td th:text="${status.count}">1</td>
+            <tr th:each="review, status : ${reviewPage.content}">
+                <td th:text="${(reviewPage.number * 10) + status.count}"></td>
                 <td th:text="${review.prodName}">상품번호 / 상품명</td>
                 <td th:text="${review.rev_content}">배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                <td><span th:text="${review.rev_rating}" class="rating">★★★★★</span></td>
+                <td class="star-rating" th:text="${review.rev_rating}">5</td>
                 <td th:text="${#dates.format(review.rev_rdate, 'yyyy-MM-dd')}">2022-12-10</td>
             </tr>
-            <tr th:if="${#lists.isEmpty(reviewList)}">
+            <tr th:if="${reviewPage.empty}">
                 <td colspan="5" style="text-align: center;">작성된 리뷰가 없습니다.</td>
             </tr>
             </tbody>
         </table>
 
+        <!-- 페이지네이션 부분을 이렇게 수정하세요 -->
         <div class="pagination">
-            <button>&lt; 이전</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-            <button>5</button>
-            <button>다음 &gt;</button>
+            <!-- 이전 버튼 -->
+            <a th:if="${reviewPage.hasPrevious()}"
+               th:href="@{/my/review(page=${reviewPage.number - 1})}"
+               class="btn-prev">&lt; 이전</a>
+            <button th:unless="${reviewPage.hasPrevious()}"
+                    disabled
+                    class="btn-prev">&lt; 이전</button>
+
+            <!-- 페이지 번호 -->
+            <th:block th:each="pageNum : ${#numbers.sequence(0, reviewPage.totalPages - 1)}">
+                <a th:if="${pageNum != reviewPage.number}"
+                   th:href="@{/my/review(page=${pageNum})}"
+                   th:text="${pageNum + 1}"
+                   class="page-btn"></a>
+                <button th:if="${pageNum == reviewPage.number}"
+                        th:text="${pageNum + 1}"
+                        class="page-btn active"
+                        disabled></button>
+            </th:block>
+
+            <!-- 다음 버튼 -->
+            <a th:if="${reviewPage.hasNext()}"
+               th:href="@{/my/review(page=${reviewPage.number + 1})}"
+               class="btn-next">다음 &gt;</a>
+            <button th:unless="${reviewPage.hasNext()}"
+                    disabled
+                    class="btn-next">다음 &gt;</button>
         </div>
     </div>
 </main>
+<script>
+// 별점 표시
+document.querySelectorAll('.star-rating').forEach(el => {
+    const rating = parseInt(el.textContent.trim());
+    if (!isNaN(rating)) {
+        el.textContent = '★'.repeat(rating);
+    }
+});
+</script>
+
 
 <div th:replace="~{my/_tail.html}"></div>

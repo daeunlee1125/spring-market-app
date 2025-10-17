@@ -5,11 +5,11 @@
     <div class="middle main-content">
       <div class="main-common">
         <div class="main-head">
-          <div><h3>상점목록</h3></div>
+          <div><h3>주문관리</h3></div>
           <div class="main-head-right">
             <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
-            <a href="">상점관리</a><div>&nbsp;>&nbsp;</div>
-            <a href="" class="nav-last">상점목록</a>
+            <a href="">주문관리</a><div>&nbsp;>&nbsp;</div>
+            <a th:href="@{/admin/order/list}" class="nav-last">주문현황</a>
           </div>
         </div>
         <div class="main-content-top"></div>
@@ -42,8 +42,8 @@
                 <td th:if="${order.ord_stat == 2}" class="status complete">결제완료</td>
                 <td th:if="${order.ord_stat == 3}" class="status cancel">주문취소</td>
                 <td>[[${order.ord_date}]]</td>
-                <td th:if="${(order.ord_addr1 == null) && (order.ord_stat != 3)}"><button class="openModalBtn deliveryBtn" data-target="deliveryModal">배송하기</button></td>
-                <td th:if="${(order.ord_addr1 != null) && (order.ord_stat != 3)}">입력완료</td>
+                <td th:if="${(order.item_trk_num == null) && (order.ord_stat != 3)}"><button class="openModalBtn deliveryBtn" data-target="deliveryModal" th:attr="data-item=${order.item_no}">배송하기</button></td>
+                <td th:if="${(order.item_trk_num != null) && (order.ord_stat != 3)}">입력완료</td>
                 <td th:if="${order.ord_stat == 3}">주문취소</td>
             </tr>
 
@@ -129,52 +129,54 @@
 <!-- 배송입력 모달 -->
 <div class="modal hidden" id="deliveryModal">
   <div class="modal-popup">
-    <div class="modal-header">
-        <h2>배송입력 <span id="deliveryOrderNo">10121211341</span></h2>
-        <span class="closeModalBtn">&times;</span>
-    </div>
-     <div class="modal-content">
-      <div class="form-group">
-        <label>주문번호</label>
-        <input type="text" value="" readonly>
-      </div>
-      <div class="form-group">
-        <label>수취인</label>
-        <input type="text" placeholder="">
-      </div>
-      <div class="form-group">
-        <label>우편번호</label>
-        <input type="text" placeholder="">
-      </div>
-      <div class="form-group">
-        <label>기본주소</label>
-        <input type="text" placeholder="">
-      </div>
-      <div class="form-group">
-        <label>상세주소</label>
-        <input type="text" placeholder="">
-      </div>
-      <div class="form-group">
-        <label>택배사</label>
-        <select>
-          <option>택배사 선택</option>
-          <option>대한통운</option>
-          <option>한진택배</option>
-          <option>롯데택배</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>운송장번호</label>
-        <input type="text" placeholder="발급받은 운송장번호 입력">
-      </div>
-      <div class="form-group">
-        <label>기타</label>
-        <input type="text" placeholder="기타정보입력">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="register-btn">등록하기</button>
-    </div>
+      <form method="post">
+          <div class="modal-header">
+              <h2>배송입력 <span id="deliveryOrderNo">10121211341</span></h2>
+              <span class="closeModalBtn">&times;</span>
+          </div>
+          <div class="modal-content">
+              <div class="form-group">
+                  <label>주문번호</label>
+                  <input type="text" value="" readonly>
+              </div>
+              <div class="form-group">
+                  <label>수취인</label>
+                  <input type="text" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>우편번호</label>
+                  <input type="text" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>기본주소</label>
+                  <input type="text" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>상세주소</label>
+                  <input type="text" placeholder="">
+              </div>
+              <div class="form-group">
+                  <label>택배사</label>
+                  <select>
+                      <option>택배사 선택</option>
+                      <option>대한통운</option>
+                      <option>한진택배</option>
+                      <option>롯데택배</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label>운송장번호</label>
+                  <input type="text" placeholder="발급받은 운송장번호 입력">
+              </div>
+              <div class="form-group">
+                  <label>기타</label>
+                  <input type="text" placeholder="기타정보입력">
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="submit" class="register-btn">등록하기</button>
+          </div>
+      </form>
   </div>
 </div>
 

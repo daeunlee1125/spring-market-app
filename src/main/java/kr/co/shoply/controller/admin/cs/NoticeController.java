@@ -1,10 +1,12 @@
 package kr.co.shoply.controller.admin.cs;
 
 
+import kr.co.shoply.dto.CopyrightDTO;
 import kr.co.shoply.dto.CsNoticeDTO;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
 import kr.co.shoply.service.CsNoticeService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import java.util.List;
 public class NoticeController {
 
     private final CsNoticeService csNoticeService;
+    private final VersionService versionService;
 
     @GetMapping("/admin/cs/notice/list")
     public String list(PageRequestDTO pageRequestDTO, Model model) {
@@ -34,7 +37,10 @@ public class NoticeController {
         model.addAttribute("pageResponse", pageResponse);
         model.addAttribute("csType", csType);
 
-        return "/admin/cs/notice/list";
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
+        return "admin/cs/notice/list";
     }
 
     // 글 삭제(체크박스)
@@ -62,6 +68,10 @@ public class NoticeController {
     @GetMapping("/admin/cs/notice/write")
     public String writeForm(Model model) {
         model.addAttribute("notice", new CsNoticeDTO());
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/cs/notice/write";
     }
 
@@ -76,6 +86,10 @@ public class NoticeController {
     public String modifyForm(@PathVariable("csNo") int csNo, Model model) {
         CsNoticeDTO notice = csNoticeService.getNotice(csNo);
         model.addAttribute("notice", notice);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/cs/notice/modify";
     }
 
@@ -97,6 +111,9 @@ public class NoticeController {
         // 글 정보 불러오기
         CsNoticeDTO notice = csNoticeService.getNotice(csNo);
         model.addAttribute("notice", notice);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/cs/notice/view";
     }

@@ -26,21 +26,21 @@
                     <table class="notice-view-table_2">
                         <tr>
                             <th>유형</th>
-                            <td>회원 - 가입</td>
+                            <td th:text="${qnaDTO.getQ_cate1()} + ' - ' + ${qnaDTO.getQ_cate2()}">회원 - 가입</td>
                         </tr>
                         <tr>
                             <th>제목</th>
-                            <td>아이디를 여러개 사용할 수 있나요?</td>
+                            <td th:text="${qnaDTO.getQ_title()}">아이디를 여러개 사용할 수 있나요?</td>
                         </tr>
                         <tr>
                             <th>내용</th>
-                            <td class="notice-content_2">개인적으로 아이디를 3개 사용했으면 하는데
+                            <td class="notice-content_2" th:text="${qnaDTO.getQ_content()}">개인적으로 아이디를 3개 사용했으면 하는데
                                 사용할 수 있나요?
                             </td>
                         </tr>
                         <tr>
                             <th>답변</th>
-                            <td class="notice-content_2">안녕하세요 쇼플리입니다.
+                            <td class="notice-content_2" th:text="${qnaDTO.getQ_reply()}">안녕하세요 쇼플리입니다.
                                 고객님 저희 쇼플리를 이용해 주셔서 감사합니다.
                                 안타깝게도 개인회원은 1개의 계정만 사용할 수 있습니다.
                                 문의하신 내용에 만족하셨나요?
@@ -49,8 +49,8 @@
                     </table>
 
                     <div class="notice-buttons_2">
-                        <button class="notice-btn_2 btn-delete_2">삭제</button>
-                        <button class="notice-btn_2 btn-list_2">목록</button>
+                        <button class="notice-btn_2 btn-delete_2" id="removeViewBtn" th:data-delQnaBtn="${qnaDTO.getQ_no()}">삭제</button>
+                        <button class="notice-btn_2 btn-list_2"><a th:href="@{/admin/cs/qna/list}">목록</a></button>
                     </div>
                 </main>
             </div>
@@ -58,7 +58,7 @@
     </div>
 
 <div th:replace="~{admin/coupon/_tail.html}"></div>
-
+<script th:src="@{/js/admin/qna.js}"></script>
 
 
 </body>

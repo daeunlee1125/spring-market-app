@@ -36,11 +36,11 @@
     <div class="bottom-header">
         <div class="header-left">
             <a href="#" id="categoryBtn"> 전체 카테고리</a>
-            <a href="#">히트상품</a>
-            <a href="#">추천상품</a>
-            <a href="#">최신상품</a>
-            <a href="#">인기상품</a>
-            <a href="#">할인상품</a>
+            <a th:href="@{/index#hit-products}">히트상품</a>
+            <a th:href="@{/index#recommended-products}">추천상품</a>
+            <a th:href="@{/index#recent-products}">최신상품</a>
+            <a th:href="@{/index#best-products}">인기상품</a>
+            <a th:href="@{/index#discount-products}">할인상품</a>
         </div>
         <div class="header-right login-menu">
             <a th:href="@{/member/login}">로그인</a> |

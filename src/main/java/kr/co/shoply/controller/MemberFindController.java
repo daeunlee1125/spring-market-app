@@ -1,8 +1,10 @@
 package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.MemberDTO;
+import kr.co.shoply.dto.SiteInfoDTO;
 import kr.co.shoply.service.EmailService;
 import kr.co.shoply.service.MemberService;
+import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +21,23 @@ public class MemberFindController {
 
     private final MemberService memberService;
     private final EmailService emailService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/member/find/userId")
-    public String userId(){
+    public String userId(Model model) {
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "member/find/userId";
     }
 
     @GetMapping("/member/find/password")
-    public String password(){
+    public String password(Model model) {
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "member/find/password";
     }
 
@@ -85,6 +96,9 @@ public class MemberFindController {
             model.addAttribute("member", memberDTO);
         }
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "member/find/resultId";
     }
 
@@ -94,14 +108,20 @@ public class MemberFindController {
 
         model.addAttribute("mem_id", mem_id);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "member/find/changePassword";
     }
 
     @PostMapping("/member/find/changePassword")
-    public String changePassword(MemberDTO memberDTO){
+    public String changePassword(MemberDTO memberDTO, Model model){
         log.info("비밀번호 변경 페이지 - memberDTO: {}", memberDTO);
 
         boolean isSuccess = memberService.modifyPassword(memberDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         if(isSuccess) {
             return "redirect:/member/login?success=success";

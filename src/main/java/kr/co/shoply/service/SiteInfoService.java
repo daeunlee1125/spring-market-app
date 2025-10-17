@@ -167,6 +167,10 @@ public class SiteInfoService {
         }
     }
 
+    public SiteInfoDTO getSiteInfo3() {
+        return siteInfoMapper.selectSiteInfo3();
+    }
+
     public void logVisit() {
         visitsMapper.insertVisit();
     }

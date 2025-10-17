@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shoply 메인</title>
+    <title>1조 Shoply 메인</title>
 
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
@@ -20,7 +20,7 @@
 <header>
 
     <!-- 메인화면 빼고는 이 줄 지우시면 됩니다! -->
-    <div class="top-adv"><img th:src="@{/image/qqq.PNG}" alt="" style="width: 100%; height: 100%;"></div>
+    <div th:each="banner : ${banners}" th:if="${(banner.ban_location==1) && (banner.ban_status==1)}" class="top-adv"><img th:src="@{${banner.ban_img}}" alt="상단이미지" style="width: 100%; height: 100%;"></div>
 
 
 
@@ -40,8 +40,8 @@
 
         <!-- 검색창 -->
         <div class="header-center">
-            <form action="" method="get">
-                <input type="text" placeholder="검색">
+            <form th:action="@{/product/search}" method="get">
+                <input type="text" name="keyword" placeholder="검색">
                 <button type="submit">
                     <img th:src="@{/image/search.png}" alt="검색">
                 </button>
@@ -79,7 +79,7 @@
             <a th:if="${#authorization.expr('!isAuthenticated()')}" th:href="@{/member/join}">회원가입</a>
 
             |
-            <a href="#">고객센터</a>
+            <a th:href="@{/cs}">고객센터</a>
         </div>
     </div>
 
@@ -99,7 +99,7 @@
                 <div class="img-box">
                     <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                 </div>
-                <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
+                <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}" class="name" th:text="${p.prod_name}"></a>
                 <div class="price-box">
                     <div class="price-top">
                         <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
@@ -121,7 +121,7 @@
                         <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
                     </div>
                     <div class="info">
-                        <a th:href="@{'/product/view/' + ${p.prod_no}}" class="name" th:text="${p.prod_name}"></a>
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}" class="name" th:text="${p.prod_name}"></a>
                         <div class="price-box">
                             <div class="price-top2">
                                 <span class="original" th:text="${#numbers.formatInteger(p.prod_price, 3, 'COMMA')} + '원'"></span>
@@ -196,11 +196,7 @@
             <!--  -->
             <div class="slider">
                 <div class="slides">
-                    <img th:src="@{/image/메인/slider_item1.jpg}" alt="이미지1">
-                    <img th:src="@{/image/메인/slider_item2.jpg}" alt="이미지2">
-                    <img th:src="@{/image/메인/slider_item3.jpg}" alt="이미지3">
-                    <img th:src="@{/image/메인/slider_item4.jpg}" alt="이미지4">
-                    <img th:src="@{/image/메인/slider_item5.jpg}" alt="이미지5">
+                    <img th:each="banner : ${banners}" th:if="${(banner.ban_location==2) && (banner.ban_status==1)}" th:src="@{${banner.ban_img}}" alt="이미지1">
                 </div>
                 <button class="prev"><i class="fas fa-chevron-left"></i></button>
                 <button class="next"><i class="fas fa-chevron-right"></i></button>
@@ -221,7 +217,7 @@
 
                     <!-- 히트상품 리스트 반복 -->
                     <div th:each="p : ${hitProducts}" class="product-box">
-                        <a th:href="@{/product/view(prod_no=${p.prod_no})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
                             <!-- 상품명 -->
@@ -257,7 +253,7 @@
 
                     <!-- 상품 리스트 반복 -->
                     <div th:each="p : ${recommendedProducts}" class="product-box">
-                        <a th:href="@{/product/view(prod_no=${p.prod_no})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
 
                             <p class="name" th:text="${p.prod_name}"></p>
@@ -291,7 +287,7 @@
                 <div class="product-grid">
 
                     <div th:each="p : ${newProducts}" class="product-box">
-                        <a th:href="@{/product/view/{prodNo}(prodNo=${p.prod_no})}">
+                        <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
 
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -329,7 +325,7 @@
                 <div class="product-grid">
                     <!-- 상품 반복 출력 -->
                     <a th:each="p : ${bestProducts}"
-                       th:href="@{'/product/view/' + ${p.prod_no}}">
+                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                         <div class="product-box">
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -343,7 +339,7 @@
                             <!-- 할인된 가격 및 무료배송 아이콘 -->
                             <div class="sale-wrap">
                     <span class="sale"
-                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'"
+                          th:text="${#numbers.formatInteger(p.prod_price - (p.prod_price * p.prod_sale / 100), 3, 'COMMA')} + '원'">
                     </span>
                                 <img th:if="${p.prod_deliv_price == 0}"
                                      th:src="@{/image/메인/ico_freeshipping.gif}"
@@ -361,7 +357,7 @@
                 <div class="product-grid">
                     <!-- 할인율 높은 순으로 8개 반복 -->
                     <a th:each="p : ${discountProducts}"
-                       th:href="@{'/product/view/' + ${p.prod_no}}">
+                       th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${p.getCate2_no()}, prodNo=${p.getProd_no()})}">
                         <div class="product-box">
                             <!-- 상품 이미지 -->
                             <img th:src="@{|${p.f_name}|}" alt="상품" class="prod-img">
@@ -387,10 +383,8 @@
                     </a>
                 </div>
             </section>
-        </div>
-</div>
-
-</main>
+        </main> </div> </div>     <footer>
+</footer>
 
 <footer>
 
@@ -406,26 +400,26 @@
     </div>
     <div class="footer-wrapper">
 
-        <h3 class="cpname">(주)샵플리닷컴</h3>
+        <h3 class="cpname" th:text="${siteInfoDTO.getS_corp_name()}">(주)샵플리닷컴</h3>
         <div class="call-cont">
             <img th:src="@{/image/call3.png}" alt="" style="height: 45px; margin-top: 5px;">
-            <span class="tel">1234-5678</span>
-            <span class="time"> (평일 09:00~18:00)</span>
+            <span class="tel" th:text="${siteInfoDTO.getS_cs_hp()}">1234-5678</span>
+            <span class="time" th:text="'(' + ${siteInfoDTO.getS_cs_time()} + ')'"> (평일 09:00~18:00)</span>
         </div>
         <div style="color: gray; margin-top: 15px">
-            <span>대표이사 : 홍길동</span>
-            <span style="margin-left: 10px;">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
-            <span style="margin-left: 10px;">사업자등록번호 : 123-45-12345</span>
+            <span th:text="'대표이사 : ' + ${siteInfoDTO.getS_ceo()}">대표이사 : 홍길동</span>
+            <span style="margin-left: 10px;" th:text="${siteInfoDTO.getS_addr1()} + ' ' + ${siteInfoDTO.getS_addr2()}">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
+            <span style="margin-left: 10px;" th:text="'사업자등록번호 : ' + ${siteInfoDTO.getS_reg_hp()}">사업자등록번호 : 123-45-12345</span>
 
             <div style="margin-top: 3px;">
-                <span>전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
+                <span th:text="'전자금융거래 분쟁 담당 : ' + ${siteInfoDTO.getS_cs_hp2()} + '(365일 ' + ${siteInfoDTO.getS_cs_time()} + ')'">전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
             </div>
         </div>
 
     </div>
     <div class="middle">
-        <p id="footer-p">
-            Copyright ©[[${appInfo.appName}]].co.kr All rights reserved. [[${appInfo.appName}]] ADMINISTRATOR Version [[${appInfo.appVersion}]]
+        <p id="footer-p" th:text="${copyrightDTO.getSCopy()} + '.' + ${copyrightDTO.getSTitle()} + ' ADMINISTRATOR Version ' + ${copyrightDTO.getVerVersion()}">
+            Copyright ©shoply.co.kr All rights reserved. shoply ADMINISTRATOR Version 0.0.4-SNAPSHOT
         </p>
     </div>
 

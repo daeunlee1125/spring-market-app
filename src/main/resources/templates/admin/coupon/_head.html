@@ -19,7 +19,7 @@
     </div>
     <nav>
         <ul class="mainSideBar">
-            <li>
+            <li th:if="${#authentication.principal.member.mem_level==7}">
                 <div><i class="fas fa-cog"></i> 환경설정</div>
                 <ul class="subSideBar">
                     <li><a th:href="@{/admin/config/basic}">기본설정</a></li>
@@ -64,7 +64,7 @@
                     <li><a th:href="@{/admin/coupon/issued}">쿠폰발급현황</a></li>
                 </ul>
             </li>
-            <li>
+            <li th:if="${#authentication.principal.member.mem_level==7}">
                 <div><i class="fas fa-headset"></i> 고객센터</div>
                 <ul class="subSideBar">
                     <li><a th:href="@{/admin/cs/notice/list}">공지사항</a></li>
@@ -76,12 +76,12 @@
     </nav>
 </aside>
 
-<!-- 헤더 -->
 <header>
     <div class="middle">
         <div id="logo">
-            <a th:href="@{/admin/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
+            <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
         </div>
+
         <div class="header-nav">
             <ul class="header-menu">
                 <li><a th:href="@{/admin/}">홈</a></li>

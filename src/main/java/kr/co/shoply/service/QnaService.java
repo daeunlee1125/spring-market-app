@@ -2,8 +2,10 @@ package kr.co.shoply.service;
 
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.dto.QnaAnswerRequestDTO;
 import kr.co.shoply.dto.QnaDTO;
 import kr.co.shoply.entity.Qna;
+import kr.co.shoply.mapper.QnaMapper;
 import kr.co.shoply.repository.QnaRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,6 +23,7 @@ public class QnaService {
 
     private final QnaRepository qnaRepository;
     private final ModelMapper modelMapper;
+    private final QnaMapper qnaMapper;
 
     @Transactional(readOnly = true)
     public List<QnaDTO> getRecentQna(int limit) {
@@ -119,4 +122,41 @@ public class QnaService {
         if (!has(cat1)) return List.of();
         return qnaRepository.findCat2ByCat1(cat1);
     }
+
+    public PageResponseDTO<QnaDTO> getQnaList3(int page, String cate1, String cate2) {
+
+        // 1. 전달받은 파라미터로 PageRequestDTO 객체를 생성합니다.
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setPg(page);
+        pageRequestDTO.setCate1(cate1);
+        pageRequestDTO.setCate2(cate2);
+        // pageRequestDTO.setSize(10); // DTO에 @Builder.Default로 기본값이 10으로 설정되어 있으므로 생략 가능
+
+        // 2. 조건에 맞는 전체 게시물 수를 가져옵니다.
+        // (매퍼가 DTO를 파라미터로 받도록 수정하는 것이 좋음)
+        int total = qnaMapper.selectQnaCnt3(pageRequestDTO);
+
+        // 3. 페이징된 목록을 가져옵니다.
+        // (매퍼가 DTO를 파라미터로 받으면 offset 계산도 DTO의 getOffset()으로 자동 처리됨)
+        List<QnaDTO> dtoList = qnaMapper.selectQnaByCate3(pageRequestDTO);
+
+        // 4. PageResponseDTO의 생성자에 pageRequestDTO를 전달하여 객체를 생성하고 반환합니다.
+        // 이제 생성자 형식이 일치하므로 에러가 발생하지 않습니다.
+        return new PageResponseDTO<>(pageRequestDTO, dtoList, total);
+    }
+
+    public QnaDTO getQna3(int q_no) {
+        return qnaMapper.selectQna3(q_no);
+    }
+
+    @Transactional
+    public void modifyAnswerQna3(QnaAnswerRequestDTO dto) {
+        qnaMapper.updateQnaReply3(dto);
+    }
+
+    public void removeQnaList3(List<Integer> list){
+        qnaMapper.deleteQnaList3(list);
+    }
+
+
 }

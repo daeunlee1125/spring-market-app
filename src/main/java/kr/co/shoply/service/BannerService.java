@@ -24,6 +24,10 @@ public class BannerService {
         bannerMapper.saveBanner(bannerDTO);
     }
 
+    public List<BannerDTO> mainBanners2(){
+        return bannerMapper.getBanners2();
+    }
+
     public List<BannerDTO> getBanners2(){
         List<Banner> banners = bannerRepository.findAll();
         List<BannerDTO> bannerDTOS = new ArrayList<>();
@@ -47,5 +51,9 @@ public class BannerService {
         }else if (ban_status==1){
             bannerMapper.statusToOne(ban_no);
         }
+    }
+
+    public String getProductBanner3(){
+        return bannerMapper.selectProductBanner3();
     }
 }

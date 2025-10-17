@@ -1,11 +1,9 @@
 package kr.co.shoply.controller.admin;
 
-import kr.co.shoply.dto.MemSellerDTO;
-import kr.co.shoply.dto.MemberDTO;
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.service.MemSellerService;
 import kr.co.shoply.service.MemberService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -25,6 +23,7 @@ public class ShopController {
 
     private final MemberService memberService;
     private final MemSellerService memSellerService;
+    private final VersionService versionService;
 
     @GetMapping("/admin/shop/list")
     public String shopList(Model model, PageRequestDTO pageRequestDTO){
@@ -32,6 +31,9 @@ public class ShopController {
         PageResponseDTO<MemSellerDTO> sellers = memSellerService.getMemSellers2Page(pageRequestDTO);
         log.info(sellers.toString());
         model.addAttribute("pageResponseDTO", sellers);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/shop/list";
     }
@@ -70,6 +72,9 @@ public class ShopController {
         PageResponseDTO<MemSellerDTO> pageResponseDTO = memSellerService.getSellerSales(pageRequestDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/shop/sales";
     }
 
@@ -80,6 +85,9 @@ public class ShopController {
         PageResponseDTO<MemSellerDTO> pageResponseDTO = memSellerService.getSellerRange(pageRequestDTO, range);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
         model.addAttribute("range", range);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/shop/sales";
     }

@@ -3,11 +3,14 @@ package kr.co.shoply.service;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.entity.*;
 import kr.co.shoply.mapper.MyProductMapper;
-import kr.co.shoply.mapper.ProductMapper;
 import kr.co.shoply.mapper.ReviewMapper;
 import kr.co.shoply.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl; // ⬅️ 이 부분을 추가하세요
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Arrays;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyService {
@@ -36,20 +37,19 @@ public class MyService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final ReviewMapper reviewMapper;
-    private final ProdOptionRepository prodOptionRepository; // 옵션
-    private final ProFileRepository proFileRepository;       // 파일
+    private final ProdOptionRepository prodOptionRepository;
+    private final ProFileRepository proFileRepository;
     private final MyProductMapper myproductMapper;
-
+    private final BannerRepository bannerRepository;
 
     @Transactional(readOnly = true)
     public ProductDTO getProduct3(String prodNo) {
-        ProductDTO product = myproductMapper.selectProduct(prodNo); // MyProductMapper 사용
+        ProductDTO product = myproductMapper.selectProduct(prodNo);
         product.setOptions(getProductOption3(prodNo));
         product.setFiles(getProductFiles(prodNo));
         return product;
     }
 
-    // 상품 파일
     @Transactional(readOnly = true)
     public List<ProdOptionDTO> getProductOption3(String prodNo) {
         List<ProdOptionDTO> options = myproductMapper.selectOption(prodNo);
@@ -61,7 +61,6 @@ public class MyService {
     public List<ProFileDTO> getProductFiles(String prodNo) {
         return myproductMapper.selectFiles(prodNo);
     }
-
 
     @Transactional
     public MyPageHomeDTO getMyPageHomeData(String memId) {
@@ -75,7 +74,6 @@ public class MyService {
                 .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
                         .map(item -> {
                             OrderItemDTO dto = modelMapper.map(item, OrderItemDTO.class);
-                            // OrderItemDTO에 ord_date 필드가 필요하며, Date 타입으로 변환 후 할당
                             dto.setOrd_date(order.getOrd_date());
                             return dto;
                         }))
@@ -101,8 +99,6 @@ public class MyService {
         List<QnaDTO> recentQnas = recentQnasEntity.stream()
                 .map(entity -> {
                     QnaDTO dto = modelMapper.map(entity, QnaDTO.class);
-
-                    // Date → String 변환
                     if (entity.getQ_rdate() != null) {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         dto.setQ_rdate(
@@ -112,7 +108,6 @@ public class MyService {
                                         .format(formatter)
                         );
                     }
-
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -138,7 +133,6 @@ public class MyService {
     public void updateMemberInfo(MemberDTO memberDTO) {
         Member member = memberRepository.findById(memberDTO.getMem_id())
                 .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
-
         member.updateInfo(memberDTO.getMem_email(), memberDTO.getMem_hp(), memberDTO.getMem_zip(), memberDTO.getMem_addr1(), memberDTO.getMem_addr2());
         memberRepository.save(member);
     }
@@ -147,7 +141,6 @@ public class MyService {
     public void changePassword(String memId, String newPassword) {
         Member member = memberRepository.findById(memId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
-
         String encodedPassword = passwordEncoder.encode(newPassword);
         member.updatePassword(encodedPassword);
         memberRepository.save(member);
@@ -165,7 +158,6 @@ public class MyService {
     public void confirmOrder(Long itemNo, String memId) {
         OrderItem orderItem = orderItemRepository.findById(itemNo)
                 .orElseThrow(() -> new IllegalArgumentException("주문 상품을 찾을 수 없습니다."));
-
         Order order = orderRepository.findById(orderItem.getOrd_no())
                 .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
 
@@ -173,33 +165,78 @@ public class MyService {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
 
-        orderItem.setItem_stat(2);
+        orderItem.setItem_stat(4);
         orderItemRepository.save(orderItem);
+
+        Optional<Product> productOpt = productRepository.findByProd_no(orderItem.getProd_no());
+        int pointAmount = 0;
+
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            pointAmount = (int) (product.getProd_price() * orderItem.getItem_cnt() * 0.1);
+        }
 
         Point point = Point.builder()
                 .mem_id(memId)
                 .p_type(1)
-                .p_point(100)
+                .p_point(pointAmount)
                 .p_info("상품구매확정")
                 .p_date(LocalDateTime.now())
-                .p_exp_date(LocalDateTime.now().plusYears(1))
+                .p_exp_date(LocalDateTime.now().plusDays(7))
                 .build();
         pointRepository.save(point);
     }
 
     @Transactional
-    public void writeReview(ReviewDTO reviewDTO) {
+    public void requestReturn(Long itemNo, String memId, String reason) {
+        OrderItem orderItem = orderItemRepository.findById(itemNo)
+                .orElseThrow(() -> new IllegalArgumentException("주문 상품을 찾을 수 없습니다."));
+        Order order = orderRepository.findById(orderItem.getOrd_no())
+                .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
+
+        if (!order.getMem_id().equals(memId)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+
+        orderItem.setItem_stat(6);
+        orderItemRepository.save(orderItem);
+    }
+
+    @Transactional
+    public void requestExchange(Long itemNo, String memId, String reason) {
+        OrderItem orderItem = orderItemRepository.findById(itemNo)
+                .orElseThrow(() -> new IllegalArgumentException("주문 상품을 찾을 수 없습니다."));
+        Order order = orderRepository.findById(orderItem.getOrd_no())
+                .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
+
+        if (!order.getMem_id().equals(memId)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+
+        orderItem.setItem_stat(5);
+        orderItemRepository.save(orderItem);
+    }
+
+    @Transactional
+    public ReviewDTO writeReview(ReviewDTO reviewDTO) {
         Review review = modelMapper.map(reviewDTO, Review.class);
-        // LocalDateTime -> Date로 변환 후 할당
         Date currentDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         review.setRev_rdate(currentDate);
+
+        if (reviewDTO.getRev_files() != null && !reviewDTO.getRev_files().isEmpty()) {
+            review.setRev_img_path(reviewDTO.getRev_files().get(0));
+        }
+
         reviewRepository.save(review);
+        ReviewDTO savedDTO = modelMapper.map(review, ReviewDTO.class);
+        productRepository.findByProd_no(review.getProd_no())
+                .ifPresent(p -> savedDTO.setProdName(p.getProd_name()));
+        return savedDTO;
     }
 
     @Transactional
     public void writeQna(QnaDTO qnaDTO) {
         Qna qna = modelMapper.map(qnaDTO, Qna.class);
-        // LocalDateTime -> Date로 변환 후 할당
         Date currentDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         qna.setQ_rdate(currentDate);
         qnaRepository.save(qna);
@@ -220,49 +257,78 @@ public class MyService {
 
     @Transactional(readOnly = true)
     public List<UserCouponDTO> getUserCouponsByMemId(String memId) {
-        // 네이티브 쿼리로 Object[] 리스트 가져오기
         List<Object[]> results = userCouponRepository.findUserCouponsNative(memId);
-
-        // Object[] -> UserCouponDTO 변환
         return results.stream().map(row -> {
             UserCouponDTO dto = new UserCouponDTO();
 
+            // 기본 정보
             dto.setCp_no((String) row[0]);
             dto.setCp_code((String) row[1]);
             dto.setMem_id((String) row[2]);
 
-            // java.sql.Timestamp 또는 java.sql.Date 모두 처리 가능하도록 수정
+            // 발급일 (row[3])
             if (row[3] != null) {
-                if (row[3] instanceof java.sql.Timestamp) {
-                    dto.setCp_issued_date(new Date(((java.sql.Timestamp) row[3]).getTime()));
-                } else if (row[3] instanceof java.sql.Date) {
-                    dto.setCp_issued_date(new Date(((java.sql.Date) row[3]).getTime()));
+                try {
+                    if (row[3] instanceof java.sql.Timestamp) {
+                        dto.setCp_issued_date(new Date(((java.sql.Timestamp) row[3]).getTime()));
+                    } else if (row[3] instanceof java.sql.Date) {
+                        dto.setCp_issued_date(new Date(((java.sql.Date) row[3]).getTime()));
+                    } else if (row[3] instanceof String) {
+                        // TO_DATE 함수가 String을 반환할 수 있음
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                        dto.setCp_issued_date(sdf.parse((String) row[3]));
+                    }
+                } catch (Exception e) {
+                    log.error("발급일 파싱 실패", e);
                 }
             }
 
+            // 사용일 (row[4])
             if (row[4] != null) {
-                if (row[4] instanceof java.sql.Timestamp) {
-                    dto.setCp_used_date(new Date(((java.sql.Timestamp) row[4]).getTime()));
-                } else if (row[4] instanceof java.sql.Date) {
-                    dto.setCp_used_date(new Date(((java.sql.Date) row[4]).getTime()));
+                try {
+                    if (row[4] instanceof java.sql.Timestamp) {
+                        dto.setCp_used_date(new Date(((java.sql.Timestamp) row[4]).getTime()));
+                    } else if (row[4] instanceof java.sql.Date) {
+                        dto.setCp_used_date(new Date(((java.sql.Date) row[4]).getTime()));
+                    } else if (row[4] instanceof String) {
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                        dto.setCp_used_date(sdf.parse((String) row[4]));
+                    }
+                } catch (Exception e) {
+                    log.error("사용일 파싱 실패", e);
                 }
             }
 
+            // 쿠폰 상태 (row[5])
             dto.setCp_stat(row[5] != null ? ((Number) row[5]).intValue() : null);
 
+            // 쿠폰 타입 (row[6])
             dto.setCp_type(row[6] != null ? ((Number) row[6]).intValue() : 0);
+
+            // 쿠폰 가치 (row[7])
             dto.setCp_value(row[7] != null ? ((Number) row[7]).intValue() : 0);
+
+            // 쿠폰명 (row[8])
             dto.setCp_name((String) row[8]);
 
-            // cp_issuer_name은 쿼리에서 제거되었으므로 주석 처리
-            // dto.setCp_issuer_name((String) row[9]);
+            // 최소 구매금액 (row[9])
+            dto.setCp_min_price(row[9] != null ? ((Number) row[9]).intValue() : 0);
 
-            // cp_exp_date 처리
-            if (row[9] != null) {
-                if (row[9] instanceof java.sql.Timestamp) {
-                    dto.setCp_exp_date(new Date(((java.sql.Timestamp) row[9]).getTime()));
-                } else if (row[9] instanceof java.sql.Date) {
-                    dto.setCp_exp_date(new Date(((java.sql.Date) row[9]).getTime()));
+            // ✅ 유효기간 (row[10]) - 수정됨!
+            if (row[10] != null) {
+                try {
+                    if (row[10] instanceof java.sql.Timestamp) {
+                        dto.setCp_exp_date(new Date(((java.sql.Timestamp) row[10]).getTime()));
+                    } else if (row[10] instanceof java.sql.Date) {
+                        dto.setCp_exp_date(new Date(((java.sql.Date) row[10]).getTime()));
+                    } else if (row[10] instanceof java.time.LocalDate) {
+                        dto.setCp_exp_date(java.sql.Date.valueOf((java.time.LocalDate) row[10]));
+                    } else if (row[10] instanceof String) {
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                        dto.setCp_exp_date(sdf.parse((String) row[10]));
+                    }
+                } catch (Exception e) {
+                    log.error("유효기간 파싱 실패", e);
                 }
             }
 
@@ -272,27 +338,45 @@ public class MyService {
 
     public List<PointDTO> getPointHistory(String memId) {
         List<Point> points = pointRepository.findByMem_idOrderByP_dateDesc(memId);
-
-        // 날짜를 "yyyy-MM-dd" 형식으로 포맷하는 포맷터 정의
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return points.stream()
                 .map(point -> {
                     PointDTO dto = modelMapper.map(point, PointDTO.class);
 
-                    // LocalDateTime을 String으로 변환하여 DTO에 설정
-                    dto.setP_date(point.getP_date().format(formatter));
-                    dto.setP_exp_date(point.getP_exp_date().format(formatter));
+                    // 날짜 포맷팅
+                    if (point.getP_date() != null) {
+                        dto.setP_date(point.getP_date().format(formatter));
+                    }
+                    if (point.getP_exp_date() != null) {
+                        dto.setP_exp_date(point.getP_exp_date().format(formatter));
+                    } else {
+                        dto.setP_exp_date("-");
+                    }
+
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    // ✅ 상태명 변환 헬퍼 메서드
+    private String getItemStatName(int stat) {
+        switch(stat) {
+            case 0: return "결제완료";
+            case 1: return "배송준비";
+            case 2: return "배송중";
+            case 3: return "배송완료";
+            case 4: return "구매확정";
+            case 5: return "교환신청";
+            case 6: return "반품신청";
+            default: return "알수없음";
+        }
     }
 
     @Transactional
     public void cancelOrder(Long itemNo, String memId) {
         OrderItem orderItem = orderItemRepository.findById(itemNo)
                 .orElseThrow(() -> new IllegalArgumentException("주문 상품을 찾을 수 없습니다."));
-
         Order order = orderRepository.findById(orderItem.getOrd_no())
                 .orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
 
@@ -300,16 +384,15 @@ public class MyService {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
 
-        orderItem.setItem_stat(0); // 취소 상태 코드
+        orderItem.setItem_stat(0);
         orderItemRepository.save(orderItem);
     }
-    @Transactional(readOnly = true)
-    public List<OrderItemDTO> getOrdersByMemId(String memId) {
-        // 회원 주문 조회
-        List<Order> orders = orderRepository.findTop5ByMem_idOrderByOrd_dateDesc(memId);
 
-        // Order -> OrderItemDTO 변환
-        return orders.stream()
+    // PageImpl을 사용하여 DTO 페이지를 반환하는 메서드로 수정
+    @Transactional(readOnly = true)
+    public Page<OrderItemDTO> getOrdersByMemId(String memId, Pageable pageable) {
+        Page<Order> orderPage = orderRepository.findByMem_id(memId, pageable);
+        List<OrderItemDTO> items = orderPage.getContent().stream()
                 .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
                         .map(item -> {
                             OrderItemDTO dto = modelMapper.map(item, OrderItemDTO.class);
@@ -317,6 +400,20 @@ public class MyService {
                             return dto;
                         }))
                 .collect(Collectors.toList());
+        return new PageImpl<>(items, pageable, orderPage.getTotalElements());
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<ReviewDTO> getReviewsByMemIdPaged(String memId, Pageable pageable) {
+        Page<Review> reviewPage = reviewRepository.findByMem_id(memId, pageable);
+
+        return reviewPage.map(review -> {
+            ReviewDTO dto = modelMapper.map(review, ReviewDTO.class);
+            productRepository.findByProd_no(review.getProd_no())
+                    .ifPresent(p -> dto.setProdName(p.getProd_name()));
+            return dto;
+        });
     }
 
     @Transactional(readOnly = true)
@@ -326,8 +423,6 @@ public class MyService {
         return recentQnasEntity.stream()
                 .map(entity -> {
                     QnaDTO dto = modelMapper.map(entity, QnaDTO.class);
-
-                    // Date → String 변환 (만약 DTO의 q_rdate가 String 타입이라면)
                     if (entity.getQ_rdate() != null) {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         dto.setQ_rdate(
@@ -337,11 +432,86 @@ public class MyService {
                                         .format(formatter)
                         );
                     }
-
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public BannerDTO getBannerByNo(int banNo) {
+        Banner banner = bannerRepository.findById(banNo).orElse(null);
+        if (banner != null) {
+            return modelMapper.map(banner, BannerDTO.class);
+        }
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> getOrderDetail(Long ordNo, Long itemNo, String memId) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // 주문 정보 조회 (ordNo를 String으로 변환)
+            Order order = orderRepository.findById(String.valueOf(ordNo))
+                    .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+
+            // 권한 확인 (자신의 주문만 볼 수 있도록)
+            if (!order.getMem_id().equals(memId)) {
+                throw new IllegalArgumentException("권한이 없습니다.");
+            }
+
+            // 주문 상품 정보 조회
+            OrderItem orderItem = orderItemRepository.findById(itemNo)
+                    .orElseThrow(() -> new IllegalArgumentException("주문상품을 찾을 수 없습니다."));
+
+            // 상품 정보 조회
+            ProductDTO product = getProduct3(orderItem.getProd_no());
+
+            // 회원 정보 조회
+            Member member = memberRepository.findById(order.getMem_id())
+                    .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+
+            // 결과 맵 구성
+            result.put("ordNo", ordNo);
+            result.put("itemNo", itemNo);
+            result.put("prodName", product.getProd_name());
+            result.put("prodPrice", product.getProd_price());
+            result.put("itemCnt", orderItem.getItem_cnt());
+            result.put("itemStat", orderItem.getItem_stat());
+            result.put("totalPrice", product.getProd_price() * orderItem.getItem_cnt());
+            result.put("discount", 0);
+
+            // 날짜 포맷팅 (java.util.Date 사용)
+            if (order.getOrd_date() != null) {
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                String ordDate = sdf.format(order.getOrd_date());
+                result.put("ordDate", ordDate);
+            } else {
+                result.put("ordDate", "");
+            }
+
+            // 상품 이미지
+            if (product.getFiles() != null && !product.getFiles().isEmpty()) {
+                result.put("prodImage", product.getFiles().get(0).getF_name());
+            }
+
+            // 배송 정보 (회원 정보)
+            result.put("memName", member.getMem_name());
+            result.put("memHp", member.getMem_hp());
+            result.put("memZip", member.getMem_zip());
+            result.put("memAddr1", member.getMem_addr1());
+            result.put("memAddr2", member.getMem_addr2());
+            result.put("deliveryMemo", "");
+
+            return result;
+
+        } catch (IllegalArgumentException e) {
+            log.error("주문상세 조회 실패: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("주문상세 조회 중 예기치 않은 오류", e);
+            throw new RuntimeException("주문상세 조회 중 오류가 발생했습니다.");
+        }
+    }
 
 }

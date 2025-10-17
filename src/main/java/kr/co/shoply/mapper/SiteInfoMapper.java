@@ -18,4 +18,5 @@ public interface SiteInfoMapper {
     public void modifyCsInfos(SiteInfoDTO siteInfoDTO);
     public void modifyCopy(SiteInfoDTO siteInfoDTO);
     public List<Chart1DTO> chartSelect();
+    SiteInfoDTO selectSiteInfo3();
 }

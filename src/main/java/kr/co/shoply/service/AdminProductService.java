@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,6 +53,31 @@ public class AdminProductService {
                 .map(cate2 -> modelMapper.map(cate2, Cate2DTO.class))
                 .toList();
     }
+
+    //상품목록
+    public PageResponseDTO<ProductListDTO> getProductList(String memId, int memLevel , PageRequestDTO pageRequestDTO){
+
+        // 전체 개수
+        int total = adminProductMapper.countProductList(memId, memLevel, pageRequestDTO.getSearchType(), pageRequestDTO.getKeyword());
+
+
+        // 목록 조회
+        List<ProductListDTO> products = adminProductMapper.selectProductList(
+                memId,
+                memLevel,
+                pageRequestDTO.getOffset(),
+                pageRequestDTO.getSize(),
+                pageRequestDTO.getSearchType(),
+                pageRequestDTO.getKeyword()
+        );
+
+        return PageResponseDTO.<ProductListDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(products)
+                .total(total)
+                .build();
+    }
+
 
     //상품등록
     @Transactional
@@ -93,6 +119,7 @@ public class AdminProductService {
 
         for(int i = 0; i < files.length; i++) {
             if(files[i] != null && !files[i].isEmpty()) {
+                log.info("#### registerProduct ====> files={}",files[i]);
                 uploadProductFile(files[i], prodNo, i + 1);
             }
         }
@@ -110,33 +137,56 @@ public class AdminProductService {
 
         try {
             // 업로드 경로 설정
-            String baseUploadPath = "/home/ec2-user/shoply/uploads/product/"; //"C:/uploads/product/"
-            Files.createDirectories(Paths.get(baseUploadPath));
+            String baseUploadPath = "/home/ec2-user/shoply/uploads/product/";
+            //String baseUploadPath = "C:/uploads/product/";
+
+            // 디렉토리 생성 (없으면)
+            File uploadDir = new File(baseUploadPath);
+            if (!uploadDir.exists()) {
+                boolean created = uploadDir.mkdirs();
+                log.info("디렉토리 생성 결과: {}", created);
+            }
+
+            //Files.createDirectories(Paths.get(baseUploadPath));
 
             // 파일명 생성
             String uuid = UUID.randomUUID().toString();
             String originalName = file.getOriginalFilename();
 
             if (originalName == null) {
-                throw new IllegalArgumentException("originalName cannot be null");
+                throw new IllegalArgumentException("파일명이 null입니다.");
             }
 
             String safeName = StringUtils.cleanPath(originalName);
             safeName = safeName.replaceAll("[^a-zA-Z0-9._-]", "_");
-
             String newName = uuid + "_" + safeName;
 
+            // File 객체로 변경
+            File destFile = new File(baseUploadPath + newName);
+
+            log.info("#### uploadProductFile ====> 저장 경로: {}", destFile.getAbsolutePath());
+            log.info("#### uploadProductFile ====> 파일 크기: {}", file.getSize());
+
             // 서버에 파일 저장
+            /*
             Path filePath = Paths.get(baseUploadPath + newName);
             file.transferTo(filePath);
-
             log.info("#### uploadProductFile ====> filePath={}", filePath.toString());
+            */
+
+            file.transferTo(destFile);  // Path 대신 File 사용!
+            log.info("#### uploadProductFile ====> 파일 저장 성공!");
+
+
+
+            String dbPath = "/uploads/product/" + newName;
+
+            log.info("#### uploadProductFile ====> dbPath={}", dbPath);
 
             // DB에 저장할 정보
             ProFileDTO fileDTO = ProFileDTO.builder()
                     .prod_no(prodNo)
-                    .f_name(newName)
-                    .f_rdate(String.valueOf(LocalDateTime.now()))
+                    .f_name(dbPath)
                     .f_dist(fileType)
                     .build();
 
@@ -180,6 +230,8 @@ public class AdminProductService {
                         .not_val(noticeVals[i])
                         .build();
 
+                log.info("#### insertProductNotices ==> noticeDTO={}", noticeDTO);
+
                 int result = adminProductMapper.insertProductNotice(noticeDTO);
                 if(result == 0) {
                     throw new RuntimeException("고시정보 INSERT 실패");
@@ -194,7 +246,7 @@ public class AdminProductService {
         List<String> optVals = dto.getOptVals();
 
         if(optNames == null || optVals == null) {
-            throw new RuntimeException("옵션이 없습니다.");
+            return; // 옵션 없으면 스킵
         }
 
         for(int i = 0; i < optNames.size(); i++) {
@@ -207,6 +259,8 @@ public class AdminProductService {
                         .opt_name(optName)
                         .opt_val(optVal)
                         .build();
+
+                log.info("#### insertProductOptions ==> optionDTO={}", optionDTO);
 
                 int result = adminProductMapper.insertProductOption(optionDTO);
                 if(result == 0) {

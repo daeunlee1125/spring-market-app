@@ -25,7 +25,8 @@
         TO_CHAR(cs_rdate, 'YYYY-MM-DD HH24:MI') AS cs_rdate
         FROM CS_NOTICE
         <where>
-            <if test="csType != null and csType.trim() != ''">
+            <!-- '전체'일 때는 WHERE 절 제외 -->
+            <if test="csType != null and csType.trim() != '' and csType != '전체'">
                 AND cs_type = #{csType}
             </if>
         </where>
@@ -34,15 +35,18 @@
     </select>
 
 
+
     <select id="selectNoticeTotal" parameterType="kr.co.shoply.dto.PageRequestDTO" resultType="int">
         SELECT COUNT(*)
         FROM CS_NOTICE
         <where>
-            <if test="csType != null and csType.trim() != ''">
+            <!-- '전체'일 때는 WHERE 절 제외 -->
+            <if test="csType != null and csType.trim() != '' and csType != '전체'">
                 AND cs_type = #{csType}
             </if>
         </where>
     </select>
+
 
 
     <delete id="deleteNotices" parameterType="list">

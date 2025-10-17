@@ -16,20 +16,24 @@
         </div>
 
         <!-- 검색 영역 -->
-        <div class="main-content-top" style="border:none; margin:15px 0;">
-          <form class="search-bar">
-            <select name="1차">
-              <option>1차선택</option>
-              <option>회원</option>
-              <option>주문</option>
-            </select>
-            <select name="2차">
-                <option>2차선택</option>
-                <option>가입</option>
-                <option>탈퇴</option>
-            </select>
-          </form>
-        </div>
+          <div class="main-content-top" style="border:none; margin:15px 0;">
+              <form class="search-bar" th:data-cate1="${cate1}" th:data-cate2="${cate2}">
+                  <select name="category1" id="category1">
+                      <option value="">1차 선택</option>
+                      <option value="회원" th:selected="${cate1 == '회원'}">회원</option>
+                      <option value="쿠폰/혜택/이벤트" th:selected="${cate1 == '쿠폰/혜택/이벤트'}">쿠폰/혜택/이벤트</option>
+                      <option value="주문/결제" th:selected="${cate1 == '주문/결제'}">주문/결제</option>
+                      <option value="배송" th:selected="${cate1 == '배송'}">배송</option>
+                      <option value="취소/반품/교환" th:selected="${cate1 == '취소/반품/교환'}">취소/반품/교환</option>
+                      <option value="여행/숙박/항공" th:selected="${cate1 == '여행/숙박/항공'}">여행/숙박/항공</option>
+                      <option value="안전거래" th:selected="${cate1 == '안전거래'}">안전거래</option>
+                  </select>
+
+                  <select name="category2" id="category2">
+                      <option value="">2차 선택</option>
+                  </select>
+              </form>
+          </div>
 
     <main>
         <table class="table">
@@ -47,30 +51,44 @@
             <th>상태</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-            <td class="checkbox-cell">
-                <input type="checkbox" name="itemCheck">
-            </td>
-            <td>100</td>
-            <td>회원</td>
-            <td>가입</td>
-            <td>[안내] 해외결제사칭문자주의</td>
-            <td>chhok</td>
-            <td>2025.09.27</td>
-            <td style="color: blue;">답변완료</td>
+            <tbody>
+            <tr class="clickable-row" style="cursor: pointer;" th:each="qnaDTO, stat : ${pageResponse.dtoList}">
+                <form th:action="@{${qnaDTO.getQ_reply() != null ? '/admin/cs/qna/view' : '/admin/cs/qna/reply'}}" method="get">
+                    <input type="hidden" name="qNo" th:value="${qnaDTO.getQ_no()}">
+                    <td class="checkbox-cell">
+                        <input type="checkbox" name="itemCheck" th:value="${qnaDTO.getQ_no()}">
+                    </td>
+                    <td th:text="${pageResponse.startNo - stat.index}">100</td>
+                    <td th:text="${qnaDTO.getQ_cate1()}">회원</td>
+                    <td th:text="${qnaDTO.getQ_cate2()}">가입</td>
+                    <td th:text="${qnaDTO.getQ_title()}">[안내] 해외결제사칭문자주의</td>
+                    <td th:text="${qnaDTO.getMem_id()}">chhok</td>
+                    <td th:text="${qnaDTO.getQ_rdate()}">2025.09.27</td>
+                    <td style="color: blue;" th:if="${qnaDTO.getQ_reply() != null}">답변완료</td>
+                    <td style="color: red;" th:unless="${qnaDTO.getQ_reply() != null}">검토중</td>
+                </form>
             </tr>
-        </tbody>
+            </tbody>
         </table>
 
-    <!-- 페이지네이션 -->
-    <div class="page">
-    <a href="#" class="prev">이전</a>
-    <a href="#" class="num current">1</a>
-    <a href="#" class="num">2</a>
-    <a href="#" class="num">3</a>
-    <a href="#" class="next">다음</a>
-    </div>
+        <!-- 페이지네이션 -->
+        <div class="page">
+            <a th:if="${pageResponse.prev}"
+               th:href="@{/admin/cs/qna/list(page=${pageResponse.start - 1}, cate1=${cate1}, cate2=${cate2})}"
+               class="prev">이전</a>
+
+            <a th:each="num : ${#numbers.sequence(pageResponse.start, pageResponse.end)}"
+               th:href="@{/admin/cs/qna/list(page=${num}, cate1=${cate1}, cate2=${cate2})}"
+
+               th:classappend="${num == pageResponse.pg} ? 'current'"
+
+               th:text="${num}"
+               class="num">1</a>
+
+            <a th:if="${pageResponse.next}"
+               th:href="@{/admin/cs/qna/list(page=${pageResponse.end + 1}, cate1=${cate1}, cate2=${cate2})}"
+               class="next">다음</a>
+        </div>
 
     <!-- 버튼 영역 -->
     <div class="button-container">
@@ -85,6 +103,7 @@
 
 
 <div th:replace="~{admin/coupon/_tail.html}"></div>
+<script th:src="@{/js/admin/qna.js}"></script>
 
   <!-- 종료 확인 모달 -->
   <div class="modal hidden" id="confirmEndModal">
@@ -96,7 +115,7 @@
       <div class="modal-content">
         <p>해당 문의하기 목록을 삭제하시겠습니까?</p>
         <div style="text-align:center; margin-top:20px;">
-          <button class="register-btn">확인</button>
+            <button class="register-btn" id="confirmDeleteBtn">확인</button>
           <button class="closeModalBtn delete-btn">취소</button>
         </div>
       </div>
@@ -105,29 +124,5 @@
   </div>
   </div>
 </div>
-
-  <!-- JS 공통 로직 -->
-   <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        // 열기 버튼
-        document.querySelectorAll(".openModalBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetId = btn.dataset.target;
-            document.getElementById(targetId).classList.remove("hidden");
-            });
-        });
-
-        // 닫기 버튼 + 배경 클릭
-        document.querySelectorAll(".modal").forEach(modal => {
-            modal.addEventListener("click", (e) => {
-            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                modal.classList.add("hidden");
-            }
-            });
-        });
-        });
-
-</script>
 </body>
 </html>

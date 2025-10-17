@@ -1,280 +1,47 @@
+<!-- _tail.hmtl-->
+</div>
 <footer>
-    <div class="footer-container">
-        <div class="footer-top">
-            <h2>(주)샵플리닷컴</h2>
-            <a href="#">사업자정보확인</a>
-            <a href="#">소비자보호 서비스 가입사실확인</a>
-        </div>
-        <div class="footer-info">
-            <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
-            <p>부산광역시 부산진구 중앙대로 103</p>
-            <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
-            <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-links">
-                <a href="#">개인정보처리방침</a> |
-                <a href="#">영상정보처리기기 운영·관리방침</a> |
-                <a th:href="@{/cs/index}">고객센터</a> |
-                <a th:href="@{/cs/faq}">FAQ</a>
-            </div>
-            <div class="footer-sns">
-                <a href="#"><img th:src="@{/image/facebook.png}" alt="Facebook"></a>
-                <a href="#"><img th:src="@{/image/instagram.png}" alt="Instagram"></a>
+
+    <div class="top-footer">
+        <div class="footer-wrapper">
+            <div class="top-f">
+                <a th:href="@{/company/index}" style="margin-left: 0px;">회사소개</a> |
+                <a th:href="@{/policy/buyer}">서비스이용약관</a> |
+                <a th:href="@{/policy/privacy}" style="color: rgb(175, 102, 175);">개인정보처리방침</a> |
+                <a th:href="@{/policy/finance}">전자금융거래약관</a>
             </div>
         </div>
     </div>
+    <div class="footer-wrapper">
+
+        <h3 class="cpname" th:text="${siteInfoDTO.getS_corp_name()}">(주)샵플리닷컴</h3>
+        <div class="call-cont">
+            <img th:src="@{/image/call3.png}" alt="" style="height: 45px; margin-top: 5px;">
+            <span class="tel" th:text="${siteInfoDTO.getS_cs_hp()}">1234-5678</span>
+            <span class="time" th:text="'(' + ${siteInfoDTO.getS_cs_time()} + ')'"> (평일 09:00~18:00)</span>
+        </div>
+        <div style="color: gray; margin-top: 15px">
+            <span th:text="'대표이사 : ' + ${siteInfoDTO.getS_ceo()}">대표이사 : 홍길동</span>
+            <span style="margin-left: 10px;" th:text="${siteInfoDTO.getS_addr1()} + ' ' + ${siteInfoDTO.getS_addr2()}">부산광역시 부산진구 중앙대로 103 그린타워 13층</span>
+            <span style="margin-left: 10px;" th:text="'사업자등록번호 : ' + ${siteInfoDTO.getS_reg_hp()}">사업자등록번호 : 123-45-12345</span>
+
+            <div style="margin-top: 3px;">
+                <span th:text="'전자금융거래 분쟁 담당 : ' + ${siteInfoDTO.getS_cs_hp2()} + '(365일 ' + ${siteInfoDTO.getS_cs_time()} + ')'">전자금융거래 분쟁 담당 : 1234-1234(365일 09:00~18:00)</span>
+            </div>
+        </div>
+
+    </div>
+
 </footer>
 
+<script th:src="@{/js/my.js}"></script>
 <script>
-    // 모달 열기
-    function openModal(id) {
-        document.getElementById(id).style.display = 'flex';
-    }
-
-    // 모달 닫기
-    function closeModal(id) {
-        document.getElementById(id).style.display = 'none';
-    }
-
-    // 모달 바깥 클릭 시 닫기
-    window.onclick = function(event) {
-        const modals = document.getElementsByClassName('modal');
-        for (let modal of modals) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
-    }
-
-    // ✅ 구매확정 함수
-    function confirmOrder(itemNo) {
-        if (!confirm('구매를 확정하시겠습니까?')) {
-            return;
-        }
-
-        fetch('/my/order/confirm', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'item_no=' + itemNo
-        })
-            .then(response => response.text())
-            .then(data => {
-                if (data === 'success') {
-                    alert('구매확정이 완료되었습니다. 포인트가 적립되었습니다.');
-                    location.reload();
-                } else {
-                    alert('구매확정에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('오류가 발생했습니다.');
-            });
-    }
-
-    // ✅ 상품평 작성 모달 열기
-    function openReviewModal(itemNo, prodNo, itemName) {
-        // 상품명 표시
-        document.querySelector('#reviewModal .info-table tbody tr:first-child td:last-child p').textContent = itemName;
-
-        // 폼에 hidden input으로 정보 저장
-        let form = document.querySelector('#reviewModal form');
-
-        // 기존 hidden input 제거
-        let existingInputs = form.querySelectorAll('input[type="hidden"]');
-        existingInputs.forEach(input => input.remove());
-
-        // 새로운 hidden input 추가
-        let itemNoInput = document.createElement('input');
-        itemNoInput.type = 'hidden';
-        itemNoInput.name = 'item_no';
-        itemNoInput.value = itemNo;
-        form.appendChild(itemNoInput);
-
-        let prodNoInput = document.createElement('input');
-        prodNoInput.type = 'hidden';
-        prodNoInput.name = 'prod_no';
-        prodNoInput.value = prodNo;
-        form.appendChild(prodNoInput);
-
-        openModal('reviewModal');
-    }
-
-    // ✅ 리뷰 작성 제출
-    document.addEventListener('DOMContentLoaded', function() {
-        const reviewForm = document.querySelector('#reviewModal form');
-        if (reviewForm) {
-            reviewForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const rating = document.querySelector('input[name="rating"]:checked');
-                const content = document.querySelector('#reviewModal textarea').value;
-
-                if (!rating) {
-                    alert('만족도를 선택해주세요.');
-                    return;
-                }
-
-                if (content.length < 10) {
-                    alert('최소 10자 이상 입력해주세요.');
-                    return;
-                }
-
-                if (content.length > 200) {
-                    alert('200자 이내로 입력해주세요.');
-                    return;
-                }
-
-                const formData = new FormData(this);
-
-                fetch('/my/review/write', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.text())
-                    .then(data => {
-                        if (data === 'success') {
-                            alert('상품평이 등록되었습니다.');
-                            closeModal('reviewModal');
-                            location.reload();
-                        } else {
-                            alert('상품평 등록에 실패했습니다.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('오류가 발생했습니다.');
-                    });
-            });
-        }
-
-        // ✅ 구매확정 모달의 확인 버튼
-        const confirmBtn = document.querySelector('#confirmModal button:first-of-type');
-        if (confirmBtn) {
-            confirmBtn.addEventListener('click', function() {
-                // 여기서 실제 구매확정 처리
-                // 현재는 모달만 닫기
-                alert('구매확정 기능은 각 주문의 구매확정 버튼을 클릭해주세요.');
-                closeModal('confirmModal');
-            });
-        }
-
-        // ✅ 문의하기 제출
-        const qnaForm = document.querySelector('#qnaPopup form');
-        if (qnaForm) {
-            qnaForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const qnaType = document.querySelector('input[name="qna_type"]:checked');
-                const title = document.querySelector('#qnaPopup input[type="text"]').value;
-                const content = document.querySelector('#qnaPopup textarea').value;
-
-                if (!qnaType) {
-                    alert('문의유형을 선택해주세요.');
-                    return;
-                }
-
-                if (!title.trim()) {
-                    alert('제목을 입력해주세요.');
-                    return;
-                }
-
-                if (!content.trim()) {
-                    alert('내용을 입력해주세요.');
-                    return;
-                }
-
-                const formData = new FormData(this);
-
-                fetch('/my/qna/write', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.text())
-                    .then(data => {
-                        if (data === 'success') {
-                            alert('문의가 등록되었습니다.');
-                            closeModal('qnaPopup');
-                            this.reset();
-                        } else {
-                            alert('문의 등록에 실패했습니다.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('오류가 발생했습니다.');
-                    });
-            });
-        }
-
-        // ✅ 교환신청 제출
-        const exchangeForm = document.querySelector('#exchangeModal button:first-of-type');
-        if (exchangeForm) {
-            exchangeForm.addEventListener('click', function() {
-                const exchangeType = document.querySelector('input[name="exchange_type"]:checked');
-                const reason = document.querySelector('#exchangeModal textarea').value;
-
-                if (!exchangeType) {
-                    alert('교환유형을 선택해주세요.');
-                    return;
-                }
-
-                if (!reason.trim()) {
-                    alert('사유를 입력해주세요.');
-                    return;
-                }
-
-                // TODO: 실제 교환신청 API 연동
-                alert('교환신청이 접수되었습니다.');
-                closeModal('exchangeModal');
-            });
-        }
-
-        // ✅ 반품신청 제출
-        const returnForm = document.querySelector('#returnModal button:first-of-type');
-        if (returnForm) {
-            returnForm.addEventListener('click', function() {
-                const returnType = document.querySelector('input[name="return_type"]:checked');
-                const reason = document.querySelector('#returnModal textarea').value;
-
-                if (!returnType) {
-                    alert('반품유형을 선택해주세요.');
-                    return;
-                }
-
-                if (!reason.trim()) {
-                    alert('사유를 입력해주세요.');
-                    return;
-                }
-
-                // TODO: 실제 반품신청 API 연동
-                alert('반품신청이 접수되었습니다.');
-                closeModal('returnModal');
-            });
-        }
+    // 인쇄 기능
+    document.querySelector(".print-btn").addEventListener("click", function() {
+        window.print();
     });
 
-    // 모달 열기
-    function openModal(id) {
-        const modal = document.getElementById(id);
-        if (modal) modal.style.display = 'flex';
-    }
-
-    // 모달 닫기
-    function closeModal(id) {
-        const modal = document.getElementById(id);
-        if (modal) modal.style.display = 'none';
-    }
-
-    // 모달 외부 클릭 시 닫기
-    window.addEventListener('click', function(e) {
-        document.querySelectorAll('.modal').forEach(modal => {
-            if (e.target === modal) modal.style.display = 'none';
-        });
-    });
 </script>
+
 </body>
 </html>

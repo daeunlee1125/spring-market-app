@@ -33,4 +33,7 @@ public class OrderDTO {
     private int item_no;
     private String corp_name;
     private String f_name;
+    private String item_trk_num;
+    private int item_stat;
+    private String item_delv;
 }

@@ -19,40 +19,27 @@
                 </div>
             </div>
             <div class="main-content-top"></div>
-
-
             <main>
-
-                <!-- search bar 있으신 분들은 위쪽 select-2를 삭제 -->
                 <div class="sub-top">
-
-
                     <div class="search-bar">
-
-                        <form action="">
-                            <select name="" id="">
-                                <option value="">상품명</option>
-                                <option value="">상품번호</option>
-                                <option value="">판매자</option>
-
+                        <form th:action="@{/admin/product/list}" method="get">
+                            <select name="searchType" id="searchType">
+                                <option value="prodName">상품명</option>
+                                <option value="prodNo">상품번호</option>
+                                <option value="company">판매자</option>
                             </select>
                             <div class="search-place">
-                                <input type="text" placeholder="검색어 입력">
-                                <button type="submit">
-                                <img th:src="@{/image/search.png}" alt="검색">
-                                </button>
+                                <input type="text" name="keyword" placeholder="검색어 입력">
+                                <button type="submit"><img th:src="@{/image/search.png}" alt="검색"></button>
                             </div>
                         </form>
                     </div>
                 </div>
-                <!-- 여기까지 sub-top -->
-
-
                 <table class="table">
                     <tr>
                         <th><input type="checkbox"></th>
                         <th>사진</th>
-                        <th>상품코드</th>
+                        <th>상품번호</th>
                         <th>상품명</th>
                         <th>판매가격</th>
                         <th>포인트</th>
@@ -61,64 +48,46 @@
                         <th>조회</th>
                         <th>관리</th>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><img src="#" alt=""></td>
 
-                        <td>210394895</td>
-                        <td>아디다스 운동화</td>
-                        <td>110,000</td>
-                        <td>15%</td>
-                        <td>150</td>
-                        <td>1,000</td>
-                        <td>(주)다파라</td>
-
-                        <td>
-                            <button class="del-btn"><a href="#">[ 삭제 ]</a></button><br>
-                            <button class="mod-btn"><a href="#">[ 수정 ]</a></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><img src="#" alt=""></td>
-
-                        <td>210394895</td>
-                        <td>아디다스 운동화</td>
-                        <td>110,000</td>
-                        <td>15%</td>
-                        <td>150</td>
-                        <td>1,000</td>
-                        <td>(주)다파라</td>
-
-                        <td>
-                            <button class="del-btn"><a href="#">[ 삭제 ]</a></button><br>
-                            <button class="mod-btn"><a href="#">[ 수정 ]</a></button>
+                    <!-- products가 비어있을 때 -->
+                    <tr th:if="${#lists.isEmpty(pageResponse.dtoList)}">
+                        <td colspan="10" style="text-align: center; padding: 50px;">
+                            등록된 상품이 없습니다.
                         </td>
                     </tr>
 
-
-
+                    <tr th:each="product : ${pageResponse.dtoList}">
+                        <td><input type="checkbox"></td>
+                        <td><img th:src="${product.f_name}" alt="상품이미지" style="width: 50px; height: 50px;"></td>
+                        <td th:text="${product.prod_no}"></td>
+                        <td th:text="${product.prod_name}"></td>
+                        <td th:text="${#numbers.formatInteger(product.prod_price, 3, 'COMMA')}"></td>
+                        <td th:text="${product.prod_point}"></td>
+                        <td th:text="${product.prod_stock}"></td>
+                        <td th:text="${product.prod_company}"></td>
+                        <td th:text="${#numbers.formatInteger(product.prod_hit, 3, 'COMMA')}"></td>
+                        <td>
+                            <button class="del-btn">[ 삭제 ]</button>
+                        </td>
+                    </tr>
                 </table>
-
-
-                <!-- banner-actions div 안에서 가지고 있는 버튼 따라 삭제하시면 됩니당 -->
-                <!-- 페이지 넘기는 버튼 삭제하고 싶으면 그냥 page 삭제하면 되고 -->
-                <!-- 버튼을 삭제하고 싶으면 버튼 클래스를 transpar로 바꿔주세요! -->
                 <div class="banner-actions">
                     <button class="delete-btn">선택삭제</button>
-
                     <div class="page">
-                        <a href="#" class="prev">이전</a>
-                        <a href="#" class="num current">1</a>
-                        <a href="#" class="num">2</a>
-                        <a href="#" class="num">3</a>
-                        <a href="#" class="next">다음</a>
+                        <a th:if="${pageResponse.prev}"
+                           th:href="@{/admin/product/list(pg=${pageResponse.start - 1})}"
+                           class="prev">이전</a>
+                        <th:block th:each="i : ${#numbers.sequence(pageResponse.start, pageResponse.end)}">
+                            <a th:href="@{/admin/product/list(pg=${i})}"
+                               th:class="${i == pageResponse.pg} ? 'num current' : 'num'"
+                               th:text="${i}">1</a>
+                        </th:block>
+                        <a th:if="${pageResponse.next}"
+                           th:href="@{/admin/product/list(pg=${pageResponse.end + 1})}"
+                           class="next">다음</a>
                     </div>
-
-                    <button class="transpar" id="openModalBtn">상점등록</button>
+                    <button class="submit-btn-1" id="reg-btn">상품등록</button><!-- register로 이동 -->
                 </div>
-
-
             </main>
         </div>
     </div>

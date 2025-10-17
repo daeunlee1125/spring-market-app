@@ -1,11 +1,13 @@
 package kr.co.shoply.service;
 
 import jakarta.transaction.Transactional;
+import kr.co.shoply.dto.BannerDTO;
 import kr.co.shoply.dto.MemSellerDTO;
 import kr.co.shoply.dto.MemberDTO;
 import kr.co.shoply.dto.TermsDTO;
 import kr.co.shoply.entity.Member;
 import kr.co.shoply.entity.Terms;
+import kr.co.shoply.mapper.BannerMapper;
 import kr.co.shoply.mapper.MemSellerMapper;
 import kr.co.shoply.mapper.MemberMapper;
 import kr.co.shoply.repository.MemberRepository;
@@ -16,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -29,6 +32,11 @@ public class MemberService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final MemberMapper memberMapper;
+    private final BannerMapper bannerMapper;
+
+    public List<BannerDTO> getLogBan2(){
+        return bannerMapper.getLoginBanner2();
+    }
 
     // 일반회원가입
     public void insertMember(MemberDTO memberDTO){

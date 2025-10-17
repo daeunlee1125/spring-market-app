@@ -83,7 +83,6 @@ public class AdminQnaController {
     @ResponseBody
     @PostMapping("/admin/cs/qna/modifyAnswerQna")
     public ResponseEntity<?> modifyAnswerQna(@RequestBody QnaAnswerRequestDTO requestDTO) {
-
         // 데이터 유효성 검사 (필요 시)
         if (requestDTO == null || requestDTO.getContent() == null || requestDTO.getContent().trim().isEmpty()) {
             return ResponseEntity.badRequest().body("답변 내용이 비어있습니다.");

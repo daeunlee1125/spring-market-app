@@ -76,8 +76,8 @@
 
     <update id="updateQnaReply3" parameterType="kr.co.shoply.dto.QnaAnswerRequestDTO">
         UPDATE QNA
-        SET Q_REPLY = #{qNo}
-        WHERE Q_NO =#{content}
+        SET Q_REPLY = #{content}
+        WHERE Q_NO = #{qNo}
     </update>
 
     <delete id="deleteQnaList3" parameterType="java.util.List">

@@ -148,10 +148,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (answerQnaBtn) {
         answerQnaBtn.addEventListener('click', function() {
-            // 1. 버튼의 data 속성에서 게시글 번호(qNo)를 가져옵니다.
+            // 'data-qna-no' 속성은 'qnaNo' 라는 이름으로 접근해야 합니다.
             const qNo = this.dataset.qnaNo;
 
-            // 2. textarea에서 답변 내용을 가져옵니다.
             const contentTextarea = document.getElementById('qnaAnswerContent');
             const content = contentTextarea.value;
 

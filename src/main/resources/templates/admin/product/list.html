@@ -22,17 +22,15 @@
             <main>
                 <div class="sub-top">
                     <div class="search-bar">
-                        <form action="">
-                            <select name="" id="">
-                                <option value="">상품명</option>
-                                <option value="">상품번호</option>
-                                <option value="">판매자</option>
+                        <form th:action="@{/admin/product/list}" method="get">
+                            <select name="searchType" id="searchType">
+                                <option value="prodName">상품명</option>
+                                <option value="prodNo">상품번호</option>
+                                <option value="company">판매자</option>
                             </select>
                             <div class="search-place">
-                                <input type="text" placeholder="검색어 입력">
-                                <button type="submit">
-                                <img th:src="@{/image/search.png}" alt="검색">
-                                </button>
+                                <input type="text" name="keyword" placeholder="검색어 입력">
+                                <button type="submit"><img th:src="@{/image/search.png}" alt="검색"></button>
                             </div>
                         </form>
                     </div>

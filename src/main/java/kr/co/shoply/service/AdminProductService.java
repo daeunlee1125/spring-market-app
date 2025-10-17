@@ -56,19 +56,26 @@ public class AdminProductService {
 
     //상품목록
     public PageResponseDTO<ProductListDTO> getProductList(String memId, int memLevel , PageRequestDTO pageRequestDTO){
-        int total = adminProductMapper.countProductList(memId, memLevel);
 
-        List<ProductListDTO> products = adminProductMapper.selectProductList(memId, memLevel, pageRequestDTO.getOffset(), pageRequestDTO.getSize());
+        // 전체 개수
+        int total = adminProductMapper.countProductList(memId, memLevel, pageRequestDTO.getSearchType(), pageRequestDTO.getKeyword());
 
-        // 3. PageResponseDTO 생성
-        PageResponseDTO<ProductListDTO> pageResponse =
-                PageResponseDTO.<ProductListDTO>builder()
-                        .pageRequestDTO(pageRequestDTO)
-                        .dtoList(products)
-                        .total(total)
-                        .build();
 
-        return pageResponse;
+        // 목록 조회
+        List<ProductListDTO> products = adminProductMapper.selectProductList(
+                memId,
+                memLevel,
+                pageRequestDTO.getOffset(),
+                pageRequestDTO.getSize(),
+                pageRequestDTO.getSearchType(),
+                pageRequestDTO.getKeyword()
+        );
+
+        return PageResponseDTO.<ProductListDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(products)
+                .total(total)
+                .build();
     }
 
 

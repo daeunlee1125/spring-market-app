@@ -1,5 +1,6 @@
 package kr.co.shoply.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.MyService;
@@ -226,13 +227,14 @@ public class MyController {
     }
 
     @PostMapping("/info/withdrawal")
-    public String withdrawal(@AuthenticationPrincipal MyUserDetails user) {
+    public String withdrawal(@AuthenticationPrincipal MyUserDetails user, HttpServletRequest request) {
         if (user == null) {
             log.warn("회원 탈퇴 시도 실패: 로그인 필요");
             return "redirect:/member/login";
         }
         String memberId = user.getMember().getMem_id();
         myService.withdrawMember(memberId);
+        request.getSession().invalidate();
         log.info("회원 탈퇴 완료: mem_id={}", memberId);
         return "redirect:/member/login?withdrawal=true";
     }

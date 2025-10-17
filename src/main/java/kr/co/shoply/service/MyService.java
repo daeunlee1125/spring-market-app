@@ -69,6 +69,7 @@ public class MyService {
         Integer pointTotal = Optional.ofNullable(pointRepository.getTotalPointsByMem_id(memId)).orElse(0);
         long qnaCount = qnaRepository.countByMem_id(memId);
 
+        // ===== 최근 주문내역 (5개) =====
         List<Order> recentOrdersEntity = orderRepository.findTop5ByMem_idOrderByOrd_dateDesc(memId);
         List<OrderItemDTO> recentOrders = recentOrdersEntity.stream()
                 .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
@@ -80,11 +81,21 @@ public class MyService {
                 .limit(5)
                 .collect(Collectors.toList());
 
+        // ===== 포인트 내역 (5개) - 수정됨 =====
         List<Point> recentPointsEntity = pointRepository.findByMem_idOrderByP_dateDesc(memId);
         List<PointDTO> recentPoints = recentPointsEntity.stream()
-                .map(entity -> modelMapper.map(entity, PointDTO.class))
+                .limit(5)  // ✅ 5개로 제한
+                .map(entity -> {
+                    PointDTO dto = modelMapper.map(entity, PointDTO.class);
+                    // ✅ 주문번호 설정 - Point 엔티티에서 ord_no 가져오기
+                    if (entity.getOrd_no() != null) {
+                        dto.setOrd_no(entity.getOrd_no());
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
+        // ===== 상품평 (5개) =====
         List<Review> recentReviewsEntity = reviewRepository.findTop5ByMem_idOrderByRev_rdateDesc(memId);
         List<ReviewDTO> recentReviews = recentReviewsEntity.stream()
                 .map(entity -> {
@@ -95,6 +106,7 @@ public class MyService {
                 })
                 .collect(Collectors.toList());
 
+        // ===== 나의 문의 (5개) =====
         List<Qna> recentQnasEntity = qnaRepository.findTop5ByMem_idOrderByQ_rdateDesc(memId);
         List<QnaDTO> recentQnas = recentQnasEntity.stream()
                 .map(entity -> {
@@ -183,6 +195,7 @@ public class MyService {
                 .p_info("상품구매확정")
                 .p_date(LocalDateTime.now())
                 .p_exp_date(LocalDateTime.now().plusDays(7))
+                .ord_no(orderItem.getOrd_no())
                 .build();
         pointRepository.save(point);
     }

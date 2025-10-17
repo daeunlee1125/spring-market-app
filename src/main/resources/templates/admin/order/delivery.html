@@ -6,7 +6,7 @@
     <div class="middle main-content">
       <div class="main-common">
         <div class="main-head">
-          <div><h3>주문관리</h3></div>
+          <div><h3>배송현황</h3></div>
           <div class="main-head-right">
             <a href="">HOME</a><div>&nbsp;>&nbsp;</div>
             <a href="">주문관리</a><div>&nbsp;>&nbsp;</div>
@@ -42,7 +42,7 @@
             </thead>
             <tbody>
               <tr th:each="deliv, stat : ${pageResponseDTO.dtoList}">
-                <td>[[${deliv.item_trk_num}]]</td>
+                <td><a href="#" class="openModBtn" data-target="delivModal" th:attr="data-item=${deliv.item_no}"  style="font-weight: bold">[[${deliv.item_trk_num}]]</a></td>
                 <td>[[${deliv.item_delv}]]</td>
                 <td>[[${deliv.ord_no}]]</td>
                 <td>[[${deliv.ord_name}]]</td>
@@ -75,6 +75,75 @@
       </div>
     </div>
   </div>
+
+
+
+
+        <!-- 주문상세 모달 -->
+        <div class="modal hidden" id="delivModal">
+            <div class="modal-popup large">
+                <div class="modal-header">
+                    <h2>배송상세 <span id="detailOrderNo" style="font-weight: bold">10121211341</span></h2>
+                    <span class="closeModalBtn">&times;</span>
+                </div>
+                <div class="modal-content">
+                    <!-- 상품정보 -->
+                    <h3>상품정보</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>상품이미지</th>
+                                <th>상품번호</th>
+                                <th>상품명</th>
+                                <th>판매자</th>
+                                <th>가격</th>
+                                <th>수량</th>
+                                <th>배송비</th>
+                                <th>결제금액</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prdInf">
+                            <tr>
+                                <td><img src=""></td>
+                                <td>123432</td>
+                                <td>상품명</td>
+                                <td>판매자</td>
+                                <td>1000</td>
+                                <td>324</td>
+                                <td>0</td>
+                                <td>34242</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+                    <h3>배송정보</h3>
+                    <div class="info-box payment-box">
+                        <div class="left">
+                            <p>주문번호 : 10121211341</p>
+                            <p>수령인 : 김유신</p>
+                            <p>연락처 : 010-3333-3333</p>
+                            <p>배송지 주소 : 부산 부산진구</p>
+                        </div>
+                        <div class="right">
+                        </div>
+                    </div>
+                    <div class="info-box payment-box">
+                        <div class="left">
+                            <p>택배사 : 로젠택배</p>
+                            <p>송장번호 : 12020120333</p>
+                            <p>기타 : 감사합니다. 수고하세요.</p>
+                        </div>
+                        <div class="right">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
 
 
   <div th:replace="~{admin/order/_tail.html}"></div>

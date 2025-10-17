@@ -32,7 +32,7 @@
             </thead>
             <tbody>
             <tr th:each="order, stat : ${pageResponseDTO.dtoList}">
-                <td><a href="#" class="openModalBtn" data-target="orderDetailModal" th:attr="data-item=${order.item_no}">[[${order.ord_no}]]</a></td>
+                <td><a href="#" class="openModalBtn" style="font-weight: bold" data-target="orderDetailModal" th:attr="data-item=${order.item_no}">[[${order.ord_no}]]</a></td>
                 <td>[[${order.mem_id}]]</td>
 
                 <td>[[${order.item_cnt}]]</td>

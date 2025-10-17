@@ -49,6 +49,9 @@ public class AdminOrderController {
         PageResponseDTO pageResponseDTO = orderService.getDelivs2(pageRequestDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
+        List<OrderDTO> delvDtls = orderService.delivDetails2();
+        model.addAttribute("delvDtls", delvDtls);
+
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 

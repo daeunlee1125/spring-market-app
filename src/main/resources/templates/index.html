@@ -20,7 +20,7 @@
 <header>
 
     <!-- 메인화면 빼고는 이 줄 지우시면 됩니다! -->
-    <div class="top-adv"><img th:each="banner : ${banners}" th:if="${banner.ban_location==1}" th:src="@{${banner.ban_img}}" alt="상단이미지" style="width: 100%; height: 100%;"></div>
+    <div th:each="banner : ${banners}" th:if="${(banner.ban_location==1) && (banner.ban_status==1)}" class="top-adv"><img th:src="@{${banner.ban_img}}" alt="상단이미지" style="width: 100%; height: 100%;"></div>
 
 
 
@@ -196,7 +196,7 @@
             <!--  -->
             <div class="slider">
                 <div class="slides">
-                    <img th:each="banner : ${banners}" th:if="${banner.ban_location == 2}" th:src="@{${banner.ban_img}}" alt="이미지1">
+                    <img th:each="banner : ${banners}" th:if="${(banner.ban_location==2) && (banner.ban_status==1)}" th:src="@{${banner.ban_img}}" alt="이미지1">
                 </div>
                 <button class="prev"><i class="fas fa-chevron-left"></i></button>
                 <button class="next"><i class="fas fa-chevron-right"></i></button>

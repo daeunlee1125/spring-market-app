@@ -21,7 +21,7 @@
     </update>
 
     <select id="getBanners2" resultType="kr.co.shoply.dto.BannerDTO">
-        SELECT BAN_LOCATION, BAN_IMG FROM banner
+        SELECT BAN_LOCATION, BAN_IMG, ban_status FROM banner
         WHERE ban_location=1 OR ban_location=2
     </select>
 

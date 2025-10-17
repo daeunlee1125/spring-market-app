@@ -149,16 +149,16 @@
                 </thead>
                 <tbody>
                 <tr th:each="point : ${recentPoints}">
-                    <td th:text="${point.p_date}"></td>
+                    <td th:text="${#strings.replace(point.p_date, 'T', ' ')}"></td>
                     <td>
                         <span th:if="${point.p_type == 1}">적립</span>
                         <span th:if="${point.p_type == 2}">사용</span>
                         <span th:unless="${point.p_type == 1 or point.p_type == 2}">기타</span>
                     </td>
-                    <td th:text="${point.ord_no}"></td>
+                    <td th:text="${point.ord_no != null and point.ord_no != 0 ? point.ord_no : '-'}"></td>
                     <td th:text="${#numbers.formatInteger(point.p_point, 0, 'COMMA')}"></td>
                     <td th:text="${point.p_info}"></td>
-                    <td th:text="${point.p_exp_date}"></td>
+                    <td th:text="${#strings.replace(point.p_exp_date, 'T', ' ')}"></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(recentPoints)}">
                     <td colspan="6" style="text-align: center;">포인트 내역이 없습니다.</td>

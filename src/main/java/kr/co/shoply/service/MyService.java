@@ -69,6 +69,7 @@ public class MyService {
         Integer pointTotal = Optional.ofNullable(pointRepository.getTotalPointsByMem_id(memId)).orElse(0);
         long qnaCount = qnaRepository.countByMem_id(memId);
 
+        // ===== 최근 주문내역 (5개) =====
         List<Order> recentOrdersEntity = orderRepository.findTop5ByMem_idOrderByOrd_dateDesc(memId);
         List<OrderItemDTO> recentOrders = recentOrdersEntity.stream()
                 .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
@@ -80,11 +81,31 @@ public class MyService {
                 .limit(5)
                 .collect(Collectors.toList());
 
+        // ===== 포인트 내역 (5개) - 수정됨 =====
         List<Point> recentPointsEntity = pointRepository.findByMem_idOrderByP_dateDesc(memId);
         List<PointDTO> recentPoints = recentPointsEntity.stream()
-                .map(entity -> modelMapper.map(entity, PointDTO.class))
+                .limit(5)  // ✅ 5개로 제한
+                .map(entity -> {
+                    PointDTO dto = modelMapper.map(entity, PointDTO.class);
+
+                    // ✅ 주문번호 명시적 설정
+                    dto.setOrd_no(entity.getOrd_no());
+
+                    // ✅ 날짜 포맷팅
+                    if (entity.getP_date() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        dto.setP_date(entity.getP_date().format(formatter));
+                    }
+                    if (entity.getP_exp_date() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        dto.setP_exp_date(entity.getP_exp_date().format(formatter));
+                    }
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
+        // ===== 상품평 (5개) =====
         List<Review> recentReviewsEntity = reviewRepository.findTop5ByMem_idOrderByRev_rdateDesc(memId);
         List<ReviewDTO> recentReviews = recentReviewsEntity.stream()
                 .map(entity -> {
@@ -95,6 +116,7 @@ public class MyService {
                 })
                 .collect(Collectors.toList());
 
+        // ===== 나의 문의 (5개) =====
         List<Qna> recentQnasEntity = qnaRepository.findTop5ByMem_idOrderByQ_rdateDesc(memId);
         List<QnaDTO> recentQnas = recentQnasEntity.stream()
                 .map(entity -> {
@@ -183,6 +205,7 @@ public class MyService {
                 .p_info("상품구매확정")
                 .p_date(LocalDateTime.now())
                 .p_exp_date(LocalDateTime.now().plusDays(7))
+                .ord_no(String.valueOf(orderItem.getOrd_no()))  // ✅ 주문번호 추가
                 .build();
         pointRepository.save(point);
     }
@@ -444,6 +467,22 @@ public class MyService {
             return modelMapper.map(banner, BannerDTO.class);
         }
         return null;
+    }
+
+
+    // MyService.java에 추가
+    @Transactional(readOnly = true)
+    public void debugPointData(String memId) {
+        List<Point> points = pointRepository.findByMem_idOrderByP_dateDesc(memId);
+        log.info("===== 포인트 데이터 디버그 =====");
+        for (Point point : points) {
+            log.info("p_no: {}, ord_no: {}, p_point: {}, p_info: {}",
+                    point.getP_no(),
+                    point.getOrd_no(),
+                    point.getP_point(),
+                    point.getP_info());
+        }
+        log.info("===== 디버그 종료 =====");
     }
 
     @Transactional(readOnly = true)

@@ -102,8 +102,21 @@
     </insert>
 
     <insert id="insertProductNotice">
-        INSERT INTO PROD_NOTICE (PROD_NO, NOT_NAME, NOT_VAL)
-                    VALUES(#{prod_no}, #{not_name}, #{not_val})
+        INSERT INTO PROD_NOTICE (
+            PROD_NO,
+            PRODUCT_STATUS,
+            TAX_TYPE,
+            RECEIPT_ISSUE,
+            BUSINESS_TYPE,
+            ORIGIN
+        ) VALUES (
+            #{prod_no},
+            #{product_status},
+            #{tax_type},
+            #{receipt_issue},
+            #{business_type},
+            #{origin}
+        )
     </insert>
 
     <insert id="insertProductOption">

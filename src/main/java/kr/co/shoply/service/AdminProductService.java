@@ -208,37 +208,21 @@ public class AdminProductService {
 
     // 상품등록 - 고시정보 INSERT 메서드
     private void insertProductNotices(ProductRegisterDTO dto, String prodNo) {
-        String[] noticeNames = {
-                "상품상태",
-                "부가세 면세여부",
-                "영수증 발행",
-                "사업자구분",
-                "원산지"
-        };
 
-        String[] noticeVals = {
-                dto.getNot_val1(),
-                dto.getNot_val2(),
-                dto.getNot_val3(),
-                dto.getNot_val4(),
-                dto.getNot_val5()
-        };
+        ProdNoticeDTO noticeDTO = ProdNoticeDTO.builder()
+                .prod_no(prodNo)
+                .product_status(dto.getNot_val1())      // 상품상태
+                .tax_type(dto.getNot_val2())            // 부가세 면세여부
+                .receipt_issue(dto.getNot_val3())       // 영수증 발행
+                .business_type(dto.getNot_val4())       // 사업자구분
+                .origin(dto.getNot_val5())              // 원산지
+                .build();
 
-        for(int i = 0; i < 5; i++) {
-            if(noticeVals[i] != null && !noticeVals[i].isEmpty()) {
-                ProdNoticeDTO noticeDTO = ProdNoticeDTO.builder()
-                        .prod_no(prodNo)
-                        .not_name(noticeNames[i])
-                        .not_val(noticeVals[i])
-                        .build();
+        log.info("#### insertProductNotices ==> noticeDTO={}", noticeDTO);
 
-                log.info("#### insertProductNotices ==> noticeDTO={}", noticeDTO);
-
-                int result = adminProductMapper.insertProductNotice(noticeDTO);
-                if(result == 0) {
-                    throw new RuntimeException("고시정보 INSERT 실패");
-                }
-            }
+        int result = adminProductMapper.insertProductNotice(noticeDTO);
+        if(result == 0) {
+            throw new RuntimeException("고시정보 INSERT 실패");
         }
     }
 

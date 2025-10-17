@@ -3,6 +3,7 @@ package kr.co.shoply.controller;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.MyService;
+import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +33,7 @@ public class MyController {
 
     private final MyService myService;
     private final String uploadDir = "C:/shoply/uploads/";
+    private final SiteInfoService siteInfoService;
 
     // ===================== 공통 메소드 =====================
     private void addMyPageSummary(Model model, String memberId) {
@@ -122,6 +124,9 @@ public class MyController {
         // 마이페이지 요약 정보
         addMyPageSummary(model, memberId);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "my/review";
     }
 
@@ -153,6 +158,9 @@ public class MyController {
             return "redirect:/member/login";
         }
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         addMyPageSummary(model, user.getMember().getMem_id());
         return "my/home";
     }
@@ -164,6 +172,10 @@ public class MyController {
         MemberDTO memberInfo = myService.getMemberInfo(memberId);
         model.addAttribute("memberInfo", memberInfo);
         addMyPageSummary(model, memberId);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "my/info";
     }
 
@@ -257,6 +269,10 @@ public class MyController {
         model.addAttribute("currentPage", orderPage.getNumber());
         model.addAttribute("totalPages", orderPage.getTotalPages());
         addMyPageSummary(model, memberId);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "my/order";
     }
 
@@ -345,6 +361,10 @@ public class MyController {
         List<QnaDTO> recentQnas = myService.getRecentQnas(memberId);
         model.addAttribute("recentQnas", recentQnas);
         addMyPageSummary(model, memberId);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "my/qna";
     }
 
@@ -355,6 +375,10 @@ public class MyController {
         List<UserCouponDTO> userCoupons = myService.getUserCouponsByMemId(memberId);
         model.addAttribute("userCoupons", userCoupons);
         addMyPageSummary(model, memberId);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "my/coupon";
     }
 
@@ -365,6 +389,10 @@ public class MyController {
         List<PointDTO> pointHistory = myService.getPointHistory(memberId);
         model.addAttribute("pointHistory", pointHistory);
         addMyPageSummary(model, memberId);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "my/point";
     }
 
@@ -377,6 +405,10 @@ public class MyController {
             if (product.getFiles() == null) product.setFiles(myService.getProductFiles(prodNo));
         }
         model.addAttribute("product", product);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "my/product/view";
     }
     @GetMapping("/order/detail")

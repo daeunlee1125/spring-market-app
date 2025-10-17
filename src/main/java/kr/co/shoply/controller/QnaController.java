@@ -3,7 +3,9 @@ package kr.co.shoply.controller;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
 import kr.co.shoply.dto.QnaDTO;
+import kr.co.shoply.dto.SiteInfoDTO;
 import kr.co.shoply.service.QnaService;
+import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,7 @@ import java.util.List;
 public class QnaController {
 
     private final QnaService qnaService;
+    private final SiteInfoService siteInfoService;
 
     /* -------- LIST -------- */
     @GetMapping("/cs/qna/list")
@@ -58,6 +61,9 @@ public class QnaController {
         model.addAttribute("cat1List", cat1List);
         model.addAttribute("cat2List", cat2List);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "cs/qna/list";
     }
 
@@ -91,6 +97,9 @@ public class QnaController {
         model.addAttribute("cat1List", cat1List);
         model.addAttribute("cat2List", cat2List);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "cs/qna/view";
     }
 
@@ -119,6 +128,9 @@ public class QnaController {
         if (cat2List == null) cat2List = Collections.emptyList();
         model.addAttribute("cat1List", cat1List);
         model.addAttribute("cat2List", cat2List);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "cs/qna/write";
     }

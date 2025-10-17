@@ -96,34 +96,6 @@
 
 <div th:replace="~{my/_tail.html}"></div>
 
-<footer>
-    <div class="footer-container">
-        <div class="footer-top">
-            <h2>(주)샵플리닷컴</h2>
-            <a href="#">사업자정보확인</a>
-            <a href="#">소비자보호 서비스 가입사실확인</a>
-        </div>
-        <div class="footer-info">
-            <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
-            <p>부산광역시 부산진구 중앙대로 103</p>
-            <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
-            <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-links">
-                <a href="#">개인정보처리방침</a> |
-                <a href="#">영상정보처리기기 운영·관리방침</a> |
-                <a th:href="@{/cs/index}">고객센터</a> |
-                <a th:href="@{/cs/faq}">FAQ</a>
-            </div>
-            <div class="footer-sns">
-                <a href="#"><img th:src="@{/image/facebook.png}" alt="Facebook"></a>
-                <a href="#"><img th:src="@{/image/instagram.png}" alt="Instagram"></a>
-            </div>
-        </div>
-    </div>
-</footer>
-
 <script>
     function openModal(id) {
         const modal = document.getElementById(id);

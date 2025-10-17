@@ -17,6 +17,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import java.nio.file.Path;
@@ -34,7 +36,7 @@ public class AdminProductController {
 
     @ResponseBody
     @GetMapping("/logs")
-    public ResponseEntity<Resource> getLogFile() throws Exception {
+    public ResponseEntity<String> getLogFile() throws Exception {
 
         Path localPath = Paths.get("logs/shoply.log");
         Path ec2Path = Paths.get("/home/ec2-user/shoply/logs/shoply.log");
@@ -47,11 +49,12 @@ public class AdminProductController {
         if (!resource.exists()) {
             return ResponseEntity.notFound().build();
         }
+        String content = Files.readString(path, StandardCharsets.UTF_8);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"shoply.log\"")
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(resource);
+                .contentType(MediaType.valueOf("text/plain;charset=UTF-8"))
+                .body(content);
     }
 
     @GetMapping("/list")

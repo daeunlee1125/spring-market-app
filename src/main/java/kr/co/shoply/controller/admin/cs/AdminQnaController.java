@@ -4,6 +4,7 @@ package kr.co.shoply.controller.admin.cs;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.mapper.QnaMapper;
 import kr.co.shoply.service.QnaService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 @Controller
 public class AdminQnaController {
     private final QnaService qnaService;
+    private final VersionService versionService;
 
     @GetMapping("/admin/cs/qna/list")
     public String qnaList(
@@ -33,6 +35,9 @@ public class AdminQnaController {
         model.addAttribute("cate1", cate1); // 필터 유지를 위해 다시 전달
         model.addAttribute("cate2", cate2); // 필터 유지를 위해 다시 전달
 
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/cs/qna/list";
     }
 
@@ -46,6 +51,9 @@ public class AdminQnaController {
         }
         model.addAttribute("qnaDTO", qnaDTO);
 
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/cs/qna/view";
     }
 
@@ -54,6 +62,9 @@ public class AdminQnaController {
 
         QnaDTO qnaDTO = qnaService.getQna3(qNo);
         model.addAttribute("qnaDTO", qnaDTO);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/cs/qna/reply";
     }

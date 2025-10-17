@@ -31,6 +31,7 @@ public class ProductController {
     private final MemberService memberService;
     private final IndexService  indexService;
     private final BannerService bannerService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
@@ -47,6 +48,10 @@ public class ProductController {
         model.addAttribute("cate2DTO", cate2DTO);
         model.addAttribute("sort", sort);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "product/list";
     }
 
@@ -114,6 +119,10 @@ public class ProductController {
         }
         model.addAttribute("OpDtoList", OpDtoList);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "product/view";
     }
 
@@ -126,6 +135,10 @@ public class ProductController {
         List<CartDTO> cartDTOList = productService.getCartAll3(userName);
         model.addAttribute("cartDTOList", cartDTOList);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "product/cart";
     }
 
@@ -226,6 +239,9 @@ public class ProductController {
         model.addAttribute("memberDTO", memberDTO);
         model.addAttribute("sysCouponDTOList", sysCouponDTOList);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "product/order";
     }
@@ -417,6 +433,9 @@ public class ProductController {
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "product/complete";
     }
 
@@ -458,6 +477,9 @@ public class ProductController {
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "product/search";
     }

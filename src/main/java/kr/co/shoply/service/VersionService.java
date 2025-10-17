@@ -1,5 +1,6 @@
 package kr.co.shoply.service;
 
+import kr.co.shoply.dto.CopyrightDTO;
 import kr.co.shoply.dto.VersionDTO;
 import kr.co.shoply.entity.Version;
 import kr.co.shoply.mapper.VersionMapper;
@@ -32,5 +33,9 @@ public class VersionService {
 
     public void saveVersion(VersionDTO versionDTO) {
         versionMapper.save(versionDTO);
+    }
+
+    public CopyrightDTO getCopyright3() {
+        return versionMapper.selectVersionAndSiteInfo3();
     }
 }

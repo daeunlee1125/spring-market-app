@@ -1,12 +1,10 @@
 package kr.co.shoply.controller;
 
-import kr.co.shoply.dto.CsFaqDTO;
-import kr.co.shoply.dto.CsNoticeDTO;
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.service.CsNoticeService;
 import kr.co.shoply.service.CsService;
 import kr.co.shoply.service.QnaService;
+import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,12 +25,17 @@ public class CsController {
 
     private final CsService csService;
     private final QnaService qnaService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/cs")
     public String csIndex(Model model) {
         // 공지사항 5개
         model.addAttribute("noticeList", csService.getRecentNotices(5));
         model.addAttribute("qnaList", qnaService.getRecentQna(5));
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "cs/index";
     }
     @GetMapping("/cs/notice/list")
@@ -59,6 +62,10 @@ public class CsController {
         model.addAttribute("selCat2", null);   // 공지는 2차 없음
         model.addAttribute("cat2List", List.of());
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+
         return "cs/notice/list";
     }
 
@@ -74,6 +81,9 @@ public class CsController {
         model.addAttribute("selCat2", null);
         model.addAttribute("cat1List", List.of("전체","고객서비스","안전거래","위해상품","이벤트당첨"));
         model.addAttribute("cat2List", List.of());
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "cs/notice/view";
     }
@@ -111,6 +121,9 @@ public class CsController {
         model.addAttribute("cat1List", csService.getCat1List());
         model.addAttribute("cat2List", csService.getCat2List(cat1));
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "cs/faq/list";
     }
 
@@ -136,6 +149,9 @@ public class CsController {
         model.addAttribute("selCat2", c2);
         model.addAttribute("cat1List", csService.getCat1List());
         model.addAttribute("cat2List", csService.getCat2List(c1));
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "cs/faq/view";
     }

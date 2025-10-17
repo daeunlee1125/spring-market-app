@@ -60,6 +60,9 @@
         ORDER BY d.dt
     </select>
 
-
+    <select id="selectSiteInfo3" resultType="kr.co.shoply.dto.SiteInfoDTO">
+        SELECT *
+        FROM SITE_INFO
+    </select>
 
 </mapper>

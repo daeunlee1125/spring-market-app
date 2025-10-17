@@ -3,6 +3,7 @@ package kr.co.shoply.controller.admin;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.AdminProductService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -31,6 +32,7 @@ import java.util.List;
 public class AdminProductController {
 
     private final AdminProductService adminProductService;
+    private final VersionService versionService;
 
     //e2c log 확인용 API
     @ResponseBody
@@ -54,6 +56,7 @@ public class AdminProductController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"shoply.log\"")
                 .contentType(MediaType.valueOf("text/plain;charset=UTF-8"))
                 .body(content);
+
     }
 
     @GetMapping("/list")
@@ -62,13 +65,20 @@ public class AdminProductController {
         String memId = user.getUsername();
         int memLevel =  user.getMemLevel();
 
+
         log.info("memId:{} memLevel:{} pageRequestDTO:{}" , memId, memLevel, pageRequestDTO);
+
 
         PageResponseDTO<ProductListDTO> pageResponse = adminProductService.getProductList(memId, memLevel, pageRequestDTO);
 
+
         log.info("pageResponse:{}", pageResponse);
 
+
         model.addAttribute("pageResponse", pageResponse);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/product/list";
     }
@@ -76,16 +86,17 @@ public class AdminProductController {
     @GetMapping("/register")
     public String register(Model model){
         List<Cate1DTO> cate1DTOList = adminProductService.getAllCate1();
-        log.info("cate1DTOList={}",cate1DTOList);
 
         model.addAttribute("cate1DTOList",cate1DTOList);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
 
         return "admin/product/register";
     }
 
     @PostMapping("/register")
     public String register(ProductRegisterDTO productRegisterDTO, Principal principal, RedirectAttributes redirectAttributes){
-        log.info("productRegisterDTO={}",productRegisterDTO);
         adminProductService.registerProduct(productRegisterDTO, principal.getName());
 
         redirectAttributes.addFlashAttribute("showAlert", true);

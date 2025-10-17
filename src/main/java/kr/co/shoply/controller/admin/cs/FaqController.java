@@ -1,8 +1,10 @@
 package kr.co.shoply.controller.admin.cs;
 
 
+import kr.co.shoply.dto.CopyrightDTO;
 import kr.co.shoply.dto.CsFaqDTO;
 import kr.co.shoply.service.CsFaqService;
+import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ public class FaqController {
 
 
     private final CsFaqService csFaqService;
-
+    private final VersionService versionService;
 
 
     // FAQ 목록
@@ -33,6 +35,10 @@ public class FaqController {
         model.addAttribute("faqList", faqList);
         model.addAttribute("cate1", cate1);
         model.addAttribute("cate2", cate2);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/cs/faq/list";
     }
 
@@ -62,6 +68,10 @@ public class FaqController {
     public String modifyForm(@PathVariable("no") int cs_faq_no, Model model) {
         CsFaqDTO faq = csFaqService.findById(cs_faq_no);
         model.addAttribute("faq", faq);
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/cs/faq/modify";
     }
 
@@ -87,6 +97,9 @@ public class FaqController {
         // 모델에 FAQ 데이터 담기
         model.addAttribute("faq", faq);
 
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         // view.html 반환
         return "admin/cs/faq/view";
     }
@@ -96,6 +109,10 @@ public class FaqController {
     @GetMapping("/admin/cs/faq/write")
     public String writeForm(Model model) {
         model.addAttribute("faq", new CsFaqDTO());
+
+        CopyrightDTO copyrightDTO = versionService.getCopyright3();
+        model.addAttribute("copyrightDTO", copyrightDTO);
+
         return "admin/cs/faq/write";
     }
 

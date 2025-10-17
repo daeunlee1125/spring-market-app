@@ -39,12 +39,7 @@
                         </div>
                         <div class="cart-item-actions">
                             <button class="buy-now">바로구매</button>
-                            <div class="action-icons">
-                                <form th:action="@{/product/delete}" method="post">
-                                    <input type="hidden" name="cart_no" th:value="${dto.getCart_no()}">
-                                    <button type="submit" class="delete-item">&#x1F5D1;</button>
-                                </form>
-                            </div>
+
                         </div>
                     </div>
                 </th:block>

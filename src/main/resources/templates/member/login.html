@@ -80,7 +80,7 @@
             </div>
             <!-- 광고 영역 -->
             <div th:each="ban : ${banners}" th:if="${ban.ban_status==1}" class="login-ad">
-                <img th:src="${ban.ban_img}" alt="로그인">
+                <img th:src="@{${ban.ban_img}}" alt="로그인">
             </div>
           </div>
           <!-- 이미지 갤러리 섹션 -->

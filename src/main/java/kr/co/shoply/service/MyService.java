@@ -139,7 +139,19 @@ public class MyService {
 
     @Transactional(readOnly = true)
     public List<ProFileDTO> getProductFiles(String prodNo) {
-        return myproductMapper.selectFiles(prodNo);
+        List<ProFileDTO> files = myproductMapper.selectFiles(prodNo);
+
+        // 경로 변환: /uploads/product/ → /image/product/
+        for (ProFileDTO file : files) {
+            String fName = file.getF_name();
+            if (fName != null) {
+                // /uploads/product/ 또는 중복 경로 모두 /image/product/로 변환
+                fName = fName.replaceAll(".*?uploads.*?product/", "/image/product/");
+                file.setF_name(fName);
+            }
+        }
+
+        return files;
     }
 
     @Transactional

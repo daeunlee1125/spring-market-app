@@ -99,8 +99,9 @@
                 <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
                 <td>
                     <div class="product-info">
+                        <!-- ✅ 수정: 경로를 직접 사용 -->
                         <img th:if="${productMap[orderItem.prod_no] != null and productMap[orderItem.prod_no].files != null and productMap[orderItem.prod_no].files.size() > 0}"
-                             th:src="@{'/uploads/' + ${productMap[orderItem.prod_no].files[0].f_name}}"
+                             th:src="${productMap[orderItem.prod_no].files[0].f_name}"
                              alt="상품 이미지" style="width: 80px; height: 80px; border-radius: 4px;">
                         <img th:if="${productMap[orderItem.prod_no] == null or productMap[orderItem.prod_no].files == null or productMap[orderItem.prod_no].files.size() == 0}"
                              th:src="@{'/image/product/cap_3_thumb2.jpg'}" alt="기본 이미지" style="width: 80px; height: 80px; border-radius: 4px;">
@@ -255,9 +256,9 @@
                             document.getElementById('orderStatus').textContent = statusText;
                             document.getElementById('orderDate').textContent = data.ordDate || '-';
 
-                            // 상품 이미지
+                            // ✅ 수정: 이미지 경로를 직접 사용
                             if (data.prodImage) {
-                                document.getElementById('orderDetailImage').src = '/uploads/' + data.prodImage;
+                                document.getElementById('orderDetailImage').src = data.prodImage;
                             }
 
                             // 배송정보 채우기

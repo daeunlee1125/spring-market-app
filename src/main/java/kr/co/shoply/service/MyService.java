@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageImpl; // ⬅️ 이 부분을 추가하세요
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,15 +58,29 @@ public class MyService {
         return options;
     }
 
-    // MyService.java에 추가 - 포인트 기간별 필터링
+    @Transactional(readOnly = true)
+    public List<ProFileDTO> getProductFiles(String prodNo) {
+        List<ProFileDTO> files = myproductMapper.selectFiles(prodNo);
+
+        // ✅ 경로 변환: /uploads/product/ → /image/product/
+        for (ProFileDTO file : files) {
+            String fName = file.getF_name();
+            if (fName != null) {
+                // /uploads/product/ 또는 중복 경로 모두 /image/product/로 변환
+                fName = fName.replaceAll(".*?uploads.*?product/", "/image/product/");
+                file.setF_name(fName);
+            }
+        }
+
+        return files;
+    }
+
     @Transactional(readOnly = true)
     public Page<PointDTO> getPointHistoryPagedWithPeriod(String memId, Pageable pageable,
                                                          String periodType, String period,
                                                          String startMonth, String endMonth) {
-        // 1. 회원의 모든 포인트 가져오기
         List<Point> allPoints = pointRepository.findByMem_idOrderByP_dateDesc(memId);
 
-        // 2. 기간에 따라 필터링
         LocalDateTime startDate = null;
         LocalDateTime endDate = LocalDateTime.now().plusDays(1);
 
@@ -95,7 +109,6 @@ public class MyService {
             }
         }
 
-        // 3. 기간으로 필터링
         final LocalDateTime finalStartDate = startDate;
         final LocalDateTime finalEndDate = endDate;
 
@@ -128,30 +141,12 @@ public class MyService {
 
         log.info("필터링된 포인트 내역 수: {}", allPointDTOs.size());
 
-        // 4. 페이지네이션
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allPointDTOs.size());
 
         List<PointDTO> pageContent = allPointDTOs.subList(start, end);
 
         return new PageImpl<>(pageContent, pageable, allPointDTOs.size());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProFileDTO> getProductFiles(String prodNo) {
-        List<ProFileDTO> files = myproductMapper.selectFiles(prodNo);
-
-        // 경로 변환: /uploads/product/ → /image/product/
-        for (ProFileDTO file : files) {
-            String fName = file.getF_name();
-            if (fName != null) {
-                // /uploads/product/ 또는 중복 경로 모두 /image/product/로 변환
-                fName = fName.replaceAll(".*?uploads.*?product/", "/image/product/");
-                file.setF_name(fName);
-            }
-        }
-
-        return files;
     }
 
     @Transactional
@@ -161,7 +156,6 @@ public class MyService {
         Integer pointTotal = Optional.ofNullable(pointRepository.getTotalPointsByMem_id(memId)).orElse(0);
         long qnaCount = qnaRepository.countByMem_id(memId);
 
-        // ===== 최근 주문내역 (5개) =====
         List<Order> recentOrdersEntity = orderRepository.findTop5ByMem_idOrderByOrd_dateDesc(memId);
         List<OrderItemDTO> recentOrders = recentOrdersEntity.stream()
                 .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
@@ -173,17 +167,14 @@ public class MyService {
                 .limit(5)
                 .collect(Collectors.toList());
 
-        // ===== 포인트 내역 (5개) - 수정됨 =====
         List<Point> recentPointsEntity = pointRepository.findByMem_idOrderByP_dateDesc(memId);
         List<PointDTO> recentPoints = recentPointsEntity.stream()
-                .limit(5)  // ✅ 5개로 제한
+                .limit(5)
                 .map(entity -> {
                     PointDTO dto = modelMapper.map(entity, PointDTO.class);
 
-                    // ✅ 주문번호 명시적 설정
                     dto.setOrd_no(entity.getOrd_no());
 
-                    // ✅ 날짜 포맷팅
                     if (entity.getP_date() != null) {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                         dto.setP_date(entity.getP_date().format(formatter));
@@ -197,7 +188,6 @@ public class MyService {
                 })
                 .collect(Collectors.toList());
 
-        // ===== 상품평 (5개) =====
         List<Review> recentReviewsEntity = reviewRepository.findTop5ByMem_idOrderByRev_rdateDesc(memId);
         List<ReviewDTO> recentReviews = recentReviewsEntity.stream()
                 .map(entity -> {
@@ -208,7 +198,6 @@ public class MyService {
                 })
                 .collect(Collectors.toList());
 
-        // ===== 나의 문의 (5개) =====
         List<Qna> recentQnasEntity = qnaRepository.findTop5ByMem_idOrderByQ_rdateDesc(memId);
         List<QnaDTO> recentQnas = recentQnasEntity.stream()
                 .map(entity -> {
@@ -297,7 +286,7 @@ public class MyService {
                 .p_info("상품구매확정")
                 .p_date(LocalDateTime.now())
                 .p_exp_date(LocalDateTime.now().plusDays(7))
-                .ord_no(String.valueOf(orderItem.getOrd_no()))  // ✅ 주문번호 추가
+                .ord_no(String.valueOf(orderItem.getOrd_no()))
                 .build();
         pointRepository.save(point);
     }
@@ -376,12 +365,10 @@ public class MyService {
         return results.stream().map(row -> {
             UserCouponDTO dto = new UserCouponDTO();
 
-            // 기본 정보
             dto.setCp_no((String) row[0]);
             dto.setCp_code((String) row[1]);
             dto.setMem_id((String) row[2]);
 
-            // 발급일 (row[3])
             if (row[3] != null) {
                 try {
                     if (row[3] instanceof java.sql.Timestamp) {
@@ -389,7 +376,6 @@ public class MyService {
                     } else if (row[3] instanceof java.sql.Date) {
                         dto.setCp_issued_date(new Date(((java.sql.Date) row[3]).getTime()));
                     } else if (row[3] instanceof String) {
-                        // TO_DATE 함수가 String을 반환할 수 있음
                         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
                         dto.setCp_issued_date(sdf.parse((String) row[3]));
                     }
@@ -398,7 +384,6 @@ public class MyService {
                 }
             }
 
-            // 사용일 (row[4])
             if (row[4] != null) {
                 try {
                     if (row[4] instanceof java.sql.Timestamp) {
@@ -414,22 +399,12 @@ public class MyService {
                 }
             }
 
-            // 쿠폰 상태 (row[5])
             dto.setCp_stat(row[5] != null ? ((Number) row[5]).intValue() : null);
-
-            // 쿠폰 타입 (row[6])
             dto.setCp_type(row[6] != null ? ((Number) row[6]).intValue() : 0);
-
-            // 쿠폰 가치 (row[7])
             dto.setCp_value(row[7] != null ? ((Number) row[7]).intValue() : 0);
-
-            // 쿠폰명 (row[8])
             dto.setCp_name((String) row[8]);
-
-            // 최소 구매금액 (row[9])
             dto.setCp_min_price(row[9] != null ? ((Number) row[9]).intValue() : 0);
 
-            // ✅ 유효기간 (row[10]) - 수정됨!
             if (row[10] != null) {
                 try {
                     if (row[10] instanceof java.sql.Timestamp) {
@@ -459,7 +434,6 @@ public class MyService {
                 .map(point -> {
                     PointDTO dto = modelMapper.map(point, PointDTO.class);
 
-                    // 날짜 포맷팅
                     if (point.getP_date() != null) {
                         dto.setP_date(point.getP_date().format(formatter));
                     }
@@ -474,7 +448,6 @@ public class MyService {
                 .collect(Collectors.toList());
     }
 
-    // ✅ 상태명 변환 헬퍼 메서드
     private String getItemStatName(int stat) {
         switch(stat) {
             case 0: return "결제완료";
@@ -507,24 +480,18 @@ public class MyService {
     public Page<OrderItemDTO> getOrdersByMemIdWithPeriod(String memId, Pageable pageable,
                                                          String periodType, String period,
                                                          String startMonth, String endMonth) {
-        // 1. 회원의 모든 Order 가져오기
         List<Order> allOrders = orderRepository.findByMem_idOrderByOrd_dateDesc(memId);
 
-        // 2. 기간에 따라 필터링
         LocalDateTime startDate = null;
-        LocalDateTime endDate = LocalDateTime.now().plusDays(1); // 오늘까지 포함
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1);
 
         if ("1day".equals(periodType)) {
-            // 1일 (오늘)
             startDate = LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0);
         } else if ("1week".equals(periodType)) {
-            // 1주일
             startDate = LocalDateTime.now().minusWeeks(1).withHour(0).withMinute(0).withSecond(0);
         } else if ("1month".equals(periodType)) {
-            // 1개월
             startDate = LocalDateTime.now().minusMonths(1).withHour(0).withMinute(0).withSecond(0);
         } else if ("month".equals(periodType) && period != null && !period.isEmpty()) {
-            // N개월 (3, 6, 12개월)
             try {
                 int months = Integer.parseInt(period);
                 startDate = LocalDateTime.now().minusMonths(months).withHour(0).withMinute(0).withSecond(0);
@@ -533,10 +500,7 @@ public class MyService {
                 startDate = null;
             }
         } else if ("custom".equals(periodType) && startMonth != null && endMonth != null) {
-            // 커스텀 기간 (예: 2024-01-15 ~ 2024-12-25)
             try {
-                // startMonth: "2024-01-15" 형식
-                // endMonth: "2024-12-25" 형식
                 startDate = LocalDate.parse(startMonth).atStartOfDay();
                 endDate = LocalDate.parse(endMonth).atTime(23, 59, 59);
 
@@ -547,7 +511,6 @@ public class MyService {
             }
         }
 
-        // 3. 기간으로 필터링
         final LocalDateTime finalStartDate = startDate;
         final LocalDateTime finalEndDate = endDate;
 
@@ -555,7 +518,7 @@ public class MyService {
 
         List<OrderItemDTO> allItems = allOrders.stream()
                 .filter(order -> {
-                    if (finalStartDate == null) return true; // 기간 미선택 시 전체
+                    if (finalStartDate == null) return true;
 
                     LocalDateTime ordDate = order.getOrd_date().toInstant()
                             .atZone(java.time.ZoneId.systemDefault())
@@ -574,7 +537,6 @@ public class MyService {
 
         log.info("필터링된 주문 항목 수: {}", allItems.size());
 
-        // 4. 페이지네이션 (10개씩)
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allItems.size());
 
@@ -583,13 +545,10 @@ public class MyService {
         return new PageImpl<>(pageContent, pageable, allItems.size());
     }
 
-    // PageImpl을 사용하여 DTO 페이지를 반환하는 메서드로 수정
     @Transactional(readOnly = true)
     public Page<OrderItemDTO> getOrdersByMemId(String memId, Pageable pageable) {
-        // 1. 회원의 모든 Order 가져오기 (페이지 X)
         List<Order> allOrders = orderRepository.findByMem_idOrderByOrd_dateDesc(memId);
 
-        // 2. Order의 모든 OrderItem을 펼치기
         List<OrderItemDTO> allItems = allOrders.stream()
                 .flatMap(order -> orderItemRepository.findByOrd_no(order.getOrd_no()).stream()
                         .map(item -> {
@@ -599,7 +558,6 @@ public class MyService {
                         }))
                 .collect(Collectors.toList());
 
-        // 3. OrderItem 기준으로 페이지네이션 (정확히 10개씩)
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allItems.size());
 
@@ -607,7 +565,6 @@ public class MyService {
 
         return new PageImpl<>(pageContent, pageable, allItems.size());
     }
-
 
     @Transactional(readOnly = true)
     public Page<ReviewDTO> getReviewsByMemIdPaged(String memId, Pageable pageable) {
@@ -651,7 +608,6 @@ public class MyService {
         return null;
     }
 
-
     @Transactional(readOnly = true)
     public void debugPointData(String memId) {
         List<Point> points = pointRepository.findByMem_idOrderByP_dateDesc(memId);
@@ -666,7 +622,6 @@ public class MyService {
         log.info("===== 디버그 종료 =====");
     }
 
-    // ===================== 포인트 페이지네이션 =====================
     @Transactional(readOnly = true)
     public Page<PointDTO> getPointHistoryPaged(String memId, Pageable pageable) {
         List<PointDTO> allPoints = getPointHistory(memId);
@@ -679,7 +634,6 @@ public class MyService {
         return new PageImpl<>(pageContent, pageable, allPoints.size());
     }
 
-    // ===================== QnA 페이지네이션 =====================
     @Transactional(readOnly = true)
     public Page<QnaDTO> getQnasByMemIdPaged(String memId, Pageable pageable) {
         List<Qna> allQnas = qnaRepository.findByMem_idOrderByQ_rdateDesc(memId);
@@ -708,10 +662,8 @@ public class MyService {
         return new PageImpl<>(pageContent, pageable, qnaDTOs.size());
     }
 
-
     @Transactional(readOnly = true)
     public Page<UserCouponDTO> getUserCouponsByMemIdPaged(String memId, Pageable pageable) {
-        // 기존 메서드 결과를 Page로 변환
         List<UserCouponDTO> allCoupons = getUserCouponsByMemId(memId);
 
         int start = (int) pageable.getOffset();
@@ -727,27 +679,21 @@ public class MyService {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            // 주문 정보 조회 (ordNo를 String으로 변환)
             Order order = orderRepository.findById(String.valueOf(ordNo))
                     .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
 
-            // 권한 확인 (자신의 주문만 볼 수 있도록)
             if (!order.getMem_id().equals(memId)) {
                 throw new IllegalArgumentException("권한이 없습니다.");
             }
 
-            // 주문 상품 정보 조회
             OrderItem orderItem = orderItemRepository.findById(itemNo)
                     .orElseThrow(() -> new IllegalArgumentException("주문상품을 찾을 수 없습니다."));
 
-            // 상품 정보 조회
             ProductDTO product = getProduct3(orderItem.getProd_no());
 
-            // 회원 정보 조회
             Member member = memberRepository.findById(order.getMem_id())
                     .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
-            // 결과 맵 구성
             result.put("ordNo", ordNo);
             result.put("itemNo", itemNo);
             result.put("prodName", product.getProd_name());
@@ -757,7 +703,6 @@ public class MyService {
             result.put("totalPrice", product.getProd_price() * orderItem.getItem_cnt());
             result.put("discount", 0);
 
-            // 날짜 포맷팅 (java.util.Date 사용)
             if (order.getOrd_date() != null) {
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
                 String ordDate = sdf.format(order.getOrd_date());
@@ -766,12 +711,12 @@ public class MyService {
                 result.put("ordDate", "");
             }
 
-            // 상품 이미지
+            // ✅ 수정: 이미지 경로 일관성 처리
             if (product.getFiles() != null && !product.getFiles().isEmpty()) {
-                result.put("prodImage", product.getFiles().get(0).getF_name());
+                String imagePath = product.getFiles().get(0).getF_name();
+                result.put("prodImage", imagePath);
             }
 
-            // 배송 정보 (회원 정보)
             result.put("memName", member.getMem_name());
             result.put("memHp", member.getMem_hp());
             result.put("memZip", member.getMem_zip());
@@ -789,5 +734,4 @@ public class MyService {
             throw new RuntimeException("주문상세 조회 중 오류가 발생했습니다.");
         }
     }
-
 }

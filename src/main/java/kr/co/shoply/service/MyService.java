@@ -667,6 +667,16 @@ public class MyService {
         return new PageImpl<>(pageContent, pageable, qnaDTOs.size());
     }
 
+
+    @Transactional(readOnly = true)
+    public List<BannerDTO> getBannerByLocation(int location) {
+        List<Banner> banners = bannerRepository.findByBan_location(location);
+        return banners.stream()
+                .filter(banner -> "1".equals(banner.getBan_status()))
+                .map(banner -> modelMapper.map(banner, BannerDTO.class))
+                .collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
     public Page<UserCouponDTO> getUserCouponsByMemIdPaged(String memId, Pageable pageable) {
         List<UserCouponDTO> allCoupons = getUserCouponsByMemId(memId);

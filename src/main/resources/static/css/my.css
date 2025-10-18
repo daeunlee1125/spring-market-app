@@ -2,6 +2,26 @@
 
 /* 페이지네이션*/
 
+/* 비활성화된 버튼 전체 */
+button:disabled {
+    background-color: #d3d3d3 !important;
+    color: #888888 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+button:disabled:hover {
+    background-color: #d3d3d3 !important;
+}
+
+/* 테이블 내 비활성화 버튼 */
+.table-container button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    border: 1px solid #999999;
+}
+
+
 /* 일반 페이지 번호 */
 .page-link.number {
     font-weight: 600;

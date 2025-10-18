@@ -74,6 +74,8 @@ public class MyController {
         model.addAttribute("productMap", productMap);
     }
 
+
+
     // ===================== 홈 =====================
     @GetMapping("/home")
     public String homePage(Model model, @AuthenticationPrincipal MyUserDetails user) {
@@ -85,6 +87,7 @@ public class MyController {
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         addMyPageSummary(model, user.getMember().getMem_id());
+        addBannerToModel(model);
         return "my/home";
     }
 
@@ -149,6 +152,7 @@ public class MyController {
         model.addAttribute("reviewPage", reviewPage);
 
         addMyPageSummary(model, memberId);
+        addBannerToModel(model);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
@@ -186,8 +190,9 @@ public class MyController {
 
         BannerDTO banner = myService.getBannerByNo(1);
         model.addAttribute("banner", banner);
-
+        addBannerToModel(model);
         addMyPageSummary(model, memberId);
+        addBannerToModel(model);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
@@ -306,7 +311,7 @@ public class MyController {
         model.addAttribute("endMonth", endMonth);
 
         addMyPageSummary(model, memberId);
-
+        addBannerToModel(model);
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
@@ -405,6 +410,8 @@ public class MyController {
         model.addAttribute("qnaPage", qnaPage);
 
         addMyPageSummary(model, memberId);
+        addBannerToModel(model);
+
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
@@ -425,7 +432,7 @@ public class MyController {
         model.addAttribute("couponPage", couponPage);
 
         addMyPageSummary(model, memberId);
-
+        addBannerToModel(model);
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
@@ -454,7 +461,7 @@ public class MyController {
         model.addAttribute("period", period);
         model.addAttribute("startMonth", startMonth);
         model.addAttribute("endMonth", endMonth);
-
+        addBannerToModel(model);
         addMyPageSummary(model, memberId);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
@@ -477,6 +484,16 @@ public class MyController {
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "my/product/view";
+    }
+
+
+    // 마이페이지 배너 조회 메서드 (공통)
+    private void addBannerToModel(Model model) {
+        // ban_location = 5: 마이페이지 배너
+        List<BannerDTO> myPageBanners = myService.getBannerByLocation(5);
+        if (myPageBanners != null && !myPageBanners.isEmpty()) {
+            model.addAttribute("banner", myPageBanners.get(0)); // 첫 번째 배너 사용
+        }
     }
 
     @GetMapping("/order/detail")

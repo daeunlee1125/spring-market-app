@@ -62,12 +62,17 @@ public class MyService {
     public List<ProFileDTO> getProductFiles(String prodNo) {
         List<ProFileDTO> files = myproductMapper.selectFiles(prodNo);
 
-        // ✅ 경로 변환: /uploads/product/ → /image/product/
+        // ✅ 경로 변환: /uploads/product/ → /shoply/uploads/product/ (절대경로)
         for (ProFileDTO file : files) {
             String fName = file.getF_name();
             if (fName != null) {
-                // /uploads/product/ 또는 중복 경로 모두 /image/product/로 변환
-                fName = fName.replaceAll(".*?uploads.*?product/", "/image/product/");
+                // 이미 /uploads/로 시작하면 /shoply 추가
+                if (fName.startsWith("/uploads/")) {
+                    fName = "/shoply" + fName;
+                } else if (!fName.startsWith("/shoply/")) {
+                    // 파일명만 있으면 전체 경로 생성
+                    fName = "/shoply/uploads/product/" + fName;
+                }
                 file.setF_name(fName);
             }
         }

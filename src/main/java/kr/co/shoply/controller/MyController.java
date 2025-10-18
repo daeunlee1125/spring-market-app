@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -42,7 +40,6 @@ public class MyController {
     private void addMyPageSummary(Model model, String memberId) {
         MyPageHomeDTO homeData = myService.getMyPageHomeData(memberId);
 
-        // 기본 정보 추가
         model.addAttribute("orderCount", homeData.getOrderCount());
         model.addAttribute("couponCount", homeData.getCouponCount());
         model.addAttribute("pointTotal", homeData.getPointTotal());
@@ -52,7 +49,7 @@ public class MyController {
         model.addAttribute("recentReviews", homeData.getRecentReviews());
         model.addAttribute("recentQnas", homeData.getRecentQnas());
 
-        // productMap 생성 - order.html 방식으로 수정
+        // ✅ productMap 생성 - 이미지 경로 일관성
         Map<String, ProductDTO> productMap = new HashMap<>();
         for (OrderItemDTO item : homeData.getRecentOrders()) {
             String prodNo = item.getProd_no();
@@ -77,8 +74,19 @@ public class MyController {
         model.addAttribute("productMap", productMap);
     }
 
-    
-// MyController.java의 주문 섹션에 추가
+    // ===================== 홈 =====================
+    @GetMapping("/home")
+    public String homePage(Model model, @AuthenticationPrincipal MyUserDetails user) {
+        if (user == null) {
+            return "redirect:/member/login";
+        }
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        addMyPageSummary(model, user.getMember().getMem_id());
+        return "my/home";
+    }
 
     // ===================== 반품 신청 =====================
     @PostMapping("/order/return")
@@ -121,6 +129,7 @@ public class MyController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     // ===================== 리뷰 =====================
     @GetMapping("/review")
     public String reviewPage(
@@ -134,14 +143,11 @@ public class MyController {
 
         String memberId = user.getMember().getMem_id();
 
-        // 페이지네이션 설정 (10개씩)
         Pageable pageable = PageRequest.of(page, 10, Sort.by("rev_rdate").descending());
 
-        // 리뷰 페이지 조회
         Page<ReviewDTO> reviewPage = myService.getReviewsByMemIdPaged(memberId, pageable);
         model.addAttribute("reviewPage", reviewPage);
 
-        // 마이페이지 요약 정보
         addMyPageSummary(model, memberId);
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
@@ -171,20 +177,6 @@ public class MyController {
         return savedFiles;
     }
 
-    // ===================== 홈 =====================
-    @GetMapping("/home")
-    public String homePage(Model model, @AuthenticationPrincipal MyUserDetails user) {
-        if (user == null) {
-            return "redirect:/member/login";
-        }
-
-        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
-        model.addAttribute("siteInfoDTO", siteInfoDTO);
-
-        addMyPageSummary(model, user.getMember().getMem_id());
-        return "my/home";
-    }
-
     // ===================== 회원 정보 =====================
     @GetMapping("/info")
     public String info(Model model, @AuthenticationPrincipal MyUserDetails user) {
@@ -192,7 +184,6 @@ public class MyController {
         MemberDTO memberInfo = myService.getMemberInfo(memberId);
         model.addAttribute("memberInfo", memberInfo);
 
-        // ✅ 배너 정보 추가
         BannerDTO banner = myService.getBannerByNo(1);
         model.addAttribute("banner", banner);
 
@@ -297,7 +288,6 @@ public class MyController {
 
         String memberId = user.getMember().getMem_id();
 
-        // Service에서 기간에 맞게 필터링된 데이터 조회
         Page<OrderItemDTO> orderPage = myService.getOrdersByMemIdWithPeriod(
                 memberId, pageable, periodType, period, startMonth, endMonth);
 
@@ -310,7 +300,6 @@ public class MyController {
         model.addAttribute("orderPage", orderPage);
         model.addAttribute("productMap", productMap);
 
-        // 선택된 기간 값 다시 전달 (UI에서 사용)
         model.addAttribute("periodType", periodType);
         model.addAttribute("period", period);
         model.addAttribute("startMonth", startMonth);
@@ -323,11 +312,12 @@ public class MyController {
 
         return "my/order";
     }
+
     // ===================== 리뷰 작성 (Ajax + 파일 업로드) =====================
     @PostMapping("/review/write")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> writeReview(
-            @RequestParam("prod_no") String prodNo,        // ✅ 추가
+            @RequestParam("prod_no") String prodNo,
             @RequestParam("rating") int rating,
             @RequestParam("content") String content,
             @RequestParam(value = "file1", required = false) MultipartFile file1,
@@ -344,7 +334,6 @@ public class MyController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
-        // ✅ prod_no 검증 추가
         if (prodNo == null || prodNo.trim().isEmpty()) {
             log.warn("리뷰 작성 실패: 상품번호 없음");
             result.put("success", false);
@@ -372,7 +361,7 @@ public class MyController {
 
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setMem_id(user.getMember().getMem_id());
-        reviewDTO.setProd_no(prodNo);  // ✅ prod_no 설정
+        reviewDTO.setProd_no(prodNo);
         reviewDTO.setRev_rating(rating);
         reviewDTO.setRev_content(content);
         reviewDTO.setRev_files(savedFiles);
@@ -388,6 +377,7 @@ public class MyController {
 
         return ResponseEntity.ok(result);
     }
+
     // ===================== QnA =====================
     @PostMapping("/qna/write")
     @ResponseBody
@@ -420,6 +410,7 @@ public class MyController {
 
         return "my/qna";
     }
+
     // ===================== 쿠폰 =====================
     @GetMapping("/coupon")
     public String coupon(Model model,
@@ -427,11 +418,9 @@ public class MyController {
                          @PageableDefault(size = 10) Pageable pageable) {
         String memberId = user.getMember().getMem_id();
 
-        // 기존 기능 유지
         List<UserCouponDTO> userCoupons = myService.getUserCouponsByMemId(memberId);
         model.addAttribute("userCoupons", userCoupons);
 
-        // 페이지네이션 추가
         Page<UserCouponDTO> couponPage = myService.getUserCouponsByMemIdPaged(memberId, pageable);
         model.addAttribute("couponPage", couponPage);
 
@@ -454,16 +443,13 @@ public class MyController {
                         @RequestParam(value = "endMonth", required = false) String endMonth) {
         String memberId = user.getMember().getMem_id();
 
-        // 디버그 로그
         myService.debugPointData(memberId);
 
-        // 기간에 맞게 필터링된 데이터 조회
         Page<PointDTO> pointPage = myService.getPointHistoryPagedWithPeriod(
                 memberId, pageable, periodType, period, startMonth, endMonth);
 
         model.addAttribute("pointPage", pointPage);
 
-        // 선택된 기간 값 다시 전달 (UI에서 사용)
         model.addAttribute("periodType", periodType);
         model.addAttribute("period", period);
         model.addAttribute("startMonth", startMonth);
@@ -493,8 +479,6 @@ public class MyController {
         return "my/product/view";
     }
 
-
-
     @GetMapping("/order/detail")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getOrderDetail(
@@ -518,6 +502,4 @@ public class MyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 }

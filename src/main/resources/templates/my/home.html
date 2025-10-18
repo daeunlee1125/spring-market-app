@@ -62,10 +62,11 @@
                     <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
                     <td>
                         <div class="product-info">
+                            <!-- ✅ 수정: 경로 처리 일관성 -->
                             <img th:if="${productMap[orderItem.prod_no] != null
       and productMap[orderItem.prod_no].files != null
       and productMap[orderItem.prod_no].files.size() > 0}"
-                                 th:src="@{/uploads/{filename}(filename=${productMap[orderItem.prod_no].files[0].f_name})}"
+                                 th:src="${productMap[orderItem.prod_no].files[0].f_name}"
                                  alt="상품 이미지"
                                  style="width: 80px; height: 80px; border-radius: 4px; object-fit: cover;">
                             <img th:if="${productMap[orderItem.prod_no] == null
@@ -103,8 +104,6 @@
                         <span th:case="6">반품신청</span>
                         <span th:case="*">상태없음</span>
                     </td>
-                    <!-- home.html의 최근 주문내역 테이블 부분 -->
-
 
                     <td>
                         <br>
@@ -265,7 +264,12 @@
                             document.getElementById('orderDate').textContent = data.ordDate || '-';
 
                             if (data.prodImage) {
-                                document.getElementById('orderDetailImage').src = '/uploads/' + data.prodImage;
+                                // ✅ 수정: 이미지 경로 처리
+                                let imagePath = data.prodImage;
+                                if (!imagePath.startsWith('/')) {
+                                    imagePath = '/image/product/' + imagePath;
+                                }
+                                document.getElementById('orderDetailImage').src = imagePath;
                             }
 
                             document.getElementById('deliveryName').textContent = data.memName || '-';
@@ -366,4 +370,3 @@
         if(modal) modal.style.display = 'none';
     }
 </script>
-

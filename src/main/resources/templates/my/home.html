@@ -63,15 +63,17 @@
                     <td>
                         <div class="product-info">
                             <img th:if="${productMap[orderItem.prod_no] != null
-                                  and productMap[orderItem.prod_no].files != null
-                                  and productMap[orderItem.prod_no].files.size() > 0}"
+      and productMap[orderItem.prod_no].files != null
+      and productMap[orderItem.prod_no].files.size() > 0}"
                                  th:src="@{'/uploads/' + ${productMap[orderItem.prod_no].files[0].f_name}}"
-                                 alt="상품 이미지"/>
+                                 alt="상품 이미지"
+                                 style="width: 80px; height: 80px; border-radius: 4px; object-fit: cover;">
                             <img th:if="${productMap[orderItem.prod_no] == null
-                                  or productMap[orderItem.prod_no].files == null
-                                  or productMap[orderItem.prod_no].files.size() == 0}"
+      or productMap[orderItem.prod_no].files == null
+      or productMap[orderItem.prod_no].files.size() == 0}"
                                  th:src="@{'/image/product/cap_3_thumb2.jpg'}"
-                                 alt="기본 상품 이미지"/>
+                                 alt="기본 상품 이미지"
+                                 style="width: 80px; height: 80px; border-radius: 4px; object-fit: cover;">
                             <div class="product-details">
                                 <p>주문번호 :
                                     <a href="#"

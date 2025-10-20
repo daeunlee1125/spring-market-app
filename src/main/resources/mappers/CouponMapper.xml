@@ -183,7 +183,7 @@
         sc.cp_type,
         sc.cp_value,
         sc.cp_note,
-        sc.cp_exp_date,
+        u.cp_exp_date,
         sc.cp_issuer_id,
         i.mem_name AS cp_issuer_name,
         u.cp_issued_date,
@@ -225,13 +225,54 @@
 
 
 
-
     <!-- 로그인한 사용자의 등급 조회 -->
     <select id="findMemberLevelById" parameterType="string" resultType="int">
         SELECT MEM_LEVEL
         FROM MEMBER
         WHERE MEM_ID = #{memId}
     </select>
+
+
+    <!-- ============================================ -->
+    <!-- 회원가입 시 자동 쿠폰 발급용 쿼리 -->
+    <!-- ============================================ -->
+
+    <!-- 마지막 쿠폰번호 조회 (30541600001, 00002...) -->
+    <select id="selectLastUserCouponNo" resultType="string">
+        SELECT MAX(cp_no)
+        FROM USER_COUPON
+        WHERE cp_code = #{cp_code}
+    </select>
+
+    <insert id="insertUserSignupCoupon" parameterType="kr.co.shoply.dto.UserCouponDTO">
+        INSERT INTO USER_COUPON (
+        cp_no,
+        cp_code,
+        mem_id,
+        cp_issued_date,
+        cp_exp_date,
+        cp_used_date,
+        cp_stat
+        )
+        VALUES (
+        #{cp_no},
+        #{cp_code},
+        #{mem_id},
+        CURRENT_TIMESTAMP,
+        ADD_MONTHS(CURRENT_TIMESTAMP, 1),
+        NULL,
+        1
+        )
+    </insert>
+
+
+    <update id="expireUserCoupons">
+        UPDATE USER_COUPON
+        SET cp_stat = 3
+        WHERE cp_stat = 1
+        AND cp_exp_date &lt; SYSDATE
+    </update>
+
 
 
 </mapper>

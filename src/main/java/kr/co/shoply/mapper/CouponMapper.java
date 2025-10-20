@@ -59,4 +59,11 @@ public interface CouponMapper {
 
 
     int findMemberLevelById(String memId);
+
+
+    void insertUserSignupCoupon(UserCouponDTO dto);
+    String selectLastUserCouponNo(String cpCode);
+
+
+    void expireUserCoupons();
 }

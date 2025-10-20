@@ -3,6 +3,8 @@ package kr.co.shoply.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
@@ -24,6 +26,7 @@ public class UserCoupon{
     private String cp_issued_date;
     private String cp_used_date;
     private int cp_stat;
+    private LocalDate cp_exp_date;
 
 
 

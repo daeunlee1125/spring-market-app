@@ -38,6 +38,8 @@ public class MemberService {
         return bannerMapper.getLoginBanner2();
     }
 
+    private final CouponService couponService;
+
     // 일반회원가입
     public void insertMember(MemberDTO memberDTO){
         memberDTO.setMem_pass(passwordEncoder.encode(memberDTO.getMem_pass()));
@@ -47,6 +49,10 @@ public class MemberService {
         Member member = modelMapper.map(memberDTO,Member.class);
 
         memberRepository.save(member);
+
+        // 회원가입 축하 쿠폰 자동 발급
+        couponService.issueSignupCoupon(memberDTO.getMem_id());
+
     }
 
     // 판매자회원가입

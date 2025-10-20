@@ -180,7 +180,7 @@
         <include refid="sorting"/>
     </select>
 
-    <select id="selectSearchProduct3" resultMap="productResultMap">
+    <select id="selectSearchProduct3" resultMap="productAllResultMap">
         SELECT
             p.*,
             pf.F_NAME
@@ -207,7 +207,7 @@
         <include refid="sorting"/>
     </select>
 
-    <select id="selectSearch2Product3" resultMap="productResultMap">
+    <select id="selectSearch2Product3" resultMap="productAllResultMap">
         SELECT *
         FROM (
             SELECT

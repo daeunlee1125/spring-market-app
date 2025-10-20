@@ -76,6 +76,7 @@
                                             </div>
                                         </div>
                                         <p class="item-name">[[${productDTO.prod_name}]]</p>
+                                        <p class="item-prod-info" th:text="${productDTO.getProd_info()}"></p>
                                         <div class="item-price-box">
                                             <div>
                                                 <span class="discount-rate">[[${productDTO.prod_sale}]]%</span>

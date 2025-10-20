@@ -23,10 +23,10 @@
         SET item_stat = CASE
         WHEN item_stat = 1 AND (
         SELECT o.ord_date FROM "order" o WHERE o.ord_no = oi.ord_no
-        ) &lt;= SYSDATE - INTERVAL '1' HOUR THEN 2
+        ) &lt;= SYSDATE - (1/24) THEN 2
         WHEN item_stat = 2 AND (
         SELECT o.ord_date FROM "order" o WHERE o.ord_no = oi.ord_no
-        ) &lt;= SYSDATE - INTERVAL '2' HOUR THEN 3
+        ) &lt;= SYSDATE - (2/24) THEN 2 THEN 3
         ELSE item_stat
         END
     </update>

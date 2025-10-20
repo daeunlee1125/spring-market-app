@@ -91,7 +91,7 @@
                 <th>날짜</th>
                 <th>상품정보</th>
                 <th>상태</th>
-                <th>확인/신청</th>
+                <th>확인 / 신청</th>
             </tr>
             </thead>
             <tbody id="orderTableBody">
@@ -99,26 +99,53 @@
                 <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
                 <td>
                     <div class="product-info">
-                        <!-- ✅ 수정: 경로를 직접 사용 -->
+                        <!-- 상품 이미지 -->
                         <img th:if="${productMap[orderItem.prod_no] != null and productMap[orderItem.prod_no].files != null and productMap[orderItem.prod_no].files.size() > 0}"
                              th:src="${productMap[orderItem.prod_no].files[0].f_name}"
-                             alt="상품 이미지" style="width: 80px; height: 80px; border-radius: 4px;">
+                             alt="상품 이미지"
+                             style="width: 80px; height: 80px; border-radius: 4px; object-fit: cover;">
                         <img th:if="${productMap[orderItem.prod_no] == null or productMap[orderItem.prod_no].files == null or productMap[orderItem.prod_no].files.size() == 0}"
                              th:src="@{'/image/product/cap_3_thumb2.jpg'}" alt="기본 이미지" style="width: 80px; height: 80px; border-radius: 4px;">
+
                         <div class="product-details">
-                            <p>주문번호:
+                            <!-- 주문번호 -->
+                            <p>주문번호 :
                                 <a href="#"
                                    class="order-number-link"
                                    th:text="${orderItem.ord_no}"
                                    th:data-ord-no="${orderItem.ord_no}"
                                    th:data-item-no="${orderItem.item_no}"
-                                   style="color: #0066cc; text-decoration: none;">1012211341</a>
+                                   style="color: #0066cc; text-decoration: none;"></a>
                             </p>
-                            <span th:text="${productMap[orderItem.prod_no] != null ? productMap[orderItem.prod_no].prod_name : '상품명 없음'}">상품명</span>
-                            <p>수량: <span th:text="${orderItem.item_cnt}">1</span>개</p>
-                            <strong th:if="${productMap[orderItem.prod_no] != null}"
-                                    th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">34,000원</strong>
-                            <strong th:if="${productMap[orderItem.prod_no] == null}">가격 정보 없음</strong>
+
+                            <!-- 판매자명 (productMap이 null이 아닐 때만) -->
+                            <th:block th:if="${productMap[orderItem.prod_no] != null}">
+                                <p>(주) <a href="#"
+                                          th:data-mem-id="${productMap[orderItem.prod_no].mem_id}"
+                                          th:text="${productMap[orderItem.prod_no].corpName ?: '상호명'}"
+                                          onclick="openSellerInfo(this.getAttribute('data-mem-id')); return false;"
+                                          style="cursor: pointer; color: #0066cc; text-decoration: none;"></a></p>
+
+                                <!-- 상품명 (링크) -->
+                                <a th:href="|/shoply/product/view/9/${productMap[orderItem.prod_no].prod_no}|"
+                                   th:text="${productMap[orderItem.prod_no].prod_name ?: '상품명 없음'}"
+                                   style="color: #0066cc; text-decoration: none; font-weight: 500; cursor: pointer; display: block; margin: 5px 0;"></a>
+
+                                <!-- 가격 -->
+                                <strong th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">
+                                    가격정보
+                                </strong>
+                            </th:block>
+
+                            <!-- 상품 정보가 없을 때 -->
+                            <th:block th:if="${productMap[orderItem.prod_no] == null}">
+                                <p>(주) 상호명</p>
+                                <p style="color: #999;">상품명 없음</p>
+                                <strong>가격 정보 없음</strong>
+                            </th:block>
+
+                            <!-- 수량 -->
+                            <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
                         </div>
                     </div>
                 </td>
@@ -137,11 +164,22 @@
                     <br>
                     <button class="btn-confirm"
                             th:data-item-no="${orderItem.item_no}"
-                            th:disabled="${orderItem.item_stat > 3}">구매확정</button>
-                    <button class="btn-review"
+                            th:disabled="${orderItem.item_stat != 3}">구매확정</button>
+
+                    <!-- 리뷰 버튼 (reviewCheckMap이 존재하고 리뷰가 있는 경우) -->
+                    <button th:if="${reviewCheckMap != null and reviewCheckMap[orderItem.prod_no] == true}"
+                            class="btn-view-review"
+                            th:data-prod-no="${orderItem.prod_no}"
+                            th:data-prod-name="${productMap[orderItem.prod_no] != null ? productMap[orderItem.prod_no].prod_name : '상품명'}"
+                            style="background-color: #28a745; cursor: pointer;">작성한 리뷰 보기</button>
+
+                    <!-- 리뷰가 없는 경우 -->
+                    <button th:if="${reviewCheckMap == null or reviewCheckMap[orderItem.prod_no] != true}"
+                            class="btn-review"
                             th:data-prod-no="${orderItem.prod_no}"
                             th:data-prod-name="${orderItem.item_name}"
                             th:disabled="${orderItem.item_stat != 4}">상품평쓰기</button>
+
                     <button class="btn-return"
                             th:data-item-no="${orderItem.item_no}"
                             th:disabled="${orderItem.item_stat > 3}">반품신청</button>
@@ -156,7 +194,6 @@
             </tr>
             </tbody>
         </table>
-
         <!-- 페이징 -->
         <div style="text-align: center; margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px;">
             <!-- 첫 페이지 -->

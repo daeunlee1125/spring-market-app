@@ -42,6 +42,100 @@ public class MyService {
     private final ProFileRepository proFileRepository;
     private final MyProductMapper myproductMapper;
     private final BannerRepository bannerRepository;
+    private final MemSellerRepository memSellerRepository;
+
+    // 내부 클래스
+    private static class SellerStats {
+        private long totSellPrice;
+
+        public SellerStats(long totSellPrice) {
+            this.totSellPrice = totSellPrice;
+        }
+
+        public long getTotSellPrice() {
+            return totSellPrice;
+        }
+    }
+
+    // 판매자 정보 조회
+    @Transactional(readOnly = true)
+    public Map<String, Object> getSellerInfo(String memId) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // 1. 회원 정보 조회
+            Member member = memberRepository.findById(memId)
+                    .orElseThrow(() -> new IllegalArgumentException("판매자를 찾을 수 없습니다."));
+
+            // 2. 판매자 정보 조회
+            MemSeller memSeller = memSellerRepository.findById(memId)
+                    .orElseThrow(() -> new IllegalArgumentException("판매자 상세정보를 찾을 수 없습니다."));
+
+            // 3. 판매자 실적 조회
+            SellerStats stats = getSellerStats(memId);
+
+            // 4. 판매자 등급 계산
+            String sellerGrade = calculateSellerGrade(stats);
+
+            // 5. 결과 구성
+            result.put("memId", memId);
+            result.put("corpName", memSeller.getCorp_name());
+            result.put("corpRegHp", memSeller.getCorp_reg_hp());
+            result.put("corpTelHp", memSeller.getCorp_tel_hp());
+            result.put("corpFax", memSeller.getCorp_fax());
+            result.put("memName", member.getMem_name());
+            result.put("memHp", member.getMem_hp());
+            result.put("memZip", member.getMem_zip());
+            result.put("memAddr1", member.getMem_addr1());
+            result.put("memAddr2", member.getMem_addr2());
+            result.put("sellerGrade", sellerGrade);
+            result.put("totSellPrice", stats.getTotSellPrice());
+
+            log.info("판매자 정보 조회 성공: mem_id={}, grade={}", memId, sellerGrade);
+            return result;
+
+        } catch (IllegalArgumentException e) {
+            log.error("판매자 정보 조회 실패: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("판매자 정보 조회 중 오류: {}", e.getMessage());
+            throw new RuntimeException("판매자 정보를 조회할 수 없습니다.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    protected SellerStats getSellerStats(String memId) {
+        List<Object[]> results = orderItemRepository.findSellerStats(memId);
+
+        if (results.isEmpty() || results.get(0) == null) {
+            return new SellerStats(0);
+        }
+
+        Object[] row = results.get(0);
+        long totalSellPrice = row[0] != null ? ((Number) row[0]).longValue() : 0;
+
+        return new SellerStats(totalSellPrice);
+    }
+
+    private String calculateSellerGrade(SellerStats stats) {
+        long totalSellPrice = stats.getTotSellPrice();
+
+        // 판매자 등급 결정 (누적 판매액 기준)
+        if (totalSellPrice >= 50_000_000) {        // 5천만원 이상
+            return "DIAMOND";
+        } else if (totalSellPrice >= 30_000_000) {  // 3천만원 이상
+            return "GOLD";
+        } else if (totalSellPrice >= 10_000_000) {  // 1천만원 이상
+            return "SILVER";
+        } else {
+            return "BRONZE";
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Review findReviewByMemIdAndProdNo(String memId, String prodNo) {
+        return reviewRepository.findByMem_idAndProd_no(memId, prodNo).orElse(null);
+    }
 
     @Transactional(readOnly = true)
     public ProductDTO getProduct3(String prodNo) {
@@ -332,14 +426,24 @@ public class MyService {
         Date currentDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         review.setRev_rdate(currentDate);
 
+        // ✅ 수정: 모든 파일을 쉼표로 구분해서 저장
         if (reviewDTO.getRev_files() != null && !reviewDTO.getRev_files().isEmpty()) {
-            review.setRev_img_path(reviewDTO.getRev_files().get(0));
+            // 파일명들을 쉼표로 조합
+            String filePathsStr = String.join(",", reviewDTO.getRev_files());
+            review.setRev_img_path(filePathsStr);
+
+            log.info("리뷰 이미지 경로 저장: {}", filePathsStr);
         }
 
         reviewRepository.save(review);
+
         ReviewDTO savedDTO = modelMapper.map(review, ReviewDTO.class);
         productRepository.findByProd_no(review.getProd_no())
                 .ifPresent(p -> savedDTO.setProdName(p.getProd_name()));
+
+        log.info("리뷰 저장 완료: rev_no={}, mem_id={}, prod_no={}, rev_img_path={}",
+                review.getRev_no(), review.getMem_id(), review.getProd_no(), review.getRev_img_path());
+
         return savedDTO;
     }
 

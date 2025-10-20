@@ -4,8 +4,29 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.shoply.mapper.MyProductMapper">
+    <!-- ✅ 수정: 판매자정보(상호명, 전화, 사업자번호, FAX) 조인 추가 -->
     <select id="selectProduct" resultType="kr.co.shoply.dto.ProductDTO">
-        SELECT * FROM product WHERE prod_no = #{prod_no}
+        SELECT
+        p.prod_no,
+        p.cate2_no,
+        p.prod_name,
+        p.prod_info,
+        p.prod_company,
+        p.mem_id,
+        p.prod_price,
+        p.prod_sale,
+        p.prod_deliv_price,
+        p.prod_point,
+        p.prod_stock,
+        p.prod_sold,
+        p.prod_hit,
+        ms.corp_name AS corpName,
+        ms.corp_tel_hp AS corpTelHp,
+        ms.corp_reg_hp AS corpRegHp,
+        ms.corp_fax AS corpFax
+        FROM product p
+        LEFT JOIN mem_seller ms ON p.mem_id = ms.mem_id
+        WHERE p.prod_no = #{prod_no}
     </select>
 
     <select id="selectOption" resultType="kr.co.shoply.dto.ProdOptionDTO">

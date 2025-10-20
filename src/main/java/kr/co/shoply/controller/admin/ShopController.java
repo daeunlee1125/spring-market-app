@@ -3,6 +3,7 @@ package kr.co.shoply.controller.admin;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.service.MemSellerService;
 import kr.co.shoply.service.MemberService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class ShopController {
     private final MemberService memberService;
     private final MemSellerService memSellerService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/admin/shop/list")
     public String shopList(Model model, PageRequestDTO pageRequestDTO){
@@ -31,6 +33,9 @@ public class ShopController {
         PageResponseDTO<MemSellerDTO> sellers = memSellerService.getMemSellers2Page(pageRequestDTO);
         log.info(sellers.toString());
         model.addAttribute("pageResponseDTO", sellers);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.mapper.AdminMemberMapper;
 import kr.co.shoply.service.AdminMemberService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +29,18 @@ public class AdminMemberController {
     
   private final AdminMemberMapper adminMemberMapper;
   private final VersionService versionService;
+  private final SiteInfoService siteInfoService;
 
 
     @GetMapping("/admin/member/list")
     public String list(PageRequestDTO pageRequestDTO, Model model) {
         PageResponseDTO<MemberDTO> pageResponseDTO = adminMemberService.selectMembers(pageRequestDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
         return "admin/member/list";

@@ -65,7 +65,7 @@
                             <div class="product-item" th:each="productDTO : ${productDTOList}">
                                 <a th:href="@{/product/view/{cate2No}/{prodNo}(cate2No=${productDTO.getCate2_no()},prodNo=${productDTO.prod_no})}" class="item-link">
                                     <div class="item-thumb">
-                                        <img th:src="@{${productDTO.getFName()}}" alt="상품 이미지">
+                                        <img class="list-item-img" th:src="@{${productDTO.getFName()}}" alt="상품 이미지">
                                     </div>
                                     <div class="item-info">
                                         <div class="item-header">

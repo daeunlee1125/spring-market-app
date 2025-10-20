@@ -3,6 +3,7 @@ package kr.co.shoply.controller.admin;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.AdminProductService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class AdminProductController {
 
     private final AdminProductService adminProductService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
     //e2c log 확인용 API
     @ResponseBody
@@ -76,6 +78,9 @@ public class AdminProductController {
 
 
         model.addAttribute("pageResponse", pageResponse);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);

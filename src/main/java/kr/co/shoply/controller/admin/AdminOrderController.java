@@ -1,10 +1,8 @@
 package kr.co.shoply.controller.admin;
 
-import kr.co.shoply.dto.CopyrightDTO;
-import kr.co.shoply.dto.OrderDTO;
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.service.OrderService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,7 @@ import java.util.List;
 public class AdminOrderController {
     private final OrderService orderService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/admin/order/list")
     public String list(Model model, PageRequestDTO pageRequestDTO) {
@@ -29,6 +28,9 @@ public class AdminOrderController {
         model.addAttribute("pageResponseDTO", pageResponseDTO);
         List<OrderDTO> details = orderService.OrderDetails2();
         model.addAttribute("details", details);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);

@@ -56,4 +56,7 @@ public interface CouponMapper {
     void updateSysCouponStatus(@Param("cp_code") String cpCode);
 
 
+
+
+    int findMemberLevelById(String memId);
 }

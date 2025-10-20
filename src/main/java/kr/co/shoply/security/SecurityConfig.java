@@ -14,6 +14,10 @@ public class SecurityConfig {
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    private kr.co.shoply.security.CustomOAuth2UserService customOAuth2UserService;
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -30,6 +34,9 @@ public class SecurityConfig {
         http.oauth2Login(oauth2 -> oauth2
                 .loginPage("/member/login")
                 .defaultSuccessUrl("/")
+                .userInfoEndpoint(userInfo -> userInfo
+                        .userService(customOAuth2UserService)
+                )
         );
 
         http.rememberMe(remember -> remember

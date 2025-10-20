@@ -517,39 +517,45 @@ public class MyController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
-        log.info("========== 리뷰 작성 시작 ==========");
-
+        String uploadDir = "C:/shoply/uploads/review/";
         List<MultipartFile> files = Arrays.asList(file1, file2, file3);
         List<String> savedFiles = new ArrayList<>();
 
-        // ✅ application.yml에서 읽기
-        String uploadDir = "C:/shoply/uploads/review/";  // 하드코딩 대신 아래처럼 수정
-
         try {
+            // 디렉토리 생성
             File uploadDirFile = new File(uploadDir);
             if (!uploadDirFile.exists()) {
-                uploadDirFile.mkdirs();
-                log.info("업로드 디렉토리 생성: {}", uploadDir);
+                boolean created = uploadDirFile.mkdirs();
+                log.info("디렉토리 생성 결과: {}, 경로: {}", created, uploadDir);
             }
 
+            log.info("✅ 업로드 디렉토리 확인: {}", uploadDirFile.exists());
+            log.info("✅ 쓰기 권한: {}", uploadDirFile.canWrite());
+
+            // 파일 저장
             for (MultipartFile file : files) {
                 if (file != null && !file.isEmpty()) {
+                    String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                    String filePath = uploadDir + filename;
+
+                    log.info("파일 저장 시작: {}", filePath);
+
                     try {
-                        String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                        File dest = new File(uploadDir + filename);
-
+                        File dest = new File(filePath);
                         file.transferTo(dest);
-                        savedFiles.add(filename);
 
+                        savedFiles.add(filename);
                         log.info("✅ 파일 저장 성공: {}", filename);
+                        log.info("파일 존재 확인: {}", dest.exists());
                     } catch (IOException e) {
-                        log.error("❌ 파일 저장 실패: {}", file.getOriginalFilename(), e);
+                        log.error("❌ 파일 저장 실패: {}", filename, e);
                     }
                 }
             }
 
-            log.info("총 저장된 파일 수: {}", savedFiles.size());
+            log.info("✅ 최종 저장된 파일: {}", savedFiles);
 
+            // DB에 저장
             ReviewDTO reviewDTO = new ReviewDTO();
             reviewDTO.setMem_id(user.getMember().getMem_id());
             reviewDTO.setProd_no(prodNo);
@@ -562,8 +568,6 @@ public class MyController {
             result.put("success", true);
             result.put("newReview", savedReview);
             result.put("savedFiles", savedFiles);
-
-            log.info("========== 리뷰 작성 완료 ==========");
 
             return ResponseEntity.ok(result);
 

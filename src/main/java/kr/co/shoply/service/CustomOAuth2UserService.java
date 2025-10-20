@@ -61,7 +61,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .mem_name(name)
                     .mem_level(1)  // int 타입
                     .mem_stat("정상")
-                    .mem_pass(null)  // 소셜 로그인은 비밀번호 없음
+                    .mem_pass("SOCIAL_LOGIN_NO_PASSWORD")  // 소셜 로그인은 비밀번호 없음 더미 비밀번호
                     .build();
             memberRepository.save(member);
 

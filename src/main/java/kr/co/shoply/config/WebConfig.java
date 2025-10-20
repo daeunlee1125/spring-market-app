@@ -1,5 +1,6 @@
 package kr.co.shoply.config;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -10,5 +11,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:/home/ec2-user/shoply/uploads/");
+    }
+
+    @Configuration
+    @EnableScheduling
+    public class SchedulerConfig {
     }
 }

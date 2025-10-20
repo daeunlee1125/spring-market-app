@@ -15,6 +15,15 @@ spring:
   application:
     name: shoply
     version: ${version}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 175533324145-1bas44qullc0br7nh133gpi349jhcnhh.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+            redirect-uri: http://ec2-3-38-140-9.ap-northeast-2.compute.amazonaws.com:8080/shoply/login/oauth2/code/google
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
     password: 1234

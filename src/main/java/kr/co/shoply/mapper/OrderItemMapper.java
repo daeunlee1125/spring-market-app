@@ -10,4 +10,5 @@ import java.util.List;
 public interface OrderItemMapper {
     public AdInfoDTO itemStatCnt2();
     public void setItemDelvInfo2(OrderDTO orderDTO);
+    public void updateOrderItem();
 }

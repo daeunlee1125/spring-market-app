@@ -104,196 +104,249 @@
         </div>
 
         <!-- 검색 영역 -->
-        <div class="main-content-top" style="border:none; margin:15px 0;">
-          <form class="search-bar">
-            <select>
-              <option>채용번호</option>
-              <option>120</option>
-              <option>119</option>
-              <option>118</option>
-            </select>
-          <input type="text" placeholder="검색어 입력">
-            <button type="submit">검색</button>
-          </form>
-        </div>
+          <div class="main-content-top" style="border:none; margin:15px 0;">
+              <form class="search-bar" method="get" th:action="@{/admin/cs/recruit/list}">
+                  <select name="searchType" th:value="${response.searchType}">
+                      <option value="">검색조건 선택</option>
+                      <option value="n" th:selected="${response.searchType=='n'}">채용번호</option>
+                      <option value="t" th:selected="${response.searchType=='t'}">제목</option>
+                      <option value="d" th:selected="${response.searchType=='d'}">채용부서</option>
+                      <option value="e" th:selected="${response.searchType=='e'}">경력사항</option>
+                      <option value="j" th:selected="${response.searchType=='j'}">채용형태</option>
+                      <option value="s" th:selected="${response.searchType=='s'}">상태</option>
+                  </select>
+                  <input type="text" name="keyword" placeholder="검색어 입력" th:value="${response.keyword}"
+                         style="border:1px solid #ccc; height:23px; padding:5px 8px; outline:none; background-color:#fff;">
+                  <button type="submit">검색</button>
+              </form>
+          </div>
     <main>
         <table class="table">
-        <thead>
+            <thead>
             <tr>
-            <th class="checkbox-cell" id="selectAll" onclick="toggleAll(this)">
-                <input type="checkbox">
-            </th>
-            <th>번호</th>
-            <th>채용부서</th>
-            <th>경력사항</th>
-            <th>채용형태</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>상태</th>
-            <th>모집기간</th>
-            <th>작성일</th>
+                <th class="checkbox-cell" id="selectAll">
+                    <input type="checkbox" id="selectAllBox">
+                </th>
+                <th>번호</th>
+                <th>채용부서</th>
+                <th>경력사항</th>
+                <th>채용형태</th>
+                <th>제목</th>
+                <th>상태</th>
+                <th>모집기간</th>
+                <th>작성일</th>
             </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <td class="checkbox-cell">
-                <input type="checkbox" name="itemCheck">
-            </td>
-            <td>119</td>
-            <td>IT</td>
-            <td>경력 2 ~ 15년</td>
-            <td>정규직</td>
-            <td>IT 인재 상시 영입(경력)</td>
-            <td>관리자</td>
-            <td style="color: green;">모집중</td>
-            <td>2025.09.27 ~ 2026.09.27</td>
-            <td>2025.09.27 12:52</td>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(response.dtoList)}">
+                <td colspan="9">등록된 채용 공고가 없습니다.</td>
             </tr>
-        </tbody>
+
+            <tr th:each="recruit : ${response.dtoList}">
+                <td><input type="checkbox" name="itemCheck" th:value="${recruit.rec_no}"></td>
+                <td th:text="${recruit.rec_no}"></td>
+                <td th:text="${recruit.rec_department}"></td>
+                <td th:text="${recruit.rec_experience}"></td>
+                <td th:text="${recruit.rec_job_type}"></td>
+                <td>
+                    <a th:href="@{|/admin/cs/recruit/read?recNo=${recruit.rec_no}|}" th:text="${recruit.rec_title}"></a>
+                </td>
+                <td th:text="${recruit.rec_status}"></td>
+                <td>
+                    <span th:text="${recruit.rec_start_time}"></span> ~
+                    <span th:text="${recruit.rec_end_date}"></span>
+                </td>
+                <td th:text="${recruit.rec_rdate}"></td>
+            </tr>
+            </tbody>
         </table>
 
-    <!-- 페이지네이션 -->
-    <div class="page">
-    <a href="#" class="prev">이전</a>
-    <a href="#" class="num current">1</a>
-    <a href="#" class="num">2</a>
-    <a href="#" class="num">3</a>
-    <a href="#" class="next">다음</a>
-    </div>
+        <!-- 페이지네이션 -->
+        <div class="page">
+            <a th:if="${response.prev}"
+               th:href="@{|/admin/cs/recruit/list?pg=${response.start-1}&searchType=${response.searchType}&keyword=${response.keyword}|}"
+               class="prev">이전</a>
 
-    <!-- 버튼 영역 -->
-    <div class="button-container">
-    <div class="left-buttons">
-        <button class="openModalBtn delete-btn" data-target="confirmEndModal">선택삭제</button>
-    </div>
-    <div class="right-buttons">
-        <button class="openModalBtn register-btn" data-target="recruitRegisterModal">채용등록</button>
-    </div>
-    </div>
+            <a th:each="p : ${#numbers.sequence(response.start, response.end)}"
+               th:href="@{|/admin/cs/recruit/list?pg=${p}&searchType=${response.searchType}&keyword=${response.keyword}|}"
+               th:classappend="${p==response.pg} ? ' current' : ''"
+               class="num"
+               th:text="${p}">1</a>
+
+            <a th:if="${response.next}"
+               th:href="@{|/admin/cs/recruit/list?pg=${response.end+1}&searchType=${response.searchType}&keyword=${response.keyword}|}"
+               class="next">다음</a>
+        </div>
+
+        <!-- 버튼 영역 -->
+        <div class="button-container">
+            <div class="left-buttons">
+                <button type="button" class="openModalBtn delete-btn" data-target="confirmEndModal">선택삭제</button>
+            </div>
+            <div class="right-buttons">
+                <button type="button" class="openModalBtn register-btn" data-target="recruitRegisterModal">채용등록</button>
+            </div>
+        </div>
     </main>
-</div>
-</div>
+      </div>
     </div>
+  </div>
 
-  <!-- 푸터 -->
-  <footer>
+<!-- 푸터 -->
+<footer>
     <div class="middle">
-        <p id="footer-p" th:text="${copyrightDTO.getSCopy()} + '.' + ${copyrightDTO.getSTitle()} + ' ADMINISTRATOR Version ' + ${copyrightDTO.getVerVersion()}">
-            Copyright ©shoply.co.kr All rights reserved. shoply ADMINISTRATOR Version 0.0.4-SNAPSHOT
+        <p id="footer-p">
+            Copyright ©Kmarket.co.kr All rights reserved.
         </p>
     </div>
-  </footer>
+</footer>
 
-  <!-- 종료 확인 모달 -->
-  <div class="modal hidden" id="confirmEndModal">
+<!-- 선택삭제 확인 모달 -->
+<div class="modal hidden" id="confirmEndModal">
     <div class="modal-popup">
-      <div class="modal-header">
-        <h2>선택삭제 확인</h2>
-        <span class="closeModalBtn">&times;</span>
-      </div>
-      <div class="modal-content">
-        <p>해당 채용하기 목록을 삭제하시겠습니까?</p>
-        <div style="text-align:center; margin-top:20px;">
-          <button class="register-btn">확인</button>
-          <button class="closeModalBtn delete-btn">취소</button>
+        <div class="modal-header">
+            <h2>선택삭제 확인</h2>
+            <span class="closeModalBtn">&times;</span>
         </div>
-      </div>
+        <div class="modal-content">
+            <p>해당 채용하기 목록을 삭제하시겠습니까?</p>
+            <div>
+                <button type="button" id="confirmDeleteBtn">확인</button>
+                <button type="button" class="closeModalBtn">취소</button>
+            </div>
+        </div>
     </div>
-  </div>
-  </div>
-  </div>
 </div>
 
-<!-- ================== 모달 ================== -->
-
+<!-- 채용등록 모달 -->
 <div class="modal hidden" id="recruitRegisterModal">
-  <div class="modal-popup large">
-    <div class="modal-header">
-      <h2>채용등록</h2>
-      <button class="closeModalBtn">&times;</button>
+    <div class="modal-popup large">
+        <div class="modal-header">
+            <h2>채용등록</h2>
+            <button type="button" class="closeModalBtn">&times;</button>
+        </div>
+        <div class="modal-content">
+            <form method="post" th:action="@{/admin/cs/recruit/register}">
+
+                <div class="form-group">
+                    <label>제목</label>
+                    <input type="text" name="rec_title">
+                </div>
+
+                <div class="form-group">
+                    <label>채용부서</label>
+                    <select name="rec_department">
+                        <option>IT</option>
+                        <option>운영</option>
+                        <option>광고사업</option>
+                        <option>경영</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>경력사항</label>
+                    <select name="rec_experience">
+                        <option>신입</option>
+                        <option>경력</option>
+                        <option>무관</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>채용형태</label>
+                    <select name="rec_job_type">
+                        <option>정규직</option>
+                        <option>계약직</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>모집기간</label>
+                    <div>
+                        <input type="date" name="rec_start_date"> ~
+                        <input type="date" name="rec_end_date">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>상태</label>
+                    <select name="rec_status">
+                        <option>모집중</option>
+                        <option>마감</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>자격요건</label>
+                    <input type="text" name="rec_qualification" class="long-input">
+                </div>
+
+                <div class="form-group">
+                    <label>복지/비고</label>
+                    <input type="text" name="rec_welfare" class="long-input">
+                </div>
+
+                <div class="form-group">
+                    <label>상세내용</label>
+                    <input type="text" name="rec_content" class="long-input">
+                </div>
+
+                <!-- 버튼 -->
+                <div style="text-align:center; margin-top:20px;">
+                    <button type="button" class="closeModalBtn delete-btn">취소</button>
+                    <button type="submit" class="register-btn">등록</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="modal-content">
-      <form>
-        <div class="form-group">
-          <label>제목</label>
-          <input type="text">
-        </div>
-
-        <div class="form-group">
-          <label>채용부서</label>
-          <select>
-            <option>채용부서 선택</option>
-            <option>IT</option>
-            <option>운영</option>
-            <option>광고사업</option>
-            <option>경영</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>경력사항</label>
-          <select>
-            <option>경력사항 선택</option>
-            <option>신입</option>
-            <option>경력</option>
-            <option>무관</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>채용형태</label>
-          <select>
-            <option>채용형태 선택</option>
-            <option>정규직</option>
-            <option>계약직</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>모집기간</label>
-          <div>
-            <input type="date"> ~ <input type="date">
-          </div>
-        
-        </div>
-        <div class="form-group">
-            <label>비고</label>
-            <input type="text" class="long-input">
-        </div>
-
-        <!-- 버튼 -->
-        <div style="text-align:center; margin-top:20px;">
-          <button type="button" class="closeModalBtn delete-btn">취소</button>
-          <button type="submit" class="register-btn">등록</button>
-        </div>
-      </form>
-    </div>
-  </div>
 </div>
 
 
-  <!-- JS 공통 로직 -->
-   <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        // 열기 버튼
+<!-- 선택삭제용 히든 폼 -->
+<form id="bulkDeleteForm" method="post" th:action="@{/admin/cs/recruit/remove}">
+    <input type="hidden" name="ids" id="idsField">
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const selectAll = document.getElementById('selectAllBox');
+        if (selectAll) {
+            selectAll.addEventListener('change', () => {
+                document.querySelectorAll('input[name="itemCheck"]').forEach(cb => cb.checked = selectAll.checked);
+            });
+        }
+
         document.querySelectorAll(".openModalBtn").forEach(btn => {
             btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetId = btn.dataset.target;
-            document.getElementById(targetId).classList.remove("hidden");
+                e.preventDefault();
+                const modal = document.getElementById(btn.dataset.target);
+                if (modal) modal.classList.remove("hidden");
             });
         });
 
-        // 닫기 버튼 + 배경 클릭
         document.querySelectorAll(".modal").forEach(modal => {
             modal.addEventListener("click", (e) => {
-            if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
-                modal.classList.add("hidden");
-            }
+                if (e.target.classList.contains("closeModalBtn") || e.target === modal) {
+                    modal.classList.add("hidden");
+                }
             });
         });
-        });
 
+        const confirmBtn = document.getElementById("confirmDeleteBtn");
+        if (confirmBtn) {
+            confirmBtn.addEventListener("click", () => {
+                const checked = document.querySelectorAll('input[name="itemCheck"]:checked');
+                if (!checked.length) {
+                    alert("삭제할 항목을 선택하세요.");
+                    return;
+                }
+                const ids = Array.from(checked).map(el => el.value);
+                document.getElementById('idsField').value = ids.join(',');
+                document.getElementById('bulkDeleteForm').submit();
+            });
+        }
+    });
 </script>
+
 </body>
 </html>

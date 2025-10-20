@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SHOPLY 소식과 이야기</title>
-  <link rel="stylesheet" href="/kmarket/inc/css/company.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/story.css">
+  <link rel="stylesheet" th:href="@{/css/company.css}">
+    <link rel="stylesheet" th:href="@{/css/story.css}">
 </head>
 <body>
 
@@ -21,11 +21,11 @@
     <!-- 2번째 줄: 회사 메뉴 -->
     <div class="bottom-header">
       <div class="company menu">
-        <a href="./index.html">HOME</a> | 
-        <a href="./culture.html">기업문화</a> | 
-        <a href="./story.html" class="active">소식과 이야기</a> | 
-        <a href="./recruit.html" >채용</a> | 
-        <a href="./media.html">미디어</a>
+        <a th:href="@{/company/index}">HOME</a> |
+        <a th:href="@{/company/culture}">기업문화</a> |
+        <a th:href="@{/company/story}" class="active">소식과 이야기</a> |
+        <a th:href="@{/company/recruit}" >채용</a> |
+        <a th:href="@{/company/media}">미디어</a>
       </div>
     </div>
   </header>
@@ -53,7 +53,7 @@
   <!-- 포스팅 카드 -->
   <section class="card-grid">
   <div class="card">
-    <a href="./story_list.html">
+    <a th:href="@{/company/story_list}">
       <img src="../image/sample1.png" alt="포스팅1">
       <div class="card-content">
         <h3>봄 스타일 완성 시크릿</h3>
@@ -63,7 +63,7 @@
   </div>
 
   <div class="card">
-    <a href="./story_list.html">
+      <a th:href="@{/company/story_list}">
       <img src="../image/sample2.jpg" alt="포스팅2">
       <div class="card-content">
         <h3>인터뷰: 디자이너 홍길동</h3>
@@ -73,7 +73,7 @@
   </div>
 
   <div class="card">
-    <a href="./story_list.html">
+      <a th:href="@{/company/story_list}">
       <img src="../image/sample3.jpg" alt="포스팅3">
       <div class="card-content">
         <h3>ESG 활동 리포트</h3>
@@ -83,7 +83,7 @@
   </div>
 
   <div class="card">
-    <a href="./story_list.html">
+      <a th:href="@{/company/recruit}">
       <img src="../image/sample1.png" alt="포스팅4">
       <div class="card-content">
         <h3>채용 소식 안내</h3>
@@ -103,7 +103,7 @@
   </div>
 
   <div class="card">
-    <a href="./story_list.html">
+      <a th:href="@{/company/story_list}">
       <img src="../image/sample3.jpg" alt="포스팅6">
       <div class="card-content">
         <h3>사회공헌 캠페인</h3>
@@ -112,14 +112,8 @@
     </a>
   </div>
 </section>
-
-
 </main>
-    
 </body>
-
-
-
 
 
  <footer class="footer">

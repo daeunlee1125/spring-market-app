@@ -66,4 +66,5 @@ public interface CouponMapper {
 
 
     void expireUserCoupons();
+
 }

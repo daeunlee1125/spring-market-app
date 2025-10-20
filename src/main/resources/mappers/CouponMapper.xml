@@ -275,4 +275,12 @@
 
 
 
+    <!-- 로그인한 사용자의 등급 조회 -->
+    <select id="findMemberLevelById" parameterType="string" resultType="int">
+        SELECT MEM_LEVEL
+        FROM MEMBER
+        WHERE MEM_ID = #{memId}
+    </select>
+
+
 </mapper>

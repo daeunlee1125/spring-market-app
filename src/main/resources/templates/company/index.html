@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SHOPLY 회사소개 메인</title>
-    <link rel="stylesheet" href="/kmarket/inc/css/company.css">
+    <link rel="stylesheet" th:href="@{/css/company.css}">
 </head>
 <body>
 
@@ -20,11 +20,11 @@
     <!-- 2번째 줄: 회사 메뉴 (오른쪽 정렬) -->
     <div class="bottom-header">
       <div class="company menu">
-        <a href="./index.html">HOME</a> | 
-        <a href="./culture.html">기업문화</a> | 
-        <a href="./story.html">소식과 이야기</a> | 
-        <a href="./recruit.html">채용</a> | 
-        <a href="./media.html">미디어</a>
+          <a th:href="@{/company/index}" class="active">HOME</a> |
+          <a th:href="@{/company/culture}">기업문화</a> |
+          <a th:href="@{/company/story}">소식과 이야기</a> |
+          <a th:href="@{/company/recruit}" >채용</a> |
+          <a th:href="@{/company/media}">미디어</a>
       </div>
     </div>
   </header>

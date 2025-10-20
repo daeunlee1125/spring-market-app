@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (searchBar) {
         const currentCate1 = searchBar.dataset.cate1;
         const currentCate2 = searchBar.dataset.cate2;
+        const baseUrl = searchBar.dataset.listUrl;
 
         function updateCategory2(selectedCategory1) {
             category2Select.innerHTML = '<option value="">2차 선택</option>';
@@ -63,11 +64,18 @@ document.addEventListener("DOMContentLoaded", function() {
             if (cate2) params.append('cate2', cate2);
             const queryString = params.toString();
             // 💡 중요: 컨텍스트 경로가 있다면 `/shoply`를 포함해야 하고, 없다면 `/admin...` 으로 시작해야 합니다.
-            const finalUrl = `/admin/cs/qna/list${queryString ? '?' + queryString : ''}`;
+            const finalUrl = `${baseUrl}${queryString ? '?' + queryString : ''}`;
             window.location.href = finalUrl;
         }
 
-        category1Select.addEventListener('change', triggerCategorySearch);
+        category1Select.addEventListener('change', function() {
+            // 1. 1차 카테고리 값에 맞춰 2차 카테고리 목록을 변경합니다.
+            //    (만약 "1차 선택" (value="")을 고르면 2차 목록이 리셋됩니다)
+            updateCategory2(category1Select.value);
+
+            // 2. 2차 카테고리가 리셋된 후, 검색을 실행합니다.
+            triggerCategorySearch();
+        });
         category2Select.addEventListener('change', triggerCategorySearch);
     }
 

@@ -61,6 +61,7 @@ header {
   align-items: center;
   gap: 13px;
   padding-top: 2px;
+    position: relative;
 }
 
 .logo {
@@ -449,4 +450,39 @@ aside {
   width: 100%;       /* 부모 div의 너비 채우기 */
   height: 100%;      /* 부모 div의 높이 채우기 */
   object-fit: cover; /* 비율 유지하면서 넘치는 부분은 잘림 */
+}
+
+/* 1. <a> 태그를 배지(span)의 위치 기준점으로 설정합니다. */
+.cart-link {
+    position: relative;
+    display: inline-block; /* <a> 태그가 영역을 갖도록 설정 (중요) */
+}
+
+/* 2. 숫자 배지 스타일 및 위치 지정 */
+.cart-count {
+    position: absolute;
+
+    /* "오른쪽 대각선 아래" 위치 (아이콘 모서리에 겹치게) */
+    bottom: -5px;
+    right: -5px;
+
+    /* 모양 */
+    background-color: #ED5565; /* (추천) 빨간색 계열 */
+    color: white;
+    border-radius: 10px; /* 원형 또는 캡슐형 */
+
+    /* 크기 및 텍스트 */
+    font-size: 12px;
+    font-weight: bold;
+    height: 18px;
+    min-width: 18px; /* 1~9까지 원형 유지 */
+    padding: 0 4px; /* 10 이상일 때 좌우 여백 */
+    box-sizing: border-box; /* 패딩을 너비에 포함 */
+
+    /* 텍스트 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    user-select: none; /* 숫자가 드래그(선택)되는 것 방지 */
 }

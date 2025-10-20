@@ -4,10 +4,13 @@ import kr.co.shoply.dto.Cate1DTO;
 import kr.co.shoply.dto.Cate2DTO;
 import kr.co.shoply.dto.SiteInfoDTO;
 import kr.co.shoply.entity.Terms;
+import kr.co.shoply.security.MyUserDetails;
+import kr.co.shoply.service.IndexService;
 import kr.co.shoply.service.PolicyService;
 import kr.co.shoply.service.ProductService;
 import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +24,10 @@ public class PolicyController {
     private final PolicyService policyService;
     private final SiteInfoService siteInfoService;
     private final ProductService productService;
+    private final IndexService indexService;
 
     @GetMapping("/policy/buyer")
-    public String buyer(Model model) {
+    public String buyer(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "buyer");
@@ -43,11 +47,17 @@ public class PolicyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
+
         return "policy/buyer";
     }
 
     @GetMapping("/policy/seller")
-    public String seller(Model model) {
+    public String seller(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "seller");
@@ -67,12 +77,18 @@ public class PolicyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
+
         return "policy/seller";
 
     }
 
     @GetMapping("/policy/finance")
-    public String finance(Model model) {
+    public String finance(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "finance");
@@ -92,11 +108,17 @@ public class PolicyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
+
         return "policy/finance";
     }
 
     @GetMapping("/policy/privacy")
-    public String privacy(Model model) {
+    public String privacy(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "privacy");
@@ -116,11 +138,17 @@ public class PolicyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
+
         return "policy/privacy";
     }
 
     @GetMapping("/policy/location")
-    public String location(Model model) {
+    public String location(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Terms terms = policyService.getTerms();
         model.addAttribute("terms", terms);
         model.addAttribute("activePage", "location");
@@ -139,6 +167,12 @@ public class PolicyController {
         }
 
         model.addAttribute("cate1DTOList", cate1DTOList);
+
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
 
         return "policy/location";
     }

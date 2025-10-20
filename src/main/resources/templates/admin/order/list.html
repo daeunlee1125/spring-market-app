@@ -15,6 +15,26 @@
         <div class="main-content-top"></div>
 
         <main>
+
+            <!-- 검색조건 카테고리 -->
+            <div class="sub-top">
+                <div class="search-bar">
+                    <form action="" method="get">
+                        <select name="searchType" id="">
+                            <option value="ord_no">주문번호</option>
+                            <option value="mem_id">주문자</option>
+                            <option value="mem_name">주문자명</option>
+                        </select>
+                        <div class="search-place">
+                            <input type="text" name="keyword" placeholder="검색어 입력">
+                            <button type="submit">
+                                <img th:src="@{/image/search.png}" alt="검색">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
           <!-- 주문현황 테이블 -->
           <table class="table order-table">
             <thead>
@@ -54,7 +74,7 @@
             <div class="page">
                 <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/order/list(pg=${pageResponseDTO.start - 1})}" class="prev">이전</a>
                 <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                    <a th:href="@{/admin/order/list(pg=${num})}" th:class="${num == pageResponseDTO.pg ? 'current' : 'num'}">[[${num}]]</a>
+                    <a th:href="@{/admin/order/list(pg=${num}, searchType=${pageResponseDTO.searchType}, keyword=${pageResponseDTO.keyword})}" th:class="${num == pageResponseDTO.pg ? 'current' : 'num'}">[[${num}]]</a>
                 </th:block>
                 <a th:if="${pageResponseDTO.next}" th:href="@{/admin/order/list(pg=${pageResponseDTO.end + 1})}" class="next">다음</a>
             </div>

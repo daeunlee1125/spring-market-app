@@ -75,7 +75,7 @@
                                 <input type="checkbox" class="chkMember" name="mem_id" th:value="${member.mem_id}">
                                 <input type="hidden" class="rankHidden" th:value="${member.mem_rank}">
                             </td>
-                            <td th:text="${stat.count}"></td>
+                            <td th:text="${pageResponseDTO.startNo - stat.index}"></td>
                             <td th:text="${member.mem_id}"></td>
                             <td th:text="${member.mem_name}"></td>
                             <td th:text="${member.mem_gen}"></td>

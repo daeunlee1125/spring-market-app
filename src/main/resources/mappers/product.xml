@@ -149,7 +149,11 @@
         WHERE pf.PROD_NO = #{prod_no}
     </select>
 
-    <select id="selectAll3" resultMap="productResultMap">
+    <resultMap id="productAllResultMap" type="kr.co.shoply.dto.ProductDTO">
+        <result column="F_NAME" property="fName"/>
+    </resultMap>
+
+    <select id="selectAll3" resultMap="productAllResultMap">
         SELECT
             p.*,
             pf.F_NAME

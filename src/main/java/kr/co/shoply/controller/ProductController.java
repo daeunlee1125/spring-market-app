@@ -41,7 +41,6 @@ public class ProductController {
     @GetMapping("/product/list/{cate2No}/{sort}")
     public String sortList(@PathVariable int cate2No, @PathVariable String sort, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         List<ProductDTO> productDTOList = productService.getProductAll3(cate2No, sort);
-
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
 
         model.addAttribute("productDTOList", productDTOList);

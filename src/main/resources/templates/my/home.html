@@ -65,7 +65,6 @@
                     <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
                     <td>
                         <div class="product-info">
-                            <!-- ✅ 수정: 경로 처리 일관성 -->
                             <img th:if="${productMap[orderItem.prod_no] != null
 and productMap[orderItem.prod_no].files != null
 and productMap[orderItem.prod_no].files.size() > 0}"
@@ -80,8 +79,18 @@ and productMap[orderItem.prod_no].files.size() > 0}"
                                        th:data-ord-no="${orderItem.ord_no}"
                                        th:data-item-no="${orderItem.item_no}"></a>
                                 </p>
-                                <p>(주) <a href="#" onclick="openModal('sellerInfoPopup')">상호명</a></p>
-                                <span th:text="${productMap[orderItem.prod_no].prod_name}">상품명</span>
+                                <!-- ✅ 수정: 실제 상호명 표시 -->
+                                <p>(주) <a href="#"
+                                          th:data-mem-id="${productMap[orderItem.prod_no].mem_id}"
+                                          th:text="${productMap[orderItem.prod_no].corpName ?: '상호명'}"
+                                          onclick="openSellerInfo(this.getAttribute('data-mem-id')); return false;"
+                                          style="cursor: pointer; color: #0066cc; text-decoration: none;"></a></p>
+
+                                <!-- ✅ 수정: 상품명을 링크로 변경 -->
+                                <a th:href="|/shoply/product/view/9/${productMap[orderItem.prod_no].prod_no}|"
+                                   th:text="${productMap[orderItem.prod_no].prod_name ?: '상품명 없음'}"
+                                   style="color: #0066cc; text-decoration: none; font-weight: 500; cursor: pointer; display: block; margin: 5px 0;"></a>
+
                                 <p>수량 : <span th:text="${orderItem.item_cnt}">1</span>개</p>
                                 <strong th:if="${productMap[orderItem.prod_no] != null}"
                                         th:text="${#numbers.formatInteger(productMap[orderItem.prod_no].prod_price, 0, 'COMMA')} + '원'">
@@ -106,8 +115,17 @@ and productMap[orderItem.prod_no].files.size() > 0}"
                         <br>
                         <button class="btn-confirm"
                                 th:data-item-no="${orderItem.item_no}"
-                                th:disabled="${orderItem.item_stat > 3}">구매확정</button>
-                        <button class="btn-review"
+                                th:disabled="${orderItem.item_stat != 3}">구매확정</button>
+                        <!-- 이미 리뷰가 있는 경우 -->
+                        <button th:if="${reviewCheckMap[orderItem.prod_no] == true}"
+                                class="btn-view-review"
+                                th:data-prod-no="${orderItem.prod_no}"
+                                th:data-prod-name="${productMap[orderItem.prod_no].prod_name ?: '상품명'}"
+                                style="background-color: #28a745; cursor: pointer;">작성한 리뷰 보기</button>
+
+                        <!-- 리뷰가 없는 경우 -->
+                        <button th:if="${reviewCheckMap[orderItem.prod_no] != true}"
+                                class="btn-review"
                                 th:data-prod-no="${orderItem.prod_no}"
                                 th:data-prod-name="${orderItem.item_name}"
                                 th:disabled="${orderItem.item_stat != 4}">상품평쓰기</button>
@@ -126,7 +144,7 @@ and productMap[orderItem.prod_no].files.size() > 0}"
                 </tbody>
             </table>
             <br>
-            <a th:href="@{/my/order}" class="more-link">더보기 &gt;</a>
+            <a th:href="@{/my/order}" class="more-link">더보기</a>
         </div>
 
         <!-- 포인트 내역 -->

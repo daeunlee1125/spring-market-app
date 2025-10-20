@@ -325,7 +325,46 @@
         </form>
     </div>
 </div>
-
+<div id="reviewDetailModal" class="modal">
+    <div class="modal-content" style="width: 600px;">
+        <div class="modal-header">
+            <h4>작성한 리뷰</h4>
+            <span class="close-btn" onclick="closeModal('reviewDetailModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td class="label" style="width: 120px;">상품명</td>
+                    <td id="reviewDetailTitle">-</td>
+                </tr>
+                <tr>
+                    <td class="label">별점</td>
+                    <td id="reviewDetailRating" style="color: #FFD700; font-size: 18px; font-weight: bold;">★★★★★</td>
+                </tr>
+                <tr>
+                    <td class="label">작성일</td>
+                    <td id="reviewDetailDate">-</td>
+                </tr>
+                <tr>
+                    <td class="label">내용</td>
+                    <td id="reviewDetailContent" style="line-height: 1.6; word-break: break-word; white-space: pre-wrap;">-</td>
+                </tr>
+                <tr>
+                    <td class="label">사진</td>
+                    <td id="reviewDetailImages" style="text-align: center; padding: 10px;">
+                        <span style="color: #999;">(이미지 없음)</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right; margin-top: 20px;">
+                <button onclick="closeModal('reviewDetailModal')"
+                        style="padding: 8px 15px; background-color: #946ccf; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500;">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     // ===== 유틸리티 함수 =====
     function formatPrice(price) {
@@ -351,8 +390,9 @@
         if(modal) modal.style.display = 'none';
     }
 
-    // ===== 공통 이벤트 등록 =====
+    // ===== 모든 이벤트를 하나의 DOMContentLoaded로 통합 =====
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('Modal DOMContentLoaded 시작');
 
         // 1. 주문번호 클릭 시 상세정보 조회
         document.querySelectorAll('.order-number-link').forEach(link => {
@@ -394,7 +434,7 @@
             });
         });
 
-        // 2. 구매확정 버튼
+        // 2. 구매확정 버튼 (페이지의 .btn-confirm)
         document.querySelectorAll('.btn-confirm').forEach(btn => {
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
@@ -406,7 +446,36 @@
             });
         });
 
-        // 3. 리뷰 작성 버튼
+        // 3. 모달 내부의 구매확정 확인 버튼 ✅ 이게 핵심!
+        const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+        if (confirmOrderBtn) {
+            confirmOrderBtn.addEventListener('click', function() {
+                const modal = document.getElementById('confirmModal');
+                const itemNo = modal.dataset.itemNo;
+
+                fetch(`/shoply/my/order/confirm?item_no=${itemNo}`, {
+                    method: 'POST'
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('구매확정이 완료되었습니다.');
+                            closeModal('confirmModal');
+                            location.reload();
+                        } else {
+                            alert('구매확정 실패: ' + data);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        } else {
+            console.error('❌ confirmOrderBtn을 찾을 수 없습니다!');
+        }
+
+        // 4. 리뷰 작성 버튼
         document.querySelectorAll('.btn-review').forEach(btn => {
             btn.addEventListener('click', function() {
                 const prodNo = this.getAttribute('data-prod-no');
@@ -420,7 +489,54 @@
             });
         });
 
-        // 4. 반품 버튼
+        // 5. 리뷰 작성 폼 제출 ✅ 이것도 핵심!
+        const reviewForm = document.getElementById('reviewForm');
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const prodNo = document.getElementById('review_prod_no').value;
+                const rating = document.querySelector('input[name="rating"]:checked')?.value || 3;
+                const content = document.getElementById('review_content').value.trim();
+
+                if (content.length < 10) {
+                    alert('리뷰 내용은 최소 10자 이상이어야 합니다.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('prod_no', prodNo);
+                formData.append('rating', rating);
+                formData.append('content', content);
+                formData.append('file1', document.querySelector('input[name="file1"]').files[0] || '');
+                formData.append('file2', document.querySelector('input[name="file2"]').files[0] || '');
+                formData.append('file3', document.querySelector('input[name="file3"]').files[0] || '');
+
+                fetch('/shoply/my/review/write', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('리뷰가 작성되었습니다.');
+                            closeModal('reviewModal');
+                            reviewForm.reset();
+                            location.reload();
+                        } else {
+                            alert('리뷰 작성 실패: ' + data.message);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        } else {
+            console.error('❌ reviewForm을 찾을 수 없습니다!');
+        }
+
+        // 6. 반품 버튼
         document.querySelectorAll('.btn-return').forEach(btn => {
             btn.addEventListener('click', function() {
                 const itemNo = this.getAttribute('data-item-no');
@@ -430,26 +546,6 @@
                     openModal('returnModal');
                 }
             });
-        });
-
-        // 5. 교환 버튼
-        document.querySelectorAll('.btn-exchange').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const itemNo = this.getAttribute('data-item-no');
-                const modal = document.getElementById('exchangeModal');
-                if(modal) {
-                    modal.dataset.itemNo = itemNo;
-                    openModal('exchangeModal');
-                }
-            });
-        });
-
-        // 6. 별점 표시 (home.html)
-        document.querySelectorAll('.star-rating').forEach(el => {
-            const rating = parseInt(el.textContent.trim());
-            if (!isNaN(rating)) {
-                el.textContent = '★'.repeat(rating);
-            }
         });
 
         // 7. 반품 신청 폼
@@ -494,7 +590,19 @@
             });
         }
 
-        // 8. 교환 신청 폼
+        // 8. 교환 버튼
+        document.querySelectorAll('.btn-exchange').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemNo = this.getAttribute('data-item-no');
+                const modal = document.getElementById('exchangeModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('exchangeModal');
+                }
+            });
+        });
+
+        // 9. 교환 신청 폼
         const exchangeForm = document.getElementById('exchangeForm');
         if (exchangeForm) {
             exchangeForm.addEventListener('submit', function(e) {
@@ -536,7 +644,7 @@
             });
         }
 
-        // 9. 비밀번호 변경 폼
+        // 10. 비밀번호 변경 폼
         const passwordForm = document.getElementById('passwordForm');
         if (passwordForm) {
             passwordForm.addEventListener('submit', function(e) {
@@ -586,66 +694,175 @@
                     });
             });
         }
-    });
-</script>
-<script>
-    // 비밀번호 변경 폼 제출
-    document.addEventListener('DOMContentLoaded', function() {
-        const passwordForm = document.getElementById('passwordForm');
-        if (passwordForm) {
-            passwordForm.addEventListener('submit', function(e) {
-                e.preventDefault();
 
-                const currentPassword = document.getElementById('currentPassword').value.trim();
-                const newPassword = document.getElementById('newPassword').value.trim();
-                const confirmPassword = document.getElementById('confirmPassword').value.trim();
+        // 11. 별점 표시
+        document.querySelectorAll('.star-rating').forEach(el => {
+            const rating = parseInt(el.textContent.trim());
+            if (!isNaN(rating)) {
+                el.textContent = '★'.repeat(rating);
+            }
+        });
 
-                if (!currentPassword) {
-                    alert('현재 비밀번호를 입력해주세요.');
-                    return;
-                }
+        // 12. 작성한 리뷰 보기 버튼
+        document.querySelectorAll('.btn-view-review').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const prodNo = this.getAttribute('data-prod-no');
+                const prodName = this.getAttribute('data-prod-name');
 
-                if (!newPassword) {
-                    alert('새 비밀번호를 입력해주세요.');
-                    return;
-                }
+                console.log('리뷰 조회 시작:', prodNo, prodName);
 
-                if (newPassword.length < 6) {
-                    alert('비밀번호는 최소 6자 이상이어야 합니다.');
-                    return;
-                }
-
-                if (newPassword !== confirmPassword) {
-                    alert('비밀번호가 일치하지 않습니다.');
-                    return;
-                }
-
-                fetch('/shoply/my/info/changePassword', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        currentPassword: currentPassword,
-                        newPassword: newPassword
+                fetch(`/shoply/my/review/detail?prod_no=${prodNo}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`HTTP 오류: ${res.status}`);
+                        return res.json();
                     })
-                })
-                    .then(res => res.text())
                     .then(data => {
-                        if (data === 'success') {
-                            alert('비밀번호가 변경되었습니다.');
-                            closeModal('passwordModal');
-                            passwordForm.reset();
-                        } else {
-                            alert('비밀번호 변경 실패: ' + data);
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+
+                        if (data && data.rev_rating !== undefined) {
+                            const titleEl = document.getElementById('reviewDetailTitle');
+                            const ratingEl = document.getElementById('reviewDetailRating');
+                            const contentEl = document.getElementById('reviewDetailContent');
+                            const dateEl = document.getElementById('reviewDetailDate');
+                            const imageEl = document.getElementById('reviewDetailImages');
+
+                            if (!titleEl || !ratingEl || !contentEl || !dateEl || !imageEl) {
+                                console.error('모달 요소를 찾을 수 없습니다.');
+                                alert('모달을 불러올 수 없습니다. 페이지를 새로고침해주세요.');
+                                return;
+                            }
+
+                            titleEl.textContent = prodName || '상품명 없음';
+                            ratingEl.textContent = '★'.repeat(data.rev_rating || 0);
+                            contentEl.textContent = data.rev_content || '-';
+
+                            if (data.rev_rdate) {
+                                let dateStr = data.rev_rdate;
+                                if (dateStr.includes('T')) {
+                                    dateStr = dateStr.split('T')[0];
+                                }
+                                dateEl.textContent = dateStr;
+                            } else {
+                                dateEl.textContent = '-';
+                            }
+
+                            imageEl.innerHTML = '';
+
+                            if (data.rev_files && Array.isArray(data.rev_files) && data.rev_files.length > 0) {
+                                data.rev_files.forEach((file, index) => {
+                                    let imagePath = file.trim();
+
+                                    if (!imagePath.startsWith('/')) {
+                                        imagePath = `/uploads/review/${imagePath}`;
+                                    } else if (!imagePath.startsWith('/uploads/')) {
+                                        imagePath = `/uploads/review/${imagePath}`;
+                                    }
+
+                                    const img = document.createElement('img');
+                                    img.src = imagePath;
+                                    img.alt = `리뷰 이미지 ${index + 1}`;
+                                    img.style.cssText = 'width: 150px; height: 150px; margin: 5px; border-radius: 4px; object-fit: cover; cursor: pointer; border: 1px solid #ddd;';
+
+                                    img.onerror = function() {
+                                        this.style.border = '2px solid #ff6b6b';
+                                        this.title = '이미지 로드 실패: ' + imagePath;
+                                    };
+
+                                    img.onclick = function() {
+                                        window.open(this.src, '_blank');
+                                    };
+
+                                    imageEl.appendChild(img);
+                                });
+                            } else {
+                                imageEl.innerHTML = '<span style="color: #999; display: inline-block; padding: 20px;">(이미지 없음)</span>';
+                            }
+
+                            openModal('reviewDetailModal');
                         }
                     })
                     .catch(err => {
-                        console.error(err);
-                        alert('오류가 발생했습니다.');
+                        console.error('리뷰 조회 실패:', err);
+                        alert('리뷰 조회 실패: ' + err.message);
                     });
             });
+        });
+
+        // 13. 판매자 정보 팝업의 문의하기 버튼
+        const sellerModal = document.getElementById('sellerInfoPopup');
+        if (sellerModal) {
+            const inquiryBtn = sellerModal.querySelector('button');
+            if (inquiryBtn) {
+                inquiryBtn.addEventListener('click', function() {
+                    openModal('qnaPopup');
+                    closeModal('sellerInfoPopup');
+                });
+            }
         }
+
+        console.log('Modal DOMContentLoaded 완료');
     });
 
+    // ===== 판매자 정보 조회 (외부 함수) =====
+    function openSellerInfo(memId) {
+        fetch(`/shoply/my/seller/info?mem_id=${memId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    const gradeStyles = {
+                        'DIAMOND': { color: '#00D4FF', badge: '💎 DIAMOND' },
+                        'GOLD': { color: '#FFD700', badge: '⭐ GOLD' },
+                        'SILVER': { color: '#C0C0C0', badge: '✨ SILVER' },
+                        'BRONZE': { color: '#CD7F32', badge: '🔶 BRONZE' }
+                    };
 
+                    const gradeInfo = gradeStyles[data.sellerGrade] || gradeStyles['BRONZE'];
+                    const sellerModal = document.querySelector('#sellerInfoPopup .info-table tbody');
+
+                    sellerModal.innerHTML = `
+                        <tr>
+                            <td class="label" style="width: 150px;">판매자 등급</td>
+                            <td style="color: ${gradeInfo.color}; font-weight: bold;">${gradeInfo.badge}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">상호</td>
+                            <td>${data.corpName || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">대표자</td>
+                            <td>${data.memName || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">전화번호</td>
+                            <td>${data.corpTelHp || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">FAX</td>
+                            <td>${data.corpFax || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">사업자번호</td>
+                            <td>${data.corpRegHp || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">영업소재지</td>
+                            <td>[${data.memZip}] ${data.memAddr1} ${data.memAddr2 || ''}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">누적 판매액</td>
+                            <td>${Number(data.totSellPrice).toLocaleString('ko-KR')}원</td>
+                        </tr>
+                    `;
+
+                    openModal('sellerInfoPopup');
+                }
+            })
+            .catch(err => {
+                console.error('판매자 정보 조회 실패:', err);
+                alert('판매자 정보를 불러올 수 없습니다.');
+            });
+    }
 </script>
-

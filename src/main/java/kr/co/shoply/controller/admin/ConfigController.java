@@ -114,6 +114,11 @@ public class ConfigController {
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo(1);
         model.addAttribute("siteInfo", siteInfoDTO);
 
+        SiteInfoDTO getTitle = siteInfoService.getSiteInfo3();
+        model.addAttribute("title", getTitle);
+
+
+
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
@@ -121,7 +126,7 @@ public class ConfigController {
     }
 
     @PostMapping("/admin/config/basic")
-    public String basic(SiteInfoDTO siteInfoDTO, @RequestParam int type, @RequestParam("img1") MultipartFile img1, @RequestParam("img2") MultipartFile img2, @RequestParam("img3") MultipartFile img3) throws IOException {
+    public String basic(SiteInfoDTO siteInfoDTO, @RequestParam int type, @RequestParam(value = "img1", required = false) MultipartFile img1, @RequestParam(value = "img2", required = false) MultipartFile img2, @RequestParam(value = "img3", required = false) MultipartFile img3) throws IOException {
 
         siteInfoService.modifySiteInfo(siteInfoDTO, type, img1, img2, img3);
 

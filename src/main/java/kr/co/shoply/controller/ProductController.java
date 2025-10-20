@@ -35,6 +35,8 @@ public class ProductController {
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
         return "redirect:/product/list/" + cate2No + "/sold";
     }
 

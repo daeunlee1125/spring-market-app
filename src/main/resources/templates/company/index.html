@@ -81,26 +81,11 @@
           <div class="news-container">
             <h2 class="news-title">SHOPLY의 따끈따끈한 최근 소식 !</h2>
             <ul class="news-list">
-              <li>
-                <span class="news-date">2025.03</span>
-                <a href="#">‘월간케이미마3월호에서만나는 50원도넛 , 1천원양념감자 !’</a>
-              </li>
-              <li>
-                <span class="news-date">2025.03</span>
-                <a href="#">‘SHOPLY, 새로운 친환경 포장재 도입’</a>
-              </li>
-              <li>
-                <span class="news-date">2025.03</span>
-                <a href="#">‘빠른 배송 서비스 전국 확대 실시’</a>
-              </li>
-              <li>
-                <span class="news-date">2025.02</span>
-                <a href="#">‘고객만족도 1위 달성, 감사 이벤트 진행’</a>
-              </li>
-              <li>
-                <span class="news-date">2025.02</span>
-                <a href="#">‘신선식품 새벽배송 서비스 시작’</a>
-              </li>
+                <li th:each="art : ${recentArticles}">
+                    <span class="news-date" th:text="${art.art_rdate}"></span>
+                    <a th:href="@{|/company/story_list/${art.art_article_no}|}" th:text="${art.art_title}">
+                    </a>
+                </li>
             </ul>
           </div>
         </section>

@@ -9,13 +9,13 @@
     </insert>
 
     <resultMap id="ProdNoticeMap" type="kr.co.shoply.dto.ProdNoticeDTO">
-        <result property="not_no" column="pn_not_no"/>
-        <result property="prod_no" column="pn_prod_no"/>
-        <result property="tax_type" column="pn_tax_type"/>
-        <result property="receipt_issue" column="pn_receipt_issue"/>
-        <result property="business_type" column="pn_business_type"/>
-        <result property="origin" column="pn_origin"/>
-        <result property="product_status" column="pn_product_status"/>
+        <result property="not_no" column="not_no"/>
+        <result property="pn_prod_no" column="pn_prod_no"/>
+        <result property="tax_type" column="tax_type"/>
+        <result property="receipt_issue" column="receipt_issue"/>
+        <result property="business_type" column="business_type"/>
+        <result property="origin" column="origin"/>
+        <result property="product_status" column="product_status"/>
     </resultMap>
 
     <resultMap id="ProductWithNoticeMap" type="kr.co.shoply.dto.ProductDTO">

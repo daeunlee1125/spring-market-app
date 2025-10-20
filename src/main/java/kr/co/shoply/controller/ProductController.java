@@ -64,7 +64,6 @@ public class ProductController {
         model.addAttribute("bannerPath", bannerPath);
 
         ProductDTO productDTO = productService.getProduct3(prodNo);
-        log.info("productDTO: {}", productDTO);
         if (productDTO == null) {
             log.warn("존재하지 않는 상품 번호로 접근: {}", prodNo);
             // 존재하지 않는 상품이므로 상품 목록 페이지로 리다이렉트

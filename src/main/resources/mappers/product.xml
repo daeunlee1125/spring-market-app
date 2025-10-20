@@ -8,38 +8,86 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="cno" keyColumn="CNO">
     </insert>
 
-    <select id="select3" resultMap="productResultMap">
+    <resultMap id="ProdNoticeMap" type="kr.co.shoply.dto.ProdNoticeDTO">
+        <result property="not_no" column="pn_not_no"/>
+        <result property="prod_no" column="pn_prod_no"/>
+        <result property="tax_type" column="pn_tax_type"/>
+        <result property="receipt_issue" column="pn_receipt_issue"/>
+        <result property="business_type" column="pn_business_type"/>
+        <result property="origin" column="pn_origin"/>
+        <result property="product_status" column="pn_product_status"/>
+    </resultMap>
+
+    <resultMap id="ProductWithNoticeMap" type="kr.co.shoply.dto.ProductDTO">
+        <id property="prod_no" column="prod_no"/>
+        <result property="cate2_no" column="cate2_no"/>
+        <result property="prod_name" column="prod_name"/>
+        <result property="prod_info" column="prod_info"/>
+        <result property="prod_company" column="prod_company"/>
+        <result property="mem_id" column="mem_id"/>
+        <result property="prod_price" column="prod_price"/>
+        <result property="prod_sale" column="prod_sale"/>
+        <result property="prod_deliv_price" column="prod_deliv_price"/>
+        <result property="prod_point" column="prod_point"/>
+        <result property="prod_stock" column="prod_stock"/>
+        <result property="prod_sold" column="prod_sold"/>
+        <result property="prod_hit" column="prod_hit"/>
+
+        <result property="avgRating" column="avgRating"/>
+        <result property="cntRating" column="cntRating"/>
+        <result property="realPrice" column="realPrice"/>
+
+        <result property="f_name" column="f_name"/>
+
+        <association property="prodNoticeDTO" resultMap="ProdNoticeMap" />
+    </resultMap>
+
+
+    <select id="getProductDetail" parameterType="string" resultMap="ProductWithNoticeMap">
         SELECT
-            p.*,
-            pf.F_NAME,
-            pn.TAX_TYPE,
-            pn.RECEIPT_ISSUE,
-            pn.BUSINESS_TYPE,
-            pn.ORIGIN,
-            pn.PRODUCT_STATUS
+        p.prod_no, p.cate2_no, p.prod_name, p.prod_info, p.prod_company, p.mem_id,
+        p.prod_price, p.prod_sale, p.prod_deliv_price, p.prod_point, p.prod_stock,
+        p.prod_sold, p.prod_hit,
+
+        p.cntRating,
+        p.realPrice,
+        p.avgRating,
+
+        pf.F_NAME AS f_name,
+
+        pn.TAX_TYPE AS tax_type,
+        pn.RECEIPT_ISSUE AS receipt_issue,
+        pn.BUSINESS_TYPE AS business_type,
+        pn.ORIGIN AS origin,
+        pn.PRODUCT_STATUS AS product_status,
+        pn.NOT_NO AS not_no,
+        pn.PROD_NO AS pn_prod_no
+
         FROM
-            PRO_FILE pf
+        PRO_FILE pf
         JOIN
         (
-            SELECT
-                p.*,
-                COUNT(r.REV_NO) AS cntRating,  p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE  / 100)) AS realPrice,
-                NVL(ROUND(AVG(r.REV_RATING),1), 0) AS avgRating
-            FROM
-                PRODUCT p
-            LEFT JOIN
-                REVIEW r ON p.PROD_NO = r.PROD_NO
-            WHERE
-                p.PROD_NO = #{prod_no}
-            GROUP BY
-                p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
-                p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
-                p.PROD_SOLD, p.PROD_HIT
-        ) p ON p.PROD_NO = pf.PROD_NO
-        JOIN PROD_NOTICE pn ON p.PROD_NO = pn.PROD_NO
+        SELECT
+        p.*,
+        COUNT(r.REV_NO) AS cntRating,
+        p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE  / 100)) AS realPrice,
+        NVL(ROUND(AVG(r.REV_RATING),1), 0) AS avgRating
+        FROM
+        PRODUCT p
+        LEFT JOIN
+        REVIEW r ON p.PROD_NO = r.PROD_NO
         WHERE
-            pf.F_DIST = 3
+        p.PROD_NO = #{prod_no}
+        GROUP BY
+        p.PROD_NO, p.CATE2_NO, p.PROD_NAME, p.PROD_INFO, p.PROD_COMPANY, p.MEM_ID,
+        p.PROD_PRICE, p.PROD_SALE, p.PROD_DELIV_PRICE, p.PROD_POINT, p.PROD_STOCK,
+        p.PROD_SOLD, p.PROD_HIT
+        ) p ON p.PROD_NO = pf.PROD_NO
+        LEFT JOIN PROD_NOTICE pn ON p.PROD_NO = pn.PROD_NO
+        WHERE
+        pf.F_DIST = 3
     </select>
+
 
     <select id="selectOption3" resultType="kr.co.shoply.dto.ProdOptionDTO">
         SELECT *

@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 public class ProdNoticeDTO {
     private int not_no;
-    private String prod_no;
+    private String pn_prod_no;
     private String tax_type;
     private String receipt_issue;
     private String business_type;

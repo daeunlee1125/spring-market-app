@@ -28,7 +28,7 @@ public class ProductService {
     }
 
     public ProductDTO getProduct3(String prod_no){
-        return productMapper.select3(prod_no);
+        return productMapper.getProductDetail(prod_no);
     }
 
     public List<ProFileDTO> getFiles3(String prod_no){

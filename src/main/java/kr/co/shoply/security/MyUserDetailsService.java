@@ -33,6 +33,7 @@ public class MyUserDetailsService implements UserDetailsService {
                 // 인증 객체 생성
                 MyUserDetails userDetails = MyUserDetails.builder()
                         .member(member)
+                        .attributes(null)
                         .build();
 
                 // 반환되는 인증객체가 Security Context Holder에 Authentication으로 저장

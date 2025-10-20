@@ -21,7 +21,7 @@
 
         <!-- 검색 영역 -->
         <div class="main-content-top" style="border:none; margin-top:15px;">
-            <form class="search-bar" th:data-cate1="${cate1}" th:data-cate2="${cate2}">
+            <form class="search-bar" th:data-cate1="${cate1}" th:data-cate2="${cate2}" th:data-list-url="@{/admin/cs/qna/list}">
                 <select name="category1" id="category1">
                     <option value="">1차 선택</option>
                     <option value="회원" th:selected="${cate1 == '회원'}">회원</option>

@@ -37,34 +37,49 @@
                     </div>
                 </div>
 
-                <!-- ======================== -->
-                <!-- 쿠폰 발급 현황 테이블 -->
-                <!-- ======================== -->
+<!--                &lt;!&ndash; ======================== &ndash;&gt;-->
+<!--                &lt;!&ndash; 쿠폰 발급 현황 테이블 &ndash;&gt;-->
+<!--                &lt;!&ndash; ======================== &ndash;&gt;-->
                 <table class="table coupon-issue-table">
                     <thead>
                     <tr>
                         <th>발급번호</th>
                         <th>쿠폰코드</th>
+                        <th>쿠폰종류</th>
+                        <th>쿠폰명</th>
                         <th>사용자</th>
-                        <th>발급일</th>
-                        <th>사용일</th>
                         <th>상태</th>
+                        <th>사용일</th>
                         <th>관리</th>
-                    </tr>
                     </thead>
 
                     <tbody>
                     <tr th:each="coupon : ${pageResponse.dtoList}">
+                        <!-- 발급번호 -->
                         <td>
                             <a href="#" class="openModalBtn"
                                th:attr="data-target='couponDetailModal-' + ${coupon.cp_no}"
                                th:text="${coupon.cp_no}"></a>
                         </td>
-                        <td th:text="${coupon.cp_code}"></td>
-                        <td th:text="${coupon.mem_id}"></td>
-                        <td th:text="${coupon.cp_issued_date != null ? #dates.format(coupon.cp_issued_date, 'yyyy-MM-dd HH:mm:ss') : '-'}"></td>
-                        <td th:text="${coupon.cp_used_date != null ? #dates.format(coupon.cp_used_date, 'yyyy-MM-dd HH:mm:ss') : '-'}"></td>
 
+                        <!-- 쿠폰코드 -->
+                        <td th:text="${coupon.cp_code}"></td>
+
+                        <!-- 쿠폰종류 -->
+                        <td th:switch="${coupon.cp_type}">
+                            <span th:case="1">개별상품 할인</span>
+                            <span th:case="2">주문상품 할인</span>
+                            <span th:case="3">배송비 무료</span>
+                            <span th:case="*">기타</span>
+                        </td>
+
+                        <!-- 쿠폰명 -->
+                        <td th:text="${coupon.cp_name}"></td>
+
+                        <!-- 사용자 -->
+                        <td th:text="${coupon.mem_id}"></td>
+
+                        <!-- 상태 -->
                         <td th:switch="${coupon.cp_stat}">
                             <span th:case="0" style="color: #1E90FF;">사용 완료</span>
                             <span th:case="1" style="color: #2E8B57;">사용 가능</span>
@@ -73,9 +88,11 @@
                             <span th:case="*">-</span>
                         </td>
 
+                        <!-- 사용일 -->
+                        <td th:text="${coupon.cp_used_date != null ? #dates.format(coupon.cp_used_date, 'yyyy-MM-dd HH:mm:ss') : '-'}"></td>
 
+                        <!-- 관리 -->
                         <td>
-                            <!-- 사용 가능(1) → 중단 가능 -->
                             <button th:if="${coupon.cp_stat == 1}"
                                     class="openModalBtn stop-btn"
                                     th:data-no="${coupon.cp_no}"
@@ -83,7 +100,6 @@
                                     th:text="'중단'">
                             </button>
 
-                            <!-- 발급 중단(2) → 재개 가능 -->
                             <button th:if="${coupon.cp_stat == 2}"
                                     class="openModalBtn stop-btn"
                                     th:data-no="${coupon.cp_no}"
@@ -91,13 +107,10 @@
                                     th:text="'재개'">
                             </button>
 
-
-                            <!-- 사용 완료(0) → 버튼 비활성화 -->
                             <button th:if="${coupon.cp_stat == 0}"
                                     class="stop-btn"
                                     disabled>완료</button>
 
-                            <!-- 발급 종료(3) → 완전히 막음 -->
                             <button th:if="${coupon.cp_stat == 3}"
                                     class="stop-btn"
                                     disabled>종료</button>
@@ -189,8 +202,9 @@
                     <tr>
                         <th>사용기간</th>
                         <td colspan="3"
-                            th:text="|${#dates.format(coupon.cp_issued_date, 'yyyy-MM-dd')} ~ ${#dates.format(coupon.cp_exp_date, 'yyyy-MM-dd')}|">
+                            th:text="${coupon.cp_issued_date != null ? #dates.format(coupon.cp_issued_date, 'yyyy-MM-dd') + ' ~ ' + #dates.format(coupon.cp_exp_date, 'yyyy-MM-dd') : '발급일 정보 없음'}">
                         </td>
+
                     </tr>
                     <tr>
                         <th>유의사항</th>

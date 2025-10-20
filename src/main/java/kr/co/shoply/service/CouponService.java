@@ -110,6 +110,28 @@ public class CouponService {
 
 
 
+    @Transactional
+    public void issueSignupCoupon(String memId) {
+        String baseCode = "30541692716"; // 회원가입 축하 쿠폰 코드
+        String lastNo = couponMapper.selectLastUserCouponNo(baseCode);
+
+        long newNo = (lastNo != null) ? Long.parseLong(lastNo) + 1 : 30541600001L;
+
+        UserCouponDTO dto = new UserCouponDTO();
+        dto.setCp_no(String.valueOf(newNo));
+        dto.setCp_code(baseCode);
+        dto.setMem_id(memId);
+        dto.setCp_stat(1); // 1 = 발급중(미사용)
+
+        couponMapper.insertUserSignupCoupon(dto);
+    }
+
+
+
+    @Transactional
+    public void expireUserCoupons() {
+        couponMapper.expireUserCoupons();
+    }
 
 
 

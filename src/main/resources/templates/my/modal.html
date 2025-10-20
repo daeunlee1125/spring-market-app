@@ -1,5 +1,4 @@
-<!-- modal.html -->
-<!-- 주문 상세 모달 -->
+<!-- modal.html --><!-- modal.html (통합 버전) -->
 
 <!-- 주문 상세 모달 -->
 <div id="orderDetailPopup" class="modal">
@@ -8,24 +7,20 @@
             <h4>주문상세</h4>
             <span class="close-btn" onclick="closeModal('orderDetailPopup')">&times;</span>
         </div>
-
         <div class="modal-body" style="padding: 20px;">
             <!-- 주문정보 섹션 -->
             <div class="section-title" style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
                 주문정보
             </div>
-
             <div style="display: flex; gap: 20px; margin-bottom: 15px;">
                 <div style="flex-shrink: 0;">
-                    <img id="orderDetailImage" alt="상품 이미지"
-                         style="width: 100px; height: 100px; background: #eee; border-radius: 4px; object-fit: cover;">
+                    <img id="orderDetailImage" alt="상품 이미지" style="width: 100px; height: 100px; background: #eee; border-radius: 4px; object-fit: cover;">
                 </div>
                 <div style="flex: 1;">
                     <p style="margin-bottom: 8px; font-size: 13px; color: #666;">주문번호: <span id="orderNo" style="color: #333; font-weight: 500;">-</span></p>
                     <p style="margin-bottom: 8px; font-size: 13px; color: #666;">(주) <a href="#" onclick="openModal('sellerInfoPopup'); closeModal('orderDetailPopup');" style="color: #0066cc; text-decoration: none;">샵플리닷컴</a></p>
                     <p id="orderProdName" style="font-size: 14px; font-weight: 600; color: #333; margin: 8px 0;">-</p>
                     <p style="margin-bottom: 8px; font-size: 13px; color: #666;">수량: <span id="orderQty" style="color: #333; font-weight: 500;">-</span>개</p>
-
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
                         <div style="padding: 12px; background: #f9f9f9; border-radius: 4px; text-align: center;">
                             <div style="font-size: 12px; color: #999; margin-bottom: 5px;">상품가격</div>
@@ -38,7 +33,6 @@
                     </div>
                 </div>
             </div>
-
             <table style="width: 100%; font-size: 13px; margin-top: 15px;">
                 <tr style="border-bottom: 1px solid #f0f0f0;">
                     <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">결제금액</td>
@@ -53,12 +47,10 @@
                     <td style="color: #666; padding-left: 15px;" id="orderDate">-</td>
                 </tr>
             </table>
-
             <!-- 배송정보 섹션 -->
             <div class="section-title" style="font-size: 14px; font-weight: 700; color: #333; margin-top: 20px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
-                </span>배송정보
+                배송정보
             </div>
-
             <table style="width: 100%; font-size: 13px;">
                 <tr style="border-bottom: 1px solid #f0f0f0;">
                     <td style="padding: 10px 0; width: 120px; font-weight: 500; color: #333; background: #fafafa; padding-left: 10px;">이름</td>
@@ -77,13 +69,9 @@
                     <td style="color: #666; padding-left: 15px;" id="deliveryMemo">없음</td>
                 </tr>
             </table>
-
-            <!-- 버튼 -->
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd;">
-                <button onclick="openModal('qnaPopup'); closeModal('orderDetailPopup');"
-                        style="padding: 8px 16px; background: #946ccf; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;">문의하기</button>
-                <button onclick="closeModal('orderDetailPopup')"
-                        style="padding: 8px 16px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;">닫기</button>
+                <button onclick="openModal('qnaPopup'); closeModal('orderDetailPopup');" style="padding: 8px 16px; background: #946ccf; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;">문의하기</button>
+                <button onclick="closeModal('orderDetailPopup')" style="padding: 8px 16px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;">닫기</button>
             </div>
         </div>
     </div>
@@ -339,13 +327,136 @@
 </div>
 
 <script>
+    // ===== 유틸리티 함수 =====
+    function formatPrice(price) {
+        if (!price) return '0원';
+        return parseInt(price).toLocaleString('ko-KR') + '원';
+    }
+
+    function getStatusText(stat) {
+        const statusMap = {
+            0: '결제완료', 1: '배송준비', 2: '배송중',
+            3: '배송완료', 4: '구매확정', 5: '교환신청', 6: '반품신청'
+        };
+        return statusMap[stat] || '상태없음';
+    }
+
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if(modal) modal.style.display = 'block';
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if(modal) modal.style.display = 'none';
+    }
+
+    // ===== 공통 이벤트 등록 =====
     document.addEventListener('DOMContentLoaded', function() {
-        // 반품 신청 폼
+
+        // 1. 주문번호 클릭 시 상세정보 조회
+        document.querySelectorAll('.order-number-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const ordNo = this.getAttribute('data-ord-no');
+                const itemNo = this.getAttribute('data-item-no');
+
+                fetch(`/shoply/my/order/detail?ord_no=${ordNo}&item_no=${itemNo}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data) {
+                            document.getElementById('orderNo').textContent = data.ordNo || '-';
+                            document.getElementById('orderProdName').textContent = data.prodName || '상품명 없음';
+                            document.getElementById('orderQty').textContent = data.itemCnt || '-';
+                            document.getElementById('orderProdPrice').textContent = (data.prodPrice ? formatPrice(data.prodPrice) : '-');
+                            document.getElementById('orderDiscount').textContent = (data.discount ? '-' + formatPrice(data.discount) : '0원');
+                            document.getElementById('orderTotalPrice').textContent = (data.totalPrice ? formatPrice(data.totalPrice) : '-');
+                            document.getElementById('orderStatus').textContent = getStatusText(data.itemStat);
+                            document.getElementById('orderDate').textContent = data.ordDate || '-';
+
+                            if (data.prodImage) {
+                                document.getElementById('orderDetailImage').src = data.prodImage;
+                            }
+
+                            document.getElementById('deliveryName').textContent = data.memName || '-';
+                            document.getElementById('deliveryPhone').textContent = data.memHp || '-';
+                            const addr = (data.memAddr1 ? '[' + data.memZip + '] ' + data.memAddr1 : '-');
+                            document.getElementById('deliveryAddr').textContent = addr + (data.memAddr2 ? ' ' + data.memAddr2 : '');
+                            document.getElementById('deliveryMemo').textContent = data.deliveryMemo || '없음';
+
+                            openModal('orderDetailPopup');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('주문상세 조회 실패:', err);
+                        alert('주문정보를 불러올 수 없습니다.');
+                    });
+            });
+        });
+
+        // 2. 구매확정 버튼
+        document.querySelectorAll('.btn-confirm').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemNo = this.getAttribute('data-item-no');
+                const modal = document.getElementById('confirmModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('confirmModal');
+                }
+            });
+        });
+
+        // 3. 리뷰 작성 버튼
+        document.querySelectorAll('.btn-review').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const prodNo = this.getAttribute('data-prod-no');
+                const prodName = this.getAttribute('data-prod-name');
+                const prodNameDisplay = document.querySelector('.product-name-display');
+                if(prodNameDisplay) {
+                    prodNameDisplay.textContent = prodName;
+                }
+                document.getElementById('review_prod_no').value = prodNo;
+                openModal('reviewModal');
+            });
+        });
+
+        // 4. 반품 버튼
+        document.querySelectorAll('.btn-return').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemNo = this.getAttribute('data-item-no');
+                const modal = document.getElementById('returnModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('returnModal');
+                }
+            });
+        });
+
+        // 5. 교환 버튼
+        document.querySelectorAll('.btn-exchange').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemNo = this.getAttribute('data-item-no');
+                const modal = document.getElementById('exchangeModal');
+                if(modal) {
+                    modal.dataset.itemNo = itemNo;
+                    openModal('exchangeModal');
+                }
+            });
+        });
+
+        // 6. 별점 표시 (home.html)
+        document.querySelectorAll('.star-rating').forEach(el => {
+            const rating = parseInt(el.textContent.trim());
+            if (!isNaN(rating)) {
+                el.textContent = '★'.repeat(rating);
+            }
+        });
+
+        // 7. 반품 신청 폼
         const returnForm = document.getElementById('returnForm');
         if (returnForm) {
             returnForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-
                 const modal = document.getElementById('returnModal');
                 const itemNo = modal.dataset.itemNo;
                 const reason = returnForm.querySelector('select[name="reason"]').value;
@@ -355,7 +466,6 @@
                     alert('반품 사유를 선택해주세요.');
                     return;
                 }
-
                 if (!detail) {
                     alert('상세 내용을 입력해주세요.');
                     return;
@@ -384,12 +494,11 @@
             });
         }
 
-        // 교환 신청 폼
+        // 8. 교환 신청 폼
         const exchangeForm = document.getElementById('exchangeForm');
         if (exchangeForm) {
             exchangeForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-
                 const modal = document.getElementById('exchangeModal');
                 const itemNo = modal.dataset.itemNo;
                 const reason = exchangeForm.querySelector('select[name="reason"]').value;
@@ -399,7 +508,6 @@
                     alert('교환 사유를 선택해주세요.');
                     return;
                 }
-
                 if (!detail) {
                     alert('상세 내용을 입력해주세요.');
                     return;
@@ -419,6 +527,57 @@
                             location.reload();
                         } else {
                             alert('교환 신청 실패: ' + data);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('오류가 발생했습니다.');
+                    });
+            });
+        }
+
+        // 9. 비밀번호 변경 폼
+        const passwordForm = document.getElementById('passwordForm');
+        if (passwordForm) {
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const currentPassword = document.getElementById('currentPassword').value.trim();
+                const newPassword = document.getElementById('newPassword').value.trim();
+                const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+                if (!currentPassword) {
+                    alert('현재 비밀번호를 입력해주세요.');
+                    return;
+                }
+                if (!newPassword) {
+                    alert('새 비밀번호를 입력해주세요.');
+                    return;
+                }
+                if (newPassword.length < 6) {
+                    alert('비밀번호는 최소 6자 이상이어야 합니다.');
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    alert('비밀번호가 일치하지 않습니다.');
+                    return;
+                }
+
+                fetch('/shoply/my/info/changePassword', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        currentPassword: currentPassword,
+                        newPassword: newPassword
+                    })
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            alert('비밀번호가 변경되었습니다.');
+                            closeModal('passwordModal');
+                            passwordForm.reset();
+                        } else {
+                            alert('비밀번호 변경 실패: ' + data);
                         }
                     })
                     .catch(err => {

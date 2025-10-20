@@ -15,39 +15,33 @@ public class IndexService {
     private final IndexMapper indexMapper;
 
     public List<ProductDTO> getNewProducts() {
-        List<ProductDTO> products = indexMapper.selectNewProducts();
         // log.info("상품 이미지 경로들: {}", products.stream().map(ProductDTO::getF_name).toList());
-        return products;
+        return indexMapper.selectNewProducts();
     }
 
     public List<ProductDTO> getHitProducts() {
-        List<ProductDTO> hitProducts = indexMapper.selectHitProducts();
-        return hitProducts;
+        return indexMapper.selectHitProducts();
     }
 
 
     public List<ProductDTO> getRecommendedProducts() {
-        List<ProductDTO> recommended = indexMapper.selectRecommendedProducts();
-        return recommended;
+        return indexMapper.selectRecommendedProducts();
     }
 
     public List<ProductDTO> getBestProducts() {
-        List<ProductDTO> products = indexMapper.selectBestProducts();
-        return products;
+        return indexMapper.selectBestProducts();
     }
 
 
     //  할인상품 (할인율 높은 순)
     public List<ProductDTO> getDiscountProducts() {
-        List<ProductDTO> products = indexMapper.selectDiscountProducts();
-        return products;
+        return indexMapper.selectDiscountProducts();
     }
 
 
     // 베스트상품 (왼쪽 사이드)
     public List<ProductDTO> getSidebarBestProducts() {
-        List<ProductDTO> products = indexMapper.selectSidebarBestProducts();
-        return products;
+        return indexMapper.selectSidebarBestProducts();
     }
 
 

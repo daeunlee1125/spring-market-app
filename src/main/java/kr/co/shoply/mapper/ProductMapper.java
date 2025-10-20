@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProductMapper {
     // 사용
     public List<ProductDTO> selectAll3(@Param("cate2_no") int cate2_no, @Param("sort") String sort); // 카테고리별 select
-    public ProductDTO select3(String prod_no); // pk 이용해서 단건 조회
+    public ProductDTO getProductDetail(String prod_no); // pk 이용해서 단건 조회
     public List<ProdOptionDTO> selectOption3(String prod_no);
     public List<ProFileDTO> selectFiles3(String prod_no);
     List<ProductDTO> selectSearchProduct3(String keyword, String sort);

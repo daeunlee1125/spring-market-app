@@ -56,13 +56,7 @@
     <!-- 추천상품 (평점 높은 순) -->
     <select id="selectRecommendedProducts" resultType="kr.co.shoply.dto.ProductDTO">
         SELECT
-        p.prod_no,
-        p.cate2_no,
-        p.prod_name,
-        p.prod_price,
-        p.prod_sale,
-        p.prod_deliv_price,
-        f.f_name
+        *
         FROM product p
         LEFT JOIN (
         SELECT prod_no, AVG(rev_rating) AS avg_rating

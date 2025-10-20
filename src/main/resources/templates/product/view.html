@@ -133,7 +133,13 @@
                             <p style="text-align: center; font-size: 18px; color: #888; margin-top: 10px; padding: 0 0 40px;" th:text="'상품 번호 : ' + ${productDTO.getProd_no()}">
                                 상품 번호: 1000722586634
                             </p>
-                            <table class="product-info-table">
+                            <div class="product-notice-header">
+                                <h3 class="title">상품정보 제공고시</h3>
+                                <p class="description">
+                                    [ 전자상거래에 관한 상품정보 제공에 관한 고시 ] 항목에 의거 등록된 정보입니다 .
+                                </p>
+                            </div>
+                            <table class="product-info-table" border="1">
                                 <tbody>
                                     <tr>
                                         <th>상품번호</th>
@@ -141,19 +147,19 @@
                                     </tr>
                                     <tr>
                                         <th>상품상태</th>
-                                        <td th:text="${productDTO.getProdNoticeDTO().getProduct_status()}">새상품</td>
+                                        <td th:text="${productDTO.prodNoticeDTO?.product_status ?: '정보 없음'}">새상품</td>
                                     </tr>
                                     <tr>
                                         <th>부가세면세여부</th>
-                                        <td th:text="${productDTO.getProdNoticeDTO().getTax_type()}">과세상품</td>
+                                        <td th:text="${productDTO.prodNoticeDTO?.tax_type ?: '정보 없음'}">과세상품</td>
                                     </tr>
                                     <tr>
                                         <th>영수증발행</th>
-                                        <td th:text="${productDTO.getProdNoticeDTO().getReceipt_issue()}">발행가능신용카드전표 , 온라인현금영수 증</td>
+                                        <td th:text="${productDTO.prodNoticeDTO?.receipt_issue ?: '정보 없음'}">발행가능신용카드전표 , 온라인현금영수 증</td>
                                     </tr>
                                     <tr>
                                         <th>사업자구분</th>
-                                        <td th:text="${productDTO.getProdNoticeDTO().getBusiness_type()}">통신판매업자</td>
+                                        <td th:text="${productDTO.prodNoticeDTO?.business_type ?: '정보 없음'}">통신판매업자</td>
                                     </tr>
                                     <tr>
                                         <th>브랜드</th>
@@ -161,7 +167,7 @@
                                     </tr>
                                     <tr>
                                         <th>원산지</th>
-                                        <td th:text="${productDTO.getProdNoticeDTO().getOrigin()}">국내생산</td>
+                                        <td th:text="${productDTO.prodNoticeDTO?.origin ?: '정보 없음'}">국내생산</td>
                                     </tr>
                                 </tbody>
                             </table>

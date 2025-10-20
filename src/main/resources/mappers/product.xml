@@ -85,7 +85,7 @@
         ) p ON p.PROD_NO = pf.PROD_NO
         LEFT JOIN PROD_NOTICE pn ON p.PROD_NO = pn.PROD_NO
         WHERE
-        pf.F_DIST = 3
+        pf.F_DIST = 1
     </select>
 
 

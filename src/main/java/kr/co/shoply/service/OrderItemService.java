@@ -5,6 +5,7 @@ import kr.co.shoply.mapper.OrderItemMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class OrderItemService {

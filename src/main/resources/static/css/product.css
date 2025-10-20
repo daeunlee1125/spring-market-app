@@ -618,10 +618,9 @@ a {
 
 /* 상품 썸네일 이미지 */
 .product-item .item-thumb {
-    width: 200px;
+    width: 100%;
     height: 250px; /* 이미지 영역 높이 고정 */
     overflow: hidden;
-    margin-left: 40px;
 }
 .product-item .item-thumb .list-item-img{
     width: 100%;

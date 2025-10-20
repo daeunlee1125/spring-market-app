@@ -2,6 +2,8 @@ package kr.co.shoply.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -17,4 +19,6 @@ public class Cate1DTO {
 
     // 추가 필드
     private int cate1_sell;
+    private List<Cate2DTO> subCategories;
+
 }

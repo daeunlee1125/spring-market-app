@@ -17,5 +17,10 @@
         GROUP BY cate1_name
     </select>
 
+    <select id="selectCate1_3" resultType="kr.co.shoply.dto.Cate1DTO">
+        SELECT *
+        FROM CATE1 c
+    </select>
+
 
 </mapper>

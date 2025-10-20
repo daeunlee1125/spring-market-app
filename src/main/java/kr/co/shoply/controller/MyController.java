@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.MyService;
+import kr.co.shoply.service.ProductService;
 import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class MyController {
     private final String uploadDir = "C:/shoply/uploads/";
     private final SiteInfoService siteInfoService;
     private final PasswordEncoder passwordEncoder;
+    private final ProductService productService;
 
     // ===================== 공통 메소드 =====================
     private void addMyPageSummary(Model model, String memberId) {
@@ -85,6 +87,18 @@ public class MyController {
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
 
         addMyPageSummary(model, user.getMember().getMem_id());
         addBannerToModel(model);
@@ -157,6 +171,18 @@ public class MyController {
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
+
         return "my/review";
     }
 
@@ -196,6 +222,18 @@ public class MyController {
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
 
         return "my/info";
     }
@@ -315,6 +353,18 @@ public class MyController {
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
+
         return "my/order";
     }
 
@@ -415,6 +465,18 @@ public class MyController {
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
+
         return "my/qna";
     }
 
@@ -435,6 +497,18 @@ public class MyController {
         addBannerToModel(model);
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
 
         return "my/coupon";
     }
@@ -467,6 +541,18 @@ public class MyController {
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
+
         return "my/point";
     }
 
@@ -482,6 +568,18 @@ public class MyController {
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
 
         return "my/product/view";
     }

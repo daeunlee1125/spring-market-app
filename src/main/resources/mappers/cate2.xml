@@ -26,6 +26,12 @@
         WHERE CATE2_NO = #{cate2_no}
     </select>
 
+    <select id="selectAll3" resultType="kr.co.shoply.dto.Cate2DTO">
+        SELECT *
+        FROM CATE2
+        WHERE CATE1_NO = #{cate1_no}
+    </select>
+
     <update id="update">
         update TB_COMMENT set content=#{content} where cno=#{cno}
     </update>

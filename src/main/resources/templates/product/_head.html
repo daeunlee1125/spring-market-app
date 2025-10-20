@@ -140,46 +140,23 @@
         <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
         <div id="categoryBox" class="category-box">
             <div class="main-menu">
-                <ul>
-                    <li data-target="menu1">패션의류</li>
-                    <li data-target="menu2">패션잡화</li>
-                    <li data-target="menu3">생활용품</li>
-                    <li data-target="menu4">반려동물</li>
-                    <li data-target="menu5">디지털/가전</li>
-                </ul>
+                <li th:each="cate1, iterStat : ${cate1DTOList}"
+                    th:data-target="|menu${iterStat.count}|"
+                    th:class="${iterStat.index == 0} ? 'active' : ''"> <span th:text="${cate1.cate1_name}">패션의류</span>
+                </li>
             </div>
 
             <div class="sub-menu">
-                <ul id="menu1" class="submenu-content">
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='1')}">여성의류</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='2')}">남성의류</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='3')}">이너웨어/잠옷</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='4')}">남여공용의류</a></li>
-                </ul>
-                <ul id="menu2" class="submenu-content" style="display:none;">
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='5')}">모자/장갑</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='6')}">신발</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='7')}">가방/지갑</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='8')}">목걸이/반지/팔찌</a></li>
-                </ul>
-                <ul id="menu3" class="submenu-content" style="display:none;">
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='9')}">청소용품</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='10')}">주방용품</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='11')}">욕실용품</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='12')}">수납/정리</a></li>
+                <ul th:each="cate1, iterStat : ${cate1DTOList}"
+                    th:id="|menu${iterStat.count}|"
+                    class="submenu-content"
+                    th:style="${iterStat.index > 0} ? 'display:none;'">
 
-                </ul>
-                <ul id="menu4" class="submenu-content" style="display:none;">
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='13')}">강아지 사료/간식</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='14')}">고양이 사료/간식</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='15')}">산책용품</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='16')}">관상어 용품</a></li>
-                </ul>
-                <ul id="menu5" class="submenu-content" style="display:none;">
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='17')}">TV</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='18')}">냉장고</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='19')}">세탁기/건조기</a></li>
-                    <li><a th:href="@{/product/list/{cate2No}(cate2No='20')}">데스크탑/노트북</a></li>
+                    <li th:each="cate2 : ${cate1.subCategories}">
+                        <a th:href="@{/product/list/{cate2No}(cate2No=${cate2.cate2_no})}"
+                           th:text="${cate2.cate2_name}">
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

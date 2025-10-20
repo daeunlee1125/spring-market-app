@@ -1,5 +1,6 @@
 package kr.co.shoply.service;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import kr.co.shoply.mapper.OrderItemMapper;
 import lombok.RequiredArgsConstructor;

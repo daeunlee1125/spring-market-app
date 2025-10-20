@@ -41,7 +41,7 @@
                         <label for="terms1" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content" th:text="${type == 'seller'} ? ${termsDTO.t_tax} : ${termsDTO.t_terms}"></div>
+                <div class="terms-content" th:utext="${type == 'seller'} ? ${termsDTO.t_tax} : ${termsDTO.t_terms}"></div>
             </div>
 
             <!-- 전자금융 이용약관 (필수) -->
@@ -53,7 +53,7 @@
                         <label for="terms2" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content" th:text="${termsDTO.t_finance}"></div>
+                <div class="terms-content" th:utext="${termsDTO.t_finance}"></div>
             </div>
 
             <!-- 개인정보 수집동의 (필수) -->
@@ -65,7 +65,7 @@
                         <label for="terms3" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content" th:text="${termsDTO.t_privacy}"></div>
+                <div class="terms-content" th:utext="${termsDTO.t_privacy}"></div>
             </div>
 
             <!-- 위치정보 이용약관 (선택) -->
@@ -77,7 +77,7 @@
                         <label for="terms4" class="agree-text">동의하기</label>
                     </div>
                 </div>
-                <div class="terms-content" th:text="${termsDTO.t_location}"></div>
+                <div class="terms-content" th:utext="${termsDTO.t_location}"></div>
             </div>
 
             <!-- 동의하기 버튼 -->

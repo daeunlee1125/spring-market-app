@@ -39,6 +39,9 @@ public class ConfigController {
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("title", siteInfoDTO);
+
         return "admin/config/banner";
     }
 
@@ -141,6 +144,9 @@ public class ConfigController {
         model.addAttribute("cate1List", cate1List);
         model.addAttribute("cate2List", cate2List);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("title", siteInfoDTO);
+
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
@@ -171,6 +177,9 @@ public class ConfigController {
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("title", siteInfoDTO);
+
         return "admin/config/policy";
     }
 
@@ -189,6 +198,9 @@ public class ConfigController {
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("title", siteInfoDTO);
 
         return "admin/config/version";
     }

@@ -97,6 +97,9 @@ public class AdminProductController {
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "admin/product/register";
     }
 
@@ -112,8 +115,11 @@ public class AdminProductController {
 
     @GetMapping("/{cate1}/cate2")
     @ResponseBody
-    public List<Cate2DTO> getCate2(@PathVariable String cate1){
+    public List<Cate2DTO> getCate2(@PathVariable String cate1, Model model){
         log.info("cate1={}",cate1);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return adminProductService.getCate2ByCate1(cate1);
     }

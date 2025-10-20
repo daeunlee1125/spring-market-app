@@ -51,6 +51,9 @@ public class AdminOrderController {
         PageResponseDTO pageResponseDTO = orderService.getDelivs2(pageRequestDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         List<OrderDTO> delvDtls = orderService.delivDetails2();
         model.addAttribute("delvDtls", delvDtls);
 

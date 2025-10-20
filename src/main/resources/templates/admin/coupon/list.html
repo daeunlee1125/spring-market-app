@@ -218,9 +218,11 @@
                     <label>쿠폰종류</label>
                     <select name="cp_type" required>
                         <option value="">종류선택</option>
-                        <option value="1">개별상품 할인</option>
-                        <option value="2">주문상품 할인</option>
-                        <option value="3">배송비 무료</option>
+                        <!-- 일반 판매자(MEM_LEVEL == 2): 개별상품 할인만 가능 -->
+                        <option th:if="${memLevel == 2}" value="1">개별상품 할인</option>
+                        <!-- 최고 관리자(MEM_LEVEL == 7): 주문상품 할인, 배송비 무료만 가능 -->
+                        <option th:if="${memLevel == 7}" value="2">주문상품 할인</option>
+                        <option th:if="${memLevel == 7}" value="3">배송비 무료</option>
                     </select>
                 </div>
 
@@ -234,25 +236,27 @@
                 <div class="form-group">
                     <label>혜택</label>
                     <div>
-                        <!-- 금액 할인 -->
-                        <label><input type="radio" name="cp_value" value="1000"> 1,000원 할인</label>
-                        <label><input type="radio" name="cp_value" value="2000"> 2,000원 할인</label>
-                        <label><input type="radio" name="cp_value" value="3000"> 3,000원 할인</label>
-                        <label><input type="radio" name="cp_value" value="4000"> 4,000원 할인</label>
-                        <label><input type="radio" name="cp_value" value="5000"> 5,000원 할인</label><br>
+                        <!--  일반판매자: 금액 할인만 -->
+                        <div th:if="${memLevel == 2}">
+                            <label><input type="radio" name="cp_value" value="1000"> 1,000원 할인</label>
+                            <label><input type="radio" name="cp_value" value="2000"> 2,000원 할인</label>
+                            <label><input type="radio" name="cp_value" value="3000"> 3,000원 할인</label>
+                            <label><input type="radio" name="cp_value" value="4000"> 4,000원 할인</label>
+                            <label><input type="radio" name="cp_value" value="5000"> 5,000원 할인</label>
+                        </div>
 
-                        <!-- 퍼센트 할인 -->
-                        <label><input type="radio" name="cp_value" value="10"> 10% 할인</label>
-                        <label><input type="radio" name="cp_value" value="20"> 20% 할인</label>
-                        <label><input type="radio" name="cp_value" value="30"> 30% 할인</label>
-                        <label><input type="radio" name="cp_value" value="40"> 40% 할인</label>
-                        <label><input type="radio" name="cp_value" value="50"> 50% 할인</label><br>
-
-                        <!-- 배송비 무료 -->
-                        <label><input type="radio" name="cp_value" value="0"> 배송비 무료</label>
+                        <!-- 최고관리자 (주문상품 할인: %형 / 배송비 무료) -->
+                        <div th:if="${memLevel == 7}">
+                            <label><input type="radio" name="cp_value" value="10"> 10% 할인</label>
+                            <label><input type="radio" name="cp_value" value="20"> 20% 할인</label>
+                            <label><input type="radio" name="cp_value" value="30"> 30% 할인</label>
+                            <label><input type="radio" name="cp_value" value="40"> 40% 할인</label>
+                            <label><input type="radio" name="cp_value" value="50"> 50% 할인</label><br>
+                            <label><input type="radio" name="cp_value" value="0">  배송비 무료</label>
+                        </div>
                     </div>
-                </div>
 
+                </div>
                 <!-- 사용기간 -->
                 <div class="form-group">
                     <label>사용기간</label>

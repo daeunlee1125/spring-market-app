@@ -103,6 +103,10 @@ public class CouponService {
     }
 
 
+    // MemberLevel 찾기
+    public int findMemberLevelById(String memId) {
+        return couponMapper.findMemberLevelById(memId);
+    }
 
 
 

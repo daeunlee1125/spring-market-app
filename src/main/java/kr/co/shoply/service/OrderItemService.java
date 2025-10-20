@@ -19,4 +19,9 @@ public class OrderItemService {
     public void updateOrderStatus() {
         orderItemMapper.updateOrderItem();
     }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("[Scheduler] OrderStatusScheduler Bean Loaded!");
+    }
 }

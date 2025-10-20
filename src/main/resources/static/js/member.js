@@ -212,6 +212,65 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+
+        // 휴대폰 인증 관련 셀렉터
+        const btnSendSms = document.querySelector('#btnSendCode');
+        const btnVerifySms = document.querySelector('#btnVerifyCode'); // ✅ 수정됨 (ID로 변경)
+        const inputPhone = document.querySelector('input[name="mem_hp"]');
+        const inputSmsCode = document.querySelector('#verifyCodeInput'); // ✅ 수정됨 (ID로 변경)
+
+        if (btnSendSms && btnVerifySms) {
+            btnSendSms.addEventListener('click', async function (e) {
+                e.preventDefault();
+                const phone = inputPhone.value.trim();
+
+                if (!validatePhone(phone)) return;
+
+                btnSendSms.disabled = true;
+                btnSendSms.textContent = '전송중...';
+
+                try {
+                    const response = await fetch(`/shoply/sms/send?phoneNumber=${encodeURIComponent(phone)}`, { method: 'POST' });
+                    if (!response.ok) throw new Error('SMS 전송 실패');
+
+                    alert('인증번호가 전송되었습니다.');
+                    btnSendSms.textContent = '재전송';
+                } catch (err) {
+                    alert('SMS 전송 중 오류 발생');
+                } finally {
+                    btnSendSms.disabled = false;
+                }
+            });
+
+            btnVerifySms.addEventListener('click', async function (e) {
+                e.preventDefault();
+                const phone = inputPhone.value.trim();
+                const code = inputSmsCode.value.trim();
+
+                if (!phone || !code) {
+                    alert('전화번호와 인증번호를 입력해주세요.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/sms/verify?phoneNumber=${encodeURIComponent(phone)}&code=${encodeURIComponent(code)}`, { method: 'POST' });
+                    const isValid = await response.json();
+
+                    if (isValid) {
+                        alert('휴대폰 인증 완료!');
+                        inputPhone.readOnly = true;
+                        inputSmsCode.readOnly = true;
+                        btnVerifySms.disabled = true;
+                        btnVerifySms.textContent = '인증완료';
+                    } else {
+                        alert('인증번호가 일치하지 않습니다.');
+                    }
+                } catch (err) {
+                    alert('인증 확인 중 오류 발생');
+                }
+            });
+        }
+
     }
 
     // ====== 판매자 회원가입 전용 ======

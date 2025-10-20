@@ -48,14 +48,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Optional<MemberSocial> optionalSocial = memberSocialRepository
                 .findBySocialTypeAndSocialId(registrationId, socialId);
 
-        String memId;
+        Member member;
 
         if (optionalSocial.isEmpty()) {
             // 5. 처음 로그인 - 회원가입 처리
-            memId = registrationId + "_" + socialId.substring(0, Math.min(10, socialId.length()));
+            String memId = registrationId + "_" + socialId.substring(0, Math.min(10, socialId.length()));
 
             // MEMBER 테이블에 저장
-            Member member = Member.builder()
+            member = Member.builder()
                     .mem_id(memId)
                     .mem_email(email)
                     .mem_name(name)
@@ -78,17 +78,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         } else {
             // 6. 이미 가입된 회원
-            memId = optionalSocial.get().getMemId();
+            String memId = optionalSocial.get().getMemId();
+            member = memberRepository.findById(memId)
+                    .orElseThrow(() -> new OAuth2AuthenticationException("회원 정보를 찾을 수 없습니다"));
+
             log.info("기존 소셜 회원 로그인 - memId: {}", memId);
         }
 
-        // 7. 기존 UserDetails 로드
-        UserDetails userDetails = myUserDetailsService.loadUserByUsername(memId);
+        // 7. MyUserDetails 직접 생성 (MyUserDetailsService 호출 안 함!)
 
-        // 8. MyUserDetails로 캐스팅하고 attributes 설정
-        MyUserDetails myUserDetails = (MyUserDetails) userDetails;
-        myUserDetails.setAttributes(attributes);  // OAuth2 정보 추가
-
-        return myUserDetails;
+        return MyUserDetails.builder()
+                .member(member)
+                .attributes(attributes)
+                .build();
     }
 }

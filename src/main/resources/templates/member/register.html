@@ -95,8 +95,10 @@
                 <div class="form-row">
                     <div class="form-label">휴대폰</div>
                     <div class="form-input">
-                        <input type="text" name="mem_hp" placeholder="휴대폰입력">
-                        <!--<button type="button" class="btn-check">중복 확인</button>-->
+                        <input type="text" id="mem_hp" name="mem_hp" placeholder="휴대폰입력">
+                        <button type="button" id="btnSendCode" class="btn-verify">인증번호 전송</button>
+                        <input type="text" id="verifyCodeInput" placeholder="인증번호 입력" style="width:100px; display:none;">
+                        <button type="button" id="btnVerifyCode" style="display:none;">확인</button>
                     </div>
                 </div>
 

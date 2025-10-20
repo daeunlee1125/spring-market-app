@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kmarket/admin - Final Version</title>
+    <title>1조-[[${title.s_title}]], [[${title.s_subtitle}]]</title>
     <!-- Font Awesome 아이콘 라이브러리 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- Daum 우편번호 서비스를 위한 스크립트 -->
@@ -78,7 +78,7 @@
 <header>
     <div class="middle">
         <div id="logo">
-            <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="logo"></a>
+            <a th:href="@{/}"><img th:src="@{${title.s_logo1}}" alt="logo"></a>
         </div>
 
         <div class="header-nav">

@@ -893,8 +893,7 @@ function loginWithKakao() {
 }
 
 function loginWithGoogle() {
-    console.log('구글 로그인 API 호출');
-    alert('구글 로그인 API를 연동해주세요.');
+    window.location.href = '/shoply/oauth2/authorization/google'
 }
 
 /**

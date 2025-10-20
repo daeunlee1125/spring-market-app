@@ -54,7 +54,7 @@
                                                  th:data-quantity="${cartDTO.getCart_item_cnt()}"
                                                  th:data-option="${cartDTO.getCart_option()}">
 
-                        <img th:src="@{${cartDTO.getFName()}}" alt="마스마룰즈">
+                        <img th:src="@{${cartDTO.getProductDTO().getF_name()}}" alt="">
                         <div class="order-item-info">
                             <p class="brand" th:text="${cartDTO.getProductDTO().getProd_company()}">마스마룰즈</p>
                             <p class="name" th:text="${cartDTO.getProductDTO().getProd_name()}">마스마룰즈 스트랩파우치 모음전 VER.3</p>

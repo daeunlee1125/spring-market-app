@@ -1,12 +1,7 @@
 package kr.co.shoply.controller;
 
-import kr.co.shoply.dto.CopyrightDTO;
-import kr.co.shoply.dto.ProductDTO;
-import kr.co.shoply.dto.SiteInfoDTO;
-import kr.co.shoply.service.BannerService;
-import kr.co.shoply.service.IndexService;
-import kr.co.shoply.service.SiteInfoService;
-import kr.co.shoply.service.VersionService;
+import kr.co.shoply.dto.*;
+import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,6 +19,7 @@ public class IndexController {
     private final BannerService bannerService;
     private final VersionService versionService;
     private final SiteInfoService siteInfoService;
+    private final ProductService productService;
 
     @GetMapping({"/","/index"})
     public String index(Model model) {
@@ -40,6 +36,18 @@ public class IndexController {
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+
+        for (Cate1DTO cate1 : cate1DTOList) {
+            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+
+            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
+            cate1.setSubCategories(subList);
+        }
+
+        model.addAttribute("cate1DTOList", cate1DTOList);
 
         return "index";
     }

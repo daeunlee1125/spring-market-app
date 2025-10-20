@@ -2,35 +2,32 @@
 <script th:src="@{/js/member_find.js}"></script>
 <div class="container">
     <div class="wrapper">
-      <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
-      <div id="categoryBox" class="category-box">
-        <div class="main-menu">
-          <ul>
-            <li data-target="menu1">패션/의류/뷰티</li>
-            <li data-target="menu2">패션잡화</li>
-            <li data-target="menu3">명품</li>
-            <li data-target="menu4">뷰티</li>
-          </ul>
+        <!-- 전체 카테고리 누르면 튀어나오는 메뉴창 -->
+        <div id="categoryBox" class="category-box">
+            <ul class="main-menu"
+                style="list-style-type: none; padding-left: 0; margin: 0;">
+
+                <li th:each="cate1, iterStat : ${cate1DTOList}"
+                    th:data-target="|menu${iterStat.count}|"
+                    th:class="${iterStat.index == 0} ? 'active' : ''">
+                    <span th:text="${cate1.cate1_name}">패션의류</span>
+                </li>
+            </ul>
+
+            <div class="sub-menu">
+                <ul th:each="cate1, iterStat : ${cate1DTOList}"
+                    th:id="|menu${iterStat.count}|"
+                    class="submenu-content"
+                    th:style="${iterStat.index > 0} ? 'display:none;'">
+
+                    <li th:each="cate2 : ${cate1.subCategories}">
+                        <a th:href="@{/product/list/{cate2No}(cate2No=${cate2.cate2_no})}"
+                           th:text="${cate2.cate2_name}">
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="sub-menu">
-          <ul id="menu1" class="submenu-content">
-            <li><a href="#">여성의류</a></li>
-            <li><a href="#">남성의류</a></li>
-            <li><a href="#">아동복</a></li>
-          </ul>
-          <ul id="menu2" class="submenu-content" style="display:none;">
-            <li><a href="#">가방</a></li>
-            <li><a href="#">신발</a></li>
-          </ul>
-          <ul id="menu3" class="submenu-content" style="display:none;">
-            <li><a href="#">해외 명품</a></li>
-          </ul>
-          <ul id="menu4" class="submenu-content" style="display:none;">
-            <li><a href="#">스킨케어</a></li>
-            <li><a href="#">메이크업</a></li>
-          </ul>
-        </div>
-      </div>
       <main>
         <div class="id-find-container">
             <h2 class="id-find-title">아이디 찾기</h2>

@@ -12,7 +12,9 @@ public interface Cate2Mapper {
 
     public Cate2DTO select(int cate2_no);
     public List<ProductDTO> selectAll();
+    public List<Cate2DTO> selectAll3(int cate1_no);
     public void insert(ProductDTO productDTO);
     public void update(ProductDTO productDTO);
     public void delete(int prod_no);
+
 }

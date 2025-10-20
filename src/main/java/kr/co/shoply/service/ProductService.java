@@ -21,6 +21,8 @@ public class ProductService {
     private final PointMapper pointMapper;
     private final CouponMapper couponMapper;
     private final OrderMapper orderMapper;
+    private final Cate1Mapper cate1Mapper;
+    private final Cate2Mapper cate2Mapper;
     private final ReviewMapper reviewMapper;
 
     public List<ProductDTO> getProductAll3(int cate2_no, String sort){
@@ -91,6 +93,14 @@ public class ProductService {
                                                Integer end_price){
 
         return  productMapper.selectSearch2Product3(keyword, sort, type, keyword2, start_price, end_price);
+    }
+
+    public List<Cate1DTO> getCate1List(){
+        return cate1Mapper.selectCate1_3();
+    }
+
+    public List<Cate2DTO> getCate2List(int cate1No){
+        return cate2Mapper.selectAll3(cate1No);
     }
 
     public void modifyUsedCoupon3(String cpCode, String memId){

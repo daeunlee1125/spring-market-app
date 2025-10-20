@@ -11,4 +11,6 @@ import java.util.List;
 public interface Cate1Mapper {
 
     public List<Cate1DTO> chartCate1();
+
+    List<Cate1DTO> selectCate1_3();
 }

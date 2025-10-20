@@ -727,6 +727,17 @@ a {
     flex-wrap: wrap;        /* 화면이 좁아지면 줄바꿈 */
 }
 
+.main-menu{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.submenu-content{
+    display: none;
+    list-style-type: none;
+    padding-left: 0;
+}
+
 /* "상품정보 제공고시" h3 태그 스타일 */
 .product-notice-header .title {
     font-size: 17px;

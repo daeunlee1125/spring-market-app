@@ -39,7 +39,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/list/{cate2No}/{sort}")
-    public String sortList(@PathVariable int cate2No, @PathVariable String sort, Model model) {
+    public String sortList(@PathVariable int cate2No, @PathVariable String sort, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         List<ProductDTO> productDTOList = productService.getProductAll3(cate2No, sort);
 
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
@@ -64,11 +64,17 @@ public class ProductController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
+
         return "product/list";
     }
 
     @GetMapping("/product/view/{cate2No}/{prodNo}")
-    public String view(@PathVariable int cate2No, @PathVariable String prodNo, Model model) {
+    public String view(@PathVariable int cate2No, @PathVariable String prodNo, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Cate2DTO cate2DTO = cate2Service.getCate(cate2No);
         model.addAttribute("cate2DTO", cate2DTO);
 
@@ -147,6 +153,12 @@ public class ProductController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
+
         return "product/view";
     }
 
@@ -174,6 +186,10 @@ public class ProductController {
         }
 
         model.addAttribute("cate1DTOList", cate1DTOList);
+
+        String memId = myUserDetails.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
 
         return "product/cart";
     }
@@ -291,6 +307,10 @@ public class ProductController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        String memId = myUserDetails.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
+
         return "product/order";
     }
 
@@ -377,6 +397,7 @@ public class ProductController {
     public String showCompletePage(@RequestParam String orderId,
                                    @RequestParam(required = false) String cpCode,
                                    @RequestParam int usedPoint,
+                                   @AuthenticationPrincipal MyUserDetails myUserDetails,
                                    Model model) {
 
         // 서비스에 주문 정보와 주문 아이템 리스트를 함께 가져오는 메서드를 만듭니다.
@@ -494,6 +515,12 @@ public class ProductController {
             cate1.setSubCategories(subList);
         }
 
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
+
         model.addAttribute("cate1DTOList", cate1DTOList);
 
         return "product/complete";
@@ -507,6 +534,7 @@ public class ProductController {
             @RequestParam(required = false) Integer minPrice,
             @RequestParam(required = false) Integer maxPrice,
             @RequestParam(defaultValue = "sold") String sort,
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
             Model model) {
 
         List<ProductDTO> productDTOList;
@@ -552,6 +580,12 @@ public class ProductController {
         }
 
         model.addAttribute("cate1DTOList", cate1DTOList);
+
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
 
         return "product/search";
     }

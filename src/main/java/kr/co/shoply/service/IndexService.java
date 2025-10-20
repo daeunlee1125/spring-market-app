@@ -1,6 +1,7 @@
 package kr.co.shoply.service;
 
 import kr.co.shoply.dto.ProductDTO;
+import kr.co.shoply.mapper.CartMapper;
 import kr.co.shoply.mapper.IndexMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.util.List;
 public class IndexService {
 
     private final IndexMapper indexMapper;
+    private final CartMapper cartMapper;
 
     public List<ProductDTO> getNewProducts() {
         // log.info("상품 이미지 경로들: {}", products.stream().map(ProductDTO::getF_name).toList());
@@ -44,7 +46,9 @@ public class IndexService {
         return indexMapper.selectSidebarBestProducts();
     }
 
-
+    public int getCartCount3(String memId) {
+        return cartMapper.selectCartIndex3(memId);
+    }
 
 
 }

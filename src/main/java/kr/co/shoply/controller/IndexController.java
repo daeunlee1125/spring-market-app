@@ -1,12 +1,15 @@
 package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.*;
+import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class IndexController {
     private final ProductService productService;
 
     @GetMapping({"/","/index"})
-    public String index(Model model) {
+    public String index(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         model.addAttribute("newProducts", indexService.getNewProducts());
         model.addAttribute("hitProducts", indexService.getHitProducts());
         model.addAttribute("recommendedProducts", indexService.getRecommendedProducts());
@@ -36,6 +39,12 @@ public class IndexController {
 
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
 
         List<Cate1DTO> cate1DTOList = productService.getCate1List();
 

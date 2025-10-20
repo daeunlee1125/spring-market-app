@@ -3,6 +3,7 @@ package kr.co.shoply.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
+import kr.co.shoply.service.IndexService;
 import kr.co.shoply.service.MyService;
 import kr.co.shoply.service.ProductService;
 import kr.co.shoply.service.SiteInfoService;
@@ -37,6 +38,7 @@ public class MyController {
     private final SiteInfoService siteInfoService;
     private final PasswordEncoder passwordEncoder;
     private final ProductService productService;
+    private final IndexService indexService;
 
     // ===================== 공통 메소드 =====================
     private void addMyPageSummary(Model model, String memberId) {
@@ -102,6 +104,11 @@ public class MyController {
 
         addMyPageSummary(model, user.getMember().getMem_id());
         addBannerToModel(model);
+
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
+
         return "my/home";
     }
 
@@ -183,6 +190,10 @@ public class MyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
+
         return "my/review";
     }
 
@@ -234,6 +245,10 @@ public class MyController {
         }
 
         model.addAttribute("cate1DTOList", cate1DTOList);
+
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
 
         return "my/info";
     }
@@ -365,6 +380,10 @@ public class MyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
+
         return "my/order";
     }
 
@@ -477,6 +496,10 @@ public class MyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
+
         return "my/qna";
     }
 
@@ -509,6 +532,10 @@ public class MyController {
         }
 
         model.addAttribute("cate1DTOList", cate1DTOList);
+
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
 
         return "my/coupon";
     }
@@ -553,12 +580,16 @@ public class MyController {
 
         model.addAttribute("cate1DTOList", cate1DTOList);
 
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
+
         return "my/point";
     }
 
     // ===================== 상품 상세 =====================
     @GetMapping("/view/{prodNo}")
-    public String viewProduct(@PathVariable String prodNo, Model model) {
+    public String viewProduct(@PathVariable String prodNo, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         ProductDTO product = myService.getProduct3(prodNo);
         if (product != null) {
             if (product.getOptions() == null) product.setOptions(myService.getProductOption3(prodNo));
@@ -580,6 +611,12 @@ public class MyController {
         }
 
         model.addAttribute("cate1DTOList", cate1DTOList);
+
+        if(myUserDetails != null) {
+            String memId = myUserDetails.getUsername();
+            int cartCount = indexService.getCartCount3(memId);
+            model.addAttribute("cartCount", cartCount);
+        }
 
         return "my/product/view";
     }

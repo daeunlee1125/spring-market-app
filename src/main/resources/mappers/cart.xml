@@ -65,6 +65,12 @@
         WHERE MEM_ID = #{mem_id} AND PROD_NO = #{prod_no} AND CART_OPTION = #{cart_option}
     </select>
 
+    <select id="selectCartIndex3" resultType="int">
+        SELECT COUNT(*)
+        FROM CART c
+        WHERE c.MEM_ID = #{mem_id}
+    </select>
+
     <insert id="insertCart3" parameterType="kr.co.shoply.dto.CartDTO">
         INSERT INTO CART(MEM_ID, PROD_NO, CART_ITEM_CNT, CART_OPTION)
         VALUES (

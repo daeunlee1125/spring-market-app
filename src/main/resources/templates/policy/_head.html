@@ -50,7 +50,9 @@
             <a th:href="@{/product/cart}">
                 <img th:src="@{/image/cart.png}" alt="장바구니" class="icon" style="width: 30px;">
             </a>
-
+            <span class="cart-count"
+                  th:if="${cartCount != null && cartCount > 0}"
+                  th:text="${cartCount}">0</span>
         </div>
     </div>
 

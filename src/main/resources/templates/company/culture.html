@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SHOPLY 기업문화</title>
-  <link rel="stylesheet" href="/kmarket/inc/css/company.css">
-  <link rel="stylesheet" href="/kmarket/inc/css/culture.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/company.css}">
+  <link rel="stylesheet" th:href="@{/css/culture.css}">
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
 
 </head>
 <body class="culture-page"> <!-- 🔹 body에 culture-page 클래스 부여 -->
@@ -23,11 +23,11 @@
     <!-- 2번째 줄: 회사 메뉴 -->
     <div class="bottom-header">
       <div class="company menu">
-        <a href="./index.html">HOME</a> | 
-        <a href="./culture.html" class="active">기업문화</a> | <!-- 🔹 현재 페이지 active 표시 -->
-        <a href="./story.html">소식과 이야기</a> | 
-        <a href="./recruit.html">채용</a> | 
-        <a href="./media.html">미디어</a>
+          <a th:href="@{/company/index}">HOME</a> |
+          <a th:href="@{/company/culture}" class="active">기업문화</a> |
+          <a th:href="@{/company/story}">소식과 이야기</a> |
+          <a th:href="@{/company/recruit}" >채용</a> |
+          <a th:href="@{/company/media}">미디어</a>
       </div>
     </div>
   </header>

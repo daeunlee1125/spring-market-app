@@ -25,7 +25,7 @@ public class Recruit {
     private String rec_department;
     private String rec_experience;
     private String rec_job_type;
-    private String rec_start_date;
+    private String rec_start_time;
     private String rec_end_date;
     private String rec_status;
     private String rec_content;

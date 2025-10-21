@@ -75,3 +75,7 @@
   color: #666;
 }
 
+.card-grid a{
+    text-decoration: none;
+}
+

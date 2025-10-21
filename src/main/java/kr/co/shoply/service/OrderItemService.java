@@ -14,14 +14,9 @@ public class OrderItemService {
 
     private final OrderItemTransactionalService orderItemTransactionalService;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 15000)
     public void updateOrderStatus() {
-        System.out.println("[Scheduler] OrderItemService 실행됨");
         orderItemTransactionalService.updateOrderStatusTransactional();
     }
 
-    @PostConstruct
-    public void init() {
-        System.out.println("[Scheduler] OrderStatusScheduler Bean Loaded!");
-    }
 }

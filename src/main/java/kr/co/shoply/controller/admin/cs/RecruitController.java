@@ -33,7 +33,7 @@ public class RecruitController {
         model.addAttribute("response", response);
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
-        return "/admin/cs/recruit/list";
+        return "admin/cs/recruit/list";
     }
 
     /** 등록 (모달 POST) */
@@ -51,7 +51,7 @@ public class RecruitController {
         model.addAttribute("dto", recruitService.read(recNo));
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
-        return "/admin/cs/recruit/read";
+        return "admin/cs/recruit/read";
     }
 
     /** 수정 */

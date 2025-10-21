@@ -224,11 +224,11 @@ public class MyService {
                     PointDTO dto = modelMapper.map(point, PointDTO.class);
 
                     if (point.getP_date() != null) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                         dto.setP_date(point.getP_date().format(formatter));
                     }
                     if (point.getP_exp_date() != null) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                         dto.setP_exp_date(point.getP_exp_date().format(formatter));
                     } else {
                         dto.setP_exp_date("-");

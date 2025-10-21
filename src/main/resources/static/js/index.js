@@ -139,7 +139,27 @@ document.addEventListener("DOMContentLoaded", () => {
           }
       });
   });
+    // 1. HTML에서 버튼 요소 찾기
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
+    // 2. 스크롤 이벤트 감지
+    window.addEventListener("scroll", () => {
+        // 200픽셀보다 많이 스크롤되면 'show' 클래스 추가, 아니면 제거
+        if (window.scrollY > 200) {
+            scrollToTopBtn.classList.add("show");
+        } else {
+            scrollToTopBtn.classList.remove("show");
+        }
+    });
+
+    // 3. 버튼 클릭 이벤트 감지
+    scrollToTopBtn.addEventListener("click", () => {
+        // 0, 0 (맨 위) 위치로 부드럽게 스크롤
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
 });
 
 // main menu hover 시 sub menu 교체

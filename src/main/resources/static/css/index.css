@@ -725,3 +725,40 @@ aside {
     user-select: none; /* 숫자가 드래그(선택)되는 것 방지 */
 }
 
+
+#scrollToTopBtn {
+    /* 1. 초기 상태: 숨김 (투명하고, 클릭 안 됨) */
+    visibility: hidden;
+    opacity: 0;
+
+    /* 2. 위치: 우측 하단 고정 */
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99; /* 다른 요소들보다 위에 표시 */
+
+    /* 3. 디자인 */
+    background-color: rgb(113, 69, 145); /* 기존 테마 보라색 */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%; /* 원형 버튼 */
+    width: 50px;         /* 너비 */
+    height: 50px;        /* 높이 */
+    font-size: 18px;     /* 아이콘 크기 */
+
+    /* 4. 부드러운 전환 효과 */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* 4-1. 'show' 클래스가 추가되었을 때 (JS가 제어) */
+#scrollToTopBtn.show {
+    visibility: visible; /* 보이게 함 */
+    opacity: 1;          /* 불투명하게 함 */
+}
+
+/* 5. 마우스 호버 시 색상 변경 */
+#scrollToTopBtn:hover {
+    background-color: #3a303aff; /* 기존 테마 진한 보라색 */
+}
+

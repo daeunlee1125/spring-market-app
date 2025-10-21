@@ -25,52 +25,6 @@ window.onclick = function(event) {
 // ============================
 document.addEventListener("DOMContentLoaded", function() {
 
-    // ----------------------------
-    // 1️⃣ 리뷰 작성 폼
-    // ----------------------------
-    const reviewForm = document.querySelector("#reviewForm");
-    if (reviewForm) {
-        reviewForm.addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const prodNo = document.getElementById('review_prod_no').value;
-            const content = document.getElementById('review_content').value.trim();
-            const rating = document.querySelector('input[name="rating"]:checked');
-
-            // 유효성 검사
-            if (!prodNo) {
-                alert('상품 정보를 찾을 수 없습니다.');
-                return;
-            }
-            if (!rating) {
-                alert('별점을 선택해주세요.');
-                return;
-            }
-            if (content.length < 10) {
-                alert('리뷰 내용을 최소 10자 이상 입력해주세요.');
-                return;
-            }
-
-            const formData = new FormData(reviewForm);
-
-            fetch("/shoply/my/review/write", { method: "POST", body: formData })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("리뷰 작성 완료!");
-                        closeModal('reviewModal');
-                        reviewForm.reset();
-                        location.reload(); // 페이지 새로고침
-                    } else {
-                        alert("리뷰 작성 실패: " + data.message);
-                    }
-                })
-                .catch(err => {
-                    console.error("Ajax Error:", err);
-                    alert("리뷰 작성 중 오류가 발생했습니다.");
-                });
-        });
-    }
 
     // ----------------------------
     // 2️⃣ 문의하기 폼

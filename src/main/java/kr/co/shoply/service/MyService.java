@@ -754,11 +754,12 @@ public class MyService {
                 .map(entity -> {
                     QnaDTO dto = modelMapper.map(entity, QnaDTO.class);
                     if (entity.getQ_rdate() != null) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        // ✅ 수정: 시간:분을 포함한 포맷 적용
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                         dto.setQ_rdate(
                                 entity.getQ_rdate().toInstant()
                                         .atZone(ZoneId.systemDefault())
-                                        .toLocalDate()
+                                        .toLocalDateTime()  // ✅ toLocalDate() → toLocalDateTime()
                                         .format(formatter)
                         );
                     }
@@ -773,7 +774,6 @@ public class MyService {
 
         return new PageImpl<>(pageContent, pageable, qnaDTOs.size());
     }
-
 
     @Transactional(readOnly = true)
     public List<BannerDTO> getBannerByLocation(int location) {

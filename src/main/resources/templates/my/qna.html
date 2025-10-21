@@ -52,7 +52,7 @@
                 <th>문의채널</th>
                 <th>문의유형</th>
                 <th>제목</th>
-                <th>작성일</th>
+                <th>작성일시</th>  <!-- ✅ "작성일" → "작성일시" -->
                 <th>상태</th>
             </tr>
             </thead>
@@ -62,7 +62,8 @@
                 <td th:text="${qna.q_cate1}">고객센터</td>
                 <td th:text="${qna.q_cate2}">주문 / 결제</td>
                 <td th:text="${qna.q_title}">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                <td th:text="${qna.q_rdate}">2022-12-12</td>
+                <!-- ✅ 시분 포함 표시 (Service에서 이미 포맷됨) -->
+                <td th:text="${qna.q_rdate}">2022-12-12 14:30</td>
                 <td>
                     <span th:if="${#strings.isEmpty(qna.q_reply)}" class="status pending">검토 중</span>
                     <span th:unless="${#strings.isEmpty(qna.q_reply)}" class="status completed">

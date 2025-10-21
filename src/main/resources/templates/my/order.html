@@ -96,7 +96,7 @@
             </thead>
             <tbody id="orderTableBody">
             <tr th:each="orderItem : ${orderPage.content}">
-                <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
+                <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd HH:mm')}">2022-12-13</td>
                 <td>
                     <div class="product-info">
                         <!-- 상품 이미지 -->

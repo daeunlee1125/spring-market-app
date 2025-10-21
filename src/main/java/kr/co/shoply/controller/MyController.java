@@ -93,6 +93,10 @@ public class MyController {
 
         String memberId = user.getMember().getMem_id();
 
+        // ✅ 추가: 회원 정보 조회
+        MemberDTO memberInfo = myService.getMemberInfo(memberId);
+        model.addAttribute("memberInfo", memberInfo);
+
         Pageable pageable = PageRequest.of(page, 10, Sort.by("q_rdate").descending());
 
         Page<QnaDTO> qnaPage = myService.getQnasByMemIdPaged(memberId, pageable);
@@ -117,7 +121,6 @@ public class MyController {
 
         return "my/qna";
     }
-
     // ===================== 문의 작성 (Ajax) =====================
     @PostMapping("/qna/write")
     @ResponseBody

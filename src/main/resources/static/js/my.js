@@ -119,40 +119,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // ----------------------------
-    // 3️⃣ 구매확정 버튼
-    // ----------------------------
-    const confirmOrderBtn = document.getElementById('confirmOrderBtn');
-    if (confirmOrderBtn) {
-        confirmOrderBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-
-            const modal = document.getElementById('confirmModal');
-            const itemNo = modal.dataset.itemNo;
-
-            if (!itemNo) {
-                alert('주문 정보를 찾을 수 없습니다.');
-                return;
-            }
-
-            fetch(`/shoply/my/order/confirm?item_no=${itemNo}`, { method: "POST" })
-                .then(res => res.text())
-                .then(data => {
-                    if (data === 'success') {
-                        alert("구매확정 완료!");
-                        closeModal('confirmModal');
-                        location.reload();
-                    } else {
-                        alert("구매확정 실패");
-                    }
-                })
-                .catch(err => {
-                    console.error("Ajax Error:", err);
-                    alert("구매확정 중 오류가 발생했습니다.");
-                });
-        });
-    }
-
-    // ----------------------------
     // 4️⃣ 반품/교환 신청 폼
     // ----------------------------
     const returnForm = document.getElementById('returnForm');

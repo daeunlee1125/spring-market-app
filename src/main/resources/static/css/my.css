@@ -1470,7 +1470,7 @@ footer {
 .table-container th {
     background-color: #f9f9f9;
 }
-.table-container td:last-child {
+.btnsContainer td:last-child {
     display: flex;
     flex-direction: column;
     gap: 10px;

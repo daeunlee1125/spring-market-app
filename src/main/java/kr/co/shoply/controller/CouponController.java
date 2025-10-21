@@ -2,6 +2,7 @@ package kr.co.shoply.controller;
 
 import kr.co.shoply.dto.*;
 import kr.co.shoply.service.CouponService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,15 @@ public class CouponController {
 
     private final CouponService couponService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/admin/coupon/list")
     public String list(PageRequestDTO pageRequestDTO, Model model, Principal principal) {
         PageResponseDTO<SysCouponDTO> pageResponse = couponService.selectCouponList(pageRequestDTO);
         model.addAttribute("pageResponse", pageResponse);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         // 로그인한 사용자 이름 조회 및 전달
         if (principal != null) {
@@ -95,6 +100,9 @@ public class CouponController {
     public String issuedCouponList(@ModelAttribute PageRequestDTO pageRequestDTO, Model model) {
         PageResponseDTO<UserCouponDTO> pageResponse = couponService.selectUserCouponList(pageRequestDTO);
         model.addAttribute("pageResponse", pageResponse);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
 
         // ✅ 모달에서 참조할 빈 객체 추가 (null 방지용)

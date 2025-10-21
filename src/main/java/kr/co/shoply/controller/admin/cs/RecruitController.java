@@ -3,7 +3,9 @@ package kr.co.shoply.controller.admin.cs;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
 import kr.co.shoply.dto.RecruitDTO;
+import kr.co.shoply.dto.SiteInfoDTO;
 import kr.co.shoply.service.RecruitService;
+import kr.co.shoply.service.SiteInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,12 +24,15 @@ import java.util.List;
 public class RecruitController {
 
     private final RecruitService recruitService;
+    private final SiteInfoService siteInfoService;
 
     /** 목록 + 검색 + 페이지네이션 (기간 없음) */
     @GetMapping("/admin/cs/recruit/list")
     public String list(PageRequestDTO pageRequestDTO, Model model) {
         PageResponseDTO<RecruitDTO> response = recruitService.list(pageRequestDTO);
         model.addAttribute("response", response);
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
         return "admin/cs/recruit/list";
     }
 
@@ -44,6 +49,8 @@ public class RecruitController {
                        @ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO,
                        Model model) {
         model.addAttribute("dto", recruitService.read(recNo));
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
         return "admin/cs/recruit/read";
     }
 

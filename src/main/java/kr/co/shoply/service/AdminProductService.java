@@ -210,7 +210,7 @@ public class AdminProductService {
     private void insertProductNotices(ProductRegisterDTO dto, String prodNo) {
 
         ProdNoticeDTO noticeDTO = ProdNoticeDTO.builder()
-                .pn_prod_no(prodNo)
+                .prod_no(prodNo)
                 .product_status(dto.getNot_val1())      // 상품상태
                 .tax_type(dto.getNot_val2())            // 부가세 면세여부
                 .receipt_issue(dto.getNot_val3())       // 영수증 발행

@@ -67,4 +67,8 @@ public interface CouponMapper {
 
     void expireUserCoupons();
 
+
+
+    String selectSellerCorpNameById(String memId);
+
 }

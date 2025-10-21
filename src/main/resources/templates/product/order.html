@@ -100,7 +100,8 @@
                                         <option value="" data-cp-type="0" data-cp-value="0" data-cp-min-price="0">사용할 쿠폰을 선택해주세요.</option>
                                         <th:block th:each="coupon : ${sysCouponDTOList}">
                                             <option th:value="${coupon.getCp_code()}"
-                                                    th:text="${coupon.getCp_name()} + '(' +${#numbers.formatDecimal(coupon.getCp_min_price(), 0, 'COMMA', 0, 'POINT')} + '원 이상 구매시 사용가능)'"
+                                                    th:text="${coupon.getCp_name()} + '(' +${#numbers.formatDecimal(coupon.getCp_min_price(), 0, 'COMMA', 0, 'POINT')}
+                                                    + '원 이상 구매시 사용가능) '"
                                                     th:data-cp-type="${coupon.getCp_type()}"
                                                     th:data-cp-value="${coupon.getCp_value()}"
                                                     th:data-cp-min-price="${coupon.getCp_min_price()}">

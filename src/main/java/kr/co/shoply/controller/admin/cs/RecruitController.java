@@ -28,7 +28,7 @@ public class RecruitController {
     public String list(PageRequestDTO pageRequestDTO, Model model) {
         PageResponseDTO<RecruitDTO> response = recruitService.list(pageRequestDTO);
         model.addAttribute("response", response);
-        return "/admin/cs/recruit/list";
+        return "admin/cs/recruit/list";
     }
 
     /** 등록 (모달 POST) */
@@ -44,7 +44,7 @@ public class RecruitController {
                        @ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO,
                        Model model) {
         model.addAttribute("dto", recruitService.read(recNo));
-        return "/admin/cs/recruit/read";
+        return "admin/cs/recruit/read";
     }
 
     /** 수정 */

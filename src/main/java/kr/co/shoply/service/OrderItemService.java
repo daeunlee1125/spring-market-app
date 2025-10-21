@@ -14,7 +14,7 @@ public class OrderItemService {
 
     private final OrderItemTransactionalService orderItemTransactionalService;
 
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(fixedRate = 50000)
     public void updateOrderStatus() {
         orderItemTransactionalService.updateOrderStatusTransactional();
     }

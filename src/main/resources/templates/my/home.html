@@ -62,7 +62,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="orderItem : ${recentOrders}">
-                    <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd')}">2022-12-13</td>
+                    <td th:text="${#dates.format(orderItem.ord_date, 'yyyy-MM-dd HH:mm')}">2022-12-13</td>
                     <td>
                         <div class="product-info">
                             <img th:if="${productMap[orderItem.prod_no] != null
@@ -79,14 +79,14 @@ and productMap[orderItem.prod_no].files.size() > 0}"
                                        th:data-ord-no="${orderItem.ord_no}"
                                        th:data-item-no="${orderItem.item_no}"></a>
                                 </p>
-                                <!-- ✅ 수정: 실제 상호명 표시 -->
+                                <!--  수정: 실제 상호명 표시 -->
                                 <p>(주) <a href="#"
                                           th:data-mem-id="${productMap[orderItem.prod_no].mem_id}"
                                           th:text="${productMap[orderItem.prod_no].corpName ?: '상호명'}"
                                           onclick="openSellerInfo(this.getAttribute('data-mem-id')); return false;"
                                           style="cursor: pointer; color: #0066cc; text-decoration: none;"></a></p>
 
-                                <!-- ✅ 수정: 상품명을 링크로 변경 -->
+                                <!--  수정: 상품명을 링크로 변경 -->
                                 <a th:href="|/shoply/product/view/9/${productMap[orderItem.prod_no].prod_no}|"
                                    th:text="${productMap[orderItem.prod_no].prod_name ?: '상품명 없음'}"
                                    style="color: #0066cc; text-decoration: none; font-weight: 500; cursor: pointer; display: block; margin: 5px 0;"></a>
@@ -165,7 +165,7 @@ and productMap[orderItem.prod_no].files.size() > 0}"
                 </thead>
                 <tbody>
                 <tr th:each="point : ${recentPoints}">
-                    <td th:text="${#strings.replace(point.p_date, 'T', ' ')}"></td>
+                    <td th:text="${#strings.replace(#strings.replace(point.p_date, 'T', ' '), #strings.substring(point.p_date, 16), '')}"></td>
                     <td>
                         <span th:if="${point.p_type == 1}">적립</span>
                         <span th:if="${point.p_type == 2}">사용</span>
@@ -206,7 +206,7 @@ and productMap[orderItem.prod_no].files.size() > 0}"
                     <td th:text="${review.prodName}"></td>
                     <td th:text="${review.rev_content}"></td>
                     <td class="star-rating" th:text="${review.rev_rating}">5</td>
-                    <td th:text="${#dates.format(review.rev_rdate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${#dates.format(review.rev_rdate, 'yyyy-MM-dd HH:mm')}"></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(recentReviews)}">
                     <td colspan="5" style="text-align: center;">상품평 내역이 없습니다.</td>

@@ -20,9 +20,10 @@
                         <input type="checkbox" class="item-checkbox" name="cart_no" th:value="${dto.getCart_no()}">
                         <img th:src="@{${dto.getFName()}}" th:alt="${dto.getFName()}"
                              class="cart-item-thumb">
-                        <div class="cart-item-info">
+                        <div class="cart-item-info" style="margin-bottom: 15px">
                             <p class="brand" th:text="${dto.getProductDTO().getProd_company()}">주식회사 루스부루</p>
                             <p class="name" th:text="${dto.getProductDTO().getProd_name()}">브랑튼</p>
+                            <p class="options" th:text="${dto.getProductDTO().getProd_info()}">브랑튼</p>
                             <p class="options" th:text="${dto.getCart_option()}">세이브 크로스 바디백 S 도난방지 가방 옵션: 비건레더_소프트카키</p>
                         </div>
                         <div class="quantity-selector">

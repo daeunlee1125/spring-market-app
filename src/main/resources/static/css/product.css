@@ -69,6 +69,8 @@
 .cart-item-info .options {
     font-size: 12px;
     color: #999;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .quantity-selector {

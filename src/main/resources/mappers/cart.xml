@@ -28,6 +28,7 @@
         <result property="prod_company" column="PROD_COMPANY"/>
         <result property="prod_price" column="PROD_PRICE"/>
         <result property="prod_sale" column="PROD_SALE"/>
+        <result property="prod_info" column="PROD_INFO"/>
         <result property="prod_deliv_price" column="PROD_DELIV_PRICE"/>
         <result property="prod_point" column="PROD_POINT"/>
         <result property="realPrice" column="realPrice"/>
@@ -45,6 +46,7 @@
             p.PROD_COMPANY,
             p.PROD_PRICE,
             p.PROD_SALE,
+            p.prod_info,
             p.PROD_DELIV_PRICE,
             p.PROD_POINT,
             p.PROD_PRICE - (p.PROD_PRICE * (p.PROD_SALE / 100)) AS realPrice,

@@ -107,8 +107,8 @@ public class ProductService {
         couponMapper.updateUsedCoupon3(cpCode, memId);
     }
 
-    public void saveUsedCoupon3(String memId, int pType, int pPoint, String pInfo){
-        pointMapper.insertUsedPoint3(memId, pType, pPoint, pInfo);
+    public void saveUsedCoupon3(String memId, int pType, int pPoint, String pInfo, String ordNo){
+        pointMapper.insertUsedPoint3(memId, pType, pPoint, pInfo, ordNo);
     }
 
     public void saveOrder3(String memId, String ordName, String ordHp, String ordZip, String ordAddr1, String ordAddr2, String payment, int ordTotal){

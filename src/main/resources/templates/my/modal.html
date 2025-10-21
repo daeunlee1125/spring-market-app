@@ -755,11 +755,16 @@
                                 data.rev_files.forEach((file, index) => {
                                     let imagePath = file.trim();
 
+                                    // ✅ 수정: /shoply/uploads/review/ 경로로 통일
                                     if (!imagePath.startsWith('/')) {
-                                        imagePath = `/uploads/review/${imagePath}`;
-                                    } else if (!imagePath.startsWith('/uploads/')) {
-                                        imagePath = `/uploads/review/${imagePath}`;
+                                        imagePath = `/shoply/uploads/review/${imagePath}`;
+                                    } else if (imagePath.startsWith('/uploads/')) {
+                                        imagePath = `/shoply${imagePath}`;
+                                    } else if (!imagePath.startsWith('/shoply/')) {
+                                        imagePath = `/shoply${imagePath}`;
                                     }
+
+                                    console.log(`이미지 ${index + 1} 경로:`, imagePath);
 
                                     const img = document.createElement('img');
                                     img.src = imagePath;
@@ -769,6 +774,11 @@
                                     img.onerror = function() {
                                         this.style.border = '2px solid #ff6b6b';
                                         this.title = '이미지 로드 실패: ' + imagePath;
+                                        console.error('이미지 로드 실패:', imagePath);
+                                    };
+
+                                    img.onload = function() {
+                                        console.log('이미지 로드 성공:', imagePath);
                                     };
 
                                     img.onclick = function() {

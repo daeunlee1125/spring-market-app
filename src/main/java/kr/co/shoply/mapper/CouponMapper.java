@@ -71,4 +71,12 @@ public interface CouponMapper {
 
     String selectSellerCorpNameById(String memId);
 
+
+    // 사용자 쿠폰 중복 여부 확인
+    int countUserCoupon(@Param("memId") String memId, @Param("cpCode") String cpCode);
+
+
+    List<SysCouponDTO> selectSellerCoupons(String sellerId);
+
+    void insertUserCoupon(UserCouponDTO dto);
 }

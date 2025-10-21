@@ -296,5 +296,46 @@
 
 
 
+    <!--  이미 발급받은 쿠폰인지 확인 -->
+    <select id="countUserCoupon" resultType="int">
+        SELECT COUNT(*)
+        FROM USER_COUPON
+        WHERE MEM_ID = #{memId}
+        AND CP_CODE = #{cpCode}
+    </select>
+
+    <!-- USER_COUPON 테이블에 발급 -->
+    <insert id="insertUserCoupon" parameterType="kr.co.shoply.dto.UserCouponDTO">
+        INSERT INTO USER_COUPON (
+        cp_no,
+        cp_code,
+        mem_id,
+        cp_issued_date,
+        cp_exp_date,
+        cp_used_date,
+        cp_stat
+        )
+        VALUES (
+        #{cp_no},
+        #{cp_code},
+        #{mem_id},
+        CURRENT_TIMESTAMP,
+        ADD_MONTHS(CURRENT_TIMESTAMP, 1),
+        NULL,
+        #{cp_stat}
+        )
+    </insert>
+
+
+
+    <select id="selectSellerCoupons" resultType="kr.co.shoply.dto.SysCouponDTO">
+        SELECT *
+        FROM SYS_COUPON
+        WHERE CP_ISSUER_ID = #{sellerId}
+        AND CP_STAT = 1
+        ORDER BY CP_ISSUE_DATE DESC
+    </select>
+
+
 
 </mapper>

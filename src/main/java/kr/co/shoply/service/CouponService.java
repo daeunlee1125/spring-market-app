@@ -1,6 +1,6 @@
 package kr.co.shoply.service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import kr.co.shoply.dto.PageRequestDTO;
 import kr.co.shoply.dto.PageResponseDTO;
 import kr.co.shoply.dto.SysCouponDTO;
@@ -147,6 +147,43 @@ public class CouponService {
     // 판매자 상호명 조회
     public String findSellerCorpNameById(String memId) {
         return couponMapper.selectSellerCorpNameById(memId);
+    }
+
+
+    @Transactional
+    public boolean hasUserCoupon(String memId, String cpCode) {
+        return couponMapper.countUserCoupon(memId, cpCode) > 0;
+    }
+
+    @Transactional
+    public void issueUserCoupon(String memId, String cpCode) {
+        String lastNo = couponMapper.selectLastUserCouponNo(cpCode);
+
+        long newNo;
+        if (lastNo != null) {
+            newNo = Long.parseLong(lastNo) + 1;
+        } else {
+            String prefix = cpCode.substring(0, 6);
+            newNo = Long.parseLong(prefix + "00001");
+        }
+
+        UserCouponDTO dto = new UserCouponDTO();
+        dto.setCp_no(String.valueOf(newNo));
+        dto.setCp_code(cpCode);
+        dto.setMem_id(memId);
+        dto.setCp_stat(1);
+
+        couponMapper.insertUserCoupon(dto);
+    }
+
+
+
+
+
+    // CouponService.java
+    @Transactional(readOnly = true)
+    public List<SysCouponDTO> getSellerCoupons(String sellerId) {
+        return couponMapper.selectSellerCoupons(sellerId);
     }
 
 

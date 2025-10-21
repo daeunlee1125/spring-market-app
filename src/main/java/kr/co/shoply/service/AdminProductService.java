@@ -218,6 +218,7 @@ public class AdminProductService {
                 .origin(dto.getNot_val5())              // 원산지
                 .build();
 
+
         log.info("#### insertProductNotices ==> noticeDTO={}", noticeDTO);
 
         int result = adminProductMapper.insertProductNotice(noticeDTO);

@@ -7,11 +7,13 @@ import kr.co.shoply.dto.SysCouponDTO;
 import kr.co.shoply.dto.UserCouponDTO;
 import kr.co.shoply.mapper.CouponMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CouponService {
@@ -33,14 +35,22 @@ public class CouponService {
 
     @Transactional
     public void registerCoupon(SysCouponDTO couponDTO) {
-        // 쿠폰번호 11자리 숫자 랜덤 생성
         String cpCode = generateCouponCode();
         couponDTO.setCp_code(cpCode);
-
         couponDTO.setCp_stat(1);
 
-        couponMapper.insertCoupon(couponDTO);
+        log.info("✅ [Service] 생성된 쿠폰번호: {}", cpCode);
+        log.info("✅ [Service] 쿠폰 DTO 내용: {}", couponDTO);
+
+        try {
+            couponMapper.insertCoupon(couponDTO);
+            log.info("✅ [Service] insertCoupon() 완료");
+        } catch (Exception e) {
+            log.error("❌ [Service] insertCoupon() 중 에러 발생", e);
+            throw e; // Controller에서 잡힐 수 있게 다시 던짐
+        }
     }
+
 
 
     @Transactional
@@ -133,6 +143,11 @@ public class CouponService {
         couponMapper.expireUserCoupons();
     }
 
+
+    // 판매자 상호명 조회
+    public String findSellerCorpNameById(String memId) {
+        return couponMapper.selectSellerCorpNameById(memId);
+    }
 
 
 }

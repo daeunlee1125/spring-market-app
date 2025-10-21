@@ -20,7 +20,7 @@ public class Review {
     private String mem_id;
     private String rev_content;
     private int rev_rating;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date rev_rdate;
     private String rev_img_path;
 }

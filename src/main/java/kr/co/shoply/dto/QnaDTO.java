@@ -22,24 +22,23 @@ public class QnaDTO {
     public String getQ_rdate() {
         return q_rdate.substring(2, 10).replace("T", " ");
     }
-    public String getMem_id() {
+
+    public void setMem_id(String mem_id) {
+        this.mem_id = mem_id;
+    }
+
+    public String getMaskedMemId() {
         if (mem_id == null) return null;
 
         int visibleLength = 3;
         int totalLength = mem_id.length();
 
-        // visibleLength보다 짧아도 그대로 3글자까지만 보여줌
         String visiblePart = mem_id.substring(0, Math.min(visibleLength, totalLength));
-
         StringBuilder masked = new StringBuilder(visiblePart);
         for (int i = visibleLength; i < totalLength; i++) {
             masked.append("*");
         }
         return masked.toString();
-    }
-
-    public void setMem_id(String mem_id) {
-        this.mem_id = mem_id;
     }
 
     private String q_reply;

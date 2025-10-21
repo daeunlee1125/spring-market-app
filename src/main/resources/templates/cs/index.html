@@ -67,7 +67,7 @@
             <a th:href="@{/cs/qna/view(qNo=${qna.q_no})}">
                 <span class="title" th:text="${qna.q_title}"></span>
             </a>
-            <span class="writer" th:text="${qna.mem_id}"></span>
+            <span class="writer" th:text="${qna.maskedMemId}"></span>
             <span class="date" th:text="${qna.q_rdate}"></span>
         </li>
     </ul>

@@ -194,72 +194,71 @@
             </tr>
             </tbody>
         </table>
-        <!-- 페이징 -->
-        <div style="text-align: center; margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px;">
-            <!-- 첫 페이지 -->
-            <a th:if="${orderPage.number > 0}"
-               th:href="@{/my/order(page=0)}"
-               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <!-- 페이징 --><div style="text-align: center; margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+        <!-- 첫 페이지 -->
+        <a th:if="${orderPage.number > 0}"
+           th:href="@{/my/order(page=0, periodType=${periodType}, period=${period}, startMonth=${startMonth}, endMonth=${endMonth})}"
+           style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
               border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
               background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">«</a>
-            <span th:unless="${orderPage.number > 0}"
-                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <span th:unless="${orderPage.number > 0}"
+              style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
                 border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
                 background: #f5f5f5; color: #ccc; font-weight: bold;">«</span>
 
-            <!-- 이전 페이지 -->
-            <a th:if="${orderPage.hasPrevious()}"
-               th:href="@{/my/order(page=${orderPage.number - 1})}"
-               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <!-- 이전 페이지 -->
+        <a th:if="${orderPage.hasPrevious()}"
+           th:href="@{/my/order(page=${orderPage.number - 1}, periodType=${periodType}, period=${period}, startMonth=${startMonth}, endMonth=${endMonth})}"
+           style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
               border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
               background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">‹</a>
-            <span th:unless="${orderPage.hasPrevious()}"
-                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <span th:unless="${orderPage.hasPrevious()}"
+              style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
                 border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
                 background: #f5f5f5; color: #ccc; font-weight: bold;">‹</span>
 
-            <!-- 페이지 번호 -->
-            <th:block th:each="i : ${#numbers.sequence(0, orderPage.totalPages - 1)}">
-                <a th:if="${i != orderPage.number}"
-                   th:href="@{/my/order(page=${i})}"
-                   th:text="${i + 1}"
-                   style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <!-- 페이지 번호 -->
+        <th:block th:each="i : ${#numbers.sequence(0, orderPage.totalPages - 1)}">
+            <a th:if="${i != orderPage.number}"
+               th:href="@{/my/order(page=${i}, periodType=${periodType}, period=${period}, startMonth=${startMonth}, endMonth=${endMonth})}"
+               th:text="${i + 1}"
+               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
                   border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
                   background: #fff; color: #555; text-decoration: none; font-weight: 600;"></a>
-                <span th:if="${i == orderPage.number}"
-                      th:text="${i + 1}"
-                      style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+            <span th:if="${i == orderPage.number}"
+                  th:text="${i + 1}"
+                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
                     border: 1px solid #946ccf; border-radius: 6px; margin: 0 2px;
                     background: linear-gradient(135deg, #a86cc1, #946ccf); color: #fff;
                     font-weight: 700;"></span>
-            </th:block>
+        </th:block>
 
-            <!-- 다음 페이지 -->
-            <a th:if="${orderPage.hasNext()}"
-               th:href="@{/my/order(page=${orderPage.number + 1})}"
-               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <!-- 다음 페이지 -->
+        <a th:if="${orderPage.hasNext()}"
+           th:href="@{/my/order(page=${orderPage.number + 1}, periodType=${periodType}, period=${period}, startMonth=${startMonth}, endMonth=${endMonth})}"
+           style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
               border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
               background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">›</a>
-            <span th:unless="${orderPage.hasNext()}"
-                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <span th:unless="${orderPage.hasNext()}"
+              style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
                 border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
                 background: #f5f5f5; color: #ccc; font-weight: bold;">›</span>
 
-            <!-- 마지막 페이지 -->
-            <a th:if="${orderPage.number < orderPage.totalPages - 1}"
-               th:href="@{/my/order(page=${orderPage.totalPages - 1})}"
-               style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <!-- 마지막 페이지 -->
+        <a th:if="${orderPage.number < orderPage.totalPages - 1}"
+           th:href="@{/my/order(page=${orderPage.totalPages - 1}, periodType=${periodType}, period=${period}, startMonth=${startMonth}, endMonth=${endMonth})}"
+           style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
               border: 1px solid #ddd; border-radius: 6px; margin: 0 2px;
               background: #fff; color: #946ccf; text-decoration: none; font-weight: bold;">»</a>
-            <span th:unless="${orderPage.number < orderPage.totalPages - 1}"
-                  style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
+        <span th:unless="${orderPage.number < orderPage.totalPages - 1}"
+              style="display: inline-block; width: 36px; height: 36px; line-height: 36px;
                 border: 1px solid #e0e0e0; border-radius: 6px; margin: 0 2px;
                 background: #f5f5f5; color: #ccc; font-weight: bold;">»</span>
 
-            <div style="margin-top: 12px; font-size: 13px; color: #999;">
-                <th:block th:text="${orderPage.number + 1} + ' / ' + ${orderPage.totalPages}"></th:block>
-            </div>
+        <div style="margin-top: 12px; font-size: 13px; color: #999;">
+            <th:block th:text="${orderPage.number + 1} + ' / ' + ${orderPage.totalPages}"></th:block>
         </div>
+    </div>
     </div>
 </main>
 
@@ -267,11 +266,21 @@
 <div th:replace="~{my/_tail.html}"></div>
 
 <script>
-
-
-    // 페이지 이동
     function goPage(page) {
-        window.location.href = `/shoply/my/order?page=${page}`;
+        //  현재 필터 파라미터를 가져와서 전달
+        const urlParams = new URLSearchParams(window.location.search);
+        const periodType = urlParams.get('periodType') || '';
+        const period = urlParams.get('period') || '';
+        const startMonth = urlParams.get('startMonth') || '';
+        const endMonth = urlParams.get('endMonth') || '';
+
+        let url = `/shoply/my/order?page=${page}`;
+        if (periodType) url += `&periodType=${periodType}`;
+        if (period) url += `&period=${period}`;
+        if (startMonth) url += `&startMonth=${startMonth}`;
+        if (endMonth) url += `&endMonth=${endMonth}`;
+
+        window.location.href = url;
     }
 
     function openModal(id) {
@@ -294,10 +303,21 @@
         const resetBtn = document.getElementById('resetBtn');
         const periodForm = document.getElementById('periodForm');
 
+        //  URL에서 현재 필터 상태 확인
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentPeriodType = urlParams.get('periodType');
+        const currentPeriod = urlParams.get('period');
+
         // 빠른 선택 버튼
         periodBtns.forEach(btn => {
             btn.addEventListener('click', function() {
-                periodBtns.forEach(b => b.style.background = '#fff');
+                // 모든 버튼 스타일 초기화
+                periodBtns.forEach(b => {
+                    b.style.background = '#fff';
+                    b.style.color = '#333';
+                });
+
+                // 클릭된 버튼 스타일 변경
                 this.style.background = '#946ccf';
                 this.style.color = '#fff';
 
@@ -305,6 +325,9 @@
                 monthSelect.value = '';
                 startMonth.value = '';
                 endMonth.value = '';
+                periodInput.value = '';
+
+                //  폼 제출 (page=0으로 자동 리셋)
                 periodForm.submit();
             });
         });
@@ -312,36 +335,84 @@
         // 개월 선택
         monthSelect.addEventListener('change', function() {
             if(this.value) {
-                periodBtns.forEach(b => b.style.background = '#fff');
+                // 버튼 선택 해제
+                periodBtns.forEach(b => {
+                    b.style.background = '#fff';
+                    b.style.color = '#333';
+                });
+
                 periodType.value = 'month';
                 periodInput.value = this.value;
                 startMonth.value = '';
                 endMonth.value = '';
+
+                //  폼 제출 (page=0으로 자동 리셋)
                 periodForm.submit();
             }
         });
 
         // 커스텀 기간 (조회 버튼 클릭)
         periodForm.addEventListener('submit', function(e) {
-            if(!periodType.value && !periodInput.value && !startMonth.value && !endMonth.value) {
-                return true;
-            }
+            e.preventDefault();
 
-            if(startMonth.value && endMonth.value) {
+            const hasFilter = periodType.value || periodInput.value ||
+                (startMonth.value && endMonth.value);
+
+            if (startMonth.value && endMonth.value) {
                 periodType.value = 'custom';
                 periodInput.value = '';
             }
+
+            //  폼을 동적으로 구성해서 page=0 파라미터 추가
+            const formData = new FormData();
+            formData.append('page', '0');  //  페이지는 항상 0으로
+
+            if (periodType.value) {
+                formData.append('periodType', periodType.value);
+            }
+            if (periodInput.value) {
+                formData.append('period', periodInput.value);
+            }
+            if (startMonth.value) {
+                formData.append('startMonth', startMonth.value);
+            }
+            if (endMonth.value) {
+                formData.append('endMonth', endMonth.value);
+            }
+
+            //  URL 생성 및 이동
+            const params = new URLSearchParams(formData);
+            window.location.href = '/shoply/my/order?' + params.toString();
         });
 
-        // 초기화
+        // 초기화 버튼
         resetBtn.addEventListener('click', function() {
-            periodBtns.forEach(b => b.style.background = '#fff');
+            periodBtns.forEach(b => {
+                b.style.background = '#fff';
+                b.style.color = '#333';
+            });
             monthSelect.value = '';
             startMonth.value = '';
             endMonth.value = '';
             periodType.value = '';
             periodInput.value = '';
+
+            //  초기 페이지로 이동
             window.location.href = '/shoply/my/order';
         });
+
+        //  페이지 로드 시 현재 필터 상태 표시
+        if (currentPeriodType) {
+            periodBtns.forEach(btn => {
+                if (btn.getAttribute('data-period') === currentPeriodType) {
+                    btn.style.background = '#946ccf';
+                    btn.style.color = '#fff';
+                }
+            });
+        }
+
+        if (currentPeriod && currentPeriodType === 'month') {
+            monthSelect.value = currentPeriod;
+        }
     });
 </script>

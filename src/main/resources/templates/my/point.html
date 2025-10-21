@@ -213,10 +213,21 @@
         const resetBtn = document.getElementById('resetBtn');
         const periodForm = document.getElementById('periodForm');
 
+        //  URL에서 현재 필터 상태 확인
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentPeriodType = urlParams.get('periodType');
+        const currentPeriod = urlParams.get('period');
+
         // 빠른 선택 버튼
         periodBtns.forEach(btn => {
             btn.addEventListener('click', function() {
-                periodBtns.forEach(b => b.style.background = '#fff');
+                // 모든 버튼 스타일 초기화
+                periodBtns.forEach(b => {
+                    b.style.background = '#fff';
+                    b.style.color = '#333';
+                });
+
+                // 클릭된 버튼 스타일 변경
                 this.style.background = '#946ccf';
                 this.style.color = '#fff';
 
@@ -224,6 +235,9 @@
                 monthSelect.value = '';
                 startMonth.value = '';
                 endMonth.value = '';
+                periodInput.value = '';
+
+                //  폼 제출 (page=0으로 자동 리셋)
                 periodForm.submit();
             });
         });
@@ -231,36 +245,84 @@
         // 개월 선택
         monthSelect.addEventListener('change', function() {
             if(this.value) {
-                periodBtns.forEach(b => b.style.background = '#fff');
+                // 버튼 선택 해제
+                periodBtns.forEach(b => {
+                    b.style.background = '#fff';
+                    b.style.color = '#333';
+                });
+
                 periodType.value = 'month';
                 periodInput.value = this.value;
                 startMonth.value = '';
                 endMonth.value = '';
+
+                //  폼 제출 (page=0으로 자동 리셋)
                 periodForm.submit();
             }
         });
 
         // 커스텀 기간 (조회 버튼 클릭)
         periodForm.addEventListener('submit', function(e) {
-            if(!periodType.value && !periodInput.value && !startMonth.value && !endMonth.value) {
-                return true;
-            }
+            e.preventDefault();
 
-            if(startMonth.value && endMonth.value) {
+            const hasFilter = periodType.value || periodInput.value ||
+                (startMonth.value && endMonth.value);
+
+            if (startMonth.value && endMonth.value) {
                 periodType.value = 'custom';
                 periodInput.value = '';
             }
+
+            //  폼을 동적으로 구성해서 page=0 파라미터 추가
+            const formData = new FormData();
+            formData.append('page', '0');  //  페이지는 항상 0으로
+
+            if (periodType.value) {
+                formData.append('periodType', periodType.value);
+            }
+            if (periodInput.value) {
+                formData.append('period', periodInput.value);
+            }
+            if (startMonth.value) {
+                formData.append('startMonth', startMonth.value);
+            }
+            if (endMonth.value) {
+                formData.append('endMonth', endMonth.value);
+            }
+
+            //  URL 생성 및 이동
+            const params = new URLSearchParams(formData);
+            window.location.href = '/shoply/my/point?' + params.toString();
         });
 
-        // 초기화
+        // 초기화 버튼
         resetBtn.addEventListener('click', function() {
-            periodBtns.forEach(b => b.style.background = '#fff');
+            periodBtns.forEach(b => {
+                b.style.background = '#fff';
+                b.style.color = '#333';
+            });
             monthSelect.value = '';
             startMonth.value = '';
             endMonth.value = '';
             periodType.value = '';
             periodInput.value = '';
+
+            //  초기 페이지로 이동
             window.location.href = '/shoply/my/point';
         });
+
+        //  페이지 로드 시 현재 필터 상태 표시
+        if (currentPeriodType) {
+            periodBtns.forEach(btn => {
+                if (btn.getAttribute('data-period') === currentPeriodType) {
+                    btn.style.background = '#946ccf';
+                    btn.style.color = '#fff';
+                }
+            });
+        }
+
+        if (currentPeriod && currentPeriodType === 'month') {
+            monthSelect.value = currentPeriod;
+        }
     });
 </script>

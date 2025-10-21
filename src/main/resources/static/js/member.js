@@ -4,6 +4,46 @@ let isEmailVerified = false;
 let isPhoneVerified = false;
 
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. 필요한 요소들을 찾습니다.
+    const termsAll = document.getElementById('termsAll');
+
+    // 2. '전체 동의'를 제외한 *모든* 개별 약관 체크박스들을 찾습니다.
+    const individualTerms = document.querySelectorAll('.terms-item input[type="checkbox"]:not(#termsAll)');
+
+    // 3. '전체 동의' 체크박스가 존재하는 페이지에서만 이 로직을 실행합니다.
+    if (termsAll && individualTerms.length > 0) {
+
+        // 4. [이벤트] '전체 동의'를 클릭했을 때
+        termsAll.addEventListener('change', function() {
+            // '전체 동의'의 체크 상태(true/false)를 가져옵니다.
+            const isChecked = this.checked;
+
+            // 모든 개별 체크박스들의 상태를 '전체 동의' 상태와 동일하게 변경합니다.
+            individualTerms.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        // 5. [이벤트] '개별 체크박스' 중 하나라도 클릭했을 때
+        individualTerms.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+
+                // 개별 체크박스 중 *하나라도* 체크가 해제되었는지 확인합니다.
+                let allChecked = true;
+                individualTerms.forEach(cb => {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+
+                // 만약 모든 개별 체크박스가 체크되어 있다면 (allChecked = true),
+                // '전체 동의' 체크박스도 체크 상태로 변경합니다.
+                // 하나라도 해제되어 있다면 '전체 동의'도 해제합니다.
+                termsAll.checked = allChecked;
+            });
+        });
+    }
+
     const form = document.querySelector('form[action*="/member/register"]:not([action*="Seller"])');
     const sellerForm = document.querySelector('form[action*="/member/registerSeller"]');
 

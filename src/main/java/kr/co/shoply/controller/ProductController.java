@@ -290,6 +290,7 @@ public class ProductController {
         model.addAttribute("totaldeliv", totaldeliv);
         model.addAttribute("cartDTOList", orderProductList); // 뷰에는 항상 cartDTOList 이름으로 전달
         model.addAttribute("memberDTO", memberDTO);
+        log.info("memberDTO:{}", memberDTO);
         model.addAttribute("sysCouponDTOList", sysCouponDTOList);
         model.addAttribute("sidebarBestProducts", indexService.getSidebarBestProducts());
 
@@ -311,7 +312,6 @@ public class ProductController {
         String memId = myUserDetails.getUsername();
         int cartCount = indexService.getCartCount3(memId);
         model.addAttribute("cartCount", cartCount);
-
         return "product/order";
     }
 
@@ -328,12 +328,6 @@ public class ProductController {
             productService.modifyUsedCoupon3(cpCode, memId);
         }
 
-        // 2. 사용한 포인트 삭감
-        if(orderRequestDTO.getUsedPoints() > 0) {
-            int usedPoint = -orderRequestDTO.getUsedPoints(); // 음수로 변환
-            productService.saveUsedCoupon3(memId, 2, usedPoint, "포인트 사용");
-        }
-
         // 3. insert order table.
         productService.saveOrder3(
                 memId,
@@ -346,6 +340,14 @@ public class ProductController {
                 orderRequestDTO.getFinalAmount()
         );
         OrderDTO orderDTO = productService.getOrderNo(memId);
+        log.info("orderDTO:{}", orderDTO);
+
+        // 2. 사용한 포인트 삭감
+        if(orderRequestDTO.getUsedPoints() > 0) {
+            int usedPoint = -orderRequestDTO.getUsedPoints(); // 음수로 변환
+            productService.saveUsedCoupon3(memId, 2, usedPoint, "포인트 사용", orderDTO.getOrd_no());
+        }
+
 
         // 4. insert orderItem table
         List<OrderItemDTO> orderItemDTOList = new ArrayList<>();

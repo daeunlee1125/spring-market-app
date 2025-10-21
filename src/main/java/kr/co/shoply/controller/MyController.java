@@ -2,6 +2,7 @@ package kr.co.shoply.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.shoply.dto.*;
+import kr.co.shoply.entity.Review;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.IndexService;
 import kr.co.shoply.service.MyService;
@@ -91,15 +92,10 @@ public class MyController {
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         List<Cate1DTO> cate1DTOList = productService.getCate1List();
-
         for (Cate1DTO cate1 : cate1DTOList) {
-            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
             List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
-
-            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
             cate1.setSubCategories(subList);
         }
-
         model.addAttribute("cate1DTOList", cate1DTOList);
 
         addMyPageSummary(model, user.getMember().getMem_id());
@@ -109,8 +105,22 @@ public class MyController {
         int cartCount = indexService.getCartCount3(memId);
         model.addAttribute("cartCount", cartCount);
 
+        // ✅ 추가: 각 상품별 리뷰 작성 여부 확인
+        MyPageHomeDTO homeData = myService.getMyPageHomeData(memId);
+        Map<String, Boolean> reviewCheckMap = new HashMap<>();
+
+        for (OrderItemDTO item : homeData.getRecentOrders()) {
+            String prodNo = item.getProd_no();
+            if (prodNo != null && !prodNo.isEmpty()) {
+                Review review = myService.findReviewByMemIdAndProdNo(memId, prodNo);
+                reviewCheckMap.put(prodNo, review != null);
+            }
+        }
+        model.addAttribute("reviewCheckMap", reviewCheckMap);
+
         return "my/home";
     }
+
 
     // ===================== 반품 신청 =====================
     @PostMapping("/order/return")
@@ -336,6 +346,99 @@ public class MyController {
         return ResponseEntity.ok("success");
     }
 
+
+
+    @GetMapping("/review/detail")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getReviewDetail(
+            @RequestParam("prod_no") String prodNo,
+            @AuthenticationPrincipal MyUserDetails user) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        if (user == null) {
+            log.warn("리뷰 조회 실패: 로그인 필요");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
+
+        try {
+            String memberId = user.getMember().getMem_id();
+
+            if (prodNo == null || prodNo.trim().isEmpty()) {
+                log.warn("리뷰 조회 실패: prodNo가 null 또는 empty");
+                result.put("error", "상품번호가 없습니다.");
+                return ResponseEntity.badRequest().body(result);
+            }
+
+            Review review = myService.findReviewByMemIdAndProdNo(memberId, prodNo);
+
+            if (review == null) {
+                log.warn("리뷰 조회 실패: 리뷰를 찾을 수 없음 - mem_id={}, prod_no={}", memberId, prodNo);
+                result.put("error", "리뷰를 찾을 수 없습니다.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            }
+
+            Integer rating = review.getRev_rating();
+            String content = review.getRev_content();
+            Date rdate = review.getRev_rdate();
+            String imgPath = review.getRev_img_path();
+
+            log.debug("리뷰 조회 성공 - rating={}, content_length={}, imgPath={}",
+                    rating, content != null ? content.length() : 0, imgPath);
+
+            result.put("rev_rating", rating != null ? rating : 0);
+            result.put("rev_content", content != null ? content : "");
+
+            // 날짜 포맷팅
+            if (rdate != null) {
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                result.put("rev_rdate", sdf.format(rdate));
+            } else {
+                result.put("rev_rdate", "");
+            }
+
+            // ✅ 수정: /uploads로 변경 (WebConfig에서 처리하는 경로)
+            List<String> files = new ArrayList<>();
+            if (imgPath != null && !imgPath.isEmpty()) {
+                String[] fileArray = imgPath.contains(",")
+                        ? imgPath.split(",\\s*")
+                        : new String[]{imgPath};
+
+                for (String file : fileArray) {
+                    if (file != null && !file.isEmpty()) {
+                        String processedPath = file.trim();
+
+                        // ✅ 경로 변환: /uploads/review/ 사용
+                        if (!processedPath.startsWith("/")) {
+                            // 파일명만 있으면 전체 경로 생성
+                            processedPath = "/uploads/review/" + processedPath;
+                        } else if (!processedPath.startsWith("/uploads/")) {
+                            // /uploads/...로 시작하지 않으면 추가
+                            processedPath = "/uploads/review/" + processedPath;
+                        }
+
+                        files.add(processedPath);
+                        log.debug("변환된 리뷰 이미지 경로: {} -> {}", file, processedPath);
+                    }
+                }
+            }
+            result.put("rev_files", files);
+
+            log.info("리뷰 조회 완료 - mem_id={}, prod_no={}, files_count={}",
+                    memberId, prodNo, files.size());
+
+            return ResponseEntity.ok(result);
+
+        } catch (NullPointerException e) {
+            log.error("리뷰 조회 중 NullPointerException 발생", e);
+            result.put("error", "데이터 처리 오류");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        } catch (Exception e) {
+            log.error("리뷰 조회 중 예외 발생", e);
+            result.put("error", "서버 오류 발생");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
     @GetMapping("/order")
     public String orderPage(Model model, @AuthenticationPrincipal MyUserDetails user,
                             @PageableDefault(size = 10) Pageable pageable,
@@ -355,6 +458,18 @@ public class MyController {
             if (product != null) productMap.put(item.getProd_no(), product);
         }
 
+        // ✅ 이 부분이 있는지 확인
+        Map<String, Boolean> reviewCheckMap = new HashMap<>();
+        for (OrderItemDTO item : orderPage.getContent()) {
+            String prodNo = item.getProd_no();
+            if (prodNo != null && !prodNo.isEmpty()) {
+                Review review = myService.findReviewByMemIdAndProdNo(memberId, prodNo);
+                reviewCheckMap.put(prodNo, review != null);
+            }
+        }
+        model.addAttribute("reviewCheckMap", reviewCheckMap);
+
+        // ✅ 이 부분도 확인
         model.addAttribute("orderPage", orderPage);
         model.addAttribute("productMap", productMap);
 
@@ -369,15 +484,10 @@ public class MyController {
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         List<Cate1DTO> cate1DTOList = productService.getCate1List();
-
         for (Cate1DTO cate1 : cate1DTOList) {
-            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
             List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
-
-            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
             cate1.setSubCategories(subList);
         }
-
         model.addAttribute("cate1DTOList", cate1DTOList);
 
         String memId = user.getUsername();
@@ -402,105 +512,71 @@ public class MyController {
         Map<String, Object> result = new HashMap<>();
 
         if (user == null) {
-            log.warn("리뷰 작성 실패: 로그인 필요");
             result.put("success", false);
             result.put("message", "로그인이 필요합니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
-        if (prodNo == null || prodNo.trim().isEmpty()) {
-            log.warn("리뷰 작성 실패: 상품번호 없음");
-            result.put("success", false);
-            result.put("message", "상품 정보를 찾을 수 없습니다.");
-            return ResponseEntity.badRequest().body(result);
-        }
-
+        String uploadDir = "C:/shoply/uploads/review/";
         List<MultipartFile> files = Arrays.asList(file1, file2, file3);
         List<String> savedFiles = new ArrayList<>();
 
-        for (MultipartFile file : files) {
-            if (file != null && !file.isEmpty()) {
-                try {
+        try {
+            // 디렉토리 생성
+            File uploadDirFile = new File(uploadDir);
+            if (!uploadDirFile.exists()) {
+                boolean created = uploadDirFile.mkdirs();
+                log.info("디렉토리 생성 결과: {}, 경로: {}", created, uploadDir);
+            }
+
+            log.info("✅ 업로드 디렉토리 확인: {}", uploadDirFile.exists());
+            log.info("✅ 쓰기 권한: {}", uploadDirFile.canWrite());
+
+            // 파일 저장
+            for (MultipartFile file : files) {
+                if (file != null && !file.isEmpty()) {
                     String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                    File dest = new File(uploadDir + "review/" + filename);
-                    dest.getParentFile().mkdirs();
-                    file.transferTo(dest);
-                    savedFiles.add(filename);
-                    log.info("업로드 파일 저장 완료: {}", filename);
-                } catch (IOException e) {
-                    log.error("파일 업로드 실패", e);
+                    String filePath = uploadDir + filename;
+
+                    log.info("파일 저장 시작: {}", filePath);
+
+                    try {
+                        File dest = new File(filePath);
+                        file.transferTo(dest);
+
+                        savedFiles.add(filename);
+                        log.info("✅ 파일 저장 성공: {}", filename);
+                        log.info("파일 존재 확인: {}", dest.exists());
+                    } catch (IOException e) {
+                        log.error("❌ 파일 저장 실패: {}", filename, e);
+                    }
                 }
             }
+
+            log.info("✅ 최종 저장된 파일: {}", savedFiles);
+
+            // DB에 저장
+            ReviewDTO reviewDTO = new ReviewDTO();
+            reviewDTO.setMem_id(user.getMember().getMem_id());
+            reviewDTO.setProd_no(prodNo);
+            reviewDTO.setRev_rating(rating);
+            reviewDTO.setRev_content(content);
+            reviewDTO.setRev_files(savedFiles);
+
+            ReviewDTO savedReview = myService.writeReview(reviewDTO);
+
+            result.put("success", true);
+            result.put("newReview", savedReview);
+            result.put("savedFiles", savedFiles);
+
+            return ResponseEntity.ok(result);
+
+        } catch (Exception e) {
+            log.error("❌ 리뷰 작성 중 오류 발생", e);
+            result.put("success", false);
+            result.put("message", "리뷰 작성 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
-
-        ReviewDTO reviewDTO = new ReviewDTO();
-        reviewDTO.setMem_id(user.getMember().getMem_id());
-        reviewDTO.setProd_no(prodNo);
-        reviewDTO.setRev_rating(rating);
-        reviewDTO.setRev_content(content);
-        reviewDTO.setRev_files(savedFiles);
-
-        ReviewDTO savedReview = myService.writeReview(reviewDTO);
-
-        result.put("success", true);
-        result.put("newReview", savedReview);
-        result.put("savedFiles", savedFiles);
-
-        log.info("리뷰 작성 성공: mem_id={}, prod_no={}, content={}",
-                user.getMember().getMem_id(), prodNo, content);
-
-        return ResponseEntity.ok(result);
-    }
-
-    // ===================== QnA =====================
-    @PostMapping("/qna/write")
-    @ResponseBody
-    public ResponseEntity<String> writeQna(@ModelAttribute QnaDTO qnaDTO,
-                                           @AuthenticationPrincipal MyUserDetails user) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-        }
-        String memberId = user.getMember().getMem_id();
-        qnaDTO.setMem_id(memberId);
-        myService.writeQna(qnaDTO);
-        return ResponseEntity.ok("success");
-    }
-
-    @GetMapping("/qna")
-    public String qnaPage(Model model,
-                          @AuthenticationPrincipal MyUserDetails user,
-                          @PageableDefault(size = 10) Pageable pageable) {
-        String memberId = user.getMember().getMem_id();
-
-        List<QnaDTO> recentQnas = myService.getRecentQnas(memberId);
-        model.addAttribute("recentQnas", recentQnas);
-
-        Page<QnaDTO> qnaPage = myService.getQnasByMemIdPaged(memberId, pageable);
-        model.addAttribute("qnaPage", qnaPage);
-
-        addMyPageSummary(model, memberId);
-        addBannerToModel(model);
-
-        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
-        model.addAttribute("siteInfoDTO", siteInfoDTO);
-
-        List<Cate1DTO> cate1DTOList = productService.getCate1List();
-
-        for (Cate1DTO cate1 : cate1DTOList) {
-            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
-            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
-
-            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
-            cate1.setSubCategories(subList);
-        }
-
-        model.addAttribute("cate1DTOList", cate1DTOList);
-
-        String memId = user.getUsername();
-        int cartCount = indexService.getCartCount3(memId);
-        model.addAttribute("cartCount", cartCount);
-
-        return "my/qna";
     }
 
     // ===================== 쿠폰 =====================
@@ -628,6 +704,22 @@ public class MyController {
         List<BannerDTO> myPageBanners = myService.getBannerByLocation(5);
         if (myPageBanners != null && !myPageBanners.isEmpty()) {
             model.addAttribute("banner", myPageBanners.get(0)); // 첫 번째 배너 사용
+        }
+    }
+
+    @GetMapping("/seller/info")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getSellerInfo(@RequestParam("mem_id") String memId) {
+        try {
+            Map<String, Object> sellerInfo = myService.getSellerInfo(memId);
+            log.info("판매자 정보 API 호출 성공: mem_id={}", memId);
+            return ResponseEntity.ok(sellerInfo);
+        } catch (IllegalArgumentException e) {
+            log.warn("판매자 정보 조회 실패: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            log.error("판매자 정보 조회 오류: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

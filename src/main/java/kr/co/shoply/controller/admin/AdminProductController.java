@@ -3,6 +3,7 @@ package kr.co.shoply.controller.admin;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.security.MyUserDetails;
 import kr.co.shoply.service.AdminProductService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class AdminProductController {
 
     private final AdminProductService adminProductService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
     //e2c log 확인용 API
     @ResponseBody
@@ -77,6 +79,9 @@ public class AdminProductController {
 
         model.addAttribute("pageResponse", pageResponse);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
@@ -91,6 +96,9 @@ public class AdminProductController {
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "admin/product/register";
     }
@@ -107,8 +115,11 @@ public class AdminProductController {
 
     @GetMapping("/{cate1}/cate2")
     @ResponseBody
-    public List<Cate2DTO> getCate2(@PathVariable String cate1){
+    public List<Cate2DTO> getCate2(@PathVariable String cate1, Model model){
         log.info("cate1={}",cate1);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return adminProductService.getCate2ByCate1(cate1);
     }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[SHOPLY] 채용 상세</title>
+  <link rel="stylesheet" th:href="@{/css/company.css}">
+  <link rel="stylesheet" th:href="@{/css/recruit_list.css}">
+</head>
+<body>
+
+  <header>
+    <!-- 1번째 줄: 로고 -->
+    <div class="top-header">
+      <div class="header-left">
+          <a th:href="@{/company/index}">
+              <img th:src="@{/image/logo.jpg}" alt="로고" class="logo">
+          </a>
+      </div>
+    </div>
+
+    <!-- 2번째 줄: 회사 메뉴 -->
+    <div class="bottom-header">
+      <div class="company menu">
+          <a th:href="@{/company/index}">HOME</a> |
+          <a th:href="@{/company/culture}">기업문화</a> |
+          <a th:href="@{/company/story}">소식과 이야기</a> |
+          <a th:href="@{/company/recruit}" class="active">채용</a> |
+          <a th:href="@{/company/media}">미디어</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="recruit-page">
+
+    <!-- 상단 배너 -->
+    <section class="recruit-hero">
+      <img th:src="@{/image/cruit.png}" alt="채용 배너">
+      <div class="hero-text">
+        <h1>채용 상세</h1>
+        <p>SHOPLY와 함께 성장할 기회를 확인하세요</p>
+      </div>
+    </section>
+
+    <!-- 채용 상세 -->
+    <section class="recruit-detail">
+      <div class="container">
+          <h2 th:text="${dto.rec_title}">[SHOPLY] 백엔드 개발자 채용</h2>
+        <ul class="detail-info">
+            <li><strong>부서:</strong> <span th:text="${dto.rec_department} ?: '-'">IT개발팀</span></li>
+            <li><strong>경력사항:</strong> <span th:text="${dto.rec_experience} ?: '-'">경력</span></li>
+            <li><strong>채용형태:</strong> <span th:text="${dto.rec_job_type} ?: '-'">정규직</span></li>
+            <li><strong>마감기간:</strong><span th:text="${dto.rec_end_date} ?: '-'">2025-03-31</span></li>
+            <li><strong>상태:</strong> <span th:text="${dto.rec_status} ?: '-'">모집중</span></li>
+        </ul>
+
+        <div class="detail-content">
+          <h3>모집 내용</h3>
+            <p th:text="${dto.rec_content} ?: '상세 내용이 등록되지 않았습니다.'"></p>
+
+            <h3>자격 요건</h3>
+          <ul>
+              <li th:text="${dto.rec_qualification} ?: '자격 요건이 등록되지 않았습니다.'"></li>
+          </ul>
+
+          <h3>복리후생</h3>
+          <ul>
+              <li th:text="${dto.rec_welfare} ?: '복리후생이 등록되지 않았습니다.'"></li>
+          </ul>
+        </div>
+
+        <div class="detail-btns">
+          <a th:href="@{/company/recruit}" class="btn-back">목록으로</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <h2>(주)샵플리닷컴</h2>
+        <a href="#">사업자정보확인</a>
+        <a href="#">소비자보호 서비스 가입사실확인</a>
+      </div>
+      <div class="footer-info">
+        <p>대표자: 홍길동 | 사업자등록번호: 123-45-67890</p>
+        <p>부산광역시 부산진구 중앙대로 103</p>
+        <p>통신판매업 신고번호: 제2025-부산진구-0001호</p>
+        <p>개인정보보호책임자: 김민수 | FAX: 051-123-4567 | Email: shoply@shoply.com</p>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-links">
+          <a href="#">개인정보처리방침</a> |
+          <a href="#">영상정보처리기기 운영·관리방침</a> |
+          <a href="#">고객센터</a> |
+          <a href="#">FAQ</a>
+        </div>
+        <div class="footer-sns">
+          <a href="#"><img src="../image/facebook.png" alt="Facebook"></a>
+          <a href="#"><img src="../image/instagram.png" alt="Instagram"></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

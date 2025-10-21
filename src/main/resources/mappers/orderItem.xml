@@ -18,4 +18,17 @@
         where item_no=#{item_no}
     </update>
 
+    <update id="updateOrderItem">
+        UPDATE order_item oi
+        SET item_stat = CASE
+        WHEN item_stat = 1 AND (
+        SELECT o.ord_date FROM "order" o WHERE o.ord_no = oi.ord_no
+        ) &lt;= SYSDATE - (1/24) THEN 2
+        WHEN item_stat = 2 AND (
+        SELECT o.ord_date FROM "order" o WHERE o.ord_no = oi.ord_no
+        ) &lt;= SYSDATE - (2/24) THEN 3
+        ELSE item_stat
+        END
+    </update>
+
 </mapper>

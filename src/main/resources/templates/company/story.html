@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SHOPLY 소식과 이야기</title>
-  <link rel="stylesheet" href="/kmarket/inc/css/company.css">
-    <link rel="stylesheet" href="/kmarket/inc/css/story.css">
+  <link rel="stylesheet" th:href="@{/css/company.css}">
+    <link rel="stylesheet" th:href="@{/css/story.css}">
 </head>
 <body>
 
@@ -21,11 +21,11 @@
     <!-- 2번째 줄: 회사 메뉴 -->
     <div class="bottom-header">
       <div class="company menu">
-        <a href="./index.html">HOME</a> | 
-        <a href="./culture.html">기업문화</a> | 
-        <a href="./story.html" class="active">소식과 이야기</a> | 
-        <a href="./recruit.html" >채용</a> | 
-        <a href="./media.html">미디어</a>
+        <a th:href="@{/company/index}">HOME</a> |
+        <a th:href="@{/company/culture}">기업문화</a> |
+        <a th:href="@{/company/story}" class="active">소식과 이야기</a> |
+        <a th:href="@{/company/recruit}" >채용</a> |
+        <a th:href="@{/company/media}">미디어</a>
       </div>
     </div>
   </header>
@@ -51,75 +51,31 @@
   </nav>
 
   <!-- 포스팅 카드 -->
-  <section class="card-grid">
-  <div class="card">
-    <a href="./story_list.html">
-      <img src="../image/sample1.png" alt="포스팅1">
-      <div class="card-content">
-        <h3>봄 스타일 완성 시크릿</h3>
-        <p>브랜드 ‘와르’ 최대 75% 할인, 케이마켓에서만!</p>
-      </div>
-    </a>
-  </div>
+    <section class="card-grid" th:if="${#lists.isEmpty(response.dtoList)} == false">
+        <div class="card" th:each="art : ${response.dtoList}">
+            <a th:href="@{|/company/story_list/${art.art_article_no}|}">
+                <img th:src="@{/image/sample1.png}" alt="포스팅 이미지">
+                <div class="card-content">
+                    <h3 th:text="${art.art_title}">제목</h3>
+                    <p th:text="${art.art_sub_title}">부제</p>
+                </div>
+            </a>
+        </div>
+    </section>
+    <div class="page" th:if="${response.total > response.size}">
+        <a th:if="${response.prev}"
+           th:href="@{|/company/story?pg=${response.start-1}|}">이전</a>
 
-  <div class="card">
-    <a href="./story_list.html">
-      <img src="../image/sample2.jpg" alt="포스팅2">
-      <div class="card-content">
-        <h3>인터뷰: 디자이너 홍길동</h3>
-        <p>새로운 브랜드 철학과 디자인 스토리를 들어보세요.</p>
-      </div>
-    </a>
-  </div>
+        <a th:each="p : ${#numbers.sequence(response.start, response.end)}"
+           th:href="@{|/company/story?pg=${p}|}"
+           th:classappend="${p==response.pg} ? ' current' : ''"
+           th:text="${p}">1</a>
 
-  <div class="card">
-    <a href="./story_list.html">
-      <img src="../image/sample3.jpg" alt="포스팅3">
-      <div class="card-content">
-        <h3>ESG 활동 리포트</h3>
-        <p>환경을 생각하는 SHOPLY의 지속가능한 여정.</p>
-      </div>
-    </a>
-  </div>
-
-  <div class="card">
-    <a href="./story_list.html">
-      <img src="../image/sample1.png" alt="포스팅4">
-      <div class="card-content">
-        <h3>채용 소식 안내</h3>
-        <p>SHOPLY와 함께 성장할 인재를 기다립니다.</p>
-      </div>
-    </a>
-  </div>
-
-  <div class="card">
-    <a href="./story_list.html">
-      <img src="../image/sample2.jpg" alt="포스팅5">
-      <div class="card-content">
-        <h3>고객 후기 스토리</h3>
-        <p>실제 고객이 전하는 생생한 경험담을 확인하세요.</p>
-      </div>
-    </a>
-  </div>
-
-  <div class="card">
-    <a href="./story_list.html">
-      <img src="../image/sample3.jpg" alt="포스팅6">
-      <div class="card-content">
-        <h3>사회공헌 캠페인</h3>
-        <p>지역사회와 함께하는 따뜻한 활동 이야기.</p>
-      </div>
-    </a>
-  </div>
-</section>
-
-
+        <a th:if="${response.next}"
+           th:href="@{|/company/story?pg=${response.end+1}|}">다음</a>
+    </div>
 </main>
-    
 </body>
-
-
-
 
 
  <footer class="footer">

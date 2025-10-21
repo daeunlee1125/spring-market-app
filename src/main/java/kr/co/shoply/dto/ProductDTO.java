@@ -35,9 +35,16 @@ public class ProductDTO {
     private String f_rdate; // 상품 등록일 = 파일 등록일
     private ProdNoticeDTO prodNoticeDTO;
 
+    // 판매자 정보
+    private String corpName;      // 상호명
+    private String corpTelHp;     // 판매자 전화
+    private String corpRegHp;     // 사업자번호
+    private String corpFax;       // FAX
+
     //my페이지 by jinwon
     private List<ProdOptionDTO> options;
     private List<ProFileDTO> files;
+
     public void setOptions(List<ProdOptionDTO> options) {
         this.options = options;
     }

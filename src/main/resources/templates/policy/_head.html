@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>정책 | SHOPLY</title>
+    <title>1조-[[${siteInfoDTO.s_title}]], [[${siteInfoDTO.s_subtitle}]]</title>
 
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/policy.css}">
@@ -28,7 +28,7 @@
         <!-- 로고 -->
         <div class="header-left">
             <a th:href="@{/index}">
-                <img th:src="@{/image/logo.jpg}" alt="로고" class="logo">
+                <img th:src="@{${siteInfoDTO.s_logo1}}" alt="로고" class="logo">
             </a>
         </div>
 

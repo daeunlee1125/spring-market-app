@@ -28,7 +28,10 @@ public class CouponController {
         if (principal != null) {
             String loginId = principal.getName();
             String memName = couponService.findMemberNameById(loginId);
+            int memLevel = couponService.findMemberLevelById(loginId);
+
             model.addAttribute("loginName", memName);
+            model.addAttribute("memLevel", memLevel);
         }
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
@@ -61,18 +64,30 @@ public class CouponController {
         log.info("쿠폰 등록 요청: {}", couponDTO);
 
         try {
-            // 로그인한 사용자의 ID 저장
             String loginId = principal.getName();
             couponDTO.setCp_issuer_id(loginId);
 
+            int memLevel = couponService.findMemberLevelById(loginId);
+            int type = couponDTO.getCp_type();
+
+            // 제한 로직
+            if (memLevel == 2 && type != 1) {
+                log.warn("권한 거부: 일반판매자가 잘못된 쿠폰 등록 시도");
+                return "denied"; // 일반판매자는 개별상품할인만 가능
+            } else if (memLevel == 7 && (type != 2 && type != 3)) {
+                log.warn("권한 거부: 최고관리자가 잘못된 쿠폰 등록 시도");
+                return "denied"; // 최고관리자는 주문상품/배송비무료만 가능
+            }
+
             couponService.registerCoupon(couponDTO);
             return "success";
+
         } catch (Exception e) {
             log.error("쿠폰 등록 실패", e);
             return "fail";
         }
-
     }
+
 
 
 

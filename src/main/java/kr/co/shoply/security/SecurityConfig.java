@@ -14,6 +14,10 @@ public class SecurityConfig {
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    private kr.co.shoply.security.CustomOAuth2UserService customOAuth2UserService;
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -24,9 +28,20 @@ public class SecurityConfig {
                 .failureUrl("/member/login?error=true")
                 .usernameParameter("mem_id")
                 .passwordParameter("mem_pass")
-        ).rememberMe(remember -> remember
-                .key("uniqueAndSecretKey") // 서버 고유 키
-                .tokenValiditySeconds(86400) // 1일
+        );
+
+        // OAuth2 로그인 추가
+        http.oauth2Login(oauth2 -> oauth2
+                .loginPage("/member/login")
+                .defaultSuccessUrl("/")
+                .userInfoEndpoint(userInfo -> userInfo
+                        .userService(customOAuth2UserService)
+                )
+        );
+
+        http.rememberMe(remember -> remember
+                .key("uniqueAndSecretKey") //서버 고유키
+                .tokenValiditySeconds(86400) //1일
                 .rememberMeParameter("autoLogin")
                 .userDetailsService(myUserDetailsService)
         );
@@ -41,6 +56,7 @@ public class SecurityConfig {
         // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/**").permitAll() // view.html에서 리뷰 확인가능하도록 전체 허가
+                .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                 .requestMatchers("/admin/config/**").hasRole("7") // 관리자 - 샵플리 기본 정보 관리
                 .requestMatchers("/admin/cs/**").hasRole("7") // 관리자 - 고객센터
                 .requestMatchers("/admin/**").hasAnyRole("7", "2") // 그 외 관리자 페이지 전체

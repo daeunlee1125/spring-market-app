@@ -2,6 +2,7 @@ package kr.co.shoply.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -17,6 +18,7 @@ public class UserCouponDTO{
     private Date cp_issued_date;
     private Date cp_used_date;
     private Integer cp_stat;
+    private Date cp_exp_date;
 
 
     private int cp_type;
@@ -32,6 +34,6 @@ public class UserCouponDTO{
     private String cp_name;
 
 
-    private Date cp_exp_date; // 만료일
+
 
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member</title>
+    <title>1조-[[${siteInfoDTO.s_title}]], [[${siteInfoDTO.s_subtitle}]]</title>
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/member.css}">
 </head>
@@ -16,7 +16,7 @@
     <div class="top-header">
         <!-- 로고 -->
         <div class="header-left">
-            <a th:href="@{/}"><img th:src="@{/image/logo.jpg}" alt="로고" class="logo"></a>
+            <a th:href="@{/}"><img th:src="@{${siteInfoDTO.s_logo1}}" alt="로고" class="logo"></a>
         </div>
         <!-- 검색창 -->
         <div class="header-center">

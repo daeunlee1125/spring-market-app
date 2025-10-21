@@ -56,4 +56,15 @@ public interface CouponMapper {
     void updateSysCouponStatus(@Param("cp_code") String cpCode);
 
 
+
+
+    int findMemberLevelById(String memId);
+
+
+    void insertUserSignupCoupon(UserCouponDTO dto);
+    String selectLastUserCouponNo(String cpCode);
+
+
+    void expireUserCoupons();
+
 }

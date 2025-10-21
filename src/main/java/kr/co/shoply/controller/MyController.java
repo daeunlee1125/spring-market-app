@@ -93,6 +93,10 @@ public class MyController {
 
         String memberId = user.getMember().getMem_id();
 
+        // ✅ 추가: 회원 정보 조회
+        MemberDTO memberInfo = myService.getMemberInfo(memberId);
+        model.addAttribute("memberInfo", memberInfo);
+
         Pageable pageable = PageRequest.of(page, 10, Sort.by("q_rdate").descending());
 
         Page<QnaDTO> qnaPage = myService.getQnasByMemIdPaged(memberId, pageable);
@@ -117,7 +121,6 @@ public class MyController {
 
         return "my/qna";
     }
-
     // ===================== 문의 작성 (Ajax) =====================
     @PostMapping("/qna/write")
     @ResponseBody
@@ -524,13 +527,16 @@ public class MyController {
     }
     @GetMapping("/order")
     public String orderPage(Model model, @AuthenticationPrincipal MyUserDetails user,
-                            @PageableDefault(size = 10) Pageable pageable,
+                            @RequestParam(value = "page", defaultValue = "0") int page,
                             @RequestParam(value = "periodType", required = false) String periodType,
                             @RequestParam(value = "period", required = false) String period,
                             @RequestParam(value = "startMonth", required = false) String startMonth,
                             @RequestParam(value = "endMonth", required = false) String endMonth) {
 
         String memberId = user.getMember().getMem_id();
+
+        // ✅ 명시적으로 Pageable 생성
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("ord_date").descending());
 
         Page<OrderItemDTO> orderPage = myService.getOrdersByMemIdWithPeriod(
                 memberId, pageable, periodType, period, startMonth, endMonth);
@@ -541,7 +547,7 @@ public class MyController {
             if (product != null) productMap.put(item.getProd_no(), product);
         }
 
-        // ✅ 이 부분이 있는지 확인
+        // ✅ 리뷰 체크맵 생성
         Map<String, Boolean> reviewCheckMap = new HashMap<>();
         for (OrderItemDTO item : orderPage.getContent()) {
             String prodNo = item.getProd_no();
@@ -552,10 +558,10 @@ public class MyController {
         }
         model.addAttribute("reviewCheckMap", reviewCheckMap);
 
-        // ✅ 이 부분도 확인
         model.addAttribute("orderPage", orderPage);
         model.addAttribute("productMap", productMap);
 
+        // ✅ 필터 파라미터 전달 (페이지네이션에서 사용)
         model.addAttribute("periodType", periodType);
         model.addAttribute("period", period);
         model.addAttribute("startMonth", startMonth);
@@ -703,12 +709,16 @@ public class MyController {
     @GetMapping("/point")
     public String point(Model model,
                         @AuthenticationPrincipal MyUserDetails user,
-                        @PageableDefault(size = 10) Pageable pageable,
+                        @RequestParam(value = "page", defaultValue = "0") int page,
                         @RequestParam(value = "periodType", required = false) String periodType,
                         @RequestParam(value = "period", required = false) String period,
                         @RequestParam(value = "startMonth", required = false) String startMonth,
                         @RequestParam(value = "endMonth", required = false) String endMonth) {
+
         String memberId = user.getMember().getMem_id();
+
+        // ✅ 명시적으로 Pageable 생성
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("p_date").descending());
 
         myService.debugPointData(memberId);
 
@@ -716,11 +726,11 @@ public class MyController {
                 memberId, pageable, periodType, period, startMonth, endMonth);
 
         model.addAttribute("pointPage", pointPage);
-
         model.addAttribute("periodType", periodType);
         model.addAttribute("period", period);
         model.addAttribute("startMonth", startMonth);
         model.addAttribute("endMonth", endMonth);
+
         addBannerToModel(model);
         addMyPageSummary(model, memberId);
 
@@ -728,15 +738,10 @@ public class MyController {
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         List<Cate1DTO> cate1DTOList = productService.getCate1List();
-
         for (Cate1DTO cate1 : cate1DTOList) {
-            // 3. 해당 1차 카테고리의 2차 카테고리 목록을 DB에서 조회합니다.
             List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
-
-            // 4. 조회한 2차 목록을 Cate1DTO에 주입(set)합니다.
             cate1.setSubCategories(subList);
         }
-
         model.addAttribute("cate1DTOList", cate1DTOList);
 
         String memId = user.getUsername();

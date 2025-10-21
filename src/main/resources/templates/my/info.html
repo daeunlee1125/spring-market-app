@@ -66,13 +66,19 @@
                     <tr>
                         <th>Email</th>
                         <td>
-                            <input type="text" id="emailId" th:value="${#strings.substringBefore(memberInfo.mem_email, '@')}">@
-                            <select id="emailDomain" onchange="checkEmailDomain()">
-                                <option value="naver.com">naver.com</option>
-                                <option value="gmail.com">gmail.com</option>
-                                <option value="self">직접입력</option>
-                            </select>
-                            <input type="text" id="emailInput" placeholder="직접입력" style="display:none;">
+                            <div style="margin-bottom: 10px; font-size: 14px; color: #333;">
+                                현재 이메일: <strong th:text="${memberInfo.mem_email}">user@naver.com</strong>
+                            </div>
+                            <div style="display: flex; gap: 5px; align-items: center;">
+                                <input type="text" id="emailId" th:value="${#strings.substringBefore(memberInfo.mem_email, '@')}" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;">@
+                                <select id="emailDomain" onchange="checkEmailDomain()" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <option value="naver.com">naver.com</option>
+                                    <option value="gmail.com">gmail.com</option>
+                                    <option value="daum.net">daum.net</option>
+                                    <option value="self">직접입력</option>
+                                </select>
+                                <input type="text" id="emailInput" placeholder="직접입력" style="display:none; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
                         </td>
                     </tr>
                     <tr>

@@ -25,7 +25,7 @@
                         <div class="inquiry-meta">
               <span class="inquiry-status"
                     th:text="${qna.q_reply != null ? '답변완료' : '답변대기'}"></span>
-                            <span th:text="${qna.mem_id}"></span>
+                            <span th:text="${qna.maskedMemId}"></span>
                             <span th:text="${qna.q_rdate}"></span>
                         </div>
                     </a>

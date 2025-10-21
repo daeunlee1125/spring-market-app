@@ -53,7 +53,7 @@
                 <th>상품명</th>
                 <th>내용</th>
                 <th>별점</th>
-                <th>작성일</th>
+                <th>작성일시</th>
             </tr>
             </thead>
             <tbody>
@@ -62,9 +62,11 @@
                 <td th:text="${review.prodName}">상품번호 / 상품명</td>
                 <td th:text="${review.rev_content}">배송이 빠릅니다. 잘 사용하겠습니다.</td>
                 <td class="star-rating" th:text="${review.rev_rating}">5</td>
-                <td th:text="${#dates.format(review.rev_rdate, 'yyyy-MM-dd')}">2022-12-10</td>
+                <!--  시간 포함 포맷 -->
+                <td th:text="${#dates.format(review.rev_rdate, 'yyyy-MM-dd HH:mm')}">2022-12-10 14:30</td>
             </tr>
-            <tr th:if="${reviewPage.empty}">
+            <!--  수정: ${reviewPage.empty} → ${#lists.isEmpty(reviewPage.content)} -->
+            <tr th:if="${#lists.isEmpty(reviewPage.content)}">
                 <td colspan="5" style="text-align: center;">작성된 리뷰가 없습니다.</td>
             </tr>
             </tbody>

@@ -397,7 +397,7 @@ public class MyController {
                 result.put("rev_rdate", "");
             }
 
-            // ✅ 수정: /uploads로 변경 (WebConfig에서 처리하는 경로)
+            // ✅ 수정: 경로 변환 로직 개선
             List<String> files = new ArrayList<>();
             if (imgPath != null && !imgPath.isEmpty()) {
                 String[] fileArray = imgPath.contains(",")
@@ -408,17 +408,19 @@ public class MyController {
                     if (file != null && !file.isEmpty()) {
                         String processedPath = file.trim();
 
-                        // ✅ 경로 변환: /uploads/review/ 사용
+                        // ✅ 파일명만 있으면 /shoply/uploads/review/ 경로 추가
                         if (!processedPath.startsWith("/")) {
-                            // 파일명만 있으면 전체 경로 생성
-                            processedPath = "/uploads/review/" + processedPath;
-                        } else if (!processedPath.startsWith("/uploads/")) {
-                            // /uploads/...로 시작하지 않으면 추가
-                            processedPath = "/uploads/review/" + processedPath;
+                            processedPath = "/shoply/uploads/review/" + processedPath;
+                        } else if (processedPath.startsWith("/uploads/")) {
+                            // /uploads/review/xxx → /shoply/uploads/review/xxx
+                            processedPath = "/shoply" + processedPath;
+                        } else if (!processedPath.startsWith("/shoply/")) {
+                            // 다른 경로면 /shoply 추가
+                            processedPath = "/shoply" + processedPath;
                         }
 
                         files.add(processedPath);
-                        log.debug("변환된 리뷰 이미지 경로: {} -> {}", file, processedPath);
+                        log.debug("변환된 리뷰 이미지 경로: {} → {}", file, processedPath);
                     }
                 }
             }
@@ -517,7 +519,7 @@ public class MyController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
-        String uploadDir = "C:/shoply/uploads/review/";
+        String uploadDir = "/home/ec2-user/shoply/uploads/review/";
         List<MultipartFile> files = Arrays.asList(file1, file2, file3);
         List<String> savedFiles = new ArrayList<>();
 

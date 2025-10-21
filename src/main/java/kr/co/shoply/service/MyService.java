@@ -378,13 +378,16 @@ public class MyService {
             pointAmount = (int) (product.getProd_price() * orderItem.getItem_cnt() * 0.1);
         }
 
+        // ✅ 수정: ZoneId.of("Asia/Seoul") 추가
+        LocalDateTime nowKST = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+
         Point point = Point.builder()
                 .mem_id(memId)
                 .p_type(1)
                 .p_point(pointAmount)
                 .p_info("상품구매확정")
-                .p_date(LocalDateTime.now())
-                .p_exp_date(LocalDateTime.now().plusDays(7))
+                .p_date(nowKST)  // ✅ 타임존 적용
+                .p_exp_date(nowKST.plusDays(7))  // ✅ 타임존 적용
                 .ord_no(String.valueOf(orderItem.getOrd_no()))
                 .build();
         pointRepository.save(point);

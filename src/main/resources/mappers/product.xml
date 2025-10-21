@@ -10,7 +10,7 @@
 
     <resultMap id="ProdNoticeMap" type="kr.co.shoply.dto.ProdNoticeDTO">
         <result property="not_no" column="not_no"/>
-        <result property="pn_prod_no" column="pn_prod_no"/>
+        <result property="prod_no" column="prod_no"/>
         <result property="tax_type" column="tax_type"/>
         <result property="receipt_issue" column="receipt_issue"/>
         <result property="business_type" column="business_type"/>
@@ -60,8 +60,7 @@
         pn.BUSINESS_TYPE AS business_type,
         pn.ORIGIN AS origin,
         pn.PRODUCT_STATUS AS product_status,
-        pn.NOT_NO AS not_no,
-        pn.PROD_NO AS pn_prod_no
+        pn.NOT_NO AS not_no
 
         FROM
         PRO_FILE pf

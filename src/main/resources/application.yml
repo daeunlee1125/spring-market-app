@@ -67,6 +67,6 @@ spring:
       static-locations: classpath:/static/, classpath:/public/, file:/home/ec2-user/shoply/uploads/
 
 solapi:
-  apiKey: NCSVE4XEUBWV80QH
-  apiSecret: FVGCA9H20BAJJDXLOKMJ1EE9VXLTK8UW
-  phoneNumber: 01033603234
+  apiKey: NCSGTLVVAFB7GAHV
+  apiSecret: N7V7FAHACZ8KWKNQPQFUCGSDSWWL4K5E
+  phoneNumber: 01021098237

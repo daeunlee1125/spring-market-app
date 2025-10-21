@@ -1,6 +1,7 @@
 let isIdChecked = false;
 let checkedId = '';
 let isEmailVerified = false;
+let isPhoneVerified = false;
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form[action*="/member/register"]:not([action*="Seller"])');
@@ -224,21 +225,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 const phone = inputPhone.value.trim();
 
-                if (!validatePhone(phone)) return;
+                if (!validatePhone(phone)) return; // 유효성 검사
 
                 btnSendSms.disabled = true;
                 btnSendSms.textContent = '전송중...';
 
                 try {
+                    // ⭐️ URL은 /shoply/ 로 시작하는 것이 맞다고 가정합니다.
                     const response = await fetch(`/shoply/sms/send?phoneNumber=${encodeURIComponent(phone)}`, { method: 'POST' });
-                    if (!response.ok) throw new Error('SMS 전송 실패');
+
+                    if (!response.ok) {
+                        const errorData = await response.json(); // 백엔드에서 에러 메시지를 보낸다면
+                        console.error("SMS Error Data:", errorData);
+                        throw new Error(errorData.message || 'SMS 전송 실패');
+                    }
 
                     alert('인증번호가 전송되었습니다.');
+
+                    // 👇 [수정] 인증번호 입력창과 확인 버튼을 보여줍니다.
+                    inputSmsCode.style.display = 'inline-block';
+                    btnVerifySms.style.display = 'inline-block';
+                    inputSmsCode.focus(); // 인증번호 입력창에 포커스
+
                     btnSendSms.textContent = '재전송';
+
                 } catch (err) {
-                    alert('SMS 전송 중 오류 발생');
+                    console.error('SMS Send Error:', err);
+                    alert(`SMS 전송 중 오류 발생: ${err.message}`);
                 } finally {
-                    btnSendSms.disabled = false;
+                    btnSendSms.disabled = false; // 재전송 가능하도록 활성화
                 }
             });
 
@@ -253,20 +268,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 try {
-                    const response = await fetch(`/sms/verify?phoneNumber=${encodeURIComponent(phone)}&code=${encodeURIComponent(code)}`, { method: 'POST' });
+                    // 👇 [수정] URL 오타 수정 (sholpy -> shoply)
+                    const response = await fetch(`/shoply/sms/verify?phoneNumber=${encodeURIComponent(phone)}&code=${encodeURIComponent(code)}`, { method: 'POST' });
                     const isValid = await response.json();
 
                     if (isValid) {
                         alert('휴대폰 인증 완료!');
+
+                        // 👇 [추가] 인증 완료 상태로 변경
+                        isPhoneVerified = true;
+
+                        // 필드 및 버튼 비활성화
                         inputPhone.readOnly = true;
                         inputSmsCode.readOnly = true;
+                        btnSendSms.disabled = true; // 재전송 버튼도 비활성화
                         btnVerifySms.disabled = true;
                         btnVerifySms.textContent = '인증완료';
                     } else {
                         alert('인증번호가 일치하지 않습니다.');
+                        isPhoneVerified = false; // 인증 실패
                     }
                 } catch (err) {
+                    console.error('SMS Verify Error:', err);
                     alert('인증 확인 중 오류 발생');
+                    isPhoneVerified = false;
                 }
             });
         }
@@ -819,6 +844,12 @@ function validateForm() {
     if (!isEmailVerified) {
         alert('이메일 인증을 완료해주세요.');
         document.querySelector('input[name="mem_email"]').focus();
+        return false;
+    }
+
+    if (!isPhoneVerified) {
+        alert('휴대폰 인증을 완료해주세요.');
+        document.querySelector('input[name="mem_hp"]').focus();
         return false;
     }
 

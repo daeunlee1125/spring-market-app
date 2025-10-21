@@ -17,7 +17,7 @@ public class OrderItemService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 10000) // 10초마다 실행 (10000ms)
+    @Scheduled(fixedRate = 20000) // 10초마다 실행 (10000ms)
     public void updateOrderStatus() {
         orderItemMapper.updateOrderItem();
     }

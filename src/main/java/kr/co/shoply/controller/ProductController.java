@@ -6,6 +6,7 @@ import kr.co.shoply.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -278,15 +279,20 @@ public class ProductController {
         int saleprice = 0;
         int totalPoint = productService.getPoint3(username);
         int totaldeliv = 0;
-
+        Set<String> seller = new HashSet<>();
         for (CartDTO cartDTO : orderProductList) {
             ProductDTO productDTO = productService.getProduct3(cartDTO.getProd_no());
             cartDTO.setProductDTO(productDTO);
             totalprice += productDTO.getProd_price() * cartDTO.getCart_item_cnt();
             saleprice += (productDTO.getProd_price() - productDTO.getRealPrice()) * cartDTO.getCart_item_cnt();
             totaldeliv += productDTO.getProd_deliv_price();
+            seller.add(cartDTO.getProductDTO().getMem_id());
         }
         List<SysCouponDTO> sysCouponDTOList = productService.getUserCoupon3(username);
+        sysCouponDTOList.removeIf(coupon ->
+                (coupon.getCp_type() == 1 && !seller.contains(coupon.getCp_issuer_id()))
+        );
+
 
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("saleprice", saleprice);

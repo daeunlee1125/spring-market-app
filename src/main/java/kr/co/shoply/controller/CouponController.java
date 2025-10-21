@@ -29,13 +29,24 @@ public class CouponController {
         SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
         model.addAttribute("siteInfoDTO", siteInfoDTO);
 
-        // 로그인한 사용자 이름 조회 및 전달
+        // 로그인한 사용자 이름(또는 발급처명) 조회 및 전달
         if (principal != null) {
             String loginId = principal.getName();
-            String memName = couponService.findMemberNameById(loginId);
-            int memLevel = couponService.findMemberLevelById(loginId);
 
-            model.addAttribute("loginName", memName);
+            int memLevel = couponService.findMemberLevelById(loginId);
+            String issuerName;
+
+            if (memLevel == 7) {
+                // 일반관리자 또는 최고관리자
+                issuerName = couponService.findMemberNameById(loginId);
+            } else if (memLevel == 2) {
+                // 판매자 (MEM_SELLER 테이블의 corp_name)
+                issuerName = couponService.findSellerCorpNameById(loginId);
+            } else {
+                issuerName = "알 수 없는 사용자";
+            }
+
+            model.addAttribute("issuerName", issuerName);
             model.addAttribute("memLevel", memLevel);
         }
 
@@ -61,37 +72,44 @@ public class CouponController {
     }
 
 
-    // 쿠폰 등록 처리
     @ResponseBody
     @PostMapping("/admin/coupon/register")
     public String registerCoupon(@ModelAttribute SysCouponDTO couponDTO,
-                                 Principal principal) { // 로그인 유저 정보 가져오기
-        log.info("쿠폰 등록 요청: {}", couponDTO);
+                                 Principal principal) {
+        log.info("✅ [Controller] 쿠폰 등록 요청 수신: {}", couponDTO);
 
         try {
             String loginId = principal.getName();
             couponDTO.setCp_issuer_id(loginId);
 
+            log.info("✅ [Controller] 발급자 ID: {}", loginId);
+            log.info("✅ [Controller] 쿠폰 정보 - 이름: {}, 타입: {}, 금액: {}",
+                    couponDTO.getCp_name(), couponDTO.getCp_type(), couponDTO.getCp_value());
+
             int memLevel = couponService.findMemberLevelById(loginId);
+            log.info("✅ [Controller] 회원등급: {}", memLevel);
+
             int type = couponDTO.getCp_type();
 
-            // 제한 로직
             if (memLevel == 2 && type != 1) {
-                log.warn("권한 거부: 일반판매자가 잘못된 쿠폰 등록 시도");
-                return "denied"; // 일반판매자는 개별상품할인만 가능
+                log.warn("🚫 일반판매자가 잘못된 쿠폰 등록 시도");
+                return "denied";
             } else if (memLevel == 7 && (type != 2 && type != 3)) {
-                log.warn("권한 거부: 최고관리자가 잘못된 쿠폰 등록 시도");
-                return "denied"; // 최고관리자는 주문상품/배송비무료만 가능
+                log.warn("🚫 최고관리자가 잘못된 쿠폰 등록 시도");
+                return "denied";
             }
 
             couponService.registerCoupon(couponDTO);
+            log.info("✅ [Controller] CouponService.registerCoupon() 호출 완료");
+
             return "success";
 
         } catch (Exception e) {
-            log.error("쿠폰 등록 실패", e);
+            log.error("❌ [Controller] 쿠폰 등록 실패", e);
             return "fail";
         }
     }
+
 
 
 

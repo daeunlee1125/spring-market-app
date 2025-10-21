@@ -1,6 +1,7 @@
 package kr.co.shoply.dto;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -18,8 +19,12 @@ public class SysCouponDTO {
     private Integer cp_type;
     private Integer cp_value;
     private Integer cp_min_price;
-    private Date cp_issue_date;
-    private Date cp_exp_date;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate cp_issue_date;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate cp_exp_date;
+
     private Integer cp_stat;
     private String cp_note;
 

@@ -21,6 +21,19 @@
                         <div class="product-info-section" data-product-price="16830">
                             <div class="info-header">
                                 <span class="brand-store" th:text="${productDTO.getProd_company()}">신세계백화점</span>
+
+                                <!--  쿠폰받기 버튼 -->
+                                <th:block th:if="${sellerCoupons != null and !#lists.isEmpty(sellerCoupons)}">
+                                    <button type="button"
+                                            class="btn-coupon-claim"
+                                            th:data-seller="${productDTO.mem_id}"
+                                            style="margin-left:10px; background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+                                        쿠폰받기
+                                    </button>
+                                </th:block>
+
+
+
                                 <h2>
                                     <span class="brand-name" th:text="${productDTO.getProd_company()}">지오다노</span>
                                     <span class="product-name" th:text="${productDTO.getProd_name()}">베이직 레더 벨트 130004</span>

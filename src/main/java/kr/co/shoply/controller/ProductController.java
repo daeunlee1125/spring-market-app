@@ -32,6 +32,7 @@ public class ProductController {
     private final IndexService  indexService;
     private final BannerService bannerService;
     private final SiteInfoService siteInfoService;
+    private final CouponService couponService;
 
     @GetMapping("/product/list/{cate2No}")
     public String list(@PathVariable int cate2No, Model model) {
@@ -89,6 +90,9 @@ public class ProductController {
             return "redirect:/product/list/" + cate2No;
         }
         model.addAttribute("productDTO", productDTO);
+
+        List<SysCouponDTO> sellerCoupons = couponService.getSellerCoupons(productDTO.getMem_id());
+        model.addAttribute("sellerCoupons", sellerCoupons);
 
         List<ProFileDTO> proFileDTOList = productService.getFiles3(prodNo);
         // 2. f_dist를 Key로 사용하는 Map 생성

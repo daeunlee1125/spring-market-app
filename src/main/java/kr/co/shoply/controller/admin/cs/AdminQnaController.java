@@ -4,6 +4,7 @@ package kr.co.shoply.controller.admin.cs;
 import kr.co.shoply.dto.*;
 import kr.co.shoply.mapper.QnaMapper;
 import kr.co.shoply.service.QnaService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.util.List;
 public class AdminQnaController {
     private final QnaService qnaService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/admin/cs/qna/list")
     public String qnaList(
@@ -34,7 +36,8 @@ public class AdminQnaController {
         model.addAttribute("pageResponse", pageResponse);
         model.addAttribute("cate1", cate1); // 필터 유지를 위해 다시 전달
         model.addAttribute("cate2", cate2); // 필터 유지를 위해 다시 전달
-
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
@@ -51,6 +54,9 @@ public class AdminQnaController {
         }
         model.addAttribute("qnaDTO", qnaDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
@@ -62,6 +68,9 @@ public class AdminQnaController {
 
         QnaDTO qnaDTO = qnaService.getQna3(qNo);
         model.addAttribute("qnaDTO", qnaDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);

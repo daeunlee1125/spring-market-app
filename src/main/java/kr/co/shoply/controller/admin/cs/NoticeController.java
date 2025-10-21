@@ -1,11 +1,9 @@
 package kr.co.shoply.controller.admin.cs;
 
 
-import kr.co.shoply.dto.CopyrightDTO;
-import kr.co.shoply.dto.CsNoticeDTO;
-import kr.co.shoply.dto.PageRequestDTO;
-import kr.co.shoply.dto.PageResponseDTO;
+import kr.co.shoply.dto.*;
 import kr.co.shoply.service.CsNoticeService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +21,7 @@ public class NoticeController {
 
     private final CsNoticeService csNoticeService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
     @GetMapping("/admin/cs/notice/list")
     public String list(PageRequestDTO pageRequestDTO, Model model) {
@@ -32,6 +31,9 @@ public class NoticeController {
         if (csType == null || csType.trim().isEmpty() || csType.equals("전체")) {
             pageRequestDTO.setCsType(null);
         }
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         PageResponseDTO<CsNoticeDTO> pageResponse = csNoticeService.selectNoticeList(pageRequestDTO);
         model.addAttribute("pageResponse", pageResponse);
@@ -72,6 +74,9 @@ public class NoticeController {
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "admin/cs/notice/write";
     }
 
@@ -89,6 +94,9 @@ public class NoticeController {
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "admin/cs/notice/modify";
     }
@@ -114,6 +122,9 @@ public class NoticeController {
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "admin/cs/notice/view";
     }

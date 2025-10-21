@@ -3,7 +3,9 @@ package kr.co.shoply.controller.admin.cs;
 
 import kr.co.shoply.dto.CopyrightDTO;
 import kr.co.shoply.dto.CsFaqDTO;
+import kr.co.shoply.dto.SiteInfoDTO;
 import kr.co.shoply.service.CsFaqService;
+import kr.co.shoply.service.SiteInfoService;
 import kr.co.shoply.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class FaqController {
 
     private final CsFaqService csFaqService;
     private final VersionService versionService;
+    private final SiteInfoService siteInfoService;
 
 
     // FAQ 목록
@@ -35,6 +38,9 @@ public class FaqController {
         model.addAttribute("faqList", faqList);
         model.addAttribute("cate1", cate1);
         model.addAttribute("cate2", cate2);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
@@ -72,6 +78,9 @@ public class FaqController {
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         return "admin/cs/faq/modify";
     }
 
@@ -100,6 +109,9 @@ public class FaqController {
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
 
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
         // view.html 반환
         return "admin/cs/faq/view";
     }
@@ -112,6 +124,9 @@ public class FaqController {
 
         CopyrightDTO copyrightDTO = versionService.getCopyright3();
         model.addAttribute("copyrightDTO", copyrightDTO);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
 
         return "admin/cs/faq/write";
     }

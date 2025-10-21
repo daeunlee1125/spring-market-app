@@ -80,7 +80,88 @@ public class MyController {
     }
 
 
+    // ===================== 문의하기 =====================
+    @GetMapping("/qna")
+    public String qnaPage(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            Model model,
+            @AuthenticationPrincipal MyUserDetails user) {
 
+        if (user == null) {
+            return "redirect:/member/login";
+        }
+
+        String memberId = user.getMember().getMem_id();
+
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("q_rdate").descending());
+
+        Page<QnaDTO> qnaPage = myService.getQnasByMemIdPaged(memberId, pageable);
+        model.addAttribute("qnaPage", qnaPage);
+
+        addMyPageSummary(model, memberId);
+        addBannerToModel(model);
+
+        SiteInfoDTO siteInfoDTO = siteInfoService.getSiteInfo3();
+        model.addAttribute("siteInfoDTO", siteInfoDTO);
+
+        List<Cate1DTO> cate1DTOList = productService.getCate1List();
+        for (Cate1DTO cate1 : cate1DTOList) {
+            List<Cate2DTO> subList = productService.getCate2List(cate1.getCate1_no());
+            cate1.setSubCategories(subList);
+        }
+        model.addAttribute("cate1DTOList", cate1DTOList);
+
+        String memId = user.getUsername();
+        int cartCount = indexService.getCartCount3(memId);
+        model.addAttribute("cartCount", cartCount);
+
+        return "my/qna";
+    }
+
+    // ===================== 문의 작성 (Ajax) =====================
+    @PostMapping("/qna/write")
+    @ResponseBody
+    public ResponseEntity<String> writeQna(
+            @RequestParam("qna_type") String qnaType,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @AuthenticationPrincipal MyUserDetails user) {
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+
+        try {
+            String memberId = user.getMember().getMem_id();
+
+            // 입력값 검증
+            if (qnaType == null || qnaType.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("문의유형을 선택해주세요.");
+            }
+            if (title == null || title.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("제목을 입력해주세요.");
+            }
+            if (content == null || content.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("내용을 입력해주세요.");
+            }
+
+            QnaDTO qnaDTO = new QnaDTO();
+            qnaDTO.setMem_id(memberId);
+            qnaDTO.setQ_cate1(qnaType);  // 상품/배송/기타
+            qnaDTO.setQ_title(title);
+            qnaDTO.setQ_content(content);
+
+            myService.writeQna(qnaDTO);
+
+            log.info("문의 작성 완료: mem_id={}, title={}", memberId, title);
+            return ResponseEntity.ok("success");
+
+        } catch (Exception e) {
+            log.error("문의 작성 중 오류", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("문의 작성 중 오류가 발생했습니다.");
+        }
+    }
     // ===================== 홈 =====================
     @GetMapping("/home")
     public String homePage(Model model, @AuthenticationPrincipal MyUserDetails user) {
